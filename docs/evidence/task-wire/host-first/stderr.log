@@ -1,0 +1,3 @@
+   Compiling hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.70s
+     Running tests/task_wire.rs (target/host-task-wire/x86_64-unknown-linux-gnu/debug/deps/task_wire-49eeaac665e41d24)

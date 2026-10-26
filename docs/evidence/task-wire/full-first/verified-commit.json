@@ -1,0 +1,6 @@
+{
+  "commit": "cea1f2ba8eda067ab005aef99094c57c298cf49e",
+  "verified_source_files": 244,
+  "all_match_tested_inputs": true,
+  "scope": "post-test source identity; full suite executed before commit against recorded dirty-tree hashes"
+}

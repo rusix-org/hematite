@@ -1,0 +1,77 @@
+{
+  "passed": true,
+  "checks": {
+    "exit_success": true,
+    "within_deadline": true,
+    "launched": true,
+    "complete_report": true,
+    "bounded_logs": true
+  },
+  "execution": {
+    "started_utc": "2026-10-26T22:42:11.249813+00:00",
+    "timeout_seconds": 60,
+    "returncode": 0,
+    "timed_out": false,
+    "launch_error": null,
+    "elapsed_seconds": 1.7686322589870542
+  },
+  "artifacts": {
+    "stdout": {
+      "bytes": 780,
+      "within_limit": true,
+      "sha256": "4d47452d03cc35f371e32b83ae5dddd9414d96436b42cd99324613f11f8b63b3"
+    },
+    "stderr": {
+      "bytes": 252,
+      "within_limit": true,
+      "sha256": "843eca8b70bd00bb2b48a9d16f46c6b5756911d85e3207d0c56774030a6cd2f7"
+    }
+  },
+  "report": {
+    "passed": true,
+    "errors": [],
+    "expected_cases": [
+      "all_completion_values",
+      "bounded_mutations_are_total",
+      "encoders_are_transactional",
+      "grant_error_precedence",
+      "grant_handle_canonicality",
+      "grant_limits_and_features",
+      "grant_literal",
+      "grant_through_startup_input",
+      "malformed_completion_words",
+      "spawn_error_precedence",
+      "spawn_flags_reserved_and_rights",
+      "spawn_frames_and_range_bounds",
+      "spawn_input_lengths_and_presence",
+      "spawn_literal",
+      "unaligned_and_owned_values",
+      "unknown_program_is_metadata",
+      "wait_and_cancel_arguments",
+      "wire_constants"
+    ],
+    "observed_lines": [
+      "running 18 tests",
+      "test all_completion_values ... ok",
+      "test bounded_mutations_are_total ... ok",
+      "test encoders_are_transactional ... ok",
+      "test grant_error_precedence ... ok",
+      "test grant_handle_canonicality ... ok",
+      "test grant_limits_and_features ... ok",
+      "test grant_literal ... ok",
+      "test grant_through_startup_input ... ok",
+      "test malformed_completion_words ... ok",
+      "test spawn_error_precedence ... ok",
+      "test spawn_flags_reserved_and_rights ... ok",
+      "test spawn_frames_and_range_bounds ... ok",
+      "test spawn_input_lengths_and_presence ... ok",
+      "test spawn_literal ... ok",
+      "test unaligned_and_owned_values ... ok",
+      "test unknown_program_is_metadata ... ok",
+      "test wait_and_cancel_arguments ... ok",
+      "test wire_constants ... ok",
+      "test result: ok. 18 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s"
+    ]
+  },
+  "scope": "actual owned task wire codecs; no capability issuance, Session extension or execution"
+}

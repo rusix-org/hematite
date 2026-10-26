@@ -1,0 +1,6 @@
+{
+  "passed": true,
+  "returncode": 0,
+  "elapsed_seconds": 259.39950942993164,
+  "scope": "local make test-all; standalone codec only; no userspace task creation or remote CI claim"
+}

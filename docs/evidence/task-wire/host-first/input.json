@@ -1,0 +1,35 @@
+{
+  "cwd": "/workspace",
+  "expected_cases": [
+    "all_completion_values",
+    "bounded_mutations_are_total",
+    "encoders_are_transactional",
+    "grant_error_precedence",
+    "grant_handle_canonicality",
+    "grant_limits_and_features",
+    "grant_literal",
+    "grant_through_startup_input",
+    "malformed_completion_words",
+    "spawn_error_precedence",
+    "spawn_flags_reserved_and_rights",
+    "spawn_frames_and_range_bounds",
+    "spawn_input_lengths_and_presence",
+    "spawn_literal",
+    "unaligned_and_owned_values",
+    "unknown_program_is_metadata",
+    "wait_and_cancel_arguments",
+    "wire_constants"
+  ],
+  "sources": {
+    "rust-toolchain.toml": "da55df283f88667ec7a31b7392d493f574a36c88467b955d467c3a3cbe2e9fb1",
+    "Cargo.lock": "383e08e95bee956a6cc81d5ee51e1b4dca8355d92c80473228e2c1413b7b177b",
+    "Cargo.toml": "b5ce112343302244db423f588b44e1c4da81b030bf2a3b2d66c7552a94bec1d8",
+    "crates/hm-kernel/Cargo.toml": "5b738f47733eb9c7ff18b1a4a635da1f747595796e3f68ba812379f03c694b9c",
+    "crates/hm-kernel/src/lib.rs": "8df4484da9d7b4e936a8c91d96903c15197b98e70594bf17321482bc729fb497",
+    "crates/hm-kernel/src/task_wire.rs": "8b3b76438f013d06df43b6af89c20b72b1514a65194483739f028825d04dc711",
+    "crates/hm-kernel/src/startup_input.rs": "78f6593de5ff4dcdaab66b58bc807e04dcf78008955b6295e98479cb8bbce059",
+    "crates/hm-kernel/tests/task_wire.rs": "a02c6ced93812e45d1750211485537c999dd1d3269557ae0d4ef60a23f3d1508",
+    "tools/check_task_wire.py": "8a628a2fbba9646345e9154d4b40f7982e5e55c7eb8a9ae34cbe0e9600b6a581",
+    "docs/design/0029-native-task-creation.md": "c94018a5be2f82f1dba3a3c6436c5186f1b1d90c583205ce2cf43eea0d3b1f3c"
+  }
+}

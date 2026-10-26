@@ -1,0 +1,983 @@
+{
+  "type-boundary/result.json": {
+    "passed": true,
+    "scope": "safe-client type boundary; not runtime isolation",
+    "probes": {
+      "valid_client": {
+        "passed": true,
+        "returncode": 0,
+        "expected_rejection": null
+      },
+      "cross_instance": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "lifetime"
+      },
+      "escaping_handle": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "lifetime"
+      },
+      "private_generation": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0616"
+      },
+      "uncloneable_instance": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0277"
+      }
+    }
+  },
+  "native-types/result.json": {
+    "passed": true,
+    "probes": {
+      "valid_issue_startup": {
+        "passed": true,
+        "returncode": 0,
+        "expected_rejection": null
+      },
+      "valid_dispatch_host": {
+        "passed": true,
+        "returncode": 0,
+        "expected_rejection": null
+      },
+      "valid_move_session": {
+        "passed": true,
+        "returncode": 0,
+        "expected_rejection": null
+      },
+      "forge_issuer": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0451"
+      },
+      "forge_session": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0451"
+      },
+      "issuer_clone": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0277"
+      },
+      "session_clone": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0277"
+      },
+      "change_generation": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0616"
+      },
+      "change_grant": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0616"
+      },
+      "change_calls": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0616"
+      },
+      "change_budget": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0616"
+      },
+      "revive_session": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0616"
+      }
+    },
+    "target": "x86_64-unknown-none",
+    "scope": "actual safe native-policy type encapsulation; no hardware authority or EL0 execution"
+  },
+  "startup-input-types/result.json": {
+    "passed": true,
+    "probes": {
+      "owned_source_independence": {
+        "passed": true,
+        "returncode": 0,
+        "expected_rejection": null
+      },
+      "move_encode_drop_then_decode": {
+        "passed": true,
+        "returncode": 0,
+        "expected_rejection": null
+      },
+      "view_copy_and_payload_borrow": {
+        "passed": true,
+        "returncode": 0,
+        "expected_rejection": null
+      },
+      "constants_absent_and_errors": {
+        "passed": true,
+        "returncode": 0,
+        "expected_rejection": null
+      },
+      "forge_input": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0451"
+      },
+      "forge_view": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0451"
+      },
+      "clone_input": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0599"
+      },
+      "copy_input": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0382"
+      },
+      "input_bytes_escape_owner": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0515"
+      },
+      "view_escape_extension": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0515"
+      },
+      "view_bytes_escape_extension": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0515"
+      },
+      "mutate_input_while_borrowed": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0506"
+      },
+      "mutate_extension_while_view_live": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0506"
+      },
+      "mutate_view_payload": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0594"
+      }
+    },
+    "target": "x86_64-unknown-none",
+    "scope": "actual owned startup input and immutable extension view lifetimes; no runtime integration"
+  },
+  "task-wire-types/result.json": {
+    "passed": true,
+    "probes": {
+      "owned_copy_detaches_source": {
+        "passed": true,
+        "returncode": 0,
+        "expected_rejection": null
+      },
+      "grant_metadata_is_copy": {
+        "passed": true,
+        "returncode": 0,
+        "expected_rejection": null
+      },
+      "forge_spawn": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0451"
+      },
+      "forge_grant": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0451"
+      },
+      "mutate_spawn": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0616"
+      },
+      "mutate_grant": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0616"
+      }
+    },
+    "target": "x86_64-unknown-none",
+    "scope": "actual private task-wire metadata and owned copies; no hardware authority"
+  },
+  "process-budget-types/result.json": {
+    "passed": true,
+    "probes": {
+      "move_begin_finish_stop": {
+        "passed": true,
+        "returncode": 0,
+        "expected_rejection": null
+      },
+      "snapshot_mutation_is_detached": {
+        "passed": true,
+        "returncode": 0,
+        "expected_rejection": null
+      },
+      "copied_errors_and_snapshots": {
+        "passed": true,
+        "returncode": 0,
+        "expected_rejection": null
+      },
+      "forge_budget": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0451"
+      },
+      "clone_budget": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0599"
+      },
+      "copy_budget": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0382"
+      },
+      "no_reset_method": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0599"
+      },
+      "no_production_test_seam": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0425"
+      },
+      "snapshot_cannot_restore_owner": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0308"
+      },
+      "shared_budget_cannot_begin": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0596"
+      }
+    },
+    "target": "x86_64-unknown-none",
+    "scope": "actual affine budget ownership and detached snapshots; no resumable runtime"
+  },
+  "boot-image-types/result.json": {
+    "passed": true,
+    "probes": {
+      "valid_image": {
+        "passed": true,
+        "returncode": 0,
+        "expected_rejection": null
+      },
+      "temporary_path": {
+        "passed": true,
+        "returncode": 0,
+        "expected_rejection": null
+      },
+      "image_after_local_plan": {
+        "passed": true,
+        "returncode": 0,
+        "expected_rejection": null
+      },
+      "escape_input": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0515"
+      },
+      "mutate_live_input": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0506"
+      },
+      "forge_image": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0451"
+      }
+    },
+    "target": "x86_64-unknown-none",
+    "scope": "actual safe boot image borrowed-input encapsulation; no execution"
+  },
+  "initramfs-types/result.json": {
+    "passed": true,
+    "probes": {
+      "valid_parse_lookup": {
+        "passed": true,
+        "returncode": 0,
+        "expected_rejection": null
+      },
+      "valid_entry_after_archive_drop": {
+        "passed": true,
+        "returncode": 0,
+        "expected_rejection": null
+      },
+      "valid_elf_composition": {
+        "passed": true,
+        "returncode": 0,
+        "expected_rejection": null
+      },
+      "valid_entry_copy": {
+        "passed": true,
+        "returncode": 0,
+        "expected_rejection": null
+      },
+      "forge_archive": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0451"
+      },
+      "forge_entry": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0451"
+      },
+      "archive_outlive_input": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0515"
+      },
+      "entry_outlive_input": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0515"
+      },
+      "mutate_input_while_entry_live": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0506"
+      },
+      "mutate_payload": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0594"
+      },
+      "mutate_path": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0594"
+      }
+    },
+    "target": "x86_64-unknown-none",
+    "scope": "actual safe initramfs entry/input lifetime encapsulation; no archive-backed execution"
+  },
+  "elf-types/result.json": {
+    "passed": true,
+    "scope": "actual safe ELF metadata and input lifetime boundaries; no execution or isolation claim",
+    "target": "x86_64-unknown-none",
+    "probes": {
+      "valid_parse_use": {
+        "passed": true,
+        "returncode": 0,
+        "expected_rejection": null
+      },
+      "valid_segment_copy": {
+        "passed": true,
+        "returncode": 0,
+        "expected_rejection": null
+      },
+      "valid_bytes_after_image_drop": {
+        "passed": true,
+        "returncode": 0,
+        "expected_rejection": null
+      },
+      "forge_image": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0451"
+      },
+      "forge_segment": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0451"
+      },
+      "private_image_entry": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0616"
+      },
+      "private_segment_permissions": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0616"
+      },
+      "image_outlive_input": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0515"
+      },
+      "mutate_input_while_image_live": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0506"
+      },
+      "file_bytes_outlive_input": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0515"
+      },
+      "mutate_file_bytes": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0594"
+      }
+    }
+  },
+  "frame-types/result.json": {
+    "passed": true,
+    "scope": "actual frame/heap module safe-client types; no runtime physical-memory claim",
+    "probes": {
+      "library": {
+        "passed": true,
+        "returncode": 0
+      },
+      "valid_client": {
+        "passed": true,
+        "returncode": 0,
+        "expected_rejection": null
+      },
+      "frame_clone": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0277"
+      },
+      "pool_clone": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0277"
+      },
+      "outlive_pool": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0515"
+      },
+      "drop_borrowed": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0505"
+      },
+      "mutable_alias": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0499"
+      },
+      "forge_frame": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0451"
+      },
+      "private_constructor": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0624"
+      },
+      "frame_send": {
+        "passed": true,
+        "returncode": 0,
+        "expected_rejection": null
+      },
+      "pool_sync": {
+        "passed": true,
+        "returncode": 0,
+        "expected_rejection": null
+      },
+      "pool_send": {
+        "passed": true,
+        "returncode": 0,
+        "expected_rejection": null
+      },
+      "frame_sync": {
+        "passed": true,
+        "returncode": 0,
+        "expected_rejection": null
+      },
+      "block_send_sync": {
+        "passed": true,
+        "returncode": 0,
+        "expected_rejection": null
+      },
+      "box_cell_send": {
+        "passed": true,
+        "returncode": 0,
+        "expected_rejection": null
+      },
+      "box_cell_sync": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0277"
+      },
+      "box_borrowed_cell_send": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0277"
+      },
+      "box_raw_pointer_send": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0277"
+      },
+      "private_metadata_guard": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0603"
+      },
+      "valid_heap": {
+        "passed": true,
+        "returncode": 0,
+        "expected_rejection": null
+      },
+      "block_clone": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0277"
+      },
+      "box_clone": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0277"
+      },
+      "borrowed_value_escape": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0515"
+      },
+      "box_outlive_pool": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0515"
+      },
+      "drop_borrowed_box": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0505"
+      },
+      "box_mutable_alias": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0499"
+      },
+      "private_backing_bytes": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0616"
+      },
+      "forge_box": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0451"
+      },
+      "drop_borrowed_block": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0505"
+      },
+      "box_send": {
+        "passed": true,
+        "returncode": 0,
+        "expected_rejection": null
+      },
+      "box_sync": {
+        "passed": true,
+        "returncode": 0,
+        "expected_rejection": null
+      }
+    }
+  },
+  "mutex-types/result.json": {
+    "passed": true,
+    "scope": "actual core mutex safe-client type boundary",
+    "probes": {
+      "library": {
+        "passed": true,
+        "returncode": 0
+      },
+      "valid_owned_access": {
+        "passed": true,
+        "returncode": 0,
+        "expected_rejection": null
+      },
+      "valid_send_nonsync_value": {
+        "passed": true,
+        "returncode": 0,
+        "expected_rejection": null
+      },
+      "valid_borrowed_value": {
+        "passed": true,
+        "returncode": 0,
+        "expected_rejection": null
+      },
+      "valid_const": {
+        "passed": true,
+        "returncode": 0,
+        "expected_rejection": null
+      },
+      "valid_forget": {
+        "passed": true,
+        "returncode": 0,
+        "expected_rejection": null
+      },
+      "mutex_nonsend_sync": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0277"
+      },
+      "mutex_nonsend_send": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0277"
+      },
+      "guard_send": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0277"
+      },
+      "guard_sync": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0277"
+      },
+      "cell_guard_sync": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0277"
+      },
+      "guard_clone": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0277"
+      },
+      "mutex_clone": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0277"
+      },
+      "guard_outlives_mutex": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0515"
+      },
+      "borrow_outlives_guard": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0515"
+      },
+      "borrowed_value_escape": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0515"
+      },
+      "drop_borrowed_guard": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0505"
+      },
+      "into_inner_while_locked": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0505"
+      },
+      "get_mut_while_locked": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0502"
+      },
+      "mutable_guard_alias": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0499"
+      },
+      "private_value": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0616"
+      },
+      "private_lock_state": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0616"
+      },
+      "forge_guard": {
+        "passed": true,
+        "returncode": 1,
+        "expected_rejection": "E0451"
+      }
+    }
+  },
+  "boot/result.json": {
+    "passed": true,
+    "arch": "x86_64",
+    "expected_exit": 33,
+    "scope": "hematite bootstrap tests; no Linux ABI compatibility claim",
+    "expected_cases": [
+      "write_protect",
+      "nx",
+      "user_execute_protect",
+      "user_access_protect",
+      "wx",
+      "stack_guard",
+      "null_guard",
+      "checked_range",
+      "monitor_bounds",
+      "cap_authority",
+      "cap_limits",
+      "cap_lifetime",
+      "cap_generation",
+      "boot_memory_valid",
+      "boot_memory_malformed",
+      "cpu_topology_valid",
+      "cpu_topology_malformed",
+      "cpu_topology_live",
+      "elf_valid",
+      "elf_malformed",
+      "frame_ranges",
+      "frame_boundaries",
+      "frame_contract",
+      "heap_blocks",
+      "heap_values",
+      "event_contract",
+      "mutex_contract",
+      "mutex_lifetime",
+      "mutex_workers",
+      "thread_contract",
+      "thread_limits",
+      "thread_core",
+      "timer_contract",
+      "fault_contract",
+      "mapping_contract",
+      "mapping_limits",
+      "mapping_hardware",
+      "cpu_local_state",
+      "gic_ownership",
+      "secondary_memory",
+      "cap_orderings"
+    ],
+    "observed_records": [
+      "HMTEST BEGIN 41",
+      "HMTEST PASS write_protect",
+      "HMTEST PASS nx",
+      "HMTEST PASS user_execute_protect",
+      "HMTEST PASS user_access_protect",
+      "HMTEST PASS wx",
+      "HMTEST PASS stack_guard",
+      "HMTEST PASS null_guard",
+      "HMTEST PASS checked_range",
+      "HMTEST PASS monitor_bounds",
+      "HMTEST PASS cap_authority",
+      "HMTEST PASS cap_limits",
+      "HMTEST PASS cap_lifetime",
+      "HMTEST PASS cap_generation",
+      "HMTEST PASS boot_memory_valid",
+      "HMTEST PASS boot_memory_malformed",
+      "HMTEST PASS cpu_topology_valid",
+      "HMTEST PASS cpu_topology_malformed",
+      "HMTEST PASS cpu_topology_live",
+      "HMTEST PASS elf_valid",
+      "HMTEST PASS elf_malformed",
+      "HMTEST PASS frame_ranges",
+      "HMTEST PASS frame_boundaries",
+      "HMTEST PASS frame_contract",
+      "HMTEST PASS heap_blocks",
+      "HMTEST PASS heap_values",
+      "HMTEST PASS event_contract",
+      "HMTEST PASS mutex_contract",
+      "HMTEST PASS mutex_lifetime",
+      "HMTEST PASS mutex_workers",
+      "HMTEST PASS thread_contract",
+      "HMTEST PASS thread_limits",
+      "HMTEST PASS thread_core",
+      "HMTEST PASS timer_contract",
+      "HMTEST PASS fault_contract",
+      "HMTEST PASS mapping_contract",
+      "HMTEST PASS mapping_limits",
+      "HMTEST PASS mapping_hardware",
+      "HMTEST PASS cpu_local_state",
+      "HMTEST PASS gic_ownership",
+      "HMTEST PASS secondary_memory",
+      "HMTEST PASS cap_orderings",
+      "HMTEST END 41"
+    ],
+    "returncode": 33,
+    "timed_out": false,
+    "launch_error": null,
+    "errors": [],
+    "started_utc": "2026-10-26T22:47:53.727940+00:00",
+    "elapsed_seconds": 0.16501005401369184,
+    "timeout_seconds": 20
+  },
+  "profiles/result.json": {
+    "passed": true,
+    "scope": "bootstrap CPU rejection and serial monitor; no Linux ABI claims",
+    "profiles": {
+      "missing-nx": true,
+      "missing-smep": true,
+      "missing-smap": true,
+      "monitor": true
+    },
+    "arch": "x86_64"
+  },
+  "profiles/missing-nx/result.json": {
+    "scope": "bootstrap rejects CPU without nx",
+    "arch": "x86_64",
+    "started_utc": "2026-10-26T22:47:53.936660+00:00",
+    "timeout_seconds": 20,
+    "returncode": 35,
+    "timed_out": false,
+    "launch_error": null,
+    "checks": {
+      "explicit_boot_rejection_exit": true,
+      "no_test_report": true,
+      "within_deadline": true,
+      "launched": true
+    },
+    "errors": [],
+    "passed": true,
+    "elapsed_seconds": 0.06469599704723805
+  },
+  "profiles/missing-smep/result.json": {
+    "scope": "bootstrap rejects CPU without smep",
+    "arch": "x86_64",
+    "started_utc": "2026-10-26T22:47:54.002103+00:00",
+    "timeout_seconds": 20,
+    "returncode": 35,
+    "timed_out": false,
+    "launch_error": null,
+    "checks": {
+      "explicit_boot_rejection_exit": true,
+      "no_test_report": true,
+      "within_deadline": true,
+      "launched": true
+    },
+    "errors": [],
+    "passed": true,
+    "elapsed_seconds": 0.06449464301113039
+  },
+  "profiles/missing-smap/result.json": {
+    "scope": "bootstrap rejects CPU without smap",
+    "arch": "x86_64",
+    "started_utc": "2026-10-26T22:47:54.067173+00:00",
+    "timeout_seconds": 20,
+    "returncode": 35,
+    "timed_out": false,
+    "launch_error": null,
+    "checks": {
+      "explicit_boot_rejection_exit": true,
+      "no_test_report": true,
+      "within_deadline": true,
+      "launched": true
+    },
+    "errors": [],
+    "passed": true,
+    "elapsed_seconds": 0.06459332804661244
+  },
+  "profiles/monitor/result.json": {
+    "scope": "live bootstrap monitor; host stops VM after serial interactions",
+    "arch": "x86_64",
+    "started_utc": "2026-10-26T22:47:54.132753+00:00",
+    "timeout_seconds": 20,
+    "returncode": 0,
+    "timed_out": false,
+    "launch_error": null,
+    "host_terminated": true,
+    "host_killed": false,
+    "checks": {
+      "initial_prompt_and_banner": true,
+      "help": true,
+      "status": true,
+      "tests": true,
+      "oversized_line": true,
+      "unknown_command": true,
+      "help_after_rejection": true,
+      "repeated_tests": true,
+      "status_after_tests": true,
+      "unsupported_apps": true,
+      "unsupported_run": true,
+      "unsupported_input": true,
+      "status_after_unsupported": true,
+      "monitor_still_running": true,
+      "complete_test_inventory": true
+    },
+    "errors": [],
+    "interactions": [
+      {
+        "name": "help",
+        "input_hex": "68656c700a",
+        "expected_response_hex": "68656c700a68656c702020202d2073686f7720636f6d6d616e64730a737461747573202d20696e737065637420626f6f742070726f74656374696f6e730a746573742020202d2072756e20626f6f7473747261702074657374730a617070732020202d206c697374206e61746976652070726f6772616d730a72756e203c706174683e205b746578745d202d206c61756e63682061206e61746976652070726f6772616d0a72756e2d67726f7570203c70617468313e203c70617468323e202d2072756e2074776f206e61746976652070726f6772616d730a",
+        "response_hex": "68656c700d0a68656c702020202d2073686f7720636f6d6d616e64730d0a737461747573202d20696e737065637420626f6f742070726f74656374696f6e730d0a746573742020202d2072756e20626f6f7473747261702074657374730d0a617070732020202d206c697374206e61746976652070726f6772616d730d0a72756e203c706174683e205b746578745d202d206c61756e63682061206e61746976652070726f6772616d0d0a72756e2d67726f7570203c70617468313e203c70617468323e202d2072756e2074776f206e61746976652070726f6772616d730d0a"
+      },
+      {
+        "name": "status",
+        "input_hex": "7374617475730a",
+        "expected_response_hex": "7374617475730a77726974652070726f74656374696f6e3a204f4b0a4e583a204f4b0a7573657220657865637574696f6e2070726f74656374696f6e3a204f4b0a75736572206163636573732070726f74656374696f6e3a204f4b0a575e58206d617070696e67733a204f4b0a737461636b2067756172643a204f4b0a6e756c6c2067756172643a204f4b0a4e6f2073746f72616765206f72206e6574776f726b696e672e0a4e6174697665206c61756e636865723a20756e737570706f727465640a4e6174697665206c61756e636865733a20300a4c6173742070726570617265642067656e65726174696f6e3a206e6f6e650a46726565206672616d65733a20756e617661696c61626c650a",
+        "response_hex": "7374617475730d0a77726974652070726f74656374696f6e3a204f4b0d0a4e583a204f4b0d0a7573657220657865637574696f6e2070726f74656374696f6e3a204f4b0d0a75736572206163636573732070726f74656374696f6e3a204f4b0d0a575e58206d617070696e67733a204f4b0d0a737461636b2067756172643a204f4b0d0a6e756c6c2067756172643a204f4b0d0a4e6f2073746f72616765206f72206e6574776f726b696e672e0d0a4e6174697665206c61756e636865723a20756e737570706f727465640d0a4e6174697665206c61756e636865733a20300d0a4c6173742070726570617265642067656e65726174696f6e3a206e6f6e650d0a46726565206672616d65733a20756e617661696c61626c650d0a"
+      },
+      {
+        "name": "tests",
+        "input_hex": "746573740a",
+        "expected_response_hex": "746573740a484d5445535420424547494e2034310a484d5445535420504153532077726974655f70726f746563740a484d544553542050415353206e780a484d54455354205041535320757365725f657865637574655f70726f746563740a484d54455354205041535320757365725f6163636573735f70726f746563740a484d5445535420504153532077780a484d54455354205041535320737461636b5f67756172640a484d544553542050415353206e756c6c5f67756172640a484d54455354205041535320636865636b65645f72616e67650a484d544553542050415353206d6f6e69746f725f626f756e64730a484d544553542050415353206361705f617574686f726974790a484d544553542050415353206361705f6c696d6974730a484d544553542050415353206361705f6c69666574696d650a484d544553542050415353206361705f67656e65726174696f6e0a484d54455354205041535320626f6f745f6d656d6f72795f76616c69640a484d54455354205041535320626f6f745f6d656d6f72795f6d616c666f726d65640a484d544553542050415353206370755f746f706f6c6f67795f76616c69640a484d544553542050415353206370755f746f706f6c6f67795f6d616c666f726d65640a484d544553542050415353206370755f746f706f6c6f67795f6c6976650a484d54455354205041535320656c665f76616c69640a484d54455354205041535320656c665f6d616c666f726d65640a484d544553542050415353206672616d655f72616e6765730a484d544553542050415353206672616d655f626f756e6461726965730a484d544553542050415353206672616d655f636f6e74726163740a484d54455354205041535320686561705f626c6f636b730a484d54455354205041535320686561705f76616c7565730a484d544553542050415353206576656e745f636f6e74726163740a484d544553542050415353206d757465785f636f6e74726163740a484d544553542050415353206d757465785f6c69666574696d650a484d544553542050415353206d757465785f776f726b6572730a484d544553542050415353207468726561645f636f6e74726163740a484d544553542050415353207468726561645f6c696d6974730a484d544553542050415353207468726561645f636f72650a484d5445535420504153532074696d65725f636f6e74726163740a484d544553542050415353206661756c745f636f6e74726163740a484d544553542050415353206d617070696e675f636f6e74726163740a484d544553542050415353206d617070696e675f6c696d6974730a484d544553542050415353206d617070696e675f68617264776172650a484d544553542050415353206370755f6c6f63616c5f73746174650a484d544553542050415353206769635f6f776e6572736869700a484d544553542050415353207365636f6e646172795f6d656d6f72790a484d544553542050415353206361705f6f72646572696e67730a484d5445535420454e442034310a426f6f747374726170207465737473207061737365642e0a",
+        "response_hex": "746573740d0a484d5445535420424547494e2034310d0a484d5445535420504153532077726974655f70726f746563740d0a484d544553542050415353206e780d0a484d54455354205041535320757365725f657865637574655f70726f746563740d0a484d54455354205041535320757365725f6163636573735f70726f746563740d0a484d5445535420504153532077780d0a484d54455354205041535320737461636b5f67756172640d0a484d544553542050415353206e756c6c5f67756172640d0a484d54455354205041535320636865636b65645f72616e67650d0a484d544553542050415353206d6f6e69746f725f626f756e64730d0a484d544553542050415353206361705f617574686f726974790d0a484d544553542050415353206361705f6c696d6974730d0a484d544553542050415353206361705f6c69666574696d650d0a484d544553542050415353206361705f67656e65726174696f6e0d0a484d54455354205041535320626f6f745f6d656d6f72795f76616c69640d0a484d54455354205041535320626f6f745f6d656d6f72795f6d616c666f726d65640d0a484d544553542050415353206370755f746f706f6c6f67795f76616c69640d0a484d544553542050415353206370755f746f706f6c6f67795f6d616c666f726d65640d0a484d544553542050415353206370755f746f706f6c6f67795f6c6976650d0a484d54455354205041535320656c665f76616c69640d0a484d54455354205041535320656c665f6d616c666f726d65640d0a484d544553542050415353206672616d655f72616e6765730d0a484d544553542050415353206672616d655f626f756e6461726965730d0a484d544553542050415353206672616d655f636f6e74726163740d0a484d54455354205041535320686561705f626c6f636b730d0a484d54455354205041535320686561705f76616c7565730d0a484d544553542050415353206576656e745f636f6e74726163740d0a484d544553542050415353206d757465785f636f6e74726163740d0a484d544553542050415353206d757465785f6c69666574696d650d0a484d544553542050415353206d757465785f776f726b6572730d0a484d544553542050415353207468726561645f636f6e74726163740d0a484d544553542050415353207468726561645f6c696d6974730d0a484d544553542050415353207468726561645f636f72650d0a484d5445535420504153532074696d65725f636f6e74726163740d0a484d544553542050415353206661756c745f636f6e74726163740d0a484d544553542050415353206d617070696e675f636f6e74726163740d0a484d544553542050415353206d617070696e675f6c696d6974730d0a484d544553542050415353206d617070696e675f68617264776172650d0a484d544553542050415353206370755f6c6f63616c5f73746174650d0a484d544553542050415353206769635f6f776e6572736869700d0a484d544553542050415353207365636f6e646172795f6d656d6f72790d0a484d544553542050415353206361705f6f72646572696e67730d0a484d5445535420454e442034310d0a426f6f747374726170207465737473207061737365642e0d0a"
+      },
+      {
+        "name": "oversized_line",
+        "input_hex": "78787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878780a",
+        "expected_response_hex": "787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878780a52656a65637465643a20757365206174206d6f7374203634207072696e7461626c652041534349492062797465732e0a",
+        "response_hex": "787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878780d0a52656a65637465643a20757365206174206d6f7374203634207072696e7461626c652041534349492062797465732e0d0a"
+      },
+      {
+        "name": "unknown_command",
+        "input_hex": "756e6b6e6f776e0a",
+        "expected_response_hex": "756e6b6e6f776e0a556e6b6e6f776e20636f6d6d616e643b20747970652068656c702e0a",
+        "response_hex": "756e6b6e6f776e0d0a556e6b6e6f776e20636f6d6d616e643b20747970652068656c702e0d0a"
+      },
+      {
+        "name": "help_after_rejection",
+        "input_hex": "68656c700a",
+        "expected_response_hex": "68656c700a68656c702020202d2073686f7720636f6d6d616e64730a737461747573202d20696e737065637420626f6f742070726f74656374696f6e730a746573742020202d2072756e20626f6f7473747261702074657374730a617070732020202d206c697374206e61746976652070726f6772616d730a72756e203c706174683e205b746578745d202d206c61756e63682061206e61746976652070726f6772616d0a72756e2d67726f7570203c70617468313e203c70617468323e202d2072756e2074776f206e61746976652070726f6772616d730a",
+        "response_hex": "68656c700d0a68656c702020202d2073686f7720636f6d6d616e64730d0a737461747573202d20696e737065637420626f6f742070726f74656374696f6e730d0a746573742020202d2072756e20626f6f7473747261702074657374730d0a617070732020202d206c697374206e61746976652070726f6772616d730d0a72756e203c706174683e205b746578745d202d206c61756e63682061206e61746976652070726f6772616d0d0a72756e2d67726f7570203c70617468313e203c70617468323e202d2072756e2074776f206e61746976652070726f6772616d730d0a"
+      },
+      {
+        "name": "repeated_tests",
+        "input_hex": "746573740a",
+        "expected_response_hex": "746573740a484d5445535420424547494e2034310a484d5445535420504153532077726974655f70726f746563740a484d544553542050415353206e780a484d54455354205041535320757365725f657865637574655f70726f746563740a484d54455354205041535320757365725f6163636573735f70726f746563740a484d5445535420504153532077780a484d54455354205041535320737461636b5f67756172640a484d544553542050415353206e756c6c5f67756172640a484d54455354205041535320636865636b65645f72616e67650a484d544553542050415353206d6f6e69746f725f626f756e64730a484d544553542050415353206361705f617574686f726974790a484d544553542050415353206361705f6c696d6974730a484d544553542050415353206361705f6c69666574696d650a484d544553542050415353206361705f67656e65726174696f6e0a484d54455354205041535320626f6f745f6d656d6f72795f76616c69640a484d54455354205041535320626f6f745f6d656d6f72795f6d616c666f726d65640a484d544553542050415353206370755f746f706f6c6f67795f76616c69640a484d544553542050415353206370755f746f706f6c6f67795f6d616c666f726d65640a484d544553542050415353206370755f746f706f6c6f67795f6c6976650a484d54455354205041535320656c665f76616c69640a484d54455354205041535320656c665f6d616c666f726d65640a484d544553542050415353206672616d655f72616e6765730a484d544553542050415353206672616d655f626f756e6461726965730a484d544553542050415353206672616d655f636f6e74726163740a484d54455354205041535320686561705f626c6f636b730a484d54455354205041535320686561705f76616c7565730a484d544553542050415353206576656e745f636f6e74726163740a484d544553542050415353206d757465785f636f6e74726163740a484d544553542050415353206d757465785f6c69666574696d650a484d544553542050415353206d757465785f776f726b6572730a484d544553542050415353207468726561645f636f6e74726163740a484d544553542050415353207468726561645f6c696d6974730a484d544553542050415353207468726561645f636f72650a484d5445535420504153532074696d65725f636f6e74726163740a484d544553542050415353206661756c745f636f6e74726163740a484d544553542050415353206d617070696e675f636f6e74726163740a484d544553542050415353206d617070696e675f6c696d6974730a484d544553542050415353206d617070696e675f68617264776172650a484d544553542050415353206370755f6c6f63616c5f73746174650a484d544553542050415353206769635f6f776e6572736869700a484d544553542050415353207365636f6e646172795f6d656d6f72790a484d544553542050415353206361705f6f72646572696e67730a484d5445535420454e442034310a426f6f747374726170207465737473207061737365642e0a",
+        "response_hex": "746573740d0a484d5445535420424547494e2034310d0a484d5445535420504153532077726974655f70726f746563740d0a484d544553542050415353206e780d0a484d54455354205041535320757365725f657865637574655f70726f746563740d0a484d54455354205041535320757365725f6163636573735f70726f746563740d0a484d5445535420504153532077780d0a484d54455354205041535320737461636b5f67756172640d0a484d544553542050415353206e756c6c5f67756172640d0a484d54455354205041535320636865636b65645f72616e67650d0a484d544553542050415353206d6f6e69746f725f626f756e64730d0a484d544553542050415353206361705f617574686f726974790d0a484d544553542050415353206361705f6c696d6974730d0a484d544553542050415353206361705f6c69666574696d650d0a484d544553542050415353206361705f67656e65726174696f6e0d0a484d54455354205041535320626f6f745f6d656d6f72795f76616c69640d0a484d54455354205041535320626f6f745f6d656d6f72795f6d616c666f726d65640d0a484d544553542050415353206370755f746f706f6c6f67795f76616c69640d0a484d544553542050415353206370755f746f706f6c6f67795f6d616c666f726d65640d0a484d544553542050415353206370755f746f706f6c6f67795f6c6976650d0a484d54455354205041535320656c665f76616c69640d0a484d54455354205041535320656c665f6d616c666f726d65640d0a484d544553542050415353206672616d655f72616e6765730d0a484d544553542050415353206672616d655f626f756e6461726965730d0a484d544553542050415353206672616d655f636f6e74726163740d0a484d54455354205041535320686561705f626c6f636b730d0a484d54455354205041535320686561705f76616c7565730d0a484d544553542050415353206576656e745f636f6e74726163740d0a484d544553542050415353206d757465785f636f6e74726163740d0a484d544553542050415353206d757465785f6c69666574696d650d0a484d544553542050415353206d757465785f776f726b6572730d0a484d544553542050415353207468726561645f636f6e74726163740d0a484d544553542050415353207468726561645f6c696d6974730d0a484d544553542050415353207468726561645f636f72650d0a484d5445535420504153532074696d65725f636f6e74726163740d0a484d544553542050415353206661756c745f636f6e74726163740d0a484d544553542050415353206d617070696e675f636f6e74726163740d0a484d544553542050415353206d617070696e675f6c696d6974730d0a484d544553542050415353206d617070696e675f68617264776172650d0a484d544553542050415353206370755f6c6f63616c5f73746174650d0a484d544553542050415353206769635f6f776e6572736869700d0a484d544553542050415353207365636f6e646172795f6d656d6f72790d0a484d544553542050415353206361705f6f72646572696e67730d0a484d5445535420454e442034310d0a426f6f747374726170207465737473207061737365642e0d0a"
+      },
+      {
+        "name": "status_after_tests",
+        "input_hex": "7374617475730a",
+        "expected_response_hex": "7374617475730a77726974652070726f74656374696f6e3a204f4b0a4e583a204f4b0a7573657220657865637574696f6e2070726f74656374696f6e3a204f4b0a75736572206163636573732070726f74656374696f6e3a204f4b0a575e58206d617070696e67733a204f4b0a737461636b2067756172643a204f4b0a6e756c6c2067756172643a204f4b0a4e6f2073746f72616765206f72206e6574776f726b696e672e0a4e6174697665206c61756e636865723a20756e737570706f727465640a4e6174697665206c61756e636865733a20300a4c6173742070726570617265642067656e65726174696f6e3a206e6f6e650a46726565206672616d65733a20756e617661696c61626c650a",
+        "response_hex": "7374617475730d0a77726974652070726f74656374696f6e3a204f4b0d0a4e583a204f4b0d0a7573657220657865637574696f6e2070726f74656374696f6e3a204f4b0d0a75736572206163636573732070726f74656374696f6e3a204f4b0d0a575e58206d617070696e67733a204f4b0d0a737461636b2067756172643a204f4b0d0a6e756c6c2067756172643a204f4b0d0a4e6f2073746f72616765206f72206e6574776f726b696e672e0d0a4e6174697665206c61756e636865723a20756e737570706f727465640d0a4e6174697665206c61756e636865733a20300d0a4c6173742070726570617265642067656e65726174696f6e3a206e6f6e650d0a46726565206672616d65733a20756e617661696c61626c650d0a"
+      },
+      {
+        "name": "unsupported_apps",
+        "input_hex": "617070730a",
+        "expected_response_hex": "617070730a4e6174697665206c61756e6368696e6720697320756e737570706f72746564206f6e207468697320706c6174666f726d2e0a",
+        "response_hex": "617070730d0a4e6174697665206c61756e6368696e6720697320756e737570706f72746564206f6e207468697320706c6174666f726d2e0d0a"
+      },
+      {
+        "name": "unsupported_run",
+        "input_hex": "72756e2062696e2f68656c6c6f0a",
+        "expected_response_hex": "72756e2062696e2f68656c6c6f0a4e6174697665206c61756e6368696e6720697320756e737570706f72746564206f6e207468697320706c6174666f726d2e0a",
+        "response_hex": "72756e2062696e2f68656c6c6f0d0a4e6174697665206c61756e6368696e6720697320756e737570706f72746564206f6e207468697320706c6174666f726d2e0d0a"
+      },
+      {
+        "name": "unsupported_input",
+        "input_hex": "72756e2062696e2f6563686f20746578740a",
+        "expected_response_hex": "72756e2062696e2f6563686f20746578740a4e6174697665206c61756e6368696e6720697320756e737570706f72746564206f6e207468697320706c6174666f726d2e0a",
+        "response_hex": "72756e2062696e2f6563686f20746578740d0a4e6174697665206c61756e6368696e6720697320756e737570706f72746564206f6e207468697320706c6174666f726d2e0d0a"
+      },
+      {
+        "name": "status_after_unsupported",
+        "input_hex": "7374617475730a",
+        "expected_response_hex": "7374617475730a77726974652070726f74656374696f6e3a204f4b0a4e583a204f4b0a7573657220657865637574696f6e2070726f74656374696f6e3a204f4b0a75736572206163636573732070726f74656374696f6e3a204f4b0a575e58206d617070696e67733a204f4b0a737461636b2067756172643a204f4b0a6e756c6c2067756172643a204f4b0a4e6f2073746f72616765206f72206e6574776f726b696e672e0a4e6174697665206c61756e636865723a20756e737570706f727465640a4e6174697665206c61756e636865733a20300a4c6173742070726570617265642067656e65726174696f6e3a206e6f6e650a46726565206672616d65733a20756e617661696c61626c650a",
+        "response_hex": "7374617475730d0a77726974652070726f74656374696f6e3a204f4b0d0a4e583a204f4b0d0a7573657220657865637574696f6e2070726f74656374696f6e3a204f4b0d0a75736572206163636573732070726f74656374696f6e3a204f4b0d0a575e58206d617070696e67733a204f4b0d0a737461636b2067756172643a204f4b0d0a6e756c6c2067756172643a204f4b0d0a4e6f2073746f72616765206f72206e6574776f726b696e672e0d0a4e6174697665206c61756e636865723a20756e737570706f727465640d0a4e6174697665206c61756e636865733a20300d0a4c6173742070726570617265642067656e65726174696f6e3a206e6f6e650d0a46726565206672616d65733a20756e617661696c61626c650d0a"
+      }
+    ],
+    "passed": true,
+    "elapsed_seconds": 0.12343923607841134
+  }
+}

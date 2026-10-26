@@ -1,0 +1,23 @@
+
+running 18 tests
+test all_completion_values ... ok
+test bounded_mutations_are_total ... ok
+test encoders_are_transactional ... ok
+test grant_error_precedence ... ok
+test grant_handle_canonicality ... ok
+test grant_limits_and_features ... ok
+test grant_literal ... ok
+test grant_through_startup_input ... ok
+test malformed_completion_words ... ok
+test spawn_error_precedence ... ok
+test spawn_flags_reserved_and_rights ... ok
+test spawn_frames_and_range_bounds ... ok
+test spawn_input_lengths_and_presence ... ok
+test spawn_literal ... ok
+test unaligned_and_owned_values ... ok
+test unknown_program_is_metadata ... ok
+test wait_and_cancel_arguments ... ok
+test wire_constants ... ok
+
+test result: ok. 18 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

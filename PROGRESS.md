@@ -8,6 +8,17 @@ from strict Linux parity to native OS design with selective compatibility.
 
 ## Implementation and verification
 
+- Native userspace task creation remains **planned**. Its standalone safe
+  wire codec is **implemented and verified locally**: 18 independent Rust
+  cases, six compiler clients per architecture, and full `make test-all`
+  (205 Python validator cases per architecture) pass. All 23 kernel images
+  remain byte-identical to the reviewed process-group milestone. See
+  [codec evidence](docs/evidence/task-wire-codec.md). The
+  [0029 design](docs/design/0029-native-task-creation.md) and
+  [Session supplement](docs/design/0029-session-admission.md) separate this
+  metadata-only work from pending capability, scheduler and hardware integration.
+  No SPAWN/WAIT/CANCEL syscall or new monitor command is exposed yet.
+
 - Stage B group runtime design and hardware protocol passed independent review.
   Core resumable turns, owned groups and ordinary launcher integration are
   **verified locally for the ordinary three-profile demo**: two echo processes,
@@ -777,3 +788,10 @@ does not claim resumable execution or process-group support.
   failures alongside corrected raw traces. Implementation checkpoint `f6fee1ff`
   matches every tested source hash. Userspace task creation is the next design;
   remote CI and service workloads remain open.
+
+- 2026-10-26: Added reviewed task wire codecs and independent literal/boundary
+  tests. Full ARM/x86 regression passes in 259.4 seconds, including all new
+  compiler probes. Verified unchanged identities of all 23 kernel images.
+  Preserved the formatting preflight failure and its corrected final run.
+  Userspace task creation remains pending Session/core implementation; the
+  owned-Session admission supplement records the next design boundary.

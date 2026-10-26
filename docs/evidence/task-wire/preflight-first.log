@@ -1,0 +1,8 @@
+Command: tools/dev.sh bash -eu -c 'cargo fmt --all -- --check; cargo clippy -p hm-kernel --test task_wire --locked --offline --target x86_64-unknown-linux-gnu --target-dir target/host-task-wire -- -D warnings; python3 tools/test_test_task_wire.py'
+Exit: 1; formatting failed before Clippy or Python tests executed.
+Diff in /workspace/crates/hm-kernel/tests/task_wire.rs:79:
+-    Spawn::new(1, None, true, 1, Rights::Wait).unwrap().encode_into(&mut console_only).unwrap();
++    Spawn::new(1, None, true, 1, Rights::Wait)
++        .unwrap()
++        .encode_into(&mut console_only)
++        .unwrap();
