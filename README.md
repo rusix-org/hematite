@@ -13,7 +13,9 @@ make run    # build and open the ARM64 monitor; Ctrl-C exits
 ```
 
 Type `help`, `status`, or `test`. `status` reports the active memory protections;
-`test` runs 16 bootstrap, capability-model and boot-memory checks. The ARM boot banner reports RAM discovered from QEMU’s device tree.
+`test` runs 19 bootstrap, capability, boot-memory and frame checks. The ARM boot banner reports discovered RAM and usable frame capacity.
+Frame tests exercise real page allocation; one page is deliberately leaked once
+per boot to verify that forgotten owners cannot cause reuse.
 This is a kernel monitor, not a shell.
 
 ```sh

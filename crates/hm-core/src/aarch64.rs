@@ -19,6 +19,7 @@ unsafe extern "C" {
     static __rodata_start: [u8; 0];
     static __rodata_end: [u8; 0];
     static __stack_guard: [u8; 0];
+    static __kernel_end: [u8; 0];
 }
 
 const UART: usize = 0x0900_0000;
@@ -30,10 +31,30 @@ const UART_PAGE: u64 = 0x0060_0000_0900_0407;
 
 pub(super) struct BootPlatform {
     memory: hm_kernel::boot_memory::MemoryMap,
+    pool: Option<super::frames::Pool>,
 }
 pub(super) const BANNER: &str = "hematite: ARM64 Rust kernel entered at EL1\n";
 
 impl Platform for BootPlatform {
+    type Frame<'a> = super::frames::Frame<'a>;
+
+    fn allocate_frame(&self) -> Result<Self::Frame<'_>, hm_kernel::frame_api::FrameError> {
+        self.pool
+            .as_ref()
+            .ok_or(hm_kernel::frame_api::FrameError::Unsupported)?
+            .allocate()
+    }
+
+    fn frame_stats(&self) -> Option<hm_kernel::frame_api::FrameStats> {
+        self.pool.as_ref().map(super::frames::Pool::stats)
+    }
+
+    fn frame_exhaustion_check(&self) -> bool {
+        self.pool
+            .as_ref()
+            .is_some_and(super::frames::Pool::exhaustion_check)
+    }
+
     fn boot_memory(&self) -> Option<&hm_kernel::boot_memory::MemoryMap> {
         Some(&self.memory)
     }
@@ -175,8 +196,8 @@ fn leaf(index: usize) -> u64 {
 }
 
 pub(super) fn init() -> BootPlatform {
-    match discover_memory() {
-        Ok(memory) => BootPlatform { memory },
+    match initialize() {
+        Ok(platform) => platform,
         Err(_) => {
             for byte in b"Boot memory rejected\r\n" {
                 serial_byte(*byte);
@@ -184,6 +205,68 @@ pub(super) fn init() -> BootPlatform {
             exit(false)
         }
     }
+}
+
+fn initialize() -> Result<BootPlatform, ()> {
+    use hm_kernel::boot_memory::Region;
+    use hm_kernel::frame_plan::Plan;
+    let memory = discover_memory()?;
+    let mut platform = BootPlatform { memory, pool: None };
+    let checks = platform.checks();
+    if !checks.write_protect
+        || !checks.wx
+        || !checks.nx
+        || !checks.stack_guard
+        || !checks.user_access_protect
+        || !checks.user_execute_protect
+        || !checks.null_guard
+    {
+        return Err(());
+    }
+    let end = core::ptr::addr_of!(__kernel_end) as u64;
+    if !(0x4020_0000..=0x4100_0000).contains(&end)
+        || !platform
+            .memory
+            .ram()
+            .iter()
+            .any(|r| r.start <= RAM as u64 && r.end >= end)
+    {
+        return Err(());
+    }
+    let mut excluded = [Region { start: 0, end: 0 }; 34];
+    excluded[0] = Region {
+        start: RAM as u64,
+        end: 0x4020_0000,
+    };
+    excluded[1] = Region {
+        start: 0x4020_0000,
+        end,
+    };
+    let reserved = platform.memory.reservations();
+    excluded
+        .get_mut(2..2 + reserved.len())
+        .ok_or(())?
+        .copy_from_slice(reserved);
+    let plan = Plan::build(
+        Region {
+            start: RAM as u64,
+            end: 0x4100_0000,
+        },
+        platform.memory.ram(),
+        &excluded[..2 + reserved.len()],
+    )
+    .map_err(|_| ())?;
+    // SAFETY: Actual QEMU boot metadata covers the live kernel and DTB. The
+    // fixed profile has no initrd/firmware runtime or DMA. Plan admits only
+    // advertised full RAM pages in the checked identity map, excluding every
+    // reservation, all kernel/table/stack storage and the entire DTB prefix.
+    // checks proved the full mapping tree: eligible leaves are exclusive
+    // supervisor RW/NX normal RAM, with no alias. One CPU/interrupts masked;
+    // no API changes mappings. Constructor permanently claims singleton use.
+    // SAFETY: The checks and exclusions above prove the constructor contract;
+    // repeated initialization is rejected before any physical memory access.
+    platform.pool = Some(unsafe { super::frames::Pool::from_boot(plan) }.map_err(|_| ())?);
+    Ok(platform)
 }
 
 fn discover_memory() -> Result<hm_kernel::boot_memory::MemoryMap, ()> {

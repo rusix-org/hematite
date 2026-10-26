@@ -1,0 +1,361 @@
+make test ARCH=aarch64
+make[1]: Entering directory '/home/aaron/code/hematite'
+docker build --tag hematite-build:phase0 .
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 801B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/rust:1.99.0-slim-bookworm@sha256:2c3a22f0a5533ea2dd5a16627bc841228151faa2d4de2644ac9987e4a2f1f2fa
+#2 DONE 0.0s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 54B done
+#3 DONE 0.0s
+
+#4 [1/4] FROM docker.io/library/rust:1.99.0-slim-bookworm@sha256:2c3a22f0a5533ea2dd5a16627bc841228151faa2d4de2644ac9987e4a2f1f2fa
+#4 resolve docker.io/library/rust:1.99.0-slim-bookworm@sha256:2c3a22f0a5533ea2dd5a16627bc841228151faa2d4de2644ac9987e4a2f1f2fa 0.1s done
+#4 DONE 0.1s
+
+#5 [2/4] RUN rm -f /etc/apt/sources.list.d/debian.sources     && printf 'deb [check-valid-until=no] https://snapshot.debian.org/archive/debian/20261025T000000Z/ bookworm main\n' > /etc/apt/sources.list     && apt-get update     && apt-get install -y --no-install-recommends qemu-system-x86 qemu-system-arm python3 make binutils     && rm -rf /var/lib/apt/lists/*
+#5 CACHED
+
+#6 [3/4] RUN rustup component add rustfmt clippy --toolchain 1.99.0     && rustup target add x86_64-unknown-none aarch64-unknown-none --toolchain 1.99.0
+#6 CACHED
+
+#7 [4/4] WORKDIR /workspace
+#7 CACHED
+
+#8 exporting to image
+#8 exporting layers done
+#8 exporting manifest sha256:fa8372b0ff4554cee9473e5bd7b37cc7fd2bfe5e51cafaba2ae39343a541f11a done
+#8 exporting config sha256:ee4ff07f9a7ccee825f9f03c19a9b1945edc40231be30a402b9780ffcb180764 done
+#8 exporting attestation manifest sha256:614a3143cf4d2e90f6bb43fc19ff47cb972f23811091d7689fff81930fcf2fc6 0.0s done
+#8 exporting manifest list sha256:94b7fed301f26be047734b71e984f51dc1db68a3b28c5c6ff50ea56d4255c2aa 0.0s done
+#8 naming to docker.io/library/hematite-build:phase0 done
+#8 unpacking to docker.io/library/hematite-build:phase0 0.0s done
+#8 DONE 0.1s
+bash tools/dev.sh bash -eu -c '\
+	evidence_dir="target/evidence/$(date -u +%Y%m%dT%H%M%S-%N)-aarch64"; \
+	mkdir -p "$evidence_dir"; \
+	{ rustc --version; cargo --version; qemu-system-aarch64 --version; \
+		if [ "aarch64" = x86_64 ]; then sha256sum /usr/share/qemu/bios-microvm.bin; \
+		else printf "Boot: direct ELF; no external firmware.\n"; fi; \
+	} > "$evidence_dir/environment.log"; \
+	cargo fmt --all -- --check; \
+	cargo clippy --workspace --all-features --locked --offline --target aarch64-unknown-none --target-dir target/aarch64/clippy -- -D warnings; \
+	python3 tools/test_test_kernel.py; \
+	python3 tools/check_repository.py; \
+	python3 tools/check_safety.py; \
+	cargo build --locked --offline -p hm-core --release --features boot-tests --target aarch64-unknown-none --target-dir target/aarch64/boot-test; \
+	cargo build --locked --offline -p hm-core --release --target aarch64-unknown-none --target-dir target/aarch64/monitor; \
+	cargo build --locked --offline -p hm-kernel --release --target aarch64-unknown-none --target-dir target/aarch64/boot-test; \
+	python3 tools/check_capability_types.py \
+		--library target/aarch64/boot-test/aarch64-unknown-none/release/libhm_kernel.rlib \
+		--target aarch64-unknown-none --output "$evidence_dir/type-boundary"; \
+	python3 tools/test_kernel.py \
+		--kernel target/aarch64/boot-test/aarch64-unknown-none/release/hematite \
+		--output "$evidence_dir/boot" --accel tcg --arch aarch64; \
+	python3 tools/test_boot_profiles.py \
+		--test-kernel target/aarch64/boot-test/aarch64-unknown-none/release/hematite \
+		--monitor-kernel target/aarch64/monitor/aarch64-unknown-none/release/hematite \
+		--output "$evidence_dir/profiles" --arch aarch64'
+    Checking hm-core v0.1.0 (/workspace/crates/hm-core)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.15s
+............
+----------------------------------------------------------------------
+Ran 12 tests in 0.010s
+
+OK
+PASS: Phase 0 records present; approval and runtime gates not assessed
+PASS: safe crate roots, dependency-free lockfile, core SAFETY-comment hygiene
+Scope: structural hygiene only; compile all targets and review core soundness separately
+   Compiling hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+   Compiling hm-core v0.1.0 (/workspace/crates/hm-core)
+    Finished `release` profile [optimized] target(s) in 2.75s
+   Compiling hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+   Compiling hm-core v0.1.0 (/workspace/crates/hm-core)
+    Finished `release` profile [optimized] target(s) in 2.60s
+    Finished `release` profile [optimized] target(s) in 0.01s
+{
+  "passed": true,
+  "scope": "safe-client type boundary; not runtime isolation",
+  "probes": {
+    "valid_client": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "cross_instance": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "lifetime"
+    },
+    "escaping_handle": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "lifetime"
+    },
+    "private_generation": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0616"
+    },
+    "uncloneable_instance": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    }
+  }
+}
+{
+  "passed": true,
+  "arch": "aarch64",
+  "expected_exit": 0,
+  "scope": "hematite bootstrap tests; no Linux ABI compatibility claim",
+  "expected_cases": [
+    "write_protect",
+    "nx",
+    "user_execute_protect",
+    "user_access_protect",
+    "wx",
+    "stack_guard",
+    "null_guard",
+    "checked_range",
+    "monitor_bounds",
+    "cap_authority",
+    "cap_limits",
+    "cap_lifetime",
+    "cap_generation",
+    "boot_memory_valid",
+    "boot_memory_malformed",
+    "frame_ranges",
+    "frame_boundaries",
+    "frame_contract",
+    "cap_orderings"
+  ],
+  "observed_records": [
+    "HMTEST BEGIN 19",
+    "HMTEST PASS write_protect",
+    "HMTEST PASS nx",
+    "HMTEST PASS user_execute_protect",
+    "HMTEST PASS user_access_protect",
+    "HMTEST PASS wx",
+    "HMTEST PASS stack_guard",
+    "HMTEST PASS null_guard",
+    "HMTEST PASS checked_range",
+    "HMTEST PASS monitor_bounds",
+    "HMTEST PASS cap_authority",
+    "HMTEST PASS cap_limits",
+    "HMTEST PASS cap_lifetime",
+    "HMTEST PASS cap_generation",
+    "HMTEST PASS boot_memory_valid",
+    "HMTEST PASS boot_memory_malformed",
+    "HMTEST PASS frame_ranges",
+    "HMTEST PASS frame_boundaries",
+    "HMTEST PASS frame_contract",
+    "HMTEST PASS cap_orderings",
+    "HMTEST END 19"
+  ],
+  "returncode": 0,
+  "timed_out": false,
+  "launch_error": null,
+  "errors": [],
+  "started_utc": "2026-10-26T06:27:34.369089+00:00",
+  "elapsed_seconds": 0.26555523998104036,
+  "timeout_seconds": 20
+}
+{
+  "passed": true,
+  "scope": "bootstrap CPU rejection and serial monitor; no Linux ABI claims",
+  "profiles": {
+    "missing-pan": true,
+    "monitor": true,
+    "memory-64m": true
+  },
+  "arch": "aarch64"
+}
+make[1]: Leaving directory '/home/aaron/code/hematite'
+make test ARCH=x86_64
+make[1]: Entering directory '/home/aaron/code/hematite'
+docker build --tag hematite-build:phase0 .
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 801B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/rust:1.99.0-slim-bookworm@sha256:2c3a22f0a5533ea2dd5a16627bc841228151faa2d4de2644ac9987e4a2f1f2fa
+#2 DONE 0.0s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 54B done
+#3 DONE 0.0s
+
+#4 [1/4] FROM docker.io/library/rust:1.99.0-slim-bookworm@sha256:2c3a22f0a5533ea2dd5a16627bc841228151faa2d4de2644ac9987e4a2f1f2fa
+#4 resolve docker.io/library/rust:1.99.0-slim-bookworm@sha256:2c3a22f0a5533ea2dd5a16627bc841228151faa2d4de2644ac9987e4a2f1f2fa 0.0s done
+#4 DONE 0.0s
+
+#5 [2/4] RUN rm -f /etc/apt/sources.list.d/debian.sources     && printf 'deb [check-valid-until=no] https://snapshot.debian.org/archive/debian/20261025T000000Z/ bookworm main\n' > /etc/apt/sources.list     && apt-get update     && apt-get install -y --no-install-recommends qemu-system-x86 qemu-system-arm python3 make binutils     && rm -rf /var/lib/apt/lists/*
+#5 CACHED
+
+#6 [3/4] RUN rustup component add rustfmt clippy --toolchain 1.99.0     && rustup target add x86_64-unknown-none aarch64-unknown-none --toolchain 1.99.0
+#6 CACHED
+
+#7 [4/4] WORKDIR /workspace
+#7 CACHED
+
+#8 exporting to image
+#8 exporting layers done
+#8 exporting manifest sha256:fa8372b0ff4554cee9473e5bd7b37cc7fd2bfe5e51cafaba2ae39343a541f11a done
+#8 exporting config sha256:ee4ff07f9a7ccee825f9f03c19a9b1945edc40231be30a402b9780ffcb180764
+#8 exporting config sha256:ee4ff07f9a7ccee825f9f03c19a9b1945edc40231be30a402b9780ffcb180764 done
+#8 exporting attestation manifest sha256:e8f355aca7823f1de8c386d322ce8f2a91a791d13ba2cbd98b1dc3685e759ad2 0.0s done
+#8 exporting manifest list sha256:c7eb1ea99c846d61abd10472d8fd117456e0c93c32e39f5485e4999db151ac9f 0.0s done
+#8 naming to docker.io/library/hematite-build:phase0 done
+#8 unpacking to docker.io/library/hematite-build:phase0 0.0s done
+#8 DONE 0.1s
+bash tools/dev.sh bash -eu -c '\
+	evidence_dir="target/evidence/$(date -u +%Y%m%dT%H%M%S-%N)-x86_64"; \
+	mkdir -p "$evidence_dir"; \
+	{ rustc --version; cargo --version; qemu-system-x86_64 --version; \
+		if [ "x86_64" = x86_64 ]; then sha256sum /usr/share/qemu/bios-microvm.bin; \
+		else printf "Boot: direct ELF; no external firmware.\n"; fi; \
+	} > "$evidence_dir/environment.log"; \
+	cargo fmt --all -- --check; \
+	cargo clippy --workspace --all-features --locked --offline --target x86_64-unknown-none --target-dir target/x86_64/clippy -- -D warnings; \
+	python3 tools/test_test_kernel.py; \
+	python3 tools/check_repository.py; \
+	python3 tools/check_safety.py; \
+	cargo build --locked --offline -p hm-core --release --features boot-tests --target x86_64-unknown-none --target-dir target/x86_64/boot-test; \
+	cargo build --locked --offline -p hm-core --release --target x86_64-unknown-none --target-dir target/x86_64/monitor; \
+	cargo build --locked --offline -p hm-kernel --release --target x86_64-unknown-none --target-dir target/x86_64/boot-test; \
+	python3 tools/check_capability_types.py \
+		--library target/x86_64/boot-test/x86_64-unknown-none/release/libhm_kernel.rlib \
+		--target x86_64-unknown-none --output "$evidence_dir/type-boundary"; \
+	python3 tools/test_kernel.py \
+		--kernel target/x86_64/boot-test/x86_64-unknown-none/release/hematite \
+		--output "$evidence_dir/boot" --accel tcg --arch x86_64; \
+	python3 tools/test_boot_profiles.py \
+		--test-kernel target/x86_64/boot-test/x86_64-unknown-none/release/hematite \
+		--monitor-kernel target/x86_64/monitor/x86_64-unknown-none/release/hematite \
+		--output "$evidence_dir/profiles" --arch x86_64'
+    Checking hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+    Checking hm-core v0.1.0 (/workspace/crates/hm-core)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.40s
+............
+----------------------------------------------------------------------
+Ran 12 tests in 0.006s
+
+OK
+PASS: Phase 0 records present; approval and runtime gates not assessed
+PASS: safe crate roots, dependency-free lockfile, core SAFETY-comment hygiene
+Scope: structural hygiene only; compile all targets and review core soundness separately
+   Compiling hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+   Compiling hm-core v0.1.0 (/workspace/crates/hm-core)
+    Finished `release` profile [optimized] target(s) in 1.47s
+   Compiling hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+   Compiling hm-core v0.1.0 (/workspace/crates/hm-core)
+    Finished `release` profile [optimized] target(s) in 1.56s
+    Finished `release` profile [optimized] target(s) in 0.01s
+{
+  "passed": true,
+  "scope": "safe-client type boundary; not runtime isolation",
+  "probes": {
+    "valid_client": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "cross_instance": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "lifetime"
+    },
+    "escaping_handle": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "lifetime"
+    },
+    "private_generation": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0616"
+    },
+    "uncloneable_instance": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    }
+  }
+}
+{
+  "passed": true,
+  "arch": "x86_64",
+  "expected_exit": 33,
+  "scope": "hematite bootstrap tests; no Linux ABI compatibility claim",
+  "expected_cases": [
+    "write_protect",
+    "nx",
+    "user_execute_protect",
+    "user_access_protect",
+    "wx",
+    "stack_guard",
+    "null_guard",
+    "checked_range",
+    "monitor_bounds",
+    "cap_authority",
+    "cap_limits",
+    "cap_lifetime",
+    "cap_generation",
+    "boot_memory_valid",
+    "boot_memory_malformed",
+    "frame_ranges",
+    "frame_boundaries",
+    "frame_contract",
+    "cap_orderings"
+  ],
+  "observed_records": [
+    "HMTEST BEGIN 19",
+    "HMTEST PASS write_protect",
+    "HMTEST PASS nx",
+    "HMTEST PASS user_execute_protect",
+    "HMTEST PASS user_access_protect",
+    "HMTEST PASS wx",
+    "HMTEST PASS stack_guard",
+    "HMTEST PASS null_guard",
+    "HMTEST PASS checked_range",
+    "HMTEST PASS monitor_bounds",
+    "HMTEST PASS cap_authority",
+    "HMTEST PASS cap_limits",
+    "HMTEST PASS cap_lifetime",
+    "HMTEST PASS cap_generation",
+    "HMTEST PASS boot_memory_valid",
+    "HMTEST PASS boot_memory_malformed",
+    "HMTEST PASS frame_ranges",
+    "HMTEST PASS frame_boundaries",
+    "HMTEST PASS frame_contract",
+    "HMTEST PASS cap_orderings",
+    "HMTEST END 19"
+  ],
+  "returncode": 33,
+  "timed_out": false,
+  "launch_error": null,
+  "errors": [],
+  "started_utc": "2026-10-26T06:27:40.303423+00:00",
+  "elapsed_seconds": 0.11479341995436698,
+  "timeout_seconds": 20
+}
+{
+  "passed": true,
+  "scope": "bootstrap CPU rejection and serial monitor; no Linux ABI claims",
+  "profiles": {
+    "missing-nx": true,
+    "missing-smep": true,
+    "missing-smap": true,
+    "monitor": true
+  },
+  "arch": "x86_64"
+}
+make[1]: Leaving directory '/home/aaron/code/hematite'

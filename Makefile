@@ -35,6 +35,9 @@ test: image
 		python3 tools/check_capability_types.py \
 			--library target/$(ARCH)/boot-test/$(TARGET)/release/libhm_kernel.rlib \
 			--target $(TARGET) --output "$$evidence_dir/type-boundary"; \
+		python3 tools/check_frame_types.py \
+			--library target/$(ARCH)/boot-test/$(TARGET)/release/libhm_kernel.rlib \
+			--target $(TARGET) --output "$$evidence_dir/frame-types"; \
 		python3 tools/test_kernel.py \
 			--kernel target/$(ARCH)/boot-test/$(TARGET)/release/hematite \
 			--output "$$evidence_dir/boot" --accel tcg --arch $(ARCH); \

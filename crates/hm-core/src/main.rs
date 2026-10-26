@@ -5,6 +5,9 @@
 use core::panic::PanicInfo;
 use hm_kernel::Platform;
 
+#[cfg(target_arch = "aarch64")]
+mod frames;
+
 #[cfg(target_arch = "x86_64")]
 #[path = "x86_64.rs"]
 mod arch;

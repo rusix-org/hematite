@@ -7,6 +7,9 @@ pub mod boot_memory;
 mod boot_memory_tests;
 pub mod capability;
 mod capability_tests;
+pub mod frame_api;
+pub mod frame_plan;
+mod frame_plan_tests;
 
 use core::ops::Range;
 
@@ -28,6 +31,16 @@ pub struct BootChecks {
 
 /// The core retains all hardware authority; policy only exchanges owned values.
 pub trait Platform {
+    type Frame<'a>: frame_api::OwnedFrame
+    where
+        Self: 'a;
+    fn allocate_frame(&self) -> Result<Self::Frame<'_>, frame_api::FrameError>;
+    fn frame_stats(&self) -> Option<frame_api::FrameStats> {
+        None
+    }
+    fn frame_exhaustion_check(&self) -> bool {
+        false
+    }
     fn write(&mut self, text: &str);
     fn read_byte(&mut self) -> Option<u8>;
     fn checks(&self) -> BootChecks;
@@ -42,14 +55,23 @@ pub fn report_memory(platform: &mut impl Platform) {
     };
     let total = memory.total_bytes();
     platform.write("Boot RAM bytes: 0x");
+    write_hex(platform, total);
+    platform.write(" (discovered RAM)\n");
+    if let Some(stats) = platform.frame_stats() {
+        platform.write("Frame pool pages: 0x");
+        write_hex(platform, stats.total as u64);
+        platform.write(" (4 KiB each; boot reservations excluded)\n");
+    }
+}
+
+fn write_hex(platform: &mut impl Platform, value: u64) {
     let mut digits = [b'0'; 16];
     for (index, digit) in digits.iter_mut().enumerate() {
-        *digit = b"0123456789abcdef"[((total >> ((15 - index) * 4)) & 15) as usize];
+        *digit = b"0123456789abcdef"[((value >> ((15 - index) * 4)) & 15) as usize];
     }
     if let Ok(text) = core::str::from_utf8(&digits) {
         platform.write(text);
     }
-    platform.write(" (discovered; not allocated)\n");
 }
 
 /// Return a bounded half-open range, rejecting both arithmetic and bound errors.
@@ -212,12 +234,15 @@ pub fn run_tests(platform: &mut impl Platform) -> bool {
         ("cap_generation", capability_tests::generation()),
         ("boot_memory_valid", boot_memory_tests::valid()),
         ("boot_memory_malformed", boot_memory_tests::malformed()),
+        ("frame_ranges", frame_plan_tests::ranges()),
+        ("frame_boundaries", frame_plan_tests::boundaries()),
+        ("frame_contract", frame_api::contract(platform)),
         (
             "cap_orderings",
             capability_tests::orderings(|message| platform.write(message)),
         ),
     ];
-    platform.write("HMTEST BEGIN 16\n");
+    platform.write("HMTEST BEGIN 19\n");
     let mut passed = true;
     for (name, success) in cases {
         platform.write(if success {
@@ -229,7 +254,7 @@ pub fn run_tests(platform: &mut impl Platform) -> bool {
         platform.write("\n");
         passed &= success;
     }
-    platform.write("HMTEST END 16\n");
+    platform.write("HMTEST END 19\n");
     passed
 }
 

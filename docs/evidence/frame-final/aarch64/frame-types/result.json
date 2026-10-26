@@ -1,0 +1,60 @@
+{
+  "passed": true,
+  "scope": "actual frame module safe-client types; no runtime physical-memory claim",
+  "probes": {
+    "library": {
+      "passed": true,
+      "returncode": 0
+    },
+    "valid_client": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "frame_clone": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "pool_clone": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "outlive_pool": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0515"
+    },
+    "drop_borrowed": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0505"
+    },
+    "mutable_alias": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0499"
+    },
+    "forge_frame": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0451"
+    },
+    "private_constructor": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0624"
+    },
+    "frame_send": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "pool_sync": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    }
+  }
+}

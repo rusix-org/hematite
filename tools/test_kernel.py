@@ -15,7 +15,7 @@ CASES = (
     "write_protect", "nx", "user_execute_protect", "user_access_protect",
     "wx", "stack_guard", "null_guard",
     "checked_range", "monitor_bounds",
-    "cap_authority", "cap_limits", "cap_lifetime", "cap_generation", "boot_memory_valid", "boot_memory_malformed", "cap_orderings",
+    "cap_authority", "cap_limits", "cap_lifetime", "cap_generation", "boot_memory_valid", "boot_memory_malformed", "frame_ranges", "frame_boundaries", "frame_contract", "cap_orderings",
 )
 SUCCESS_EXITS = {"aarch64": 0, "x86_64": 33}
 TIMEOUT_SECONDS = 20

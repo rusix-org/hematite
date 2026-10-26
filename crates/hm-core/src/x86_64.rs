@@ -27,6 +27,12 @@ unsafe extern "C" {
 pub(super) struct BootPlatform;
 
 impl Platform for BootPlatform {
+    type Frame<'a> = hm_kernel::frame_api::UnsupportedFrame;
+
+    fn allocate_frame(&self) -> Result<Self::Frame<'_>, hm_kernel::frame_api::FrameError> {
+        Err(hm_kernel::frame_api::FrameError::Unsupported)
+    }
+
     fn write(&mut self, text: &str) {
         for byte in text.bytes() {
             if byte == b'\n' {

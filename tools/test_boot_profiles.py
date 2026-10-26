@@ -158,9 +158,20 @@ def run_monitor(output, kernel, arch="aarch64", ram_mb=128):
             )
             if arch == "aarch64":
                 expected_memory = (f"Boot RAM bytes: 0x{ram_mb * 1024 * 1024:016x} "
-                                   "(discovered; not allocated)").encode("ascii")
+                                   "(discovered RAM)").encode("ascii")
                 lines = banner.replace(b"\r\n", b"\n").split(b"\n")
                 result["checks"]["discovered_ram_matches_vm"] = lines.count(expected_memory) == 1
+                symbols = subprocess.run(["readelf", "-sW", str(kernel)], capture_output=True,
+                                         check=True, timeout=5).stdout.decode("ascii")
+                ends = [int(line.split()[1], 16) for line in symbols.splitlines()
+                        if line.split() and line.split()[-1] == "__kernel_end"]
+                if len(ends) != 1 or not 0x40200000 < ends[0] < 0x41000000:
+                    raise RuntimeError("missing or invalid ELF kernel-end marker")
+                # These generated QEMU profiles have no other reserved ranges.
+                expected_pages = (0x41000000 - ends[0]) // 4096
+                pool_line = (f"Frame pool pages: 0x{expected_pages:016x} "
+                             "(4 KiB each; boot reservations excluded)").encode("ascii")
+                result["checks"]["pool_excludes_boot_storage"] = lines.count(pool_line) == 1
             for name, request, expected in monitor_steps():
                 # No input is sent until the kernel has initialized its UART
                 # and emitted a prompt. Each command awaits its own next prompt.
@@ -183,7 +194,7 @@ def run_monitor(output, kernel, arch="aarch64", ram_mb=128):
         except OSError as error:
             result["launch_error"] = str(error)
             result["errors"].append(str(error))
-        except RuntimeError as error:
+        except (RuntimeError, subprocess.SubprocessError) as error:
             result["errors"].append(str(error))
         finally:
             if proc is not None:
@@ -210,6 +221,7 @@ def run_monitor(output, kernel, arch="aarch64", ram_mb=128):
     expected_checks = {"initial_prompt_and_banner", "monitor_still_running"}
     if arch == "aarch64":
         expected_checks.add("discovered_ram_matches_vm")
+        expected_checks.add("pool_excludes_boot_storage")
     expected_checks.add("complete_test_inventory")
     expected_checks.update(name for name, _, _ in monitor_steps())
     for name in sorted(expected_checks):
