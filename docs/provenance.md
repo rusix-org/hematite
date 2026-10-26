@@ -13,11 +13,20 @@ Substantial AI assistance and independent AI review are disclosed in commits.
 | Rust safety | [Rust Reference extern statics](https://doc.rust-lang.org/reference/items/external-blocks.html#statics): mutable hardware-owned page tables; compiler `forbid(unsafe_code)` on policy crate |
 | Host tooling | Python standard library, Cargo, GNU Make, Docker, QEMU; no third-party Python packages |
 
+## ARM64 extension
+
+[Design 0002](design/0002-arm64-bootstrap.md) links the consulted Arm register,
+translation, PL011 and semihosting specifications, and the QEMU virt platform
+contract. [Review 0002](reviews/0002-arm64-bootstrap.md) records the independent
+source review and fixes. `boot-aarch64.S` and `aarch64.rs` are original code;
+no Linux or third-party kernel implementation was copied. Fixed semihosting
+is used only to exit the guest test, never to expose host-file operations.
+
 ## Dependency inventory
 
 `Cargo.lock` contains only `hm-core` and `hm-kernel`; there are no external
 kernel crates. Stable Rust `1.99.0` supplies `core` and compiler-builtins for
-`x86_64-unknown-none`; no nightly features, custom target or build-std patch.
+`aarch64-unknown-none` and `x86_64-unknown-none`; no nightly features, custom target or build-std patch.
 Those compiler/runtime components remain trusted tooling, not audited original
 kernel code. `hm-core` is the only project crate permitted to use unsafe code.
 
