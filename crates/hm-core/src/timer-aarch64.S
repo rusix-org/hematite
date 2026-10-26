@@ -440,6 +440,9 @@ arm_timer_irq:
     stp x26, x27, [sp, #208]
     stp x28, x29, [sp, #224]
     str x30, [sp, #240]
+    ldr x0, =arm_preempt_state
+    ldr x1, [x0, #16]
+    cbnz x1, arm_preempt_irq
     mrs x0, spsr_el1
     mov x1, #0x3df
     and x0, x0, x1

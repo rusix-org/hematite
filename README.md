@@ -48,14 +48,16 @@ frame until unmapping completes translation-cache invalidation. Tests exercise
 actual accesses, remapping, exhaustion and reclamation. Table storage is fixed;
 user address spaces and concurrent mapping updates remain ahead.
 
-ARM timer interrupts now run inside a bounded assembly operation, with context
-preservation and verified shutdown before returning to Rust. Tests also block
-delivery to exercise timeout handling.
+ARM supports both scoped timer diagnostics and timer-driven kernel scheduling.
+Tests verify full interrupted contexts, timer shutdown, and blocked delivery.
 
 Up to four kernel callbacks can now run on separate guarded stacks and yield
 cooperatively. Tests cover round-robin scheduling, preserved local values,
-normal destructor execution, stack reuse and overflow rejection. Timer-driven
-preemption, SMP and userspace threads are not implemented yet.
+normal destructor execution, stack reuse and overflow rejection. A separate
+preemptive runner schedules safe callbacks that never yield. `make test` also
+runs its dedicated guest images, checks forced interrupts at execution
+transitions, and reruns the bootstrap tests afterward in the same guest.
+SMP and userspace threads remain unimplemented.
 
 Shared kernel values can use an owned mutex whose guard controls access.
 Contended cooperative workers yield while waiting. Tests cover real kernel

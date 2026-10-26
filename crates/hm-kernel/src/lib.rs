@@ -16,6 +16,7 @@ pub mod mapping_api;
 mod mapping_tests;
 pub mod mutex_api;
 mod mutex_tests;
+mod preemption_tests;
 pub mod thread_api;
 mod thread_tests;
 
@@ -51,6 +52,18 @@ pub trait Platform {
         Err(thread_api::ThreadError::Unsupported)
     }
     fn thread_checks(&self) -> Option<ThreadChecks> {
+        None
+    }
+    fn run_preemptive(
+        &self,
+        _jobs: &[thread_api::ThreadJob],
+    ) -> Result<thread_api::PreemptReport, thread_api::ThreadError> {
+        Err(thread_api::ThreadError::Unsupported)
+    }
+    fn preempt_core_check(&self) -> Option<bool> {
+        None
+    }
+    fn preemption_irq_count(&self) -> Option<u64> {
         None
     }
     fn timer_checks(&self) -> Option<TimerChecks> {
@@ -488,6 +501,43 @@ pub fn run_tests(platform: &mut impl Platform) -> bool {
         passed &= success;
     }
     platform.write("HMTEST END 32\n");
+    passed
+}
+
+/// Separate strict inventory for timer-driven scheduling; ordinary boot tests
+/// retain their fixed diagnostic IRQ count.
+#[inline(never)]
+pub fn run_preemption_tests(platform: &mut impl Platform) -> bool {
+    let before = platform.preemption_irq_count();
+    let cases = [
+        ("preempt_progress", preemption_tests::progress(platform)),
+        ("preempt_mixed", preemption_tests::mixed(platform)),
+        ("preempt_limits", preemption_tests::limits(platform)),
+        (
+            "preempt_core",
+            platform
+                .preempt_core_check()
+                .unwrap_or(cfg!(target_arch = "x86_64")),
+        ),
+    ];
+    platform.write("HMPREEMPT BEGIN 4\n");
+    let mut passed = true;
+    for (name, success) in cases {
+        platform.write(if success {
+            "HMPREEMPT PASS "
+        } else {
+            "HMPREEMPT FAIL "
+        });
+        platform.write(name);
+        platform.write("\n");
+        passed &= success;
+    }
+    platform.write("HMPREEMPT END 4\n");
+    if let (Some(before), Some(after)) = (before, platform.preemption_irq_count()) {
+        platform.write("HMPREEMPT IRQ ");
+        write_hex(platform, after.wrapping_sub(before));
+        platform.write("\n");
+    }
     passed
 }
 

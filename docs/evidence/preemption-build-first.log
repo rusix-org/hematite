@@ -1,0 +1,42 @@
+   Compiling hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+   Compiling hm-core v0.1.0 (/workspace/crates/hm-core)
+warning: unexpected `cfg` condition value: `preemption-no-timer-test`
+  --> crates/hm-core/src/preempt.rs:10:92
+   |
+10 | global_asm!(include_str!("preempt-aarch64.S"), entry = sym entry, delivery = const if cfg!(feature = "preemption-no-timer-test") { 0...
+   |                                                                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: expected values for `feature` are: `boot-tests`, `nested-fault-test`, `preemption-tests`, `thread-overflow-test`, and `unhandled-fault-test`
+   = help: consider adding `preemption-no-timer-test` as a feature in `Cargo.toml`
+   = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+   = note: `#[warn(unexpected_cfgs)]` on by default
+
+warning: `extern` block uses type `ThreadJob`, which is not FFI-safe
+  --> crates/hm-core/src/preempt.rs:62:55
+   |
+62 |     fn arm_preempt_dispatch(host: *mut Context, task: *mut Task, interval: u64);
+   |                                                       ^^^^^^^^^ not FFI-safe
+   |
+   = help: consider adding a `#[repr(C)]` or `#[repr(transparent)]` attribute to this struct
+   = note: this struct has unspecified layout
+   = note: `#[warn(improper_ctypes)]` on by default
+
+warning: `extern` block uses type `ThreadJob`, which is not FFI-safe
+  --> crates/hm-core/src/preempt.rs:63:32
+   |
+63 |     fn arm_preempt_yield(task: *mut Task, host: *const Context);
+   |                                ^^^^^^^^^ not FFI-safe
+   |
+   = help: consider adding a `#[repr(C)]` or `#[repr(transparent)]` attribute to this struct
+   = note: this struct has unspecified layout
+
+error: expected readable system register
+  |
+note: instantiated into assembly here
+ --> <inline asm>:1:10
+  |
+1 |     mrs x8, pan
+  |             ^
+
+warning: `hm-core` (bin "hematite") generated 3 warnings
+error: could not compile `hm-core` (bin "hematite") due to 1 previous error; 3 warnings emitted

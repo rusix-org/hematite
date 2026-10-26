@@ -104,6 +104,7 @@ def main():
     source = root / "crates/hm-core/src/threads.rs"
     wrapper = output / "hm_threads.rs"
     wrapper.write_text('#![no_std]\n#![deny(unsafe_op_in_unsafe_fn)]\n'
+                       f'#[path={json.dumps(str(source.with_name("preempt.rs")))}] mod preempt;\n'
                        f'#[path={json.dumps(str(source))}] pub mod threads;\n'
                        'pub use threads::Runner;\n')
     base = ["rustc", "--edition=2024", "--target", args.target, "-C", "panic=abort",

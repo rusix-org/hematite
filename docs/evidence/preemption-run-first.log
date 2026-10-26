@@ -1,0 +1,44 @@
+{
+  "passed": false,
+  "errors": [
+    "Wrong image or fatal exception output",
+    "Wrong image or fatal exception output",
+    "Report differs from exact scheduling inventory",
+    "Missing, duplicate or zero scheduling IRQ count",
+    "Expected successful ARM exit 0, got 2"
+  ],
+  "observed_records": [],
+  "expected_cases": [
+    "preempt_progress",
+    "preempt_mixed",
+    "preempt_limits",
+    "preempt_core"
+  ],
+  "returncode": 2,
+  "timed_out": false,
+  "launch_error": null,
+  "scheduler_irqs": null,
+  "scope": "single-CPU ARM timer-driven scheduling; not SMP",
+  "trace": {
+    "passed": false,
+    "errors": [
+      "Unexpected exception in scheduling run",
+      "Unexpected IRQ exception level",
+      "Invalid IRQ vector/state",
+      "Unexpected exception in scheduling run",
+      "Unexpected IRQ exception level",
+      "Incomplete IRQ transactions or count mismatch"
+    ],
+    "counts": {
+      "irq": 1,
+      "vector": 2,
+      "ack": 0,
+      "eoi": 0
+    },
+    "expected_interrupts": null,
+    "sha256": "9509201a68e07ee7460560390ea842937e95bb67120e27bce2df9fe7a87b1cec"
+  },
+  "started_utc": "2026-10-26T13:26:10.752677+00:00",
+  "elapsed_seconds": 0.16614948702044785,
+  "timeout_seconds": 20
+}

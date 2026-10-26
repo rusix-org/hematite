@@ -65,6 +65,25 @@ impl Platform for BootPlatform {
     fn thread_checks(&self) -> Option<hm_kernel::ThreadChecks> {
         self.runner.as_ref().map(super::threads::Runner::checks)
     }
+    fn run_preemptive(
+        &self,
+        jobs: &[hm_kernel::thread_api::ThreadJob],
+    ) -> Result<hm_kernel::thread_api::PreemptReport, hm_kernel::thread_api::ThreadError> {
+        self.runner
+            .as_ref()
+            .ok_or(hm_kernel::thread_api::ThreadError::Unsupported)?
+            .run_preemptive(jobs)
+    }
+    fn preempt_core_check(&self) -> Option<bool> {
+        self.runner.as_ref().map(|runner| {
+            super::preempt_checks::checks(runner)
+                && super::preempt::context_checks(runner)
+                && super::preempt::control_checks()
+        })
+    }
+    fn preemption_irq_count(&self) -> Option<u64> {
+        Some(super::preempt::irq_count())
+    }
     fn timer_checks(&self) -> Option<hm_kernel::TimerChecks> {
         Some(super::timer::checks())
     }
@@ -409,6 +428,21 @@ fn initialize() -> Result<BootPlatform, ()> {
 pub(super) fn thread_overflow(platform: &BootPlatform) -> ! {
     match platform.runner.as_ref() {
         Some(runner) => super::threads::overflow(runner),
+        None => exit(false),
+    }
+}
+
+#[cfg(all(
+    feature = "preemption-overflow-test",
+    not(any(
+        feature = "nested-fault-test",
+        feature = "unhandled-fault-test",
+        feature = "thread-overflow-test"
+    ))
+))]
+pub(super) fn preemption_overflow(platform: &BootPlatform) -> ! {
+    match platform.runner.as_ref() {
+        Some(runner) => super::preempt::overflow(runner),
         None => exit(false),
     }
 }

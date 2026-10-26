@@ -1,0 +1,44 @@
+hematite: ARM64 Rust kernel entered at EL1
+Boot RAM bytes: 0x0000000004000000 (discovered RAM)
+Frame pool pages: 0x0000000000000d59 (4 KiB each; boot reservations excluded)
+HMPREEMPT BEGIN 4
+HMPREEMPT PASS preempt_progress
+HMPREEMPT PASS preempt_mixed
+HMPREEMPT PASS preempt_limits
+HMPREEMPT PASS preempt_core
+HMPREEMPT END 4
+HMPREEMPT IRQ 000000000000005d
+HMTEST BEGIN 32
+HMTEST PASS write_protect
+HMTEST PASS nx
+HMTEST PASS user_execute_protect
+HMTEST PASS user_access_protect
+HMTEST PASS wx
+HMTEST PASS stack_guard
+HMTEST PASS null_guard
+HMTEST PASS checked_range
+HMTEST PASS monitor_bounds
+HMTEST PASS cap_authority
+HMTEST PASS cap_limits
+HMTEST PASS cap_lifetime
+HMTEST PASS cap_generation
+HMTEST PASS boot_memory_valid
+HMTEST PASS boot_memory_malformed
+HMTEST PASS frame_ranges
+HMTEST PASS frame_boundaries
+HMTEST PASS frame_contract
+HMTEST PASS heap_blocks
+HMTEST PASS heap_values
+HMTEST PASS mutex_contract
+HMTEST PASS mutex_lifetime
+HMTEST PASS mutex_workers
+HMTEST PASS thread_contract
+HMTEST PASS thread_limits
+HMTEST PASS thread_core
+HMTEST PASS timer_contract
+HMTEST PASS fault_contract
+HMTEST PASS mapping_contract
+HMTEST PASS mapping_limits
+HMTEST PASS mapping_hardware
+HMTEST PASS cap_orderings
+HMTEST END 32

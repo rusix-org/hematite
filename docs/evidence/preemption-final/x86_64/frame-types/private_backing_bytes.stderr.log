@@ -1,0 +1,17 @@
+warning: unused imports: `Block`, `Frame`, and `Pool`
+ --> /workspace/target/evidence/20261026T133602-866275239-x86_64/frame-types/private_backing_bytes.rs:3:17
+  |
+3 | use hm_frames::{Frame, Pool, Block, KernelBox};
+  |                 ^^^^^  ^^^^  ^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+error[E0616]: field `_block` of struct `KernelBox` is private
+ --> /workspace/target/evidence/20261026T133602-866275239-x86_64/frame-types/private_backing_bytes.rs:6:45
+  |
+6 | pub fn client(mut b: KernelBox<'_,u64>) { b._block.bytes_mut()[0]=1; }
+  |                                             ^^^^^^ private field
+
+error: aborting due to 1 previous error; 1 warning emitted
+
+For more information about this error, try `rustc --explain E0616`.

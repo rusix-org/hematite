@@ -205,3 +205,22 @@ on a guard destructor that arbitrary safe code owns. Revalidate exact timer,
 GIC and exclusive-monitor instruction ordering against their primary manuals
 during implementation review; those details are not established by this
 high-level design alone.
+
+## Boundary-expiry diagnostic refinement
+
+A separate `preemption-boundary-test` image injects one expired timer per run at
+first entry, explicit yield and completion before their scheduler mutations.
+A private assembly macro saves its scratch GPRs/NZCV on the current guarded
+worker stack, masks IRQ before changing assembly-only one-shot flags, and sets
+CNTP_CVAL to zero with synchronization. These three sites require the existing
+IRQ-enabled RUNNING-worker state; an already-masked entry is an invariant failure.
+After restoring registers, flags and SP it restores that IRQ-enabled state in
+a labelled instruction window. No policy callback runs while the macro is
+masked, and no Rust borrow or emergency-stack frame survives its transition.
+One-shot flags prevent a resumed worker from repeatedly forcing expiry.
+
+The host must observe actual IRQ interrupted PCs within each exported
+start/yield/completion window, using ranges from that image's ELF. Missing
+observations fail. The normal image has no injection. This instrumentation
+was independently reviewed before implementation; register/flag preservation
+and exact source/trace correspondence remain source/runtime verification duties.

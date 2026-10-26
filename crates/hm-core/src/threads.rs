@@ -33,7 +33,7 @@ unsafe extern "C" {
 const RUNNABLE: u64 = 0;
 const RUNNING: u64 = 1;
 const DONE: u64 = 2;
-static BUSY: AtomicBool = AtomicBool::new(false);
+pub(super) static BUSY: AtomicBool = AtomicBool::new(false);
 
 #[repr(C, align(16))]
 struct Context {
@@ -94,6 +94,13 @@ impl Runner {
         Self {
             _single_cpu: PhantomData,
         }
+    }
+
+    pub fn run_preemptive(
+        &self,
+        jobs: &[ThreadJob],
+    ) -> Result<hm_kernel::thread_api::PreemptReport, ThreadError> {
+        super::preempt::run(jobs)
     }
 
     pub fn run(&self, jobs: &[ThreadJob]) -> Result<RunReport, ThreadError> {
@@ -277,7 +284,7 @@ unsafe fn task_ptr(state: *mut RunState, id: usize) -> *mut Task {
 
 // SAFETY: Caller owns the global stack lease, id is bounded, and no live Rust
 // frame/reference exists on this worker stack (before start or after completion).
-unsafe fn clear_stack(id: usize) {
+pub(super) unsafe fn clear_stack(id: usize) {
     // SAFETY: Guard+4096 begins the complete64KiB reserved normal-RAM stack.
     unsafe { core::ptr::write_bytes((guards()[id] + 4096) as *mut u8, 0, 65536) }
 }
@@ -290,7 +297,7 @@ pub(super) fn guards() -> [usize; MAX_THREADS] {
         core::ptr::addr_of!(__thread3_guard) as usize,
     ]
 }
-fn tops() -> [usize; MAX_THREADS] {
+pub(super) fn tops() -> [usize; MAX_THREADS] {
     [
         core::ptr::addr_of!(__thread0_top) as usize,
         core::ptr::addr_of!(__thread1_top) as usize,

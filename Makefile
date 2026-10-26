@@ -28,6 +28,9 @@ test: image
 		cargo clippy --workspace --all-features --locked --offline --target $(TARGET) --target-dir target/$(ARCH)/clippy -- -D warnings; \
 		python3 tools/test_test_kernel.py; \
 		python3 tools/test_timer_trace.py; \
+		python3 tools/test_test_preemption.py; \
+		python3 tools/test_test_preemption_negative.py; \
+		python3 tools/test_preemption_boundaries.py; \
 		python3 tools/check_repository.py; \
 		python3 tools/check_safety.py; \
 		cargo build --locked --offline -p hm-core --release --features boot-tests --target $(TARGET) --target-dir target/$(ARCH)/boot-test; \
@@ -36,6 +39,10 @@ test: image
 			cargo build --locked --offline -p hm-core --release --features unhandled-fault-test --target $(TARGET) --target-dir target/$(ARCH)/fault-test; \
 			cargo build --locked --offline -p hm-core --release --features nested-fault-test --target $(TARGET) --target-dir target/$(ARCH)/nested-test; \
 			cargo build --locked --offline -p hm-core --release --features thread-overflow-test --target $(TARGET) --target-dir target/$(ARCH)/thread-overflow-test; \
+			cargo build --locked --offline -p hm-core --release --features preemption-tests --target $(TARGET) --target-dir target/$(ARCH)/preemption-test; \
+			cargo build --locked --offline -p hm-core --release --features preemption-boundary-test --target $(TARGET) --target-dir target/$(ARCH)/preemption-boundary-test; \
+			cargo build --locked --offline -p hm-core --release --features preemption-no-timer-test --target $(TARGET) --target-dir target/$(ARCH)/preemption-no-timer-test; \
+			cargo build --locked --offline -p hm-core --release --features preemption-overflow-test --target $(TARGET) --target-dir target/$(ARCH)/preemption-overflow-test; \
 		fi; \
 		cargo build --locked --offline -p hm-kernel --release --target $(TARGET) --target-dir target/$(ARCH)/boot-test; \
 		python3 tools/check_capability_types.py \
@@ -71,6 +78,10 @@ test: image
 			--thread-overflow-kernel target/$(ARCH)/thread-overflow-test/$(TARGET)/release/hematite \
 			--output "$$evidence_dir/profiles" --arch $(ARCH); \
 		if [ "$(ARCH)" = aarch64 ]; then \
+			python3 tools/test_preemption.py --kernel target/$(ARCH)/preemption-test/$(TARGET)/release/hematite --output "$$evidence_dir/preemption-128m"; \
+			python3 tools/test_preemption.py --kernel target/$(ARCH)/preemption-test/$(TARGET)/release/hematite --memory 64 --output "$$evidence_dir/preemption-64m"; \
+			python3 tools/test_preemption.py --kernel target/$(ARCH)/preemption-boundary-test/$(TARGET)/release/hematite --boundaries --output "$$evidence_dir/preemption-boundaries"; \
+			python3 tools/test_preemption_negative.py --no-timer-kernel target/$(ARCH)/preemption-no-timer-test/$(TARGET)/release/hematite --overflow-kernel target/$(ARCH)/preemption-overflow-test/$(TARGET)/release/hematite --output "$$evidence_dir/preemption-negative"; \
 			python3 tools/check_timer_trace.py --trace "$$evidence_dir/boot/exceptions.log" \
 				--expected 16 --output "$$evidence_dir/boot/timer-trace.json"; \
 			python3 tools/check_timer_trace.py --trace "$$evidence_dir/profiles/monitor/exceptions.log" \

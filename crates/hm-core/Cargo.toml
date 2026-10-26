@@ -12,6 +12,10 @@ boot-tests = []
 unhandled-fault-test = []
 nested-fault-test = []
 thread-overflow-test = []
+preemption-tests = []
+preemption-no-timer-test = ["preemption-tests"]
+preemption-boundary-test = ["preemption-tests"]
+preemption-overflow-test = []
 
 [[bin]]
 name = "hematite"

@@ -1,0 +1,18 @@
+gic_cpu_write cpu 0 iface write at 0x00000000 0x00000000
+gic_cpu_write cpu 0 iface write at 0x00000004 0x000000ff
+gic_cpu_write cpu 0 iface write at 0x00000008 0x00000000
+gic_cpu_write cpu 0 iface write at 0x00000000 0x00000001
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40202020
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40208ce0
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+Taking exception 1 [Undefined Instruction] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x2000000
+...with ELR 0x402020c0
+...to EL1 PC 0x40200800 PSTATE 0x4003c5
+Taking exception 16 [Semihosting call] on CPU 0
+...from EL1 to EL1
+...handling as semihosting call 0x20

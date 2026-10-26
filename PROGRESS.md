@@ -1,6 +1,6 @@
 # Progress
 
-Current phase: **Phase 1 underway: mutex ownership and cooperative contention verified**.
+Current phase: **Phase 1 underway: single-CPU ARM timer preemption verified locally**.
 Aaron approved scratch implementation and then changed the primary objective
 from strict Linux parity to native OS design with selective compatibility.
 [ADR 0005](docs/adr/0005-native-first-design.md) records the native direction;
@@ -19,18 +19,21 @@ from strict Linux parity to native OS design with selective compatibility.
 - Serial monitor: `make run` defaults to ARM64; `ARCH=x86_64` selects the
   regression port. Commands `help`, `status`, `test`; Ctrl-C exits.
 - `make test-all`: formatting, Clippy and safety checks for both targets,
-  23 host harness tests, 32 guest tests per architecture, ARM no-PAN rejection,
+  40 host harness tests, 32 guest tests per architecture, ARM no-PAN rejection,
   x86 missing-NX/SMEP/SMAP rejection, and live monitor recovery tests on both.
   ARM discovery matches both 128 MiB and 64 MiB guest configurations.
+  Separate ARM images run four preemption cases at both memory sizes, then
+  repeat the 32 existing cases in the same guest. Forced-transition, withheld
+  timer delivery and preemptible stack-overflow profiles also pass.
   All passed locally; CI at `d13b032` covers the preceding thread milestone.
   `make test` tests ARM64 alone by default.
 - Pinned Rust base and Debian package snapshot, QEMU 7.2.22. One CPU/128 MiB
   guest by default; ARM discovery also tests 64 MiB; no attached disks or networking. Both targets use TCG.
 
-Latest evidence: [mutex verification](docs/evidence/kernel-mutex.md),
-[ARM guest results](docs/evidence/mutex-final/aarch64/boot/result.json),
-[ARM profiles](docs/evidence/mutex-final/aarch64/profiles/result.json),
-and matching x86 results under `docs/evidence/mutex-final/x86_64/`.
+Latest evidence: [preemption verification](docs/evidence/arm-preemption.md),
+[ARM scheduling results](docs/evidence/preemption-final/aarch64/preemption-128m/result.json),
+[ARM profiles](docs/evidence/preemption-final/aarch64/profiles/result.json),
+and matching x86 results under `docs/evidence/preemption-final/x86_64/`.
 Earlier [bootstrap verification](docs/evidence/hematite-bootstrap.md) is retained.
 The earlier [Asterinas baseline](docs/evidence/asterinas-evaluation.md) remains
 an evaluation only; it is not this kernel's implementation.
@@ -133,8 +136,8 @@ spaces, executable mappings and SMP shootdowns remain unimplemented.
 The pinned GICv2 profile delivers eight physical timer interrupts per scoped
 assembly probe. The handler preserves GPRs on the emergency stack, rearms the
 timer and acknowledges/completes interrupt 30. It never calls Rust or touches
-allocator/mapping metadata. Rust still runs with asynchronous exceptions masked.
-This establishes interrupt delivery, not thread preemption or general handlers.
+allocator/mapping metadata. Rust remains masked around this diagnostic path;
+the separate preemptive runner below enables IRQs in worker callbacks.
 
 Runtime checks cover x4–x30, all 32 Q registers, NZCV, FPCR/FPSR and both stack
 pointers. Polling scratch x0–x3 preservation is source-reviewed, not a sentinel
@@ -169,8 +172,8 @@ The pinned compiler's page probing is checked in emitted IR/assembly; an actual
 128 KiB callback frame faults in worker zero's guard and exits fatally.
 See [design](docs/design/0010-arm-kernel-threads.md),
 [review](docs/reviews/0010-arm-kernel-threads.md) and
-[evidence](docs/evidence/arm-threads.md). Preemption, SMP, cancellation and
-dynamically allocated thread stacks remain unimplemented.
+[evidence](docs/evidence/arm-threads.md). SMP, cancellation and dynamically
+allocated thread stacks remain unimplemented.
 
 ## Mutex ownership and contention verified locally
 
@@ -193,6 +196,18 @@ This is host concurrency evidence, not guest SMP. See
 preemption-disable ownership and fairness guarantees remain unimplemented.
 
 ## Limits and gates
+
+ARM's separate preemptive runner now suspends arbitrary safe function-pointer
+callbacks through timer IRQs, preserving full register images in task-owned
+storage. The shared emergency stack is released before coordinator execution.
+Four nonyielding workers, mixed yields, mutex ownership during preemption,
+destructors, context sentinels and exact trace accounting pass. Forced expiry
+hits all three start/yield/completion windows. No public interrupt-mask guard
+is exposed; allocator/mapping capabilities remain unavailable to workers.
+See [design](docs/design/0012-arm-preemption.md),
+[source review](docs/reviews/0012-arm-preemption-source.md) and
+[evidence](docs/evidence/arm-preemption.md). This does not satisfy Phase 1's
+multi-CPU gate; wait queues, SMP-safe resource ownership and SMP remain ahead.
 
 No userspace, syscall ABI, general interrupt/exception handling, SMP, storage,
 virtio drivers or networking exists. ARM recovery is restricted to the fixed
@@ -221,10 +236,9 @@ publication awaits Aaron's response. Local kernel development remains authorized
 
 ## Next actions
 
-1. Implement and source-review the [ARM preemption contract](docs/design/0012-arm-preemption.md),
-   whose [independent prerequisite audit/design review](docs/reviews/0012-arm-preemption.md)
-   is complete. Preserve the masked coordinator and restricted worker capabilities;
-   verify timer-driven progress of callbacks that never yield. Extend recovery to fault-aware user operations only with
+1. Design/review wait/wake queues and SMP-safe resource/scheduler ownership before
+   enabling additional CPUs. Preserve the restricted allocator/mapping capability
+   boundary until its synchronization is implemented. Extend recovery to fault-aware user operations only with
    address-space and lifetime proofs. Add interrupt/SMP-safe ownership before concurrency;
    implement measured small-object allocation before service workloads.
 2. Define the native userspace wire contract from those experiments; select
@@ -324,3 +338,11 @@ publication awaits Aaron's response. Local kernel development remains authorized
   reclamation, cooperative mask preservation and timer setup/teardown failures.
   This is design evidence only: no preemption implementation or runtime tests
   added. Public mutex push remains pending approval; local work continues.
+- 2026-10-26: Implemented and independently source-reviewed ARM preemption.
+  Initial compilation exposed PAN encoding/FFI issues; first IRQ exposed an
+  invalid EL1 banked-SP read, fixed with a memory-free SPSel observation. Fixed
+  all-features negative-fixture selection. Final full suite passes 40 host and
+  32 baseline guest cases per architecture, four ARM scheduling cases plus
+  same-guest regressions, forced-transition delivery and both negative profiles.
+  Preserved failures, exact source/ELF hashes and full traces. Remote publication
+  remains pending approval; no push retry occurred.

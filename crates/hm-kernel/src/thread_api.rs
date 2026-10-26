@@ -1,4 +1,4 @@
-//! Bounded cooperative kernel execution; this is not a userspace wire ABI.
+//! Bounded kernel execution; this is not a userspace wire ABI.
 #![forbid(unsafe_code)]
 
 pub const MAX_THREADS: usize = 4;
@@ -24,6 +24,7 @@ pub enum ThreadError {
     Unsupported,
     TooMany,
     Busy,
+    TimerUnavailable,
 }
 
 /// Values are indexed by admitted job ID. The trace records each dispatch,
@@ -49,6 +50,33 @@ impl RunReport {
             trace: [0; TRACE_CAPACITY],
             trace_len: 0,
             truncated: false,
+        }
+    }
+}
+
+/// Why the indexed dispatch resumed a worker. Timer suspension is not a yield.
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub enum DispatchCause {
+    Initial,
+    Yield,
+    Timer,
+}
+
+/// `causes` uses the same indices and truncation boundary as `run.trace`.
+/// Timer counters include every suspension, even after the trace fills.
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub struct PreemptReport {
+    pub run: RunReport,
+    pub preemptions: [u64; MAX_THREADS],
+    pub causes: [DispatchCause; TRACE_CAPACITY],
+}
+
+impl PreemptReport {
+    pub const fn empty() -> Self {
+        Self {
+            run: RunReport::empty(),
+            preemptions: [0; MAX_THREADS],
+            causes: [DispatchCause::Initial; TRACE_CAPACITY],
         }
     }
 }

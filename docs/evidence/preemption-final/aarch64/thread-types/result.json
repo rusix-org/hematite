@@ -1,0 +1,90 @@
+{
+  "passed": true,
+  "scope": "actual ARM thread types and pinned compiler stack probing",
+  "probes": {
+    "library": {
+      "passed": true,
+      "returncode": 0
+    },
+    "valid_callback_run": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "valid_forget_borrow": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "runner_clone": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "runner_send": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "runner_sync": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "private_constructor": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0624"
+    },
+    "forge_runner": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0451"
+    },
+    "private_register_context": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0603"
+    },
+    "private_token": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0603"
+    },
+    "capturing_callback": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0308"
+    },
+    "borrowed_callback": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0308"
+    },
+    "context_escape": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0521"
+    },
+    "context_mutable_alias": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0499"
+    },
+    "context_send": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    }
+  },
+  "stack_probes": {
+    "passed": true,
+    "returncode": 0,
+    "checks": {
+      "compiler_succeeded": true,
+      "inline_probe_attribute": true,
+      "full_128k_page_probe_loop": true
+    },
+    "scope": "pinned compiler fixture; actual worker guard overflow is tested in QEMU"
+  }
+}

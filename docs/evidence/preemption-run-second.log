@@ -1,0 +1,38 @@
+{
+  "passed": true,
+  "errors": [],
+  "observed_records": [
+    "HMPREEMPT BEGIN 4",
+    "HMPREEMPT PASS preempt_progress",
+    "HMPREEMPT PASS preempt_mixed",
+    "HMPREEMPT PASS preempt_limits",
+    "HMPREEMPT PASS preempt_core",
+    "HMPREEMPT END 4"
+  ],
+  "expected_cases": [
+    "preempt_progress",
+    "preempt_mixed",
+    "preempt_limits",
+    "preempt_core"
+  ],
+  "returncode": 0,
+  "timed_out": false,
+  "launch_error": null,
+  "scheduler_irqs": 93,
+  "scope": "single-CPU ARM timer-driven scheduling; not SMP",
+  "trace": {
+    "passed": true,
+    "errors": [],
+    "counts": {
+      "irq": 93,
+      "vector": 93,
+      "ack": 93,
+      "eoi": 93
+    },
+    "expected_interrupts": 93,
+    "sha256": "02c9effb041412b6d09f619f15958730a5280b0dbc999599839b241cf048fe88"
+  },
+  "started_utc": "2026-10-26T13:28:23.524200+00:00",
+  "elapsed_seconds": 0.16603823308832943,
+  "timeout_seconds": 20
+}

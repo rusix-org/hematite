@@ -16,6 +16,10 @@ mod frames;
 #[cfg(target_arch = "aarch64")]
 mod mappings;
 #[cfg(target_arch = "aarch64")]
+mod preempt;
+#[cfg(target_arch = "aarch64")]
+mod preempt_checks;
+#[cfg(target_arch = "aarch64")]
 mod threads;
 #[cfg(target_arch = "aarch64")]
 mod timer;
@@ -45,18 +49,40 @@ extern "C" fn boot_main(_boot_info: u64) -> ! {
         not(any(feature = "nested-fault-test", feature = "unhandled-fault-test"))
     ))]
     arch::thread_overflow(&platform);
+    #[cfg(all(
+        target_arch = "aarch64",
+        feature = "preemption-overflow-test",
+        not(any(
+            feature = "nested-fault-test",
+            feature = "unhandled-fault-test",
+            feature = "thread-overflow-test"
+        ))
+    ))]
+    {
+        platform.write("HMPREEMPT EXPECT OVERFLOW\n");
+        arch::preemption_overflow(&platform);
+    }
     #[cfg(not(all(
         target_arch = "aarch64",
         any(
             feature = "unhandled-fault-test",
             feature = "nested-fault-test",
-            feature = "thread-overflow-test"
+            feature = "thread-overflow-test",
+            feature = "preemption-overflow-test"
         )
     )))]
     {
-        #[cfg(feature = "boot-tests")]
+        #[cfg(feature = "preemption-no-timer-test")]
+        platform.write("HMPREEMPT EXPECT NO-TIMER\n");
+        #[cfg(feature = "preemption-tests")]
+        {
+            let scheduling = hm_kernel::run_preemption_tests(&mut platform);
+            let regression = hm_kernel::run_tests(&mut platform);
+            arch::exit(scheduling && regression);
+        }
+        #[cfg(all(feature = "boot-tests", not(feature = "preemption-tests")))]
         arch::exit(hm_kernel::run_tests(&mut platform));
-        #[cfg(not(feature = "boot-tests"))]
+        #[cfg(not(any(feature = "boot-tests", feature = "preemption-tests")))]
         hm_kernel::run_monitor(&mut platform)
     }
 }
