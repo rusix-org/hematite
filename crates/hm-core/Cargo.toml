@@ -20,6 +20,10 @@ wait-all-blocked-test = []
 secondary-tests = []
 secondary-stale-generation-test = ["secondary-tests"]
 secondary-cpu-off-return-test = ["secondary-tests"]
+smp-tests = ["secondary-tests"]
+smp-no-peer-timer-test = ["smp-tests"]
+smp-peer-overflow-test = ["smp-tests"]
+smp-all-blocked-test = ["smp-tests"]
 
 [[bin]]
 name = "hematite"

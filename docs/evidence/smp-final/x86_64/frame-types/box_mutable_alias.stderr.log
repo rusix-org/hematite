@@ -1,0 +1,32 @@
+warning: unused imports: `Block`, `Frame`, and `Pool`
+ --> /workspace/target/evidence/20261026T160020-722312328-x86_64/frame-types/box_mutable_alias.rs:3:17
+  |
+3 | use hm_frames::{Frame, Pool, Block, KernelBox};
+  |                 ^^^^^  ^^^^  ^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `hm_kernel::frame_api::OwnedFrame`
+ --> /workspace/target/evidence/20261026T160020-722312328-x86_64/frame-types/box_mutable_alias.rs:4:5
+  |
+4 | use hm_kernel::frame_api::OwnedFrame;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `hm_kernel::heap_api::OwnedBlock`
+ --> /workspace/target/evidence/20261026T160020-722312328-x86_64/frame-types/box_mutable_alias.rs:5:5
+  |
+5 | use hm_kernel::heap_api::OwnedBlock;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0499]: cannot borrow `b` as mutable more than once at a time
+ --> /workspace/target/evidence/20261026T160020-722312328-x86_64/frame-types/box_mutable_alias.rs:6:68
+  |
+6 | pub fn client(mut b: KernelBox<'_,u64>) { let a=&mut*b; let c=&mut*b; *a=*c; }
+  |                                                      -             ^  ----- first borrow later used here
+  |                                                      |             |
+  |                                                      |             second mutable borrow occurs here
+  |                                                      first mutable borrow occurs here
+
+error: aborting due to 1 previous error; 3 warnings emitted
+
+For more information about this error, try `rustc --explain E0499`.

@@ -1,0 +1,4 @@
+hematite: ARM64 Rust kernel entered at EL1
+Boot RAM bytes: 0x0000000008000000 (discovered RAM)
+Frame pool pages: 0x0000000000000d31 (4 KiB each; boot reservations excluded)
+HMEXCEPTION FATAL

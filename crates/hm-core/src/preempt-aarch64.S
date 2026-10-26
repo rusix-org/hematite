@@ -405,6 +405,13 @@ arm_preempt_dispatch:
     // Build-time negative image withholds delivery, preserving the workload.
     mov x6, #{delivery}
     cbz x6, .Lwithhold
+    mov x6, #{peer_delivery}
+    cbnz x6, .Lpeer_delivery
+    mrs x6, mpidr_el1
+    and x6, x6, #0xff
+    cmp x6, #1
+    b.eq .Lwithhold
+.Lpeer_delivery:
     str w5, [x4, #0x100]
 .Lwithhold:
     mov x4, #1

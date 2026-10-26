@@ -93,7 +93,7 @@ impl Runner {
     // additionally acquires exclusive use before touching any worker storage.
     pub(crate) unsafe fn from_boot() -> Self {
         Self {
-            cpu_id: super::cpu_local::current_id(),
+            cpu_id: super::cpu_local::current_id().filter(|id| *id == 0),
             _single_cpu: PhantomData,
         }
     }
@@ -322,6 +322,56 @@ pub(super) fn tops() -> [usize; MAX_THREADS] {
         core::ptr::addr_of!(__thread2_top) as usize,
         core::ptr::addr_of!(__thread3_top) as usize,
     ]
+}
+// SAFETY: Fixed secondary worker reservations are established and validated by
+// coldboot; these address-only markers grant no runtime ownership by themselves.
+unsafe extern "C" {
+    static __secondary_thread0_guard: [u8; 0];
+    static __secondary_thread0_top: [u8; 0];
+    static __secondary_thread1_guard: [u8; 0];
+    static __secondary_thread1_top: [u8; 0];
+    static __secondary_thread2_guard: [u8; 0];
+    static __secondary_thread2_top: [u8; 0];
+    static __secondary_thread3_guard: [u8; 0];
+    static __secondary_thread3_top: [u8; 0];
+}
+pub(super) fn local_guards(cpu: usize) -> Option<[usize; MAX_THREADS]> {
+    match cpu {
+        0 => Some(guards()),
+        1 => Some([
+            core::ptr::addr_of!(__secondary_thread0_guard) as usize,
+            core::ptr::addr_of!(__secondary_thread1_guard) as usize,
+            core::ptr::addr_of!(__secondary_thread2_guard) as usize,
+            core::ptr::addr_of!(__secondary_thread3_guard) as usize,
+        ]),
+        _ => None,
+    }
+}
+pub(super) fn local_tops(cpu: usize) -> Option<[usize; MAX_THREADS]> {
+    match cpu {
+        0 => Some(tops()),
+        1 => Some([
+            core::ptr::addr_of!(__secondary_thread0_top) as usize,
+            core::ptr::addr_of!(__secondary_thread1_top) as usize,
+            core::ptr::addr_of!(__secondary_thread2_top) as usize,
+            core::ptr::addr_of!(__secondary_thread3_top) as usize,
+        ]),
+        _ => None,
+    }
+}
+// SAFETY: Caller exclusively owns this CPU's worker stack and proves no live
+// callback/frame remains there; CPU affinity and global session lease are held.
+pub(super) unsafe fn clear_local_stack(cpu: usize, id: usize) {
+    let (Some(guards), Some(tops)) = (local_guards(cpu), local_tops(cpu)) else {
+        return;
+    };
+    let (Some(&guard), Some(&top)) = (guards.get(id), tops.get(id)) else {
+        return;
+    };
+    // SAFETY: Exact linker bounds exclude guards; caller supplies ownership.
+    unsafe {
+        core::ptr::write_bytes((guard + 4096) as *mut u8, 0, top - guard - 4096);
+    }
 }
 fn guards_valid() -> bool {
     guards().iter().all(|address| {

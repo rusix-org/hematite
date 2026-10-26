@@ -8,6 +8,10 @@ pub const TRACE_CAPACITY: usize = 64;
 /// Yield preserves this callback's locals and resumes it before the run returns.
 pub trait ThreadContext {
     fn id(&self) -> usize;
+    /// The CPU executing this pinned callback; workers do not migrate.
+    fn cpu_id(&self) -> usize {
+        0
+    }
     fn yield_now(&mut self);
     /// Deschedule until this event differs from the supplied observation.
     /// Observe before checking the predicate; always recheck after returning.

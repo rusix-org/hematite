@@ -1,0 +1,8 @@
+{
+  "kernel": "/workspace/target/aarch64/wait-all-blocked-test/aarch64-unknown-none/release/hematite",
+  "sha256": "0b4906fd0337f5ef2b6647f21004c6d3561698ce52a58ac9d130a65c7e7151e5",
+  "accel": "tcg",
+  "cpu": "max",
+  "arch": "aarch64",
+  "ram_mb": 128
+}

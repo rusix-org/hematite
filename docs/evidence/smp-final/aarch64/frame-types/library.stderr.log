@@ -1,0 +1,16 @@
+warning: methods `excludes_region` and `exclusion_checks` are never used
+   --> /workspace/crates/hm-core/src/frames.rs:104:19
+    |
+ 22 | impl Pool {
+    | --------- methods in this implementation
+...
+104 |     pub(super) fn excludes_region(&self, start: u64, end: u64) -> bool {
+    |                   ^^^^^^^^^^^^^^^
+...
+126 |     pub(super) fn exclusion_checks(&self) -> bool {
+    |                   ^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: 1 warning emitted
+

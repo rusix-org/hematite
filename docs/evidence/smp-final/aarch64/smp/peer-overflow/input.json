@@ -1,0 +1,9 @@
+{
+  "kernel": "/workspace/target/aarch64/smp-peer-overflow-test/aarch64-unknown-none/release/hematite",
+  "sha256": "17d8017cf82262ab6b9fd4c60c87d1619cfc6f812172ba99cf5f43b8f5da2f8c",
+  "arch": "aarch64",
+  "accel": "tcg,thread=multi",
+  "cpus": 2,
+  "ram_mb": 128,
+  "negative": "peer-overflow"
+}

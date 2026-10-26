@@ -4,6 +4,7 @@ use core::cell::UnsafeCell;
 use core::marker::PhantomData;
 use core::sync::atomic::{AtomicU64, Ordering};
 use hm_kernel::cpu_topology::{Conduit, Topology};
+use hm_kernel::thread_api::{MAX_THREADS, PreemptReport, ThreadContext, ThreadJob};
 
 const IDLE: u64 = 0;
 const PREPARED: u64 = 1;
@@ -23,6 +24,8 @@ struct PeerReport {
     root: u64,
     sp: u64,
     checks: u64,
+    preempt: PreemptReport,
+    irq_count: u64,
 }
 impl PeerReport {
     const ZERO: Self = Self {
@@ -30,22 +33,46 @@ impl PeerReport {
         root: 0,
         sp: 0,
         checks: 0,
+        preempt: PreemptReport::empty(),
+        irq_count: 0,
     };
+}
+#[derive(Clone, Copy)]
+struct Work {
+    mode: u64,
+    counts: [usize; 2],
+    jobs: [[ThreadJob; MAX_THREADS]; 2],
+}
+impl Work {
+    const EMPTY: Self = Self {
+        mode: 0,
+        counts: [0; 2],
+        jobs: [[ThreadJob {
+            entry: empty_job,
+            input: 0,
+        }; MAX_THREADS]; 2],
+    };
+}
+fn empty_job(_: &mut dyn ThreadContext, _: u64) -> u64 {
+    0
 }
 #[repr(C, align(64))]
 struct Mailbox {
     phase: AtomicU64,
     generation: AtomicU64,
     report: UnsafeCell<PeerReport>,
+    work: UnsafeCell<Work>,
 }
 // SAFETY: CPU0 owns report preparation/reuse only while CPU1 is confirmed OFF
 // under BUSY. CPU1 writes only after Acquire Prepared/Go. CPU0 reads only after
-// Acquire Returned plus PSCI OFF. No payload references escape either owner.
+// Acquire Returned plus PSCI OFF. Work is a disjoint immutable copy while
+// admitted; no payload references escape either owner.
 unsafe impl Sync for Mailbox {}
 static MAILBOX: Mailbox = Mailbox {
     phase: AtomicU64::new(IDLE),
     generation: AtomicU64::new(0),
     report: UnsafeCell::new(PeerReport::ZERO),
+    work: UnsafeCell::new(Work::EMPTY),
 };
 static NEXT_GENERATION: AtomicU64 = AtomicU64::new(1);
 const _: () = {
@@ -53,7 +80,7 @@ const _: () = {
     assert!(core::mem::offset_of!(Mailbox, generation) == 8);
     assert!(core::mem::offset_of!(Mailbox, report) == 16);
     assert!(core::mem::size_of::<AtomicU64>() == 8);
-    assert!(core::mem::size_of::<PeerReport>() == 32);
+    assert!(core::mem::offset_of!(PeerReport, preempt) == 32);
 };
 
 // SAFETY: Fixed CPU1 entry uses only reserved stacks/root, establishes EL1 ABI,
@@ -62,7 +89,9 @@ global_asm!(include_str!("secondary-aarch64.S"),
     adapter = sym adapter, mailbox = sym MAILBOX,
     affinity_mask = const super::cpu_local::AFFINITY_MASK,
     cpu_stride = const super::cpu_local::STRIDE,
-    off_return = const if cfg!(feature = "secondary-cpu-off-return-test") { 1 } else { 0 });
+    off_return = const if cfg!(feature = "secondary-cpu-off-return-test") { 1 } else { 0 },
+    smp = const if cfg!(feature = "smp-tests") { 1 } else { 0 },
+    overflow = const if cfg!(feature = "smp-peer-overflow-test") { 1 } else { 0 });
 // SAFETY: Private fixed entries/markers belong to the reviewed image. No caller
 // supplies arbitrary stack/root addresses; CPU_ON always uses this entry.
 unsafe extern "C" {
@@ -84,6 +113,7 @@ pub(super) struct Info {
     pub cpu_off: i64,
     pub affinity_info: i64,
 }
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub(super) struct Session {
     pub generation: u64,
     pub cpu: u64,
@@ -92,11 +122,27 @@ pub(super) struct Session {
     pub sp: u64,
     pub checks: u64,
 }
-#[derive(Debug)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub(super) enum Error {
     Authority,
     Busy,
     Generation,
+    #[cfg(feature = "smp-tests")]
+    TooMany,
+    TimerUnavailable,
+}
+
+#[cfg(feature = "smp-tests")]
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub(super) struct SmpReport {
+    pub generation: u64,
+    pub cpus: [usize; 2],
+    pub reports: [PreemptReport; 2],
+    pub irq_counts: [u64; 2],
+    pub off: bool,
+    pub peer_checks: u64,
+    pub peer_root: u64,
+    pub peer_sp: u64,
 }
 
 /// Boot capability; no transfer, sharing, cloning or caller-provided jobs.
@@ -136,6 +182,39 @@ impl Runner {
     }
 
     pub(super) fn run(&mut self) -> Result<Session, Error> {
+        self.execute(Work::EMPTY).map(|(session, _, _)| session)
+    }
+    #[cfg(feature = "smp-tests")]
+    pub(super) fn run_smp(
+        &mut self,
+        cpu0_jobs: &[ThreadJob],
+        cpu1_jobs: &[ThreadJob],
+    ) -> Result<SmpReport, Error> {
+        if cpu0_jobs.len() > MAX_THREADS || cpu1_jobs.len() > MAX_THREADS {
+            return Err(Error::TooMany);
+        }
+        let mut work = Work::EMPTY;
+        work.mode = 1;
+        work.counts = [cpu0_jobs.len(), cpu1_jobs.len()];
+        for (destination, source) in work.jobs[0].iter_mut().zip(cpu0_jobs) {
+            *destination = *source;
+        }
+        for (destination, source) in work.jobs[1].iter_mut().zip(cpu1_jobs) {
+            *destination = *source;
+        }
+        let (session, reports, irq_counts) = self.execute(work)?;
+        Ok(SmpReport {
+            generation: session.generation,
+            cpus: [0, session.cpu as usize],
+            reports,
+            irq_counts,
+            off: true,
+            peer_checks: session.checks,
+            peer_root: session.root,
+            peer_sp: session.sp,
+        })
+    }
+    fn execute(&mut self, work: Work) -> Result<(Session, [PreemptReport; 2], [u64; 2]), Error> {
         if !authority() {
             return Err(Error::Authority);
         }
@@ -151,10 +230,24 @@ impl Runner {
             return Err(Error::Generation);
         };
         NEXT_GENERATION.store(next, Ordering::Relaxed);
+        if work.mode == 1 {
+            // SAFETY: CPU0 owns BUSY and firmware confirmed peer OFF before any
+            // shared controller mutation. No callback has been published yet.
+            if !unsafe { super::preempt::shared_start() } {
+                super::threads::BUSY.store(false, Ordering::Release);
+                return Err(Error::TimerUnavailable);
+            }
+            #[cfg(feature = "smp-tests")]
+            // SAFETY: Same lease/OFF proof; only diagnostic masks reset.
+            unsafe {
+                super::preempt::reset_smp_observations();
+            }
+        }
         // SAFETY: BUSY and PSCI OFF prove there is no peer reader/writer or live
         // Rust frame. Prepare only permanent payload and private CPU1 record.
         unsafe {
             MAILBOX.report.get().write(PeerReport::ZERO);
+            MAILBOX.work.get().write(work);
             super::cpu_local::prepare_secondary();
         }
         MAILBOX.generation.store(generation, Ordering::Relaxed);
@@ -175,6 +268,14 @@ impl Runner {
         }
         wait_phase(PREPARED, ONLINE);
         MAILBOX.phase.store(GO, Ordering::Release);
+        let (local, local_irqs) = if work.mode == 1 {
+            let Some(jobs) = work.jobs[0].get(..work.counts[0]) else {
+                fail();
+            };
+            local_run(jobs, 0)
+        } else {
+            (PreemptReport::empty(), 0)
+        };
         wait_phase(GO, RETURNED);
         loop {
             match hvc(AFFINITY_INFO, 1, 0, 0) {
@@ -188,20 +289,27 @@ impl Runner {
         // exists; copy report before clearing only usable stack bytes.
         let report = unsafe {
             let report = MAILBOX.report.get().read();
+            if work.mode == 1 {
+                super::preempt::shared_stop();
+            }
             clear_stacks();
             super::cpu_local::restore_secondary();
             report
         };
         MAILBOX.phase.store(IDLE, Ordering::Release);
         super::threads::BUSY.store(false, Ordering::Release);
-        Ok(Session {
-            generation,
-            cpu: report.cpu,
-            on,
-            root: report.root,
-            sp: report.sp,
-            checks: report.checks,
-        })
+        Ok((
+            Session {
+                generation,
+                cpu: report.cpu,
+                on,
+                root: report.root,
+                sp: report.sp,
+                checks: report.checks,
+            },
+            [local, report.preempt],
+            [local_irqs, report.irq_count],
+        ))
     }
 }
 
@@ -281,9 +389,25 @@ unsafe extern "C" fn adapter(context: u64) {
         #[cfg(not(feature = "secondary-stale-generation-test"))]
         fail();
     }
+    // SAFETY: Acquire Prepared observes CPU0's immutable owned copy. This raw
+    // read touches only Work, never the disjoint report that CPU1 later writes.
+    let work = unsafe { MAILBOX.work.get().read() };
+    if work.mode > 1 || work.counts.iter().any(|count| *count > MAX_THREADS) {
+        fail();
+    }
     MAILBOX.phase.store(ONLINE, Ordering::Release);
     wait_phase(ONLINE, GO);
+    let (preempt, irq_count) = if work.mode == 1 {
+        let Some(jobs) = work.jobs[1].get(..work.counts[1]) else {
+            fail();
+        };
+        local_run(jobs, 1)
+    } else {
+        (PreemptReport::empty(), 0)
+    };
     let mut report = observe();
+    report.preempt = preempt;
+    report.irq_count = irq_count;
     report.checks |= 1 << 7; // Fixed diagnostic callback returned normally.
     // SAFETY: Acquire Go grants CPU1 sole report ownership until it returns to
     // assembly. CPU0 cannot read until Returned and OFF; no reference escapes.
@@ -376,5 +500,31 @@ fn observe() -> PeerReport {
         root,
         sp,
         checks,
+        preempt: PreemptReport::empty(),
+        irq_count: 0,
     }
+}
+
+fn local_run(jobs: &[ThreadJob], cpu: usize) -> (PreemptReport, u64) {
+    let before = super::cpu_local::irq_count();
+    // SAFETY: Only execute/adapter reach here after session admission. CPU0
+    // holds BUSY through peer OFF; each CPU has distinct stacks/publication and
+    // shared forwarding stays enabled until both local schedulers are quiet.
+    let Ok(report) = (unsafe { super::preempt::run_local(jobs, cpu) }) else {
+        fail();
+    };
+    if !super::preempt::local_control_checks(cpu) {
+        fail();
+    }
+    let Some(irqs) = super::cpu_local::irq_count().checked_sub(before) else {
+        fail();
+    };
+    let total = report
+        .preemptions
+        .iter()
+        .try_fold(0u64, |sum, value| sum.checked_add(*value));
+    if total != Some(irqs) {
+        fail();
+    }
+    (report, irqs)
 }

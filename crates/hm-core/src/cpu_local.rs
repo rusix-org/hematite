@@ -68,17 +68,23 @@ fn masked<T>(observe: impl FnOnce(usize, u64) -> T) -> T {
     result
 }
 
-fn valid(pointer: usize, mpidr: u64) -> bool {
-    if pointer != base() || mpidr & AFFINITY_MASK != 0 {
-        return false;
+fn identity(pointer: usize, mpidr: u64) -> Option<u64> {
+    let cpu = mpidr & AFFINITY_MASK;
+    if cpu > 1 || pointer != base() + cpu as usize * STRIDE {
+        return None;
     }
-    // SAFETY: Exact known base and CPU0 affinity checked before dereference;
-    // all callers mask IRQ and boot has initialized the identity to zero.
-    unsafe { ((pointer + CPU_ID) as *const u64).read_volatile() == 0 }
+    // SAFETY: Exact own-CPU base checked before dereference; callers mask IRQ.
+    if unsafe { ((pointer + CPU_ID) as *const u64).read_volatile() } == cpu {
+        Some(cpu)
+    } else {
+        None
+    }
 }
-
+fn valid(pointer: usize, mpidr: u64) -> bool {
+    identity(pointer, mpidr) == Some(0)
+}
 pub(super) fn current_id() -> Option<u64> {
-    masked(|pointer, mpidr| valid(pointer, mpidr).then_some(0))
+    masked(identity)
 }
 
 pub(super) fn irq_count() -> u64 {
@@ -92,7 +98,7 @@ pub(super) fn wait_expiries() -> u64 {
 
 fn read_counter(offset: usize) -> u64 {
     masked(|pointer, mpidr| {
-        if !valid(pointer, mpidr) {
+        if identity(pointer, mpidr).is_none() {
             return 0;
         }
         // SAFETY: Private callers supply only asserted scalar offsets; base
@@ -165,5 +171,20 @@ pub(super) fn secondary_identity() -> bool {
         // SAFETY: Only CPU1 reads its own validated record, with IRQ masked;
         // CPU0 cannot touch this slot between preparation and Returned+OFF.
         unsafe { ((pointer + CPU_ID) as *const u64).read_volatile() == 1 }
+    })
+}
+
+#[cfg(feature = "smp-tests")]
+pub(super) fn worker_active() -> bool {
+    masked(|pointer, mpidr| {
+        if identity(pointer, mpidr).is_none() {
+            return false;
+        }
+        // SAFETY: Own validated record with IRQ masked; read only its scalar
+        // publication, never dereference the published task from this observer.
+        unsafe {
+            ((pointer + PREEMPT + 16) as *const u64).read_volatile() == 1
+                && ((pointer + PREEMPT + 8) as *const u64).read_volatile() != 0
+        }
     })
 }

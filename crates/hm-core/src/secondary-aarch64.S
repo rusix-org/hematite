@@ -127,13 +127,53 @@ arm_secondary_off_return:
 
 .balign 2048
 arm_secondary_vectors:
-.rept 16
+.rept 4
     b arm_secondary_failure
     .balign 128
 .endr
+.if {overflow}
+    b arm_secondary_overflow_fault
+.else
+    b arm_secondary_failure
+.endif
+    .balign 128
+.if {smp}
+    b arm_timer_irq
+.else
+    b arm_secondary_failure
+.endif
+    .balign 128
+.rept 10
+    b arm_secondary_failure
+    .balign 128
+.endr
+
+.if {overflow}
+// Terminal-only negative: no stack access or register restoration on a guard.
+arm_secondary_overflow_fault:
+    mrs x0, esr_el1
+    lsr x1, x0, #26
+    cmp x1, #0x25
+    b.ne arm_secondary_failure
+    and x0, x0, #63
+    cmp x0, #7
+    b.ne arm_secondary_failure
+    mrs x0, far_el1
+    ldr x1, =__secondary_thread0_guard
+    cmp x0, x1
+    b.lo arm_secondary_failure
+    add x1, x1, #4096
+    cmp x0, x1
+    b.hs arm_secondary_failure
+    ldr x1, =.Lsecondary_overflow
+    b .Lsecondary_exit
+.endif
+    .ltorg
 
 .section .rodata.secondary,"a"
 .balign 8
 .Lsecondary_failed: .quad 0x20026, 2
 .Lsecondary_stale: .quad 0x20026, 3
 .Lsecondary_off_return: .quad 0x20026, 4
+
+.Lsecondary_overflow: .quad 0x20026, 5

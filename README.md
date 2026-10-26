@@ -57,7 +57,9 @@ normal destructor execution, stack reuse and overflow rejection. A separate
 preemptive runner schedules safe callbacks that never yield. `make test` also
 runs its dedicated guest images, checks forced interrupts at execution
 transitions, and reruns the bootstrap tests afterward in the same guest.
-Concurrent SMP scheduling and userspace threads remain unimplemented.
+Dedicated two-CPU tests now run up to four preemptive callbacks per CPU, with
+shared mutex contention and cross-CPU Event wakeups. Userspace threads remain
+unimplemented.
 
 Shared kernel values can use an owned mutex whose guard controls access.
 Contended cooperative workers yield while waiting. Tests cover real kernel
@@ -72,8 +74,8 @@ idle: an all-blocked run retains its stacks while the coordinator spins.
 
 CPU/PSCI device-tree parsing now describes the supported one- or two-CPU ARM
 profile and rejects ambiguous or unsupported topology. Generated QEMU trees
-exercise both accepted profiles and excess-CPU rejection. This is preparation
-for SMP. Dedicated lifecycle tests now start and stop CPU1 twice, confirming
+exercise both accepted profiles and excess-CPU rejection. Dedicated lifecycle
+tests start and stop CPU1 twice, confirming
 firmware OFF before reusing its state. Timer and scheduler state
 now live in CPU-local records, with affinity validation and inactive-record
 canary checks. Shared interrupt-controller setup is separate from local timer
@@ -81,7 +83,9 @@ setup and teardown, with preservation checks across local sessions. Secondary
 CPU stacks and a root excluding the mutable mapping arena are now reserved
 and checked against allocator exclusions. CPU1 verifies its installed root,
 stack and translation permissions. `make test-all` exercises this at both RAM
-sizes and checks failure paths; simultaneous preemptive workers come next.
+sizes and checks failure paths. Concurrent scheduling tests verify each CPU's
+interrupts, worker stacks and register preservation, then confirm CPU1 is OFF
+before reuse. See [SMP verification](docs/evidence/arm-smp-scheduling.md).
 
 The safe capability experiment checks rights attenuation, bounded accounting,
 stale handles, revocation and cancellation/completion lifetimes. It models

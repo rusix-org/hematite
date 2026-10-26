@@ -141,6 +141,7 @@ def main():
                        'pub use threads::Runner;\npub use secondary::Runner as SecondaryRunner;\n')
     base = ["rustc", "--edition=2024", "--target", args.target, "-C", "panic=abort",
             "--cfg", 'feature="secondary-tests"',
+            "--cfg", 'feature="smp-tests"',
             "--extern", f"hm_kernel={library}", "-L", f"dependency={library.parent / 'deps'}"]
     thread_lib = output / "libhm_threads.rlib"
     code, _ = run(base + ["--crate-type=rlib", "--crate-name=hm_threads", str(wrapper),

@@ -1,0 +1,9 @@
+{
+  "kernel": "/workspace/target/aarch64/smp-no-peer-timer-test/aarch64-unknown-none/release/hematite",
+  "sha256": "74cac14ecdd61553ee56e584401f4913d143d05522a12fb791f6ea8b26c28841",
+  "arch": "aarch64",
+  "accel": "tcg,thread=multi",
+  "cpus": 2,
+  "ram_mb": 128,
+  "negative": "no-peer-timer"
+}

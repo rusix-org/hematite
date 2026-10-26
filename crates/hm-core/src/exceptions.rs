@@ -4,7 +4,8 @@ use hm_kernel::FaultChecks;
 
 // SAFETY: Reviewed design 0007 binds vector entry, separately owned stacks,
 // exact fault sites and ABI-preserving probes. No dynamic recovery entries.
-global_asm!(include_str!("exceptions-aarch64.S"));
+global_asm!(include_str!("exceptions-aarch64.S"),
+    secondary = const if cfg!(feature = "secondary-tests") { 1 } else { 0 });
 
 // SAFETY: These no-argument assembly functions follow AAPCS64 and touch only
 // fixed image-owned probes. All Rust entry follows the configured EL1 boot.

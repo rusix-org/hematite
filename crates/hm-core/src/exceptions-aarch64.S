@@ -116,6 +116,12 @@ arm_nested_fatal:
     b .Lfatal_print
 .global arm_exception_fatal
 arm_exception_fatal:
+.if {secondary}
+    mrs x0, mpidr_el1
+    ldr x1, =0xff00ffffff
+    and x0, x0, x1
+    cbnz x0, arm_secondary_failure
+.endif
     ldr x0, =arm_exception_message
 .Lfatal_print:
     mov x1, #0x09000000

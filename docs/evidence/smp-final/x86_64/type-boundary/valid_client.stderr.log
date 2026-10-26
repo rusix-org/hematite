@@ -1,0 +1,10 @@
+warning: unused imports: `Handle` and `Model`
+ --> /workspace/target/evidence/20261026T160020-722312328-x86_64/type-boundary/valid_client.rs:3:64
+  |
+3 | use hm_kernel::capability::{with_model, Config, Owner, Rights, Handle, Model};
+  |                                                                ^^^^^^  ^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: 1 warning emitted
+

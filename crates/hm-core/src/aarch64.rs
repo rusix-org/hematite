@@ -689,6 +689,7 @@ pub(super) fn exit(success: bool) -> ! {
 #[cfg(feature = "secondary-tests")]
 #[cfg_attr(
     any(
+        feature = "smp-tests",
         feature = "nested-fault-test",
         feature = "unhandled-fault-test",
         feature = "thread-overflow-test",
@@ -759,4 +760,104 @@ pub(super) fn secondary_tests(platform: &mut BootPlatform) -> bool {
     }
     platform.write("HMSMP PASS lifecycle\nHMSMP END 2\n");
     true
+}
+
+#[cfg(feature = "smp-tests")]
+#[cfg_attr(
+    any(
+        feature = "nested-fault-test",
+        feature = "unhandled-fault-test",
+        feature = "thread-overflow-test",
+        feature = "preemption-overflow-test",
+        feature = "wait-all-blocked-test"
+    ),
+    allow(dead_code)
+)]
+pub(super) fn smp_tests(platform: &mut BootPlatform) -> bool {
+    #[cfg(not(any(
+        feature = "smp-no-peer-timer-test",
+        feature = "smp-peer-overflow-test",
+        feature = "smp-all-blocked-test"
+    )))]
+    struct Output<'a>(&'a mut BootPlatform);
+    #[cfg(not(any(
+        feature = "smp-no-peer-timer-test",
+        feature = "smp-peer-overflow-test",
+        feature = "smp-all-blocked-test"
+    )))]
+    impl core::fmt::Write for Output<'_> {
+        fn write_str(&mut self, text: &str) -> core::fmt::Result {
+            self.0.write(text);
+            Ok(())
+        }
+    }
+    let Some(topology) = platform.topology.as_ref() else {
+        platform.write("HMSCHED REJECT TOPOLOGY\n");
+        return false;
+    };
+    if !super::secondary::admitted(topology) {
+        platform.write("HMSCHED REJECT TOPOLOGY\n");
+        return false;
+    }
+    // SAFETY: Actual boot topology and full roots/stack/frame exclusions were
+    // validated by initialize. No allocator or mapping authority reaches peers.
+    let Some(mut runner) = (unsafe { super::secondary::Runner::from_boot(topology) }) else {
+        platform.write("HMSCHED REJECT PSCI\n");
+        return false;
+    };
+    #[cfg(feature = "smp-no-peer-timer-test")]
+    {
+        platform.write("HMSCHED EXPECT NO-PEER-TIMER\n");
+        super::smp_checks::no_peer_timer(&mut runner);
+    }
+    #[cfg(all(
+        not(feature = "smp-no-peer-timer-test"),
+        feature = "smp-peer-overflow-test"
+    ))]
+    {
+        platform.write("HMSCHED EXPECT PEER-OVERFLOW\n");
+        super::smp_checks::peer_overflow(&mut runner);
+    }
+    #[cfg(all(
+        not(any(feature = "smp-no-peer-timer-test", feature = "smp-peer-overflow-test")),
+        feature = "smp-all-blocked-test"
+    ))]
+    {
+        platform.write("HMSCHED EXPECT ALL-BLOCKED\n");
+        super::smp_checks::all_blocked(&mut runner);
+    }
+    #[cfg(not(any(
+        feature = "smp-no-peer-timer-test",
+        feature = "smp-peer-overflow-test",
+        feature = "smp-all-blocked-test"
+    )))]
+    super::smp_checks::run(&mut runner, &mut Output(platform))
+}
+
+#[cfg(any(feature = "smp-no-peer-timer-test", feature = "smp-all-blocked-test"))]
+fn smp_marker(args: core::fmt::Arguments<'_>) {
+    if super::cpu_local::current_id() != Some(0) {
+        exit(false);
+    }
+    struct Output;
+    impl core::fmt::Write for Output {
+        fn write_str(&mut self, text: &str) -> core::fmt::Result {
+            for byte in text.bytes() {
+                if byte == b'\n' {
+                    serial_byte(b'\r');
+                }
+                serial_byte(byte);
+            }
+            Ok(())
+        }
+    }
+    let _ = core::fmt::write(&mut Output, args);
+}
+#[cfg(feature = "smp-no-peer-timer-test")]
+pub(super) fn smp_peer_started_marker(sp: u64) {
+    smp_marker(format_args!("HMSCHED STARTED cpu=1 sp={sp}\n"));
+}
+#[cfg(feature = "smp-all-blocked-test")]
+pub(super) fn smp_both_blocked_marker() {
+    smp_marker(format_args!("HMSCHED BLOCKED cpu0=1 cpu1=1\n"));
 }

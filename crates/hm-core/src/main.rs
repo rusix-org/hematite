@@ -22,6 +22,21 @@ mod mutex_checks;
     allow(dead_code)
 )]
 mod secondary;
+#[cfg(all(target_arch = "aarch64", feature = "smp-tests"))]
+#[cfg_attr(
+    any(
+        feature = "nested-fault-test",
+        feature = "unhandled-fault-test",
+        feature = "thread-overflow-test",
+        feature = "preemption-overflow-test",
+        feature = "wait-all-blocked-test",
+        feature = "smp-no-peer-timer-test",
+        feature = "smp-peer-overflow-test",
+        feature = "smp-all-blocked-test"
+    ),
+    allow(dead_code)
+)]
+mod smp_checks;
 
 #[cfg(target_arch = "aarch64")]
 mod exceptions;
@@ -98,7 +113,18 @@ extern "C" fn boot_main(_boot_info: u64) -> ! {
         )
     )))]
     {
-        #[cfg(all(target_arch = "aarch64", feature = "secondary-tests"))]
+        #[cfg(all(target_arch = "aarch64", feature = "smp-tests"))]
+        {
+            if !arch::smp_tests(&mut platform) {
+                arch::exit(false);
+            }
+            arch::exit(hm_kernel::run_tests(&mut platform));
+        }
+        #[cfg(all(
+            target_arch = "aarch64",
+            feature = "secondary-tests",
+            not(feature = "smp-tests")
+        ))]
         {
             if !arch::secondary_tests(&mut platform) {
                 arch::exit(false);

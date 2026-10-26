@@ -1,0 +1,84 @@
+{
+  "returncode": 0,
+  "error": null,
+  "values": {
+    "arm_vectors": [
+      1075841024
+    ],
+    "arm_secondary_vectors": [
+      1075853312
+    ],
+    "arm_preempt_start": [
+      1075848056
+    ],
+    "arm_secondary_root": [
+      1075896320
+    ],
+    "__secondary_stack_guard": [
+      1076330496
+    ],
+    "__secondary_stack_top": [
+      1076400128
+    ],
+    "__thread0_guard": [
+      1076051968
+    ],
+    "__thread0_top": [
+      1076121600
+    ],
+    "__thread1_guard": [
+      1076121600
+    ],
+    "__thread1_top": [
+      1076191232
+    ],
+    "__thread2_guard": [
+      1076191232
+    ],
+    "__thread2_top": [
+      1076260864
+    ],
+    "__thread3_guard": [
+      1076260864
+    ],
+    "__thread3_top": [
+      1076330496
+    ],
+    "__secondary_thread0_guard": [
+      1076420608
+    ],
+    "__secondary_thread0_top": [
+      1076490240
+    ],
+    "__secondary_thread1_guard": [
+      1076490240
+    ],
+    "__secondary_thread1_top": [
+      1076559872
+    ],
+    "__secondary_thread2_guard": [
+      1076559872
+    ],
+    "__secondary_thread2_top": [
+      1076629504
+    ],
+    "__secondary_thread3_guard": [
+      1076629504
+    ],
+    "__secondary_thread3_top": [
+      1076699136
+    ]
+  },
+  "overflow_probe_symbols": [
+    {
+      "value": 1075874700,
+      "size": 128
+    }
+  ],
+  "overflow_probe_range": [
+    1075874700,
+    1075874828
+  ],
+  "overflow_probe_required": true,
+  "passed": true
+}

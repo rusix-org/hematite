@@ -1,0 +1,18 @@
+{
+  "scope": "bootstrap rejects CPU without smep",
+  "arch": "x86_64",
+  "started_utc": "2026-10-26T16:00:31.522120+00:00",
+  "timeout_seconds": 20,
+  "returncode": 35,
+  "timed_out": false,
+  "launch_error": null,
+  "checks": {
+    "explicit_boot_rejection_exit": true,
+    "no_test_report": true,
+    "within_deadline": true,
+    "launched": true
+  },
+  "errors": [],
+  "passed": true,
+  "elapsed_seconds": 0.06442613899707794
+}

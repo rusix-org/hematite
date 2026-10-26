@@ -1,0 +1,16 @@
+{
+  "returncode": 0,
+  "error": null,
+  "values": {
+    "arm_secondary_root": [
+      1076109312
+    ],
+    "__secondary_stack_guard": [
+      1076543488
+    ],
+    "__secondary_stack_top": [
+      1076613120
+    ]
+  },
+  "passed": true
+}

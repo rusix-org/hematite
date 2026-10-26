@@ -15,7 +15,8 @@ global_asm!(include_str!("preempt-aarch64.S"), entry = sym entry, delivery = con
     cpu_preempt = const super::cpu_local::PREEMPT,
     cpu_irq_count = const super::cpu_local::IRQ_COUNT,
     cpu_boundary_flags = const super::cpu_local::BOUNDARY_FLAGS,
-    cpu_wait_expiries = const super::cpu_local::WAIT_EXPIRIES);
+    cpu_wait_expiries = const super::cpu_local::WAIT_EXPIRIES,
+    peer_delivery = const if cfg!(feature = "smp-no-peer-timer-test") { 0 } else { 1 });
 
 // SAFETY: The diagnostic owns its stack frame, preserves the caller ABI and
 // observes only the IRQ counter while real scheduling changes worker contexts.
@@ -87,6 +88,7 @@ const _: () = {
 // live aligned context records under the global execution lease and masked IRQ.
 unsafe extern "C" {
     static __exception_stack_top: [u8; 0];
+    static __secondary_exception_stack_top: [u8; 0];
     fn arm_preempt_context_probe(seed: u64) -> u64;
     fn arm_gic_session_start() -> u64;
     fn arm_gic_session_stop() -> u64;
@@ -115,32 +117,85 @@ pub(super) fn run(jobs: &[ThreadJob]) -> Result<PreemptReport, ThreadError> {
     super::threads::BUSY
         .compare_exchange(false, true, Ordering::AcqRel, Ordering::Acquire)
         .map_err(|_| ThreadError::Busy)?;
-    let mut report = PreemptReport::empty();
     if jobs.is_empty() {
         super::threads::BUSY.store(false, Ordering::Release);
-        return Ok(report);
+        return Ok(PreemptReport::empty());
     }
-    // SAFETY: Runner's boot authority and global lease ensure this masked
-    // coordinator exclusively owns the one-CPU GIC/timer and guarded stacks.
-    let shared = unsafe { arm_gic_session_start() };
-    if shared == 0 {
-        super::threads::BUSY.store(false, Ordering::Release);
-        return Err(ThreadError::TimerUnavailable);
+    // SAFETY: CPU0 owns BUSY, CPU1 is OFF; this wrapper owns shared lifecycle.
+    let result = unsafe {
+        if !shared_start() {
+            Err(ThreadError::TimerUnavailable)
+        } else {
+            let result = run_local(jobs, 0);
+            shared_stop();
+            result
+        }
+    };
+    super::threads::BUSY.store(false, Ordering::Release);
+    result
+}
+
+// SAFETY: Caller is masked CPU0, holds BUSY and has confirmed CPU1 OFF.
+pub(super) unsafe fn shared_start() -> bool {
+    // SAFETY: Caller supplies the complete shared controller ownership proof.
+    unsafe { arm_gic_session_start() == 1 }
+}
+// SAFETY: Caller holds BUSY and both local schedulers are quiet; CPU1 OFF is
+// confirmed after Returned, or no CPU_ON was attempted in this session.
+pub(super) unsafe fn shared_stop() {
+    // SAFETY: The caller proves no peer can still require shared forwarding.
+    unsafe {
+        if arm_gic_session_stop() != 1 {
+            arm_exception_fail();
+        }
     }
-    // SAFETY: Shared forwarding is initialized under the lease; CPU1 remains
-    // off. Local setup owns only this CPU's GICC, PPI30 and timer record.
+}
+
+/// Run only the current CPU's private scheduler within an already owned session.
+#[inline(never)]
+// SAFETY: Caller holds BUSY, shared forwarding is initialized, and exclusively
+// owns this CPU's scheduler/stacks until every callback returns. No lease/global
+// controller operation is performed here; caller must join all peers on error.
+pub(super) unsafe fn run_local(
+    jobs: &[ThreadJob],
+    cpu: usize,
+) -> Result<PreemptReport, ThreadError> {
+    let daif: u64;
+    // SAFETY: Read-only local EL1 observation; admission precedes mutation.
+    unsafe {
+        asm!("mrs {}, daif", out(reg) daif, options(nomem,nostack,preserves_flags));
+    }
+    if super::cpu_local::current_id() != Some(cpu as u64) || daif != 0x3c0 {
+        return Err(ThreadError::Unsupported);
+    }
+    let Some(tops) = super::threads::local_tops(cpu) else {
+        return Err(ThreadError::Unsupported);
+    };
+    if jobs.len() > MAX_THREADS {
+        return Err(ThreadError::TooMany);
+    }
+    let mut report = PreemptReport::empty();
+    // SAFETY: Shared session ownership and exclusive local authority above.
     let interval = unsafe { arm_preempt_setup() };
     if interval == 0 {
-        // SAFETY: No worker has been published; local cleanup is idempotent.
-        // Shared shutdown is valid because CPU1 is still off, not just because
-        // the local setup failed. No armed controller escapes this lease.
+        // SAFETY: No task has been published; local cleanup is idempotent and
+        // deliberately leaves shared forwarding available to any live peer.
         unsafe {
-            if arm_preempt_stop() != 1 || arm_gic_session_stop() != 1 {
+            if arm_preempt_stop() != 1 {
                 arm_exception_fail();
             }
         }
-        super::threads::BUSY.store(false, Ordering::Release);
         return Err(ThreadError::TimerUnavailable);
+    }
+    if jobs.is_empty() {
+        // SAFETY: No tasks published; local setup must be paired with stop even
+        // for an empty SMP side, so it has explicit quiet hardware state.
+        unsafe {
+            if arm_preempt_stop() != 1 {
+                arm_exception_fail();
+            }
+        }
+        return Ok(report);
     }
     let state = UnsafeCell::new(State {
         host: Context { words: [0; 32] },
@@ -166,11 +221,11 @@ pub(super) fn run(jobs: &[ThreadJob]) -> Result<PreemptReport, ThreadError> {
     // Only raw projections cross dispatch; no references to IRQ-mutated task
     // records are retained. Handler accesses only the published running task.
     unsafe {
-        for id in 0..jobs.len() {
-            super::threads::clear_stack(id);
+        for (id, top) in tops.iter().enumerate().take(jobs.len()) {
+            super::threads::clear_local_stack(cpu, id);
             let task = task(state, id);
             let image = core::ptr::addr_of_mut!((*task).image);
-            (*image).sp = super::threads::tops()[id] as u64;
+            (*image).sp = *top as u64;
             (*image).pc = arm_preempt_start as *const () as u64;
             // EL1h, D/A/F masked and IRQ enabled, PAN retained from coordinator.
             let pan: u64;
@@ -186,8 +241,10 @@ pub(super) fn run(jobs: &[ThreadJob]) -> Result<PreemptReport, ThreadError> {
         let mut announced_blocked = false;
         while report.run.completed < jobs.len() {
             let mut blocked = 0;
-            for waiting in 0..jobs.len() {
-                let waiting = task(state, waiting);
+            #[cfg(feature = "smp-tests")]
+            let mut blocked_mask = 0;
+            for waiting_id in 0..jobs.len() {
+                let waiting = task(state, waiting_id);
                 if core::ptr::addr_of!((*waiting).status).read() != 3 {
                     continue;
                 }
@@ -207,17 +264,27 @@ pub(super) fn run(jobs: &[ThreadJob]) -> Result<PreemptReport, ThreadError> {
                     core::ptr::addr_of_mut!((*waiting).status).write(0);
                 } else {
                     blocked += 1;
+                    #[cfg(feature = "smp-tests")]
+                    {
+                        blocked_mask |= 1u64 << waiting_id;
+                    }
                 }
             }
+            #[cfg(feature = "smp-tests")]
+            publish_blocked(
+                cpu,
+                blocked_mask,
+                blocked == jobs.len() - report.run.completed,
+            );
             if blocked == jobs.len() - report.run.completed {
                 #[cfg(feature = "wait-all-blocked-test")]
                 if !announced_blocked {
                     super::arch::wait_blocked_marker();
                     announced_blocked = true;
                 }
-                // No current external producer exists. Keep every suspended
-                // stack/borrow and the lease live; do not return or fake a wake.
-                // This spins the coordinator CPU rather than claiming idle.
+                // Keep every suspended stack/borrow and the lease live. A
+                // remote CPU may notify an Event; rescan rather than returning
+                // or claiming interrupt-driven idle.
                 core::hint::spin_loop();
                 continue;
             }
@@ -261,14 +328,15 @@ pub(super) fn run(jobs: &[ThreadJob]) -> Result<PreemptReport, ThreadError> {
         }
         // Quiesce source/controller before publication withdrawal and wiping
         // completed stacks. Failure terminates rather than reclaiming early.
-        if arm_preempt_stop() != 1 || arm_gic_session_stop() != 1 {
+        if arm_preempt_stop() != 1 {
             arm_exception_fail();
         }
         for id in 0..jobs.len() {
-            super::threads::clear_stack(id);
+            super::threads::clear_local_stack(cpu, id);
         }
     }
-    super::threads::BUSY.store(false, Ordering::Release);
+    #[cfg(feature = "smp-tests")]
+    publish_blocked(cpu, 0, false);
     Ok(report)
 }
 fn empty(_: &mut dyn ThreadContext, _: u64) -> u64 {
@@ -285,11 +353,15 @@ unsafe fn task(state: *mut State, id: usize) -> *mut Task {
     }
 }
 struct Token {
+    cpu_id: usize,
     state: *mut State,
     id: usize,
     _local: PhantomData<*mut ()>,
 }
 impl ThreadContext for Token {
+    fn cpu_id(&self) -> usize {
+        self.cpu_id
+    }
     fn id(&self) -> usize {
         self.id
     }
@@ -304,11 +376,13 @@ impl ThreadContext for Token {
         }
     }
     fn wait(&mut self, event: &Event, observed: u64) -> Result<(), WaitError> {
-        // SAFETY: This private token is a running worker on the sole CPU.
-        // The compiler memory barrier and IRQ mask serialize the last check
-        // with registration. No public mask token or arbitrary callback escapes.
+        // SAFETY: This private token is a running worker on its own CPU.
+        // Masking excludes local scheduler mutation, while remote Event.notify
+        // remains legal; the coordinator rescan closes that registration race. No public mask token or arbitrary callback escapes.
         let saved_daif = unsafe { arm_preempt_wait_mask() };
         let current = event.snapshot();
+        #[cfg(feature = "smp-tests")]
+        wait_race_point(self.cpu_id, self.id);
         let outcome = if current != observed {
             Ok(())
         } else if current == u64::MAX {
@@ -363,7 +437,14 @@ unsafe extern "C" fn entry(state: *mut core::ffi::c_void, id: usize) -> u64 {
     let state = state.cast::<State>();
     // SAFETY: Entry receives the initialized live task; its job is immutable.
     let job = unsafe { core::ptr::addr_of!((*task(state, id)).job).read() };
+    let Some(cpu_id) = super::cpu_local::current_id() else {
+        // SAFETY: Loss of trusted CPU association cannot return a worker token.
+        unsafe {
+            arm_exception_fail();
+        }
+    };
     let mut token = Token {
+        cpu_id: cpu_id as usize,
         state,
         id,
         _local: PhantomData,
@@ -466,9 +547,25 @@ pub(super) fn context_checks(runner: &super::threads::Runner) -> bool {
 }
 
 pub(super) fn control_checks() -> bool {
+    controls(0, false)
+}
+#[cfg(feature = "secondary-tests")]
+pub(super) fn local_control_checks(cpu_id: usize) -> bool {
+    controls(cpu_id, true)
+}
+fn controls(cpu_id: usize, shared: bool) -> bool {
+    if super::cpu_local::current_id() != Some(cpu_id as u64) {
+        return false;
+    }
+    let expected_stack = match cpu_id {
+        0 => core::ptr::addr_of!(__exception_stack_top) as u64,
+        1 => core::ptr::addr_of!(__secondary_exception_stack_top) as u64,
+        _ => return false,
+    };
     let (daif, stack, timer): (u64, u64, u64);
-    // SAFETY: Read-only control/MMIO observations on the boot-proven soleCPU;
-    // caller is the platform coordinator, outside any running worker lease.
+    // SAFETY: Read-only own-CPU control/MMIO observations by the masked
+    // coordinator. Shared forwarding stays stable under the session lease;
+    // only banked local interrupt state is inspected while a peer may run.
     unsafe {
         asm!("mrs {daif}, daif", "mrs {stack}, sp_el0", "mrs {timer}, cntp_ctl_el0",
             daif=out(reg) daif,stack=out(reg) stack,timer=out(reg) timer,
@@ -476,9 +573,9 @@ pub(super) fn control_checks() -> bool {
         let dist = 0x08000000 as *const u32;
         let cpu = 0x08010000 as *const u32;
         daif == 0x3c0
-            && stack == core::ptr::addr_of!(__exception_stack_top) as u64
+            && stack == expected_stack
             && timer & 3 == 2
-            && dist.read_volatile() == 0
+            && dist.read_volatile() == u32::from(shared)
             && cpu.read_volatile() == 0
             && dist.add(0x100 / 4).read_volatile() & (1 << 30) == 0
             && dist.add(0x200 / 4).read_volatile() & (1 << 30) == 0
@@ -537,4 +634,154 @@ pub(super) fn gic_checks() -> bool {
     };
     super::threads::BUSY.store(false, Ordering::Release);
     passed
+}
+
+#[cfg(feature = "smp-tests")]
+use core::sync::atomic::AtomicU64;
+#[cfg(feature = "smp-tests")]
+static BLOCKED_MASKS: [AtomicU64; 2] = [AtomicU64::new(0), AtomicU64::new(0)];
+#[cfg(feature = "smp-tests")]
+static ALL_BLOCKED: AtomicU64 = AtomicU64::new(0);
+#[cfg(feature = "smp-all-blocked-test")]
+static BLOCKED_ANNOUNCED: AtomicU64 = AtomicU64::new(0);
+#[cfg(feature = "smp-tests")]
+static WAIT_RACE: AtomicU64 = AtomicU64::new(0);
+
+#[cfg(feature = "smp-tests")]
+// SAFETY: Caller holds BUSY with CPU1 OFF before admission, so no coordinator
+// can publish diagnostic state. Preserve a pre-armed wait-race phase.
+pub(super) unsafe fn reset_smp_observations() {
+    for mask in &BLOCKED_MASKS {
+        mask.store(0, Ordering::Relaxed);
+    }
+    ALL_BLOCKED.store(0, Ordering::Relaxed);
+    #[cfg(feature = "smp-all-blocked-test")]
+    BLOCKED_ANNOUNCED.store(0, Ordering::Relaxed);
+}
+#[cfg(feature = "smp-tests")]
+pub(super) fn blocked_masks() -> [u64; 2] {
+    [
+        BLOCKED_MASKS[0].load(Ordering::Acquire),
+        BLOCKED_MASKS[1].load(Ordering::Acquire),
+    ]
+}
+#[cfg(feature = "smp-tests")]
+fn publish_blocked(cpu: usize, mask: u64, all: bool) {
+    let Some(slot) = BLOCKED_MASKS.get(cpu) else {
+        return;
+    };
+    slot.store(mask, Ordering::Release);
+    if all {
+        ALL_BLOCKED.fetch_or(1 << cpu, Ordering::AcqRel);
+    } else {
+        ALL_BLOCKED.fetch_and(!(1 << cpu), Ordering::AcqRel);
+    }
+    #[cfg(feature = "smp-all-blocked-test")]
+    if cpu == 0
+        && all
+        && ALL_BLOCKED.load(Ordering::Acquire) == 3
+        && BLOCKED_ANNOUNCED.swap(1, Ordering::AcqRel) == 0
+    {
+        super::arch::smp_both_blocked_marker();
+    }
+}
+#[cfg(feature = "smp-tests")]
+pub(super) fn arm_wait_race() -> bool {
+    let daif: u64;
+    // SAFETY: Read-only local EL1 mask check before arming diagnostic state.
+    unsafe {
+        asm!("mrs {}, daif", out(reg) daif, options(nomem,nostack,preserves_flags));
+    }
+    if daif != 0x3c0
+        || super::cpu_local::current_id() != Some(0)
+        || super::threads::BUSY.load(Ordering::Acquire)
+    {
+        return false;
+    }
+    let old = WAIT_RACE.load(Ordering::Acquire);
+    (old == 0 || old == 3)
+        && WAIT_RACE
+            .compare_exchange(old, 1, Ordering::AcqRel, Ordering::Acquire)
+            .is_ok()
+}
+#[cfg(feature = "smp-tests")]
+pub(super) fn wait_race_ready() -> bool {
+    WAIT_RACE.load(Ordering::Acquire) == 2
+}
+#[cfg(feature = "smp-tests")]
+pub(super) fn finish_wait_race() -> bool {
+    WAIT_RACE
+        .compare_exchange(2, 3, Ordering::Release, Ordering::Relaxed)
+        .is_ok()
+}
+#[cfg(feature = "smp-tests")]
+fn wait_race_point(cpu: usize, task: usize) {
+    if cpu == 0
+        && task == 0
+        && WAIT_RACE
+            .compare_exchange(1, 2, Ordering::AcqRel, Ordering::Acquire)
+            .is_ok()
+    {
+        while WAIT_RACE.load(Ordering::Acquire) != 3 {
+            core::hint::spin_loop();
+        }
+    }
+}
+
+#[cfg(feature = "smp-tests")]
+pub(super) fn worker_observation() -> Option<(u64, u64)> {
+    let (saved, sp): (u64, u64);
+    // SAFETY: Mask before reading own mutable publication; compiler memory
+    // effects keep all observations inside the window. Preserve caller DAIF.
+    unsafe {
+        asm!("mrs {saved}, daif", "msr daifset, #2", "isb", "mov {sp}, sp",
+        saved=out(reg) saved, sp=out(reg) sp, options(nostack,preserves_flags));
+    }
+    let result = super::cpu_local::current_id().and_then(|cpu| {
+        if saved & 0x80 != 0 || !super::cpu_local::worker_active() {
+            return None;
+        }
+        let guards = super::threads::local_guards(cpu as usize)?;
+        let tops = super::threads::local_tops(cpu as usize)?;
+        guards
+            .into_iter()
+            .zip(tops)
+            .any(|(guard, top)| sp >= (guard + 4096) as u64 && sp < top as u64)
+            .then_some((cpu, sp))
+    });
+    // SAFETY: No record reference escaped; all observations finished.
+    unsafe {
+        asm!("msr daif, {}", "isb", in(reg) saved, options(nostack,preserves_flags));
+    }
+    result
+}
+#[cfg(feature = "smp-tests")]
+pub(super) fn worker_register_probe(seed: u64) -> u64 {
+    if worker_observation().is_none() {
+        return 0;
+    }
+    // SAFETY: Validated actual IRQ-enabled worker, own publication and stack.
+    // The fixed ABI-preserving sentinel polls only this CPU's IRQ counter.
+    unsafe { arm_preempt_context_probe(seed) }
+}
+
+#[cfg(feature = "smp-peer-overflow-test")]
+pub(super) fn peer_overflow_worker(context: &mut dyn ThreadContext, value: u64) -> u64 {
+    if context.cpu_id() != 1
+        || context.id() != 0
+        || worker_observation().is_none_or(|(cpu, _)| cpu != 1)
+    {
+        return 0;
+    }
+    arm_smp_large_frame(value)
+}
+#[cfg(feature = "smp-peer-overflow-test")]
+#[inline(never)]
+// SAFETY: Unique diagnostic symbol for the host's exact stack-probe PC check.
+#[unsafe(no_mangle)]
+extern "C" fn arm_smp_large_frame(value: u64) -> u64 {
+    let mut bytes = [0u8; 131072];
+    core::hint::black_box(&mut bytes);
+    bytes[0] = value as u8;
+    u64::from(core::hint::black_box(bytes[131071]))
 }
