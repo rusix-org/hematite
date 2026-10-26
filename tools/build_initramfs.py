@@ -31,8 +31,27 @@ def payloads(elf):
             ('etc', 0o40755, b''), ('etc/banner', 0o100644, BANNER)]
 
 
+def process_payloads(source=None):
+    from test_process import CASES
+    source = source or ELF.parent / 'manifest.json'
+    document = json.loads(source.read_text())
+    if set(document['fixtures']) != set(CASES):
+        raise ValueError('process fixture inventory mismatch')
+    entries = [('bin', 0o40755, b'')]
+    for case in CASES:
+        item = document['fixtures'][case]
+        data = (source.parent / (case + '.elf')).read_bytes()
+        if item['file'] != case + '.elf' or item['sha256'] != sha(data):
+            raise ValueError('process ELF hash mismatch: ' + case)
+        payloads(data)  # Shared bounded ELF input check.
+        entries.append(('bin/' + case, 0o100755, data))
+    return entries + [('etc', 0o40755, b''), ('etc/banner', 0o100644, BANNER)]
+
+
 def newc(entries):
     """Trusted fixture encoder, not a parser or extraction implementation."""
+    if len(entries) > 64 or any(len(name.encode('ascii')) > 128 or len(data) > 1024 * 1024 for name, _, data in entries):
+        raise ValueError('entry exceeds profile capacity')
     result = bytearray()
     for inode, (name, mode, content) in enumerate(entries, 1):
         encoded = name.encode('ascii') + b'\0'
@@ -131,11 +150,16 @@ def inspect_with_gnu(path, entries, output, label):
             raise ValueError('GNU extracted payload mismatch: ' + member)
 
 
-def build(output, update=False):
-    entries = payloads(ELF.read_bytes())
+def build(output, update=False, process=False):
+    canonical = CANONICAL.with_name("process-initramfs.cpio") if process else CANONICAL
+    canonical_manifest = canonical.with_suffix(".manifest.json")
+    entries = process_payloads() if process else payloads(ELF.read_bytes())
     generated = newc(entries)
     expected = manifest(generated, entries)
-    archive = output / 'initramfs.cpio'
+    expected['archive'] = canonical.name
+    if process:
+        expected['process_manifest_sha256'] = sha((ELF.parent / 'manifest.json').read_bytes())
+    archive = output / canonical.name
     archive.write_bytes(generated)
     version, stderr = run(['cpio', '--version'], output, 'cpio-version')
     if stderr or b'GNU cpio' not in version:
@@ -161,12 +185,12 @@ def build(output, update=False):
         raise ValueError('GNU archive creation emitted diagnostics')
     inspect_with_gnu(reference, entries, output, 'reference')
     if update:
-        CANONICAL.write_bytes(generated)
-        CANONICAL_MANIFEST.write_text(json.dumps(expected, indent=2) + '\n')
+        canonical.write_bytes(generated)
+        canonical_manifest.write_text(json.dumps(expected, indent=2) + '\n')
     else:
-        if not CANONICAL.is_file() or CANONICAL.read_bytes() != generated:
+        if not canonical.is_file() or canonical.read_bytes() != generated:
             raise ValueError('Canonical archive does not reproduce byte-for-byte')
-        if not CANONICAL_MANIFEST.is_file() or json.loads(CANONICAL_MANIFEST.read_text()) != expected:
+        if not canonical_manifest.is_file() or canonical_manifest.read_bytes() != (json.dumps(expected, indent=2) + '\n').encode():
             raise ValueError('Canonical manifest does not reproduce')
     (output / 'manifest.json').write_text(json.dumps(expected, indent=2) + '\n')
     return {'passed': True, 'canonical_sha256': sha(generated), 'reference_sha256': sha(reference.read_bytes()),
@@ -178,16 +202,20 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--update', action='store_true')
+    parser.add_argument('--process', action='store_true', help='separate full process archive, preserving the small parser fixture')
     args = parser.parse_args()
     output = args.output.resolve()
     if output.exists():
         parser.error('use a fresh output directory')
     output.mkdir(parents=True)
     sources = (ELF, Path(__file__).resolve(), ROOT / 'docs/design/0024-initramfs.md')
+    if args.process:
+        sources += (ELF.parent / 'manifest.json', ROOT / 'docs/design/0025-archive-execution.md')
+        sources += tuple(ELF.parent / (case + '.elf') for case in __import__('test_process').CASES)
     (output / 'input.json').write_text(json.dumps({'sources': {str(path.relative_to(ROOT)): sha(path.read_bytes())
-        for path in sources}, 'update': args.update}, indent=2) + '\n')
+        for path in sources}, 'update': args.update, 'process': args.process}, indent=2) + '\n')
     try:
-        result = build(output, args.update)
+        result = build(output, args.update, args.process)
     except (OSError, ValueError, UnicodeError, subprocess.TimeoutExpired) as error:
         result = {'passed': False, 'error': str(error)}
     (output / 'result.json').write_text(json.dumps(result, indent=2) + '\n')

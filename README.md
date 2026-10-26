@@ -108,15 +108,16 @@ Protected native ARM userspace now executes separately linked Rust programs.
 The process tests cover console/exit calls, invalid arguments, capability limits,
 register restoration, protection faults, timer termination and memory reclamation.
 `make test` runs 33 programs twice in each of three ARM guest profiles and checks
-the actual exception trace. These embedded programs are a development milestone;
-archive-backed startup, a userspace shell and Linux compatibility remain future work. See
+the actual exception trace. These archive-backed programs are a development milestone;
+normal userspace startup, a shell and Linux compatibility remain future work. See
 [native process evidence](docs/evidence/native-process.md), including the pinned
 emulator limitations.
 
 A safe bounded newc initramfs parser now validates whole archives before file
 lookup. GNU cpio reference checks and malformed-input/lifetime tests cover
-admission; connecting archive entries to guest execution is next. See
-[initramfs evidence](docs/evidence/initramfs-admission.md).
+admission. The process test kernel now loads all 33 programs from that checked
+archive, with exact embedded-payload verification and no individual ELF fallback.
+See [archive execution evidence](docs/evidence/archive-process-execution.md).
 
 The safe capability experiment checks rights attenuation, bounded accounting,
 stale handles, revocation and cancellation/completion lifetimes. It models

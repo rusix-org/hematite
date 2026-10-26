@@ -1,7 +1,7 @@
 {
   "version": 1,
   "kernel_text": 1075838976,
-  "kernel_data": 1077473280,
+  "kernel_data": 1077489664,
   "fixtures": {
     "hello": {
       "entry": 4294967296,
@@ -18,7 +18,7 @@
         "register_svc_2": 4294970468,
         "register_svc_3": 4294971860,
         "kernel_text": 1075838976,
-        "kernel_data": 1077473280
+        "kernel_data": 1077489664
       },
       "segments": [
         {
@@ -53,7 +53,7 @@
         }
       ],
       "file": "hello.elf",
-      "sha256": "197c29d0ed6cf2a0c5b35573267654c51c3a1f86bee29e02de899261ff18f881"
+      "sha256": "ff2e501c58a3aacf376045d496d3313d6f8872e763e27e8bb04451e33b2b4e52"
     },
     "badptr_null": {
       "entry": 4294967296,
@@ -70,7 +70,7 @@
         "register_svc_2": 4294970468,
         "register_svc_3": 4294971860,
         "kernel_text": 1075838976,
-        "kernel_data": 1077473280
+        "kernel_data": 1077489664
       },
       "segments": [
         {
@@ -105,7 +105,7 @@
         }
       ],
       "file": "badptr_null.elf",
-      "sha256": "4f2050ccf1e5e48c2bed3970e81416f1aabb3caa8a4476908904b94264765965"
+      "sha256": "7d84cb530393098b9e9e9cd33da71d0a47d5328ef1e7c43ef5ba7ac3334d615e"
     },
     "badptr_overflow": {
       "entry": 4294967296,
@@ -122,7 +122,7 @@
         "register_svc_2": 4294970468,
         "register_svc_3": 4294971860,
         "kernel_text": 1075838976,
-        "kernel_data": 1077473280
+        "kernel_data": 1077489664
       },
       "segments": [
         {
@@ -157,7 +157,7 @@
         }
       ],
       "file": "badptr_overflow.elf",
-      "sha256": "10230f6e6f52dd27747170b0ab3afd72911ae7e840a6e99f71452bbb35d51ad9"
+      "sha256": "4cb1e531647b2032e48f6c92571954aa2506007f261e28cb857c04a86a1cf6fc"
     },
     "badptr_crossing": {
       "entry": 4294967296,
@@ -174,7 +174,7 @@
         "register_svc_2": 4294970468,
         "register_svc_3": 4294971860,
         "kernel_text": 1075838976,
-        "kernel_data": 1077473280
+        "kernel_data": 1077489664
       },
       "segments": [
         {
@@ -209,7 +209,7 @@
         }
       ],
       "file": "badptr_crossing.elf",
-      "sha256": "bb51acb5ec1b9ff5640039e4950b5e9262b18e93fdcfd2c517fb119e042aab1f"
+      "sha256": "0c7a33ba3e4fffab87fe79e2ca533bfe73febcda3fc2ff6c02cfc63d17eebfef"
     },
     "oversize": {
       "entry": 4294967296,
@@ -226,7 +226,7 @@
         "register_svc_2": 4294970468,
         "register_svc_3": 4294971860,
         "kernel_text": 1075838976,
-        "kernel_data": 1077473280
+        "kernel_data": 1077489664
       },
       "segments": [
         {
@@ -261,7 +261,7 @@
         }
       ],
       "file": "oversize.elf",
-      "sha256": "e99ad728eb5017b138f8a34ddfe359be2e1d6be64dd2ce163483aafcc7a4b740"
+      "sha256": "2d967785b9293305004f84b5cc2364e0ad21d6d369c9f59bb2fe11ab7451682c"
     },
     "badhandle": {
       "entry": 4294967296,
@@ -278,7 +278,7 @@
         "register_svc_2": 4294970468,
         "register_svc_3": 4294971860,
         "kernel_text": 1075838976,
-        "kernel_data": 1077473280
+        "kernel_data": 1077489664
       },
       "segments": [
         {
@@ -313,7 +313,7 @@
         }
       ],
       "file": "badhandle.elf",
-      "sha256": "1cde18dc6e3b28c8e1091463f4e043e7ce80deebc469ae870de43fd67702c813"
+      "sha256": "5cfa2998a5e3df67d4df73574c6eebd605e9c2c2c71d80647eaffa5bc5116811"
     },
     "badversion": {
       "entry": 4294967296,
@@ -330,7 +330,7 @@
         "register_svc_2": 4294970468,
         "register_svc_3": 4294971860,
         "kernel_text": 1075838976,
-        "kernel_data": 1077473280
+        "kernel_data": 1077489664
       },
       "segments": [
         {
@@ -365,7 +365,7 @@
         }
       ],
       "file": "badversion.elf",
-      "sha256": "a16621c61e8e3e96ce0a04068b9e2956c7f16d64258d3889aa9085d458939cac"
+      "sha256": "09f4efc6fa592c7e4f67fd06361917a2a642b5a899b9b4cf84df324edb9bf4d7"
     },
     "badopcode": {
       "entry": 4294967296,
@@ -382,7 +382,7 @@
         "register_svc_2": 4294970468,
         "register_svc_3": 4294971860,
         "kernel_text": 1075838976,
-        "kernel_data": 1077473280
+        "kernel_data": 1077489664
       },
       "segments": [
         {
@@ -417,7 +417,7 @@
         }
       ],
       "file": "badopcode.elf",
-      "sha256": "ecccf615cde4aea2c893406b30d64a2c0e5f5a35c8c2b1d148b5f744b84cb4f7"
+      "sha256": "5bf0ab1db58c3d46804c160a26005aa56fddc41cc9614a01693942fa3caf9b03"
     },
     "rxwrite": {
       "entry": 4294967296,
@@ -435,7 +435,7 @@
         "register_svc_2": 4294970468,
         "register_svc_3": 4294971860,
         "kernel_text": 1075838976,
-        "kernel_data": 1077473280
+        "kernel_data": 1077489664
       },
       "segments": [
         {
@@ -470,7 +470,7 @@
         }
       ],
       "file": "rxwrite.elf",
-      "sha256": "3a680be77f4a8edeb5ddedc59a20e960720ea8688b3debba6edf1e36022f01db"
+      "sha256": "8a2df0565ee02731388043c783573ee72ec39620d9683440d64693afc2dd1f95"
     },
     "rwexecute": {
       "entry": 4294967296,
@@ -488,7 +488,7 @@
         "register_svc_2": 4294970468,
         "register_svc_3": 4294971860,
         "kernel_text": 1075838976,
-        "kernel_data": 1077473280
+        "kernel_data": 1077489664
       },
       "segments": [
         {
@@ -523,7 +523,7 @@
         }
       ],
       "file": "rwexecute.elf",
-      "sha256": "6ad41f7b80d26a38c7c48ccf084d21d54be5a9f4e584049ce5cc4e83b1e45e4e"
+      "sha256": "a362a32e779297aae4ac6c580c1db72009c35ce4d499177e00522c3223e8b2d9"
     },
     "stackexecute": {
       "entry": 4294967296,
@@ -541,7 +541,7 @@
         "register_svc_2": 4294970468,
         "register_svc_3": 4294971860,
         "kernel_text": 1075838976,
-        "kernel_data": 1077473280
+        "kernel_data": 1077489664
       },
       "segments": [
         {
@@ -576,7 +576,7 @@
         }
       ],
       "file": "stackexecute.elf",
-      "sha256": "e057c6ada25f19a6e4b0e5a48d35ea384f6c5683ca1be171a571c51dd1e2eb37"
+      "sha256": "8e578203122988ce341b6cf6a4370009e8a648b3870982ec96be9ce0037946bf"
     },
     "kernelread": {
       "entry": 4294967296,
@@ -594,7 +594,7 @@
         "register_svc_2": 4294970468,
         "register_svc_3": 4294971860,
         "kernel_text": 1075838976,
-        "kernel_data": 1077473280
+        "kernel_data": 1077489664
       },
       "segments": [
         {
@@ -629,7 +629,7 @@
         }
       ],
       "file": "kernelread.elf",
-      "sha256": "a7272e876882020e7bc4495f605a2d0ccb33c1789fe11e5a41345a71911239e3"
+      "sha256": "f36490c661fb8e74b74e21dcc55610691627a4f0607fcb4f9a493fdbab17c12a"
     },
     "kernelwrite": {
       "entry": 4294967296,
@@ -647,7 +647,7 @@
         "register_svc_2": 4294970468,
         "register_svc_3": 4294971860,
         "kernel_text": 1075838976,
-        "kernel_data": 1077473280
+        "kernel_data": 1077489664
       },
       "segments": [
         {
@@ -682,7 +682,7 @@
         }
       ],
       "file": "kernelwrite.elf",
-      "sha256": "d80f94433793f22edc22b0d4c9fc527e107e06f72676d271ee16adbb463f29b4"
+      "sha256": "6d23f9ae64a6a21865768baae14c352fd00b82c603dc5ce9dcaee3e591bf93a7"
     },
     "uartread": {
       "entry": 4294967296,
@@ -700,7 +700,7 @@
         "register_svc_2": 4294970468,
         "register_svc_3": 4294971860,
         "kernel_text": 1075838976,
-        "kernel_data": 1077473280
+        "kernel_data": 1077489664
       },
       "segments": [
         {
@@ -735,7 +735,7 @@
         }
       ],
       "file": "uartread.elf",
-      "sha256": "7f646724a55b6641c7366580a82b4065042f4cbf0660820856c2876e19ccaf70"
+      "sha256": "0292305849e7d599ff68a26e5c32752a97a6befac642753dbd46e6888c099100"
     },
     "gicread": {
       "entry": 4294967296,
@@ -753,7 +753,7 @@
         "register_svc_2": 4294970468,
         "register_svc_3": 4294971860,
         "kernel_text": 1075838976,
-        "kernel_data": 1077473280
+        "kernel_data": 1077489664
       },
       "segments": [
         {
@@ -788,7 +788,7 @@
         }
       ],
       "file": "gicread.elf",
-      "sha256": "19d61d124eb89547146ed0ea13d83ff44f5e94330f36801741abc8c7fb312ce4"
+      "sha256": "ddb9bdaebdc2ea8d9591541390fe1f9ac84baaa587f0c3ecfdfd11feb8ed86a6"
     },
     "cntpdisable": {
       "entry": 4294967296,
@@ -806,7 +806,7 @@
         "register_svc_2": 4294970468,
         "register_svc_3": 4294971860,
         "kernel_text": 1075838976,
-        "kernel_data": 1077473280
+        "kernel_data": 1077489664
       },
       "segments": [
         {
@@ -841,7 +841,7 @@
         }
       ],
       "file": "cntpdisable.elf",
-      "sha256": "997024d4e32c38cba8bebb2b3a929bb760fec0c1bcfd716ea7da5c18e9426ca6"
+      "sha256": "3e5fd0f16860166a20bcb22d2dae3545cfe96a43bdcae4c97635bee857e4ba12"
     },
     "daifmask": {
       "entry": 4294967296,
@@ -859,7 +859,7 @@
         "register_svc_2": 4294970468,
         "register_svc_3": 4294971860,
         "kernel_text": 1075838976,
-        "kernel_data": 1077473280
+        "kernel_data": 1077489664
       },
       "segments": [
         {
@@ -894,7 +894,7 @@
         }
       ],
       "file": "daifmask.elf",
-      "sha256": "8c982d8aa87a0e99c923dec2e27d35713f0b8df4dfa5f4186d151f0fdc58e349"
+      "sha256": "62e1e04ebfad8f35e28438f2f924bffd923681de90a9fe922236dcb1723c7809"
     },
     "stackguard": {
       "entry": 4294967296,
@@ -912,7 +912,7 @@
         "register_svc_2": 4294970468,
         "register_svc_3": 4294971860,
         "kernel_text": 1075838976,
-        "kernel_data": 1077473280
+        "kernel_data": 1077489664
       },
       "segments": [
         {
@@ -947,7 +947,7 @@
         }
       ],
       "file": "stackguard.elf",
-      "sha256": "c962d8e72f4051c975790eb3693c7b6e0134c07c5aeb14f36ce03ef8f35f7882"
+      "sha256": "216a8c750c958c6e839799647ad0e2c9412ef4db302c16f5fe87e13772597789"
     },
     "loop": {
       "entry": 4294967296,
@@ -964,7 +964,7 @@
         "register_svc_2": 4294970468,
         "register_svc_3": 4294971860,
         "kernel_text": 1075838976,
-        "kernel_data": 1077473280
+        "kernel_data": 1077489664
       },
       "segments": [
         {
@@ -999,7 +999,7 @@
         }
       ],
       "file": "loop.elf",
-      "sha256": "df9cda142e9e88222681d1484079bc85e5ec328992ad67da4cfa4ffc7514183b"
+      "sha256": "55abab64f2906088586137d6c27ef2bbb9925f019cedbe8c6f640f306aec84d8"
     },
     "zerowrite": {
       "entry": 4294967296,
@@ -1016,7 +1016,7 @@
         "register_svc_2": 4294970468,
         "register_svc_3": 4294971860,
         "kernel_text": 1075838976,
-        "kernel_data": 1077473280
+        "kernel_data": 1077489664
       },
       "segments": [
         {
@@ -1051,7 +1051,7 @@
         }
       ],
       "file": "zerowrite.elf",
-      "sha256": "53882fcd2c01df36754c75a53465615da387b36a76c052b7f66e90c97b1d6bcc"
+      "sha256": "cea39c2645b1a501a31bb5b092b55d8708ea60259f254529fb2836146eea8ce8"
     },
     "maxwrite": {
       "entry": 4294967296,
@@ -1068,7 +1068,7 @@
         "register_svc_2": 4294970468,
         "register_svc_3": 4294971860,
         "kernel_text": 1075838976,
-        "kernel_data": 1077473280
+        "kernel_data": 1077489664
       },
       "segments": [
         {
@@ -1103,7 +1103,7 @@
         }
       ],
       "file": "maxwrite.elf",
-      "sha256": "5c3997c794b4d1b42734b63aae8e776ee040e2335ab1c6e598dd0202349d3299"
+      "sha256": "cec4f2d515f313e37b26133369469ad1f2b68d2b0fb2efaa49c5da6f685f4090"
     },
     "bytebudget": {
       "entry": 4294967296,
@@ -1120,7 +1120,7 @@
         "register_svc_2": 4294970468,
         "register_svc_3": 4294971860,
         "kernel_text": 1075838976,
-        "kernel_data": 1077473280
+        "kernel_data": 1077489664
       },
       "segments": [
         {
@@ -1155,7 +1155,7 @@
         }
       ],
       "file": "bytebudget.elf",
-      "sha256": "c42398380559cf072af78542558e25574b62664de8a1087a82f4588df1496177"
+      "sha256": "9009135235b36e114786c6b387f66d3536f0765aeacb8f66b8e793c0d433bebe"
     },
     "calllimit": {
       "entry": 4294967296,
@@ -1172,7 +1172,7 @@
         "register_svc_2": 4294970468,
         "register_svc_3": 4294971860,
         "kernel_text": 1075838976,
-        "kernel_data": 1077473280
+        "kernel_data": 1077489664
       },
       "segments": [
         {
@@ -1207,7 +1207,7 @@
         }
       ],
       "file": "calllimit.elf",
-      "sha256": "ccff616fa14e24b20f2b74bf06a4f347fa602a0bb8360392e504d218cf258c0e"
+      "sha256": "a3b74074672e90de8d2e6d46fbb35b98025c2c8fcf5e1519c799850586315c88"
     },
     "invalidstorm": {
       "entry": 4294967296,
@@ -1224,7 +1224,7 @@
         "register_svc_2": 4294970468,
         "register_svc_3": 4294971860,
         "kernel_text": 1075838976,
-        "kernel_data": 1077473280
+        "kernel_data": 1077489664
       },
       "segments": [
         {
@@ -1259,7 +1259,7 @@
         }
       ],
       "file": "invalidstorm.elf",
-      "sha256": "c5731d920bbde3dd0f076aabc5d4f0ff709a775fd4d03ca7c743197de28e612d"
+      "sha256": "1971c0cfc5f3026c5d6d3c80706d11a6c9cc92b015ac172ae07e20c26f8ce105"
     },
     "exit64": {
       "entry": 4294967296,
@@ -1276,7 +1276,7 @@
         "register_svc_2": 4294970468,
         "register_svc_3": 4294971860,
         "kernel_text": 1075838976,
-        "kernel_data": 1077473280
+        "kernel_data": 1077489664
       },
       "segments": [
         {
@@ -1311,7 +1311,7 @@
         }
       ],
       "file": "exit64.elf",
-      "sha256": "2d794ca03313a914b394dd2d103b3b106c37673e042e15df8041c5e33d41729e"
+      "sha256": "8a1d9e47f2838a934c0e5d57390faacf98372c595f8bbd3549d1d4690f48fd27"
     },
     "invalidexit": {
       "entry": 4294967296,
@@ -1328,7 +1328,7 @@
         "register_svc_2": 4294970468,
         "register_svc_3": 4294971860,
         "kernel_text": 1075838976,
-        "kernel_data": 1077473280
+        "kernel_data": 1077489664
       },
       "segments": [
         {
@@ -1363,7 +1363,7 @@
         }
       ],
       "file": "invalidexit.elf",
-      "sha256": "f4dbdab6f39386ab1a3185f606cc0da944af7e819679610236069410a32782e5"
+      "sha256": "2089f9bf414f07269a533bf9c63bc72f33446d226b3843c1a5852b693c26d61c"
     },
     "stalehandle": {
       "entry": 4294967296,
@@ -1380,7 +1380,7 @@
         "register_svc_2": 4294970468,
         "register_svc_3": 4294971860,
         "kernel_text": 1075838976,
-        "kernel_data": 1077473280
+        "kernel_data": 1077489664
       },
       "segments": [
         {
@@ -1415,7 +1415,7 @@
         }
       ],
       "file": "stalehandle.elf",
-      "sha256": "38533ea82f514343d91ccd4156292a8c41ac16aa13594d559be252a2d4f59056"
+      "sha256": "fde2fe438403838aac5386cb725e714a9714ef2bfa21633c2fefba4c4f5e581b"
     },
     "nogrant": {
       "entry": 4294967296,
@@ -1432,7 +1432,7 @@
         "register_svc_2": 4294970468,
         "register_svc_3": 4294971860,
         "kernel_text": 1075838976,
-        "kernel_data": 1077473280
+        "kernel_data": 1077489664
       },
       "segments": [
         {
@@ -1467,7 +1467,7 @@
         }
       ],
       "file": "nogrant.elf",
-      "sha256": "9b5723ec02f6c5834c18164d1d920eb89c1e612f5435f36c970f266a13cf0a83"
+      "sha256": "83aa54ee86ea0536aca78b5acbbd02f330f2f0f5df9c66d955bce88cbdc7573a"
     },
     "svcimm": {
       "entry": 4294967296,
@@ -1485,7 +1485,7 @@
         "register_svc_2": 4294970468,
         "register_svc_3": 4294971860,
         "kernel_text": 1075838976,
-        "kernel_data": 1077473280
+        "kernel_data": 1077489664
       },
       "segments": [
         {
@@ -1520,7 +1520,7 @@
         }
       ],
       "file": "svcimm.elf",
-      "sha256": "0a5075d8c8b3e65839375deeed4ed3deb0fa01051bf01a002527bc6a5920d2ee"
+      "sha256": "4218481aecdd1ea372cc8e244873a9abffd86a768bbffcb1787cc779e3a1afe4"
     },
     "registers": {
       "entry": 4294967296,
@@ -1537,7 +1537,7 @@
         "register_svc_2": 4294970464,
         "register_svc_3": 4294971856,
         "kernel_text": 1075838976,
-        "kernel_data": 1077473280
+        "kernel_data": 1077489664
       },
       "segments": [
         {
@@ -1572,7 +1572,7 @@
         }
       ],
       "file": "registers.elf",
-      "sha256": "cb2750f6a52629c65cb89f4fe0b6748cdb7147d7a09a0dd34497e84d7f7723e1"
+      "sha256": "957f20482db1155b5cbcbb789404a32adf42242ad6f9bc17cb545981e7ef64c8"
     },
     "badsp": {
       "entry": 4294967296,
@@ -1589,7 +1589,7 @@
         "register_svc_2": 4294970468,
         "register_svc_3": 4294971860,
         "kernel_text": 1075838976,
-        "kernel_data": 1077473280
+        "kernel_data": 1077489664
       },
       "segments": [
         {
@@ -1624,7 +1624,7 @@
         }
       ],
       "file": "badsp.elf",
-      "sha256": "2e316ba7579c35ca2fb5275c75b2c052a8c9d82497d7db5e6eac736447a2ff4b"
+      "sha256": "4013371d7109f0fbba61bc64bffc340b931543031a094f1aec44043095a2dcfd"
     },
     "startupwrite": {
       "entry": 4294967296,
@@ -1642,7 +1642,7 @@
         "register_svc_2": 4294970468,
         "register_svc_3": 4294971860,
         "kernel_text": 1075838976,
-        "kernel_data": 1077473280
+        "kernel_data": 1077489664
       },
       "segments": [
         {
@@ -1677,7 +1677,7 @@
         }
       ],
       "file": "startupwrite.elf",
-      "sha256": "180041784e806ed8634127169f45ce5ca325c4e0ec8077b10fa52c78a5165019"
+      "sha256": "b573a3e8c7f81d4e800582231fff7a512744b3eb48189805381711c1da652d8e"
     },
     "semihost": {
       "entry": 4294967296,
@@ -1695,7 +1695,7 @@
         "register_svc_2": 4294970468,
         "register_svc_3": 4294971860,
         "kernel_text": 1075838976,
-        "kernel_data": 1077473280
+        "kernel_data": 1077489664
       },
       "segments": [
         {
@@ -1730,7 +1730,7 @@
         }
       ],
       "file": "semihost.elf",
-      "sha256": "bec33072e4b131888789ea8fb9f50869a3a0dcdafa2a608bf83e91b6928e8987"
+      "sha256": "f94da571416806886dded6600d13ddaf372232a3c9e02c2d3352f802546ad1ae"
     }
   }
 }

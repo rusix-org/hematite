@@ -1,6 +1,6 @@
 # Progress
 
-Current phase: **Phase 1 locally verified within its ARM scope; Phase 2 protected native ELF execution verified locally; initramfs remains open**.
+Current phase: **Phase 1 locally verified within its ARM scope; Phase 2 native functional experiment verified locally, including archive-backed execution; matching CI remains open**.
 Aaron approved scratch implementation and then changed the primary objective
 from strict Linux parity to native OS design with selective compatibility.
 [ADR 0005](docs/adr/0005-native-first-design.md) records the native direction;
@@ -19,7 +19,7 @@ from strict Linux parity to native OS design with selective compatibility.
 - Serial monitor: `make run` defaults to ARM64; `ARCH=x86_64` selects the
   regression port. Commands `help`, `status`, `test`; Ctrl-C exits.
 - `make test-all`: formatting, Clippy and safety checks for both targets,
-  123 host harness tests, ten native-policy host tests, sixteen initramfs host cases, 41 guest tests per architecture, ARM no-PAN rejection,
+  131 host harness tests, ten native-policy host tests, sixteen initramfs and eight boot-image host cases, 41 guest tests per architecture, ARM no-PAN rejection,
   x86 missing-NX/SMEP/SMAP rejection, and live monitor recovery tests on both.
   ARM discovery matches both 128 MiB and 64 MiB guest configurations.
   Separate ARM images run five scheduling/wait cases at both memory sizes, then
@@ -35,9 +35,14 @@ from strict Linux parity to native OS design with selective compatibility.
   guest by default; lifecycle and SMP tests use two CPUs with TCG thread=multi. ARM also
   tests 64 MiB; no attached disks or networking. Both targets use TCG.
 
-Latest input-boundary evidence: [checked initramfs admission](docs/evidence/initramfs-admission.md),
+Latest execution evidence: [archive-backed native processes](docs/evidence/archive-process-execution.md),
+with [complete ARM/x86 regressions](docs/evidence/archive-process-final/verification-summary.json)
+and an explicit Phase 2 requirement audit. The normal boot remains a kernel monitor.
+
+Earlier input-boundary evidence: [checked initramfs admission](docs/evidence/initramfs-admission.md),
 with [complete ARM/x86 regressions](docs/evidence/initramfs-final/verification-summary.json).
-The process executable is unchanged; archive-backed execution remains open.
+That admission-only milestone left the process executable unchanged; execution
+from the archive is now separately verified above.
 
 Earlier execution evidence: [protected native processes](docs/evidence/native-process.md),
 with [complete ARM/x86 regressions](docs/evidence/process-final/verification-summary.json).
@@ -411,7 +416,8 @@ roll back; maximum-size and forgotten-owner cases pass. Sixteen compiler clients
 verify authority/lifetime boundaries. See [evidence](docs/evidence/owned-address-spaces.md).
 That milestone used SP_EL0 only as a kernel emergency stack. Design 0023 now
 adds a separate trusted exception frame, user stack and instruction-cache
-protocol for actual protected execution; initramfs remains Phase 2 work.
+protocol for actual protected execution; checked archive input now follows
+designs 0024/0025.
 
 The versioned native console/exit policy is now implemented in safe Rust and
 verified with ten host cases and twelve compiler clients per target. It defines
@@ -432,15 +438,19 @@ The bounded newc initramfs parser is implemented and independently reviewed.
 Sixteen host tests validate complete admission before lookup, GNU cpio reference
 payloads, traversal/alias rejection, all declared limits and borrowed lifetimes.
 Eleven compiler clients per target check encapsulation and input ownership.
-The guest still selects individual embedded ELF fixtures; archive-backed
-execution remains a separate gate. See [archive evidence](docs/evidence/initramfs-admission.md).
+That parser-only milestone is recorded in [archive evidence](docs/evidence/initramfs-admission.md).
+The process profile now selects every program and preparation input by exact
+archive path. Four admission failures precede allocation, and the full 66-run
+matrix passes at all three configurations. Exact embedded bytes, kernel address
+bindings, compiled stacks and raw traces were independently checked. See
+[execution evidence](docs/evidence/archive-process-execution.md).
 
 ## Next actions
 
-1. Review the archive-backed execution design, then connect the checked input
-   to the verified ELF/process path and finish the native Phase 2 gate. Preserve
-   all 33 program cases and recheck compiled stacks before guest execution.
-   Concurrent userspace remains outside scope.
+1. Design and independently review an ordinary ARM monitor launcher with archive
+   listing, exact program selection, readable output and prompt recovery after
+   exit/fault/deadline. Retain one Executor/issuer across launches and preserve
+   all existing isolation gates. Concurrent userspace remains outside scope.
 2. Use these experiments to refine the native wire contract; select compatibility
    workloads and pin a Linux oracle when the adapter exists.
 3. Resolve the license selection; keep remote CI current as further milestones are published.
@@ -658,3 +668,13 @@ execution remains a separate gate. See [archive evidence](docs/evidence/initramf
   directory-link profile was settled before implementation from actual GNU
   filesystem behavior. See [evidence](docs/evidence/initramfs-admission.md).
   Archive-backed execution remains next; no new remote CI or push.
+
+- 2026-10-26: Connected checked archives to all native process and preparation
+  paths. Four preallocation errors preserve frames; all three profiles pass
+  66 runs with exact reclamation and unchanged hardware transaction rules.
+  GNU payload extraction and unique read-only kernel embedding checks exclude
+  individual ELF fallbacks. One rebinding iteration stabilized BSS40393000;
+  source/stack review preceded guests. Full ARM/x86 suite passes 131 Python
+  cases per target, eight composition tests and six type clients per target.
+  Local native Phase 2 requirements audited; matching CI and Linux adapter
+  remain absent. Next is ordinary monitor launch. See [evidence](docs/evidence/archive-process-execution.md).

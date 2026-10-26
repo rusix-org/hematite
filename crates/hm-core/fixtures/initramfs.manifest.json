@@ -1,7 +1,7 @@
 {
   "version": 1,
   "archive": "initramfs.cpio",
-  "sha256": "92f2f815237cbe921b64802533ee945afb03c225d00d96f9f2d4cd723bb17201",
+  "sha256": "b912d0090fc5d4315cc721271fb054f1fccd60867fed0b93b94ba8890d898797",
   "bytes": 20480,
   "entries": [
     {
@@ -16,7 +16,7 @@
       "kind": "file",
       "mode": 33261,
       "size": 19816,
-      "sha256": "197c29d0ed6cf2a0c5b35573267654c51c3a1f86bee29e02de899261ff18f881"
+      "sha256": "ff2e501c58a3aacf376045d496d3313d6f8872e763e27e8bb04451e33b2b4e52"
     },
     {
       "path": "etc",

@@ -28,7 +28,12 @@ def record(kind, **values):
 
 
 def console(cpus=1):
-    lines = ['hematite bootstrap', 'HMPROC PREFLIGHT checks=15 irqs=8', 'HMPROC BEGIN 66',
+    lines = ['hematite bootstrap', 'HMPROC PREFLIGHT checks=15 irqs=8',
+             'HMPROC ARCHIVE bytes=4096 entries=36 files=34',
+             'HMPROC ADMISSION case=malformed error=archive before=1000 after=1000',
+             'HMPROC ADMISSION case=missing error=missing before=1000 after=1000',
+             'HMPROC ADMISSION case=directory error=directory before=1000 after=1000',
+             'HMPROC ADMISSION case=invalidelf error=elf before=1000 after=1000', 'HMPROC BEGIN 66',
              record('INFO', wire=1, cpus=cpus, peer_off=1, abi=1, max_write=256,
                     byte_budget=4096, call_limit=64, timer_frequency=62500000, timer_ticks=6250000)]
     for index in range(66):
@@ -69,7 +74,7 @@ def console(cpus=1):
 
 
 def trace(raw, cpus=1):
-    runs = h.validate_serial(raw, FIXTURES, SYMBOLS, cpus)['runs']
+    runs = h.validate_serial(raw, FIXTURES, SYMBOLS, cpus, 4096)['runs']
     lines = []
     def write(offset, value):
         lines.append(f'gic_cpu_write cpu 0 iface write at {offset:#010x} {value:#010x}')
@@ -143,13 +148,79 @@ class ProcessTests(unittest.TestCase):
 
     def reject(self, raw=None, trace_data=None, execution=EXECUTION, fixtures=FIXTURES, symbols=SYMBOLS, cpus=1):
         result = h.validate(self.raw if raw is None else raw, self.trace if trace_data is None else trace_data,
-                            execution, fixtures, symbols, cpus)
+                            execution, fixtures, symbols, cpus, 4096)
         self.assertFalse(result['passed'])
+
+    def test_archive_admission_inventory(self):
+        for line in self.raw.splitlines(keepends=True):
+            if line.startswith((b'HMPROC ARCHIVE', b'HMPROC ADMISSION')):
+                self.reject(raw=self.raw.replace(line, b'', 1))
+                self.reject(raw=self.raw.replace(line, line + line, 1))
+                for old, new in ((b'4096', b'4097'), (b'36', b'35'), (b'34', b'33'),
+                                 (b'after=1000', b'after=999'), (b'before=1000', b'before=999'),
+                                 (b'error=archive', b'error=elf'), (b'error=missing', b'error=elf'),
+                                 (b'error=directory', b'error=missing'), (b'error=elf', b'error=archive')):
+                    if old in line:
+                        self.reject(raw=self.raw.replace(line, line.replace(old, new), 1))
+        rows = [line for line in self.raw.splitlines(keepends=True) if line.startswith(b'HMPROC ADMISSION')]
+        self.reject(raw=self.raw.replace(rows[0] + rows[1], rows[1] + rows[0]))
+        bad = self.raw
+        for row in rows:
+            bad = bad.replace(row, row.replace(b'1000', b'999'))
+        self.reject(raw=bad)
+
+    def test_archive_embedding_exact_readonly_and_no_raw_fallback(self):
+        payload = b'ELF fixture payload'
+        archive = b'cpio prefix' + payload + b'cpio suffix'
+        def kernel(data, flags=4):
+            header = bytearray(120)
+            header[:6] = b'\x7fELF\x02\x01'
+            struct.pack_into('<Q', header, 32, 64)
+            struct.pack_into('<HH', header, 54, 56, 1)
+            struct.pack_into('<IIQQQQQQ', header, 64, 1, flags, 120, 0x40000000, 0x40000000, len(data), len(data), 1)
+            return bytes(header) + data
+        self.assertEqual(h.embedded_archive(kernel(archive), archive, [payload]), 120)
+        for data, flags in ((archive, 6), (archive, 0), (archive + archive, 4),
+                            (archive + payload, 4), (payload + archive, 4), (archive[:-1], 4)):
+            with self.assertRaises(ValueError):
+                h.embedded_archive(kernel(data, flags), archive, [payload])
+        broken = bytearray(kernel(archive))
+        struct.pack_into('<Q', broken, 96, 2**64 - 1)
+        with self.assertRaises(ValueError):
+            h.embedded_archive(bytes(broken), archive, [payload])
+
+    def test_archive_across_multiple_loads(self):
+        payload = b'complete native ELF payload'
+        archive = b'archive begin' + payload + b'archive end'
+        def kernel(parts, overlap=False):
+            start = 64 + 56 * len(parts)
+            header = bytearray(start)
+            header[:6] = b'\x7fELF\x02\x01'
+            struct.pack_into('<Q', header, 32, 64)
+            struct.pack_into('<HH', header, 54, 56, len(parts))
+            data = b''
+            for i, (part, flags) in enumerate(parts):
+                offset = start + len(data)
+                if overlap and i == 1:
+                    offset = start
+                struct.pack_into('<IIQQQQQQ', header, 64 + i * 56, 1, flags, offset,
+                                 0x40000000 + i * 0x10000, 0x40000000 + i * 0x10000,
+                                 len(part), len(part), 1)
+                data += part
+            return bytes(header) + data
+        self.assertEqual(h.embedded_archive(kernel([(b'unrelated', 6), (archive, 4)]), archive, [payload]), 185)
+        bad = [kernel([(archive, 4), (archive, 6)]),
+               kernel([(archive[:20], 4), (archive[20:], 4)]),
+               kernel([(archive, 4), (payload, 6)]),
+               kernel([(archive, 4), (b'overlap', 6)], overlap=True)]
+        for data in bad:
+            with self.assertRaises(ValueError):
+                h.embedded_archive(data, archive, [payload])
 
     def test_complete_one_and_two_cpu_inventory(self):
         for cpus in (1, 2):
             raw = console(cpus)
-            result = h.validate(raw, trace(raw, cpus), EXECUTION, FIXTURES, SYMBOLS, cpus)
+            result = h.validate(raw, trace(raw, cpus), EXECUTION, FIXTURES, SYMBOLS, cpus, 4096)
             self.assertTrue(result['passed'], result['errors'])
 
     def test_each_case_run_required_once_in_order(self):

@@ -3,6 +3,7 @@
 
 //! Safe bootstrap policy. This monitor is kernel code, not Linux userspace.
 
+pub mod boot_image;
 pub mod boot_memory;
 mod boot_memory_tests;
 pub mod capability;

@@ -29,6 +29,8 @@ TIMEOUT_SECONDS = 60
 NUMBER = r'(0|[1-9][0-9]{0,19})'
 FIELDS = {
     'PREFLIGHT': 'checks irqs',
+    'ARCHIVE': 'bytes entries files',
+    'ADMISSION': 'case error before after',
     'INFO': 'wire cpus peer_off abi max_write byte_budget call_limit timer_frequency timer_ticks',
     'RUN': 'index pass case fixture entry root sp handle before during owned',
     'CALL': 'index ordinal pc version operation arg1 arg2 arg3',
@@ -39,7 +41,7 @@ FIELDS = {
     'PASS': 'index pass case',
     'PREPARE': 'budget exhausted drop before after',
 }
-TEXT_FIELDS = {'case', 'fixture', 'reason', 'hex'}
+TEXT_FIELDS = {'case', 'fixture', 'reason', 'hex', 'error'}
 
 
 def require(condition, message):
@@ -158,17 +160,24 @@ def check_fault(esr, expected):
             esr & 0x780 == 0)  # S1PTW, EA, FnV and reserved status bits must be clear.
 
 
-def validate_serial(raw, fixtures, symbols, cpus):
+def validate_serial(raw, fixtures, symbols, cpus, archive_bytes):
     found, positions = serial_records(raw)
     cursor = iter(found)
     require(fields(next(cursor), 'PREFLIGHT') == {'checks': 15, 'irqs': 8}, 'Wrong timer preflight')
+    require(fields(next(cursor), 'ARCHIVE') == {'bytes': archive_bytes, 'entries': 36, 'files': 34}, 'Wrong archive inventory')
+    admission_baseline = None
+    for case, error in (('malformed', 'archive'), ('missing', 'missing'), ('directory', 'directory'), ('invalidelf', 'elf')):
+        row = fields(next(cursor), 'ADMISSION')
+        if admission_baseline is None:
+            admission_baseline = row['before']
+        require(row == {'case': case, 'error': error, 'before': admission_baseline, 'after': admission_baseline}, 'Admission changed resources or outcome')
     require(next(cursor) == 'HMPROC BEGIN 66', 'Wrong BEGIN')
     info = fields(next(cursor), 'INFO')
     require({k: v for k, v in info.items() if k not in ('timer_frequency', 'timer_ticks')} == {
         'wire': 1, 'cpus': cpus, 'peer_off': 1, 'abi': 1, 'max_write': 256, 'byte_budget': 4096, 'call_limit': 64}, 'Wrong INFO')
     require(cpus in (1, 2) and 1000 <= info['timer_frequency'] <= 1000000000 and
             info['timer_ticks'] == info['timer_frequency'] // 10, 'Wrong timer budget')
-    baseline, runs = None, []
+    baseline, runs = admission_baseline, []
     for index in range(66):
         case = CASES[index % 33]
         fixture = fixtures[case]
@@ -380,7 +389,7 @@ def validate_process_trace(raw, report, symbols, cpus):
             'el0_timer_irqs': 2, 'baseline_irqs': 16, 'trace_grammar': 'QEMU 7.2.22; independently reviewed process-first-qemu traces'}
 
 
-def validate(console, trace, execution, fixtures, symbols, cpus=1):
+def validate(console, trace, execution, fixtures, symbols, cpus=1, archive_bytes=None):
     errors, report, trace_report = [], None, None
     checks = {'launched': execution.get('launch_error') is None,
               'within_deadline': execution.get('timed_out') is False,
@@ -388,11 +397,12 @@ def validate(console, trace, execution, fixtures, symbols, cpus=1):
               'no_foreign_report': not any(marker in console for marker in
                   (b'HMEXCEPTION', b'HMSPACE', b'HMSMP', b'HMSCHED', b'HMPREEMPT'))}
     try:
+        require(type(archive_bytes) is int and 0 < archive_bytes <= 4 * 1024 * 1024, 'Missing verified archive length')
         require(set(fixtures) == set(CASES), 'Wrong fixture inventory')
         require(set(symbols) == set(SYMBOLS) and all(type(v) is int and 0x40000000 <= v < 0x41000000 for v in symbols.values()), 'Invalid kernel symbols')
         require(symbols['arm_root'] % 4096 == 0 and symbols['arm_vectors'] % 2048 == 0 and
                 symbols['arm_process_vectors'] % 2048 == 0 and symbols['arm_timer_window_begin'] < symbols['arm_timer_window_end'], 'Invalid kernel symbol geometry')
-        report = validate_serial(console, fixtures, symbols, cpus)
+        report = validate_serial(console, fixtures, symbols, cpus, archive_bytes)
         trace_report = validate_process_trace(trace, report, symbols, cpus)
     except (ValueError, UnicodeError, KeyError, TypeError, StopIteration, IndexError) as error:
         errors.append(str(error) or 'Incomplete process evidence')
@@ -402,7 +412,7 @@ def validate(console, trace, execution, fixtures, symbols, cpus=1):
     checks['post_process_baseline'] = post['passed']
     return {'passed': all(checks.values()), 'checks': checks, 'errors': errors,
             'records': report['record_count'] if report else 0, 'trace': trace_report, 'post_process': post,
-            'scope': 'native ELF EL0 execution/containment/reclamation on pinned QEMU; no initramfs or Linux ABI claim',
+            'scope': 'archive-backed native ELF EL0 execution/containment/reclamation on pinned QEMU; no Linux ABI claim',
             'trace_grammar_reviewed': TRACE_GRAMMAR_REVIEWED}
 
 
@@ -500,7 +510,7 @@ def check_fixture_manifest(path, output, kernel_symbols):
     return fixtures
 
 
-def run_profile(kernel, fixtures, symbols, output, memory=128, cpus=1):
+def run_profile(kernel, fixtures, symbols, output, memory=128, cpus=1, archive_bytes=None):
     output.mkdir()
     command = qemu_command(kernel, 'tcg', 'aarch64')
     command[command.index('-smp') + 1] = str(cpus)
@@ -530,7 +540,7 @@ def run_profile(kernel, fixtures, symbols, output, memory=128, cpus=1):
     execution['elapsed_seconds'] = time.monotonic() - start
     paths = {'serial': output / 'serial.log', 'exceptions': output / 'exceptions.log'}
     artifacts = {name: artifact(path) for name, path in paths.items()}
-    result = validate(bounded_bytes(paths['serial']), bounded_bytes(paths['exceptions']), execution, fixtures, symbols, cpus)
+    result = validate(bounded_bytes(paths['serial']), bounded_bytes(paths['exceptions']), execution, fixtures, symbols, cpus, archive_bytes)
     result['checks']['artifacts_present_and_bounded'] = all(item['exists'] and item['within_size_limit'] for item in artifacts.values())
     result['checks']['trace_grammar_reviewed'] = TRACE_GRAMMAR_REVIEWED
     result['passed'] = all(result['checks'].values())
@@ -544,10 +554,60 @@ def run_profile(kernel, fixtures, symbols, output, memory=128, cpus=1):
 TRACE_GRAMMAR_REVIEWED = True
 
 
+def embedded_archive(kernel, archive, payloads):
+    """Locate exact bytes using independently decoded ELF64 program headers."""
+    require(len(kernel) >= 64 and kernel[:6] == b'\x7fELF\x02\x01', 'Invalid kernel ELF')
+    phoff = struct.unpack_from('<Q', kernel, 32)[0]
+    size, count = struct.unpack_from('<HH', kernel, 54)
+    require(size == 56 and 0 < count <= 128 and phoff <= len(kernel) and count * size <= len(kernel) - phoff, 'Invalid kernel headers')
+    loads, matches = [], []
+    for i in range(count):
+        kind, flags, offset, va, pa, filesz, memsz, align = struct.unpack_from('<IIQQQQQQ', kernel, phoff + i * size)
+        if kind != 1:
+            continue
+        require(filesz <= memsz and offset <= len(kernel) and filesz <= len(kernel) - offset and
+                va + memsz <= MAX_U64 and pa + memsz <= MAX_U64, 'Invalid kernel load interval')
+        end = offset + filesz
+        require(not any(offset < other_end and other_start < end for other_start, other_end, _ in loads), 'Overlapping kernel file loads')
+        loads.append((offset, end, flags))
+        position = kernel.find(archive, offset, end)
+        while position >= 0:
+            matches.append((position, flags))
+            position = kernel.find(archive, position + 1, end)
+    require(len(matches) == 1, 'Archive must occur exactly once in kernel loads')
+    start, flags = matches[0]
+    require(flags & 4 and not flags & 2, 'Archive is not read-only')
+    stop = start + len(archive)
+    for payload in payloads:
+        for left, right, _ in loads:
+            position = kernel.find(payload, left, right)
+            while position >= 0:
+                require(start <= position and position + len(payload) <= stop, 'Raw process ELF outside archive')
+                position = kernel.find(payload, position + 1, right)
+    return start
+
+
+def check_archive_artifact(path, fixture_manifest, kernel, output):
+    import build_initramfs as builder
+    entries = builder.process_payloads(fixture_manifest)
+    require(path.is_file() and 0 < path.stat().st_size <= builder.MAX_BYTES, 'Missing or oversized archive')
+    archive = path.read_bytes()
+    require(archive == builder.newc(entries), 'Process archive differs from exact canonical entries')
+    expected = builder.manifest(archive, entries)
+    expected['archive'] = 'process-initramfs.cpio'
+    expected['process_manifest_sha256'] = builder.sha(fixture_manifest.read_bytes())
+    require(path.with_suffix('.manifest.json').read_bytes() == (json.dumps(expected, indent=2) + '\n').encode(), 'Process archive manifest mismatch')
+    builder.inspect_with_gnu(path, entries, output, 'process-archive')
+    offset = embedded_archive(kernel.read_bytes(), archive, [data for name, mode, data in entries if name.startswith('bin/')])
+    return {'bytes': len(archive), 'sha256': builder.sha(archive), 'kernel_file_offset': offset,
+            'entries': 36, 'files': 34, 'manifest': str(path.with_suffix('.manifest.json'))}
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--kernel', type=Path, required=True)
     parser.add_argument('--fixtures', type=Path, required=True, help='independently generated ELF manifest JSON')
+    parser.add_argument('--archive', type=Path, required=True, help='canonical process archive; adjacent .manifest.json required')
     parser.add_argument('--output', type=Path, required=True)
     args = parser.parse_args()
     kernel, manifest, output = args.kernel.resolve(), args.fixtures.resolve(), args.output.resolve()
@@ -558,11 +618,13 @@ def main():
     try:
         symbols = read_symbols(kernel, output, 'kernel-symbols', SYMBOLS)
         fixtures = check_fixture_manifest(manifest, output, symbols)
+        archive_report = check_archive_artifact(args.archive.resolve(), manifest, kernel, output)
+        write_json(output / 'archive.json', archive_report)
         write_json(output / 'metadata.json', {'manifest': str(manifest), 'sha256': hashlib.sha256(manifest.read_bytes()).hexdigest(),
                                              'fixtures': fixtures, 'symbols': symbols})
         for memory, cpus in ((64, 1), (128, 1), (128, 2)):
             name = f'process-{memory}m-{cpus}cpu'
-            profiles[name] = run_profile(kernel, fixtures, symbols, output / name, memory, cpus)['passed']
+            profiles[name] = run_profile(kernel, fixtures, symbols, output / name, memory, cpus, archive_report['bytes'])['passed']
     except (OSError, ValueError, UnicodeError, KeyError, TypeError, struct.error, subprocess.TimeoutExpired) as caught:
         error = str(caught)
     result = {'passed': error is None and len(profiles) == 3 and all(profiles.values()),

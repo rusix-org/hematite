@@ -167,7 +167,9 @@ explicitly before exposing the API.
 ## Stage D: teardown and first-program gate
 
 Execution, containment and reclamation are locally verified under design 0023.
-The independent initramfs gate remains pending.
+Archive-backed input and execution are now locally verified under
+[design 0025](0025-archive-execution.md). The [requirement audit](../evidence/archive-process-execution.md)
+records the native functional result, missing matching CI and Linux gaps.
 
 Normal exit, user fault and timeout converge on one quiescent teardown path.
 No active user frame or root is freed while EL0 or a translation can access it.

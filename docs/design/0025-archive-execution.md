@@ -1,7 +1,9 @@
 # Native execution from the checked archive
 
-Status: draft for independent review, 2026-10-26. No implementation is authorized
-by this draft alone. [0024](0024-initramfs.md) owns the archive admission contract;
+Status: implemented and locally verified, 2026-10-26, with independent
+[source/trace review](../reviews/0025-archive-execution.md),
+[compiled-stack review](../evidence/archive-process-stack-review.md) and
+[complete ARM/x86 evidence](../evidence/archive-process-execution.md). [0024](0024-initramfs.md) owns the archive admission contract;
 [0023](0023-arm-native-process.md) owns execution and its
 [verification contract](0023-process-verification.md). This milestone connects
 those existing safe APIs without changing Executor, page tables, CPU0/peer-OFF
@@ -82,8 +84,10 @@ manifest bytes. Preserve the real GNU-produced reference gate from0024.
 Before QEMU, the host verifier checks the archive manifest and GNU comparisons,
 all33 extracted ELF payload hashes against the process manifest, and existing
 ELF symbols/opcodes/segment metadata. It then locates the complete exact archive
-byte sequence in the built kernel's file-backed read-only PT_LOAD contents,
-requires exactly one occurrence, and records its ELF file offset and SHA256.
+byte sequence across all built-kernel file-backed PT_LOAD contents, requires
+exactly one occurrence across those contents, and records its ELF file offset
+and SHA256. Check all segment/file interval arithmetic and require the entire
+archive span within one PT_LOAD with PF_R set and PF_W clear.
 Do not accept a manifest hash merely printed by the guest as proof of embedding.
 Reject an archive match outside file-backed read-only kernel storage. Check that
 no complete standalone process ELF payload occurs outside that archive span in
@@ -140,7 +144,9 @@ HMPROC ADMISSION case=invalidelf error=elf before=<n> after=<n>
 ```
 
 Require exactly this order, exact field sets, archive length equal to verified
-artifact bytes, and identical before/after free counts across all four records.
+artifact bytes, and identical before/after free counts across all four records. These counts
+must also equal the common baseline recorded by every one of the 66 runs,
+excluding a leak between admission checks and BEGIN.
 Missing, duplicated, reordered or unexpected records fail. The preflight and
 all subsequent HMPROC records retain their existing meaning. These admission
 checks cause no architectural exceptions or PSCI calls; the independently

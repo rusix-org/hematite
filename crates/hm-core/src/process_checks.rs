@@ -2,10 +2,12 @@
 #![forbid(unsafe_code)]
 use super::frames::Pool;
 use super::process::{Executor, Reason, STACK_TOP};
-use super::process_inputs::CASES;
+use super::process_inputs::{ARCHIVE, CASES};
 use super::user_space::{Factory, Space};
 use core::fmt::Write;
+use hm_kernel::boot_image::{AdmissionError, admit};
 use hm_kernel::elf::{Image, Permissions, USER_IMAGE_START};
+use hm_kernel::initramfs::{Archive, Kind};
 
 type Checked = Result<(), ()>;
 fn require(ok: bool) -> Checked {
@@ -35,13 +37,14 @@ fn checks(
     output: &mut dyn Write,
 ) -> Checked {
     require(cpus == 1 || cpus == 2)?;
+    admission_checks(pool, output)?;
     writeln!(output, "HMPROC BEGIN 66").map_err(|_| ())?;
     writeln!(output,"HMPROC INFO wire=1 cpus={cpus} peer_off=1 abi=1 max_write=256 byte_budget=4096 call_limit=64 timer_frequency={} timer_ticks={}",executor.frequency(),executor.ticks()).map_err(|_|())?;
     let baseline = pool.stats().free;
     for pass in 0..2 {
-        for (number, (name, bytes)) in CASES.iter().enumerate() {
+        for (number, (name, path)) in CASES.iter().enumerate() {
             one(
-                pool, factory, executor, pass, number, name, bytes, baseline, root, vectors, output,
+                pool, factory, executor, pass, number, name, path, baseline, root, vectors, output,
             )?;
         }
     }
@@ -56,6 +59,53 @@ fn checks(
     .map_err(|_| ())?;
     writeln!(output, "HMPROC END 66").map_err(|_| ())
 }
+// Keep the archive plan and admission temporaries off the loading call chain.
+#[inline(never)]
+fn admission_checks(pool: &Pool, output: &mut dyn Write) -> Checked {
+    let baseline = pool.stats().free;
+    archive_inventory(output)?;
+    let malformed = include_bytes!("../fixtures/malformed-initramfs.cpio");
+    for (case, error, input, path) in [
+        ("malformed", "archive", malformed.as_slice(), "first"),
+        ("missing", "missing", ARCHIVE, "bin/missing"),
+        ("directory", "directory", ARCHIVE, "bin"),
+        ("invalidelf", "elf", ARCHIVE, "etc/banner"),
+    ] {
+        require(pool.stats().free == baseline)?;
+        let result = admit(input, path);
+        require(matches!(
+            (error, result),
+            ("archive", Err(AdmissionError::Archive(_)))
+                | ("missing", Err(AdmissionError::Missing))
+                | ("directory", Err(AdmissionError::Directory))
+                | ("elf", Err(AdmissionError::Elf(_)))
+        ))?;
+        require(pool.stats().free == baseline)?;
+        writeln!(
+            output,
+            "HMPROC ADMISSION case={case} error={error} before={baseline} after={}",
+            pool.stats().free
+        )
+        .map_err(|_| ())?;
+    }
+    Ok(())
+}
+#[inline(never)]
+fn archive_inventory(output: &mut dyn Write) -> Checked {
+    let archive = Archive::parse(ARCHIVE).map_err(|_| ())?;
+    let files = archive
+        .entries()
+        .filter(|entry| entry.kind() == Kind::File)
+        .count();
+    require(archive.len() == 36 && files == 34)?;
+    writeln!(
+        output,
+        "HMPROC ARCHIVE bytes={} entries={} files={files}",
+        ARCHIVE.len(),
+        archive.len()
+    )
+    .map_err(|_| ())
+}
 // Separate owners from other cases to bound simultaneously live stack storage.
 #[allow(clippy::too_many_arguments)]
 #[inline(never)]
@@ -66,14 +116,14 @@ fn one(
     pass: usize,
     number: usize,
     name: &str,
-    bytes: &[u8],
+    path: &str,
     baseline: usize,
     root: u64,
     vectors: u64,
     output: &mut dyn Write,
 ) -> Checked {
     require(pool.stats().free == baseline)?;
-    let image = Image::parse(bytes).map_err(|_| ())?;
+    let image = admit(ARCHIVE, path).map_err(|_| ())?;
     let owned = image.page_count() + 29;
     let space = factory.load(&image, owned - 1).map_err(|_| ())?;
     verify(&space, &image)?;
@@ -187,7 +237,7 @@ fn prepare_failure(
     baseline: usize,
     exhausted: bool,
 ) -> Checked {
-    let image = Image::parse(CASES[0].1).map_err(|_| ())?;
+    let image = admit(ARCHIVE, CASES[0].1).map_err(|_| ())?;
     let space = factory
         .load(&image, image.page_count() + 28)
         .map_err(|_| ())?;
@@ -244,7 +294,7 @@ fn prepare_drop(
     executor: &mut Executor,
     baseline: usize,
 ) -> Checked {
-    let image = Image::parse(CASES[0].1).map_err(|_| ())?;
+    let image = admit(ARCHIVE, CASES[0].1).map_err(|_| ())?;
     let space = factory
         .load(&image, image.page_count() + 28)
         .map_err(|_| ())?;
