@@ -1,8 +1,11 @@
 # Protected native ARM process execution
 
-Status: approved for implementation by independent
-[review 0023](../reviews/0023-arm-native-process.md), 2026-10-26.
-Process implementation, compiled-stack review and EL0 execution remain pending.
+Status: implemented, with source, compiler boundaries, compiled stack and first
+three pinned-QEMU EL0 traces independently reviewed, 2026-10-26; see
+[review 0023](../reviews/0023-arm-native-process.md). The initial harness failures
+are preserved. Exact BTYPE and pinned-emulator DAIF expectations were corrected
+after investigation; the fresh full ARM/x86 execution gate now passes. See
+[verification evidence](../evidence/native-process.md).
 This completes the execution/containment portion of stages C/D in
 [0021](0021-arm-first-userspace.md), using the owned address spaces proved in
 [0022](0022-arm-owned-address-spaces.md). It is not an initramfs implementation,
@@ -158,7 +161,9 @@ The 2048-byte frame has this private assembly layout (not a user wire layout):
 | 1296..1423 | kernel q8..q15 |
 | 1424, 1432 | kernel FPCR/FPSR |
 | 1440..1559 | 15 private timer/GIC/authority words, ordered below |
-| 1560..2047 | reserved zero |
+| 1560 | private process root argument |
+| 1568, 1576, 1584 | private feature mask, original kernel DIT, original kernel SSBS |
+| 1592..2047 | reserved zero |
 
 The 18 words beginning at 1024 are, in eight-byte steps: TTBR0, TTBR1, PAR,
 VBAR, SP_EL0, DAIF, ELR, SPSR, ESR, FAR, CNTKCTL, CPACR, TPIDR_EL0,
@@ -353,3 +358,43 @@ the declared target profile, not copied into kernel code; actual runtime
 PMUVer/PMUSERENR observations remain required.
 These sources establish instruction semantics; the scoped root/trap/lifetime
 protocol is our design argument. No Linux implementation source is used.
+
+## PSTATE restoration amendment (2026-10-26)
+
+Independent review requires conditional kernel DIT and SSBS snapshot, restoration
+and readback on every slice. Admit ID_AA64PFR0_EL1.DIT [51:48] only 0/1,
+ID_AA64PFR1_EL1.SSBS [7:4] only 0/2, and MTE [11:8] only 0. Unknown
+encodings, SSBS1 (without direct register access), and MTE-enabled guests are
+rejected before entry. Absent registers are never accessed. The frame feature
+mask has bit 0 for DIT and bit 1 for SSBS2; absent snapshots are zero. Restore
+both supported fields before returning to Rust and include them in control
+readbacks. User ERET still preserves only NZCV: DIT/SSBS are initially zero and
+reset to zero on every resume. The register fixture must set DIT before SVC
+and verify its reset after resume, while kernel control readbacks prove isolation.
+
+DIT survives exception entry; SSBS instead takes SCTLR_EL1.DSSBS, which need
+not equal the original kernel SSBS. Therefore both require explicit restoration.
+TCO is not silently ignored: this profile requires MTE absent and does not access
+TCO. This supplements the listed register domain, not a claim that all future
+architectural extensions have been isolated.
+
+The first pinned-QEMU traces revealed that version 7.2.22 clears DIT during
+exception entry, unlike Arm's retention rule. The fixture therefore verifies
+user writes and sanitized resumes plus the observed kernel-zero state; it does
+not dynamically exercise restoration from retained DIT1. Keep the explicit
+architectural save/restore. The exact emulator-source investigation and tested
+scope are recorded in [review 0023](../reviews/0023-arm-native-process.md).
+
+Primary semantics: [Arm L.b known issues, D1.3.2 IX0001](https://documentation-service.arm.com/static/686bf0c446dc1e49e34b8121)
+identifies unchanged DIT on exception entry; [Arm I.a correction D19696](https://documentation-service.arm.com/static/644c18cbaa78c007af74fa2c)
+identifies EL0 DIT/SSBS/TCO access; [Arm RME register supplement](https://documentation-service.arm.com/static/649ae5b238511951cb799288)
+defines DIT feature encodings; [Arm SME register supplement, E3.2](https://documentation-service.arm.com/static/62015c6c965f7d118e3f5f4c)
+defines SSBS2 direct access and MTE encodings. [Arm A65AE SCTLR description,
+3.1.70](https://documentation-service.arm.com/static/624ff3decaabfd7b3c13e9c7)
+defines exception-entry SSBS selection. Pinned QEMU v7.2.22
+[CPU initialization](https://github.com/qemu/qemu/blob/v7.2.22/target/arm/cpu64.c)
+sets DIT1/SSBS2 and downgrades MTE when the board lacks tag memory; actual ID
+readbacks remain mandatory. Its [register definitions](https://github.com/qemu/qemu/blob/v7.2.22/target/arm/helper.c)
+corroborate encoded aliases S3_3_C4_C2_5 (DIT) and S3_3_C4_C2_6 (SSBS).
+No implementation code was copied; this target-source check supplements Arm's
+architectural register semantics.

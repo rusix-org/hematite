@@ -1,6 +1,6 @@
 # Progress
 
-Current phase: **Phase 1 locally verified within its ARM scope; Phase 2 owned ELF loading and installed translations verified; EL0 execution planned**.
+Current phase: **Phase 1 locally verified within its ARM scope; Phase 2 protected native ELF execution verified locally; initramfs remains open**.
 Aaron approved scratch implementation and then changed the primary objective
 from strict Linux parity to native OS design with selective compatibility.
 [ADR 0005](docs/adr/0005-native-first-design.md) records the native direction;
@@ -19,7 +19,7 @@ from strict Linux parity to native OS design with selective compatibility.
 - Serial monitor: `make run` defaults to ARM64; `ARCH=x86_64` selects the
   regression port. Commands `help`, `status`, `test`; Ctrl-C exits.
 - `make test-all`: formatting, Clippy and safety checks for both targets,
-  97 host harness tests, ten native-policy host tests, 41 guest tests per architecture, ARM no-PAN rejection,
+  115 host harness tests, ten native-policy host tests, 41 guest tests per architecture, ARM no-PAN rejection,
   x86 missing-NX/SMEP/SMAP rejection, and live monitor recovery tests on both.
   ARM discovery matches both 128 MiB and 64 MiB guest configurations.
   Separate ARM images run five scheduling/wait cases at both memory sizes, then
@@ -35,7 +35,12 @@ from strict Linux parity to native OS design with selective compatibility.
   guest by default; lifecycle and SMP tests use two CPUs with TCG thread=multi. ARM also
   tests 64 MiB; no attached disks or networking. Both targets use TCG.
 
-Latest policy evidence: [native call policy](docs/evidence/native-policy.md), with
+Latest execution evidence: [protected native processes](docs/evidence/native-process.md),
+with [complete ARM/x86 regressions](docs/evidence/process-final/verification-summary.json).
+All three process profiles pass 66 runs each; the reviewed executable matches
+the tested ELF. Pinned-emulator coverage limitations are recorded explicitly.
+
+Earlier policy evidence: [native call policy](docs/evidence/native-policy.md), with
 [complete local regressions](docs/evidence/native-policy-final/verification-summary.json).
 Hardware evidence: [owned ARM address spaces](docs/evidence/owned-address-spaces.md),
 [compiled stack review](docs/evidence/space-stack-review.md), and
@@ -400,9 +405,9 @@ profiles pass five ownership cases, 142 before/active/after translation queries,
 and 41 baseline cases each. All budget prefixes and real allocator exhaustion
 roll back; maximum-size and forgotten-owner cases pass. Sixteen compiler clients
 verify authority/lifetime boundaries. See [evidence](docs/evidence/owned-address-spaces.md).
-SP_EL0 still holds a kernel emergency stack; entering EL0 requires a separately
-reviewed trap-stack and instruction-cache protocol. Initramfs, safe process copy,
-owned handles and process reclamation remain Phase 2 work.
+That milestone used SP_EL0 only as a kernel emergency stack. Design 0023 now
+adds a separate trusted exception frame, user stack and instruction-cache
+protocol for actual protected execution; initramfs remains Phase 2 work.
 
 The versioned native console/exit policy is now implemented in safe Rust and
 verified with ten host cases and twelve compiler clients per target. It defines
@@ -410,18 +415,22 @@ startup bytes, scoped generation handles, all-or-nothing copy-before-output,
 independent byte/call limits and terminal revocation. The 64th returning call
 records a Reply and stops; replies never grant hardware resume authority.
 [Evidence](docs/evidence/native-policy.md) explicitly excludes the real user-copy
-adapter and EL0 execution. Design 0023 specifies their implementation contract.
+adapter and EL0 execution. Those now have separate
+[native process evidence](docs/evidence/native-process.md): 33 real Rust ELF
+fixtures run twice on each of three ARM profiles. Strict traces verify native
+calls, protection faults, timer termination, terminal no-resume behavior and
+reclamation. Nineteen compiler clients check the actual process API; preparation
+budget/exhaustion failures and inactive drop preserve ownership. Kernel source,
+compiled stacks and actual traces have independent AI review. Pinned-QEMU DAIF
+syndrome and DIT coverage limitations are explicit; no hardware or Linux claim.
 
 ## Next actions
 
-1. Implement the reviewed [native process design](docs/design/0023-arm-native-process.md)
-   and its [execution gate](docs/design/0023-process-verification.md): protected
-   EL0 entry/return, actual console/exit calls, fault/deadline containment and
-   reclamation. Review source and compiled stack bounds before QEMU; inspect
-   actual EL0 traces before freezing the strict parser. Keep CPU1 OFF.
-2. Add a checked initramfs input and finish the Phase 2 gate. Use these experiments
-   to refine the native wire contract; select compatibility workloads and pin a
-   Linux oracle when the adapter exists.
+1. Design and independently review checked initramfs input, then connect it to
+   the verified ELF/process path and finish the native Phase 2 gate. Embedded
+   fixtures currently provide inputs; concurrent userspace remains outside scope.
+2. Use these experiments to refine the native wire contract; select compatibility
+   workloads and pin a Linux oracle when the adapter exists.
 3. Resolve the license selection; keep remote CI current as further milestones are published.
 
 ## Session ledger
@@ -616,3 +625,14 @@ adapter and EL0 execution. Design 0023 specifies their implementation contract.
   64th reply immediately revokes the grant and stores termination. Archived raw
   logs/source identities. Core EL0 execution remains implementation work, with
   no new kernel entry/exception code or remote publication in this milestone.
+
+- 2026-10-26: Implemented reviewed protected native ARM ELF execution. Three
+  profiles pass 66 runs each, including actual console/exit calls, invalid
+  arguments and handles, bounded authority, protection faults, timer deadline,
+  register restoration and exact reclamation. Source/compiled-stack/trace review
+  preceded acceptance. Preserved fixture/build/lint failures and first guest
+  validator failures; resolved exact BTYPE and pinned-QEMU DAIF expectations
+  without changing runtime code. Explicitly recorded QEMU's DIT coverage limit.
+  Full ARM/x86 suite passes 115 Python cases per target, 19 process compiler
+  clients and all prior profiles. See [evidence](docs/evidence/native-process.md).
+  Initramfs remains next; no new remote CI or public push.

@@ -66,7 +66,25 @@ mod smp_checks;
     allow(dead_code)
 )]
 mod space_checks;
-#[cfg(all(target_arch = "aarch64", feature = "space-tests"))]
+#[cfg(all(
+    target_arch = "aarch64",
+    any(feature = "space-tests", feature = "process-tests")
+))]
+#[cfg_attr(
+    any(
+        feature = "process-tests",
+        feature = "secondary-tests",
+        feature = "nested-fault-test",
+        feature = "unhandled-fault-test",
+        feature = "thread-overflow-test",
+        feature = "preemption-overflow-test",
+        feature = "wait-all-blocked-test"
+    ),
+    allow(dead_code)
+)]
+mod user_space;
+
+#[cfg(all(target_arch = "aarch64", feature = "process-tests"))]
 #[cfg_attr(
     any(
         feature = "secondary-tests",
@@ -78,7 +96,33 @@ mod space_checks;
     ),
     allow(dead_code)
 )]
-mod user_space;
+mod process;
+#[cfg(all(target_arch = "aarch64", feature = "process-tests"))]
+#[cfg_attr(
+    any(
+        feature = "secondary-tests",
+        feature = "nested-fault-test",
+        feature = "unhandled-fault-test",
+        feature = "thread-overflow-test",
+        feature = "preemption-overflow-test",
+        feature = "wait-all-blocked-test"
+    ),
+    allow(dead_code)
+)]
+mod process_checks;
+#[cfg(all(target_arch = "aarch64", feature = "process-tests"))]
+#[cfg_attr(
+    any(
+        feature = "secondary-tests",
+        feature = "nested-fault-test",
+        feature = "unhandled-fault-test",
+        feature = "thread-overflow-test",
+        feature = "preemption-overflow-test",
+        feature = "wait-all-blocked-test"
+    ),
+    allow(dead_code)
+)]
+mod process_inputs;
 
 #[cfg(target_arch = "aarch64")]
 mod exceptions;
@@ -175,8 +219,19 @@ extern "C" fn boot_main(_boot_info: u64) -> ! {
         }
         #[cfg(all(
             target_arch = "aarch64",
-            feature = "space-tests",
+            feature = "process-tests",
             not(feature = "secondary-tests")
+        ))]
+        {
+            if !arch::process_tests(&mut platform) {
+                arch::exit(false);
+            }
+            arch::exit(hm_kernel::run_tests(&mut platform));
+        }
+        #[cfg(all(
+            target_arch = "aarch64",
+            feature = "space-tests",
+            not(any(feature = "secondary-tests", feature = "process-tests"))
         ))]
         {
             if !arch::space_tests(&mut platform) {
@@ -188,7 +243,11 @@ extern "C" fn boot_main(_boot_info: u64) -> ! {
             feature = "preemption-no-timer-test",
             not(all(
                 target_arch = "aarch64",
-                any(feature = "secondary-tests", feature = "space-tests")
+                any(
+                    feature = "secondary-tests",
+                    feature = "space-tests",
+                    feature = "process-tests"
+                )
             ))
         ))]
         platform.write("HMPREEMPT EXPECT NO-TIMER\n");
@@ -196,7 +255,11 @@ extern "C" fn boot_main(_boot_info: u64) -> ! {
             feature = "preemption-tests",
             not(all(
                 target_arch = "aarch64",
-                any(feature = "secondary-tests", feature = "space-tests")
+                any(
+                    feature = "secondary-tests",
+                    feature = "space-tests",
+                    feature = "process-tests"
+                )
             ))
         ))]
         {
@@ -209,7 +272,11 @@ extern "C" fn boot_main(_boot_info: u64) -> ! {
             not(feature = "preemption-tests"),
             not(all(
                 target_arch = "aarch64",
-                any(feature = "secondary-tests", feature = "space-tests")
+                any(
+                    feature = "secondary-tests",
+                    feature = "space-tests",
+                    feature = "process-tests"
+                )
             ))
         ))]
         arch::exit(hm_kernel::run_tests(&mut platform));
@@ -218,7 +285,11 @@ extern "C" fn boot_main(_boot_info: u64) -> ! {
             feature = "preemption-tests",
             all(
                 target_arch = "aarch64",
-                any(feature = "secondary-tests", feature = "space-tests")
+                any(
+                    feature = "secondary-tests",
+                    feature = "space-tests",
+                    feature = "process-tests"
+                )
             )
         )))]
         hm_kernel::run_monitor(&mut platform)

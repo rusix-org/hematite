@@ -1,0 +1,102 @@
+#!/usr/bin/env python3
+"""Compile actual native-process types and reject authority/lifetime violations."""
+import argparse
+import hashlib
+import json
+from pathlib import Path
+import sys
+
+from check_frame_types import run
+from check_mapping_types import rejected_only_for
+
+PREAMBLE = '''#![no_std]
+#![forbid(unsafe_code)]
+use hm_process::{Executor, Process, RunReport, Error, Space, Pool, Factory};
+use hm_kernel::elf::Image;
+'''
+PROBES = {
+    "valid_prepare_run": ('''pub fn client(e: &mut Executor, space: Space<'_>) -> Option<RunReport> {
+        let process = e.prepare(space, true, 1).ok()?;
+        let _ = (process.entry(), process.root_address(), process.frame_count(), process.handle());
+        e.run(process).ok()
+    }''', None),
+    "valid_input_released": ('''pub fn client<'p>(e: &mut Executor, f: &Factory<'p>) -> Option<Process<'p>> {
+        let mut input = [0u8; 8192]; let image = Image::parse(&input).ok()?;
+        let space = f.load(&image, 284).ok()?; drop(image); input.fill(0);
+        e.prepare(space, true, 1).ok()
+    }''', None),
+    "valid_forget_inactive": ('''pub fn client(p: Process<'_>) { core::mem::forget(p); }''', None),
+    "valid_owned_report": ('''pub fn client(e: &mut Executor, p: Process<'_>) -> Option<RunReport> { e.run(p).ok() }''', None),
+    "private_constructor": ('''pub fn client(t: &hm_kernel::cpu_topology::Topology) { let _ = Executor::from_boot(t); }''', "E0624"),
+    "private_context": ('''pub fn client(p: &mut Process<'_>) { p.context[32] = 0; }''', "E0616"),
+    "private_space": ('''pub fn client(p: Process<'_>) { let _ = p.space; }''', "E0616"),
+    "private_session": ('''pub fn client(p: Process<'_>) { let _ = p.session; }''', "E0616"),
+    "private_issuer": ('''pub fn client(e: &mut Executor) { e.issuer = hm_kernel::native::Issuer::new(); }''', "E0616"),
+    "process_clone": ('''pub fn client(p: &Process<'_>) { let _ = <Process<'_> as Clone>::clone(p); }''', "E0277"),
+    "executor_clone": ('''pub fn client(e: &Executor) { let _ = <Executor as Clone>::clone(e); }''', "E0277"),
+    "process_send": ('''fn send<T: Send>() {} pub fn client() { send::<Process<'static>>(); }''', "E0277"),
+    "process_sync": ('''fn sync<T: Sync>() {} pub fn client() { sync::<Process<'static>>(); }''', "E0277"),
+    "executor_send": ('''fn send<T: Send>() {} pub fn client() { send::<Executor>(); }''', "E0277"),
+    "executor_sync": ('''fn sync<T: Sync>() {} pub fn client() { sync::<Executor>(); }''', "E0277"),
+    "process_consumed_once": ('''pub fn client(e: &mut Executor, p: Process<'_>) { let _ = e.run(p); let _ = e.run(p); }''', "E0382"),
+    "no_callback": ('''pub fn client(e: &mut Executor, p: Process<'_>) { let _ = e.run(p, || {}); }''', "E0061"),
+    "pool_lifetime": ('''pub fn client(e: &mut Executor, make: for<'p> fn(&'p Pool) -> Factory<'p>, pool: Pool, input: &[u8]) -> Option<Process<'static>> {
+        let factory = make(&pool); let space = factory.load(&Image::parse(input).ok()?, 284).ok()?;
+        e.prepare(space, true, 1).ok()
+    }''', "E0515"),
+    "forge_process": ('''pub fn client(space: Space<'_>, session: hm_kernel::native::Session) {
+        let _ = Process { space, session, context: [0;106], handle: 1 };
+    }''', "E0451"),
+}
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--library", type=Path, required=True)
+    parser.add_argument("--target", choices=["aarch64-unknown-none"], required=True)
+    parser.add_argument("--output", type=Path, required=True)
+    args = parser.parse_args()
+    library, output = args.library.resolve(), args.output.resolve()
+    if not library.is_file():
+        parser.error("build hm-kernel first")
+    if output.exists():
+        parser.error("use a fresh output directory")
+    output.mkdir(parents=True)
+    source = Path(__file__).resolve().parents[1] / "crates/hm-core/src"
+    modules = ("frames", "cpu_local", "threads", "preempt", "secondary", "user_space", "process")
+    inputs = [name + ".rs" for name in modules] + ["process_layout.rs",
+        "process-aarch64.S", "user-space-aarch64.S", "threads-aarch64.S",
+        "preempt-aarch64.S", "preempt-probe-aarch64.S", "secondary-aarch64.S"]
+    wrapper = output / "hm_process.rs"
+    wrapper.write_text('#![no_std]\n#![deny(unsafe_op_in_unsafe_fn)]\n' + ''.join(
+        f'#[path={json.dumps(str(source / (name + ".rs")))}] mod {name};\n' for name in modules) +
+        'pub use user_space::{Factory, Space};\npub use frames::Pool;\npub use process::{Executor, Process, RunReport, Error};\n')
+    (output / "input.json").write_text(json.dumps({"library": str(library),
+        "sha256": hashlib.sha256(library.read_bytes()).hexdigest(), "target": args.target,
+        "expected_probes": list(PROBES), "sources": {name: hashlib.sha256(
+            (source / name).read_bytes()).hexdigest() for name in inputs}}, indent=2) + '\n')
+    base = ["rustc", "--edition=2024", "--target", args.target, "-C", "panic=abort",
+        "--cfg", 'feature="secondary-tests"', "--cfg", 'feature="smp-tests"',
+        "--extern", f"hm_kernel={library}", "-L", f"dependency={library.parent / 'deps'}"]
+    compiled = output / "libhm_process.rlib"
+    code, _ = run(base + ["--crate-type=rlib", "--crate-name=hm_process", str(wrapper), "-o", str(compiled)], output, "library")
+    results = {"library": {"passed": code == 0 and compiled.is_file(), "returncode": code}}
+    if results["library"]["passed"]:
+        for name, (body, rejection) in PROBES.items():
+            client, metadata = output / f"{name}.rs", output / f"{name}.rmeta"
+            client.write_text(PREAMBLE + body + '\n')
+            code, diagnostics = run(base + ["--crate-type=lib", "--emit=metadata", "--error-format=json",
+                "--extern", f"hm_process={compiled}", str(client), "-o", str(metadata)], output, name)
+            intended = rejected_only_for(diagnostics, rejection)
+            passed = code == 0 and metadata.is_file() if rejection is None else code is not None and code != 0 and intended
+            results[name] = {"passed": passed, "returncode": code, "expected_rejection": rejection}
+    passed = len(results) == len(PROBES) + 1 and all(result["passed"] for result in results.values())
+    result = {"passed": passed, "probes": results,
+        "scope": "actual native-process safe-client authority and lifetime boundaries; execution tested separately"}
+    (output / "result.json").write_text(json.dumps(result, indent=2) + '\n')
+    print(json.dumps(result, indent=2))
+    return 0 if passed else 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())

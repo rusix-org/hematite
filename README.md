@@ -13,7 +13,7 @@ make run    # build and open the ARM64 monitor; Ctrl-C exits
 ```
 
 Type `help`, `status`, or `test`. `status` reports the active memory protections;
-`test` runs 39 bootstrap, capability, memory, topology, event, mutex, thread, timer, exception and mapping checks. The ARM boot banner reports discovered RAM and usable frame capacity.
+`test` runs 41 bootstrap, capability, memory, topology, event, mutex, thread, timer, exception and mapping checks. The ARM boot banner reports discovered RAM and usable frame capacity.
 Memory tests exercise real frame, heap and mapping ownership. Three pages are deliberately
 retained once per boot to verify that forgotten owners cannot cause reuse.
 This is a kernel monitor, not a shell.
@@ -98,12 +98,20 @@ See
 ARM now also loads that ELF into owned address spaces with protected code,
 read-only data, writable data and guarded stacks. Three QEMU profiles verify
 allocation rollback, maximum-size loading, ownership retention and repeated
-page-table restoration using ARM translation probes. Actual EL0 execution is
-next; see [owned-space evidence](docs/evidence/owned-address-spaces.md).
+page-table restoration using ARM translation probes; see
+[owned-space evidence](docs/evidence/owned-address-spaces.md).
 The native console/exit policy now has versioned startup bytes, scoped grants,
 checked copying and resource limits, verified on the host and by compiler
-boundary tests. Its actual EL0 adapter remains to be implemented; see
-[native policy evidence](docs/evidence/native-policy.md).
+boundary tests; see [native policy evidence](docs/evidence/native-policy.md).
+
+Protected native ARM userspace now executes separately linked Rust programs.
+The process tests cover console/exit calls, invalid arguments, capability limits,
+register restoration, protection faults, timer termination and memory reclamation.
+`make test` runs 33 programs twice in each of three ARM guest profiles and checks
+the actual exception trace. These embedded programs are a development milestone;
+initramfs, a userspace shell and Linux compatibility remain future work. See
+[native process evidence](docs/evidence/native-process.md), including the pinned
+emulator limitations.
 
 The safe capability experiment checks rights attenuation, bounded accounting,
 stale handles, revocation and cancellation/completion lifetimes. It models

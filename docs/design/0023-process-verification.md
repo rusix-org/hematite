@@ -1,9 +1,11 @@
 # Protected native process verification
 
-Status: approved for implementation, 2026-10-26, by independent
-[review 0023](../reviews/0023-arm-native-process.md). The final parser still
-requires inspection of actual pinned-QEMU EL0 trace grammar before approval;
-no process execution has yet been verified. This is the verification companion
+Status: implemented, with the first three actual pinned-QEMU traces independently
+reviewed and parser grammar approved, 2026-10-26, in
+[review 0023](../reviews/0023-arm-native-process.md). Initial failures are preserved;
+the exact BTYPE and pinned-emulator DAIF corrections below are reviewed, and
+the fresh full ARM/x86 execution gate now passes; see
+[verification evidence](../evidence/native-process.md). This is the verification companion
 to [process design 0023](0023-arm-native-process.md), whose separate review owns
 entry, copy, timer and teardown mechanisms.
 [Design 0021](0021-arm-first-userspace.md) owns the milestone requirements;
@@ -101,7 +103,7 @@ manifest against readelf/disassembly; the guest cannot supply its own expected
 values. Every successful normal exit is code 0; a fixture assertion failure uses
 code 1..255 and fails the gate. Intentional memory/privileged-fault programs have
 no syscall prelude; each performs its one disassembled fault operation, with an
-unreachable `exit(255)` fallback that must never execute.
+unreachable `exit(205)` fallback that must never execute.
 
 Hello issues WRITE(15 bytes `hello from EL0\n`) then EXIT(0). Each single-invalid
 case issues its named invalid request, checks the exact wire status and zero
@@ -111,8 +113,10 @@ badopcode Operation=2. Zero length uses a valid grant and u64::MAX address;
 maxwrite uses a 256-byte array with byte[i]=i. Bytebudget writes that same array
 sixteen times, requests one additional byte (Budget=6), makes a zero-length
 write (OK/0), then exits: 19 calls, exactly 4096 output bytes. Calllimit and
-invalidstorm each have exactly 64 calls and no exit call; an instruction after
-the 64th SVC sets a failure sentinel, and must not execute. Exit64 has exactly
+invalidstorm each have exactly 64 calls and no exit call. The SVC successor is
+RET into the checked request helper; completing the loop would reach exit202.
+The host rejects any ERET after the terminal 64th result, so no successor
+instruction may execute and no 65th SVC is accepted. Exit64 has exactly
 63 zero writes followed by EXIT(0). Invalidexit issues status 256, then a valid
 status with address=1, then a valid status with length=1 (Argument=7 each), then
 EXIT(0). Registers has three zero writes then EXIT(0). Badsp has only EXIT(0).
@@ -150,7 +154,10 @@ r=2..30, except x2=u64::MAX, x3=0 and x8=1 as the zero-write arguments.
 Use q[r].low=0x1000_0000_0000_0000 | (j<<8) | r and
 q[r].high=0x2000_0000_0000_0000 | (j<<8) | r for r=0..31;
 FPCR=j<<22 (rounding mode), FPSR=0x0800_0000 | (1<<(j-1)),
-TPIDR_EL0=0x1234_0000_0000_0000 | j, and NZCV respectively
+TPIDR_EL0=0x1234_0000_0000_0000 | j. In the fixed QEMU max profile also set
+DIT=1 and SSBS=1 before each SVC, and capture/check both as zero initially and
+after every sanitized resume (snapshot words 101/102). Kernel readbacks must
+restore the original kernel DIT/SSBS between slices. NZCV is respectively
 0xa000_0000, 0x5000_0000, 0xf000_0000. TPIDRRO_EL0 stays zero.
 Freeze those literal masks/patterns in the fixture manifest and independently
 review the capture/check assembly; arithmetic flags must be set last and captured
@@ -158,6 +165,12 @@ before comparison instructions change them.
 User flags must retain only their permitted NZCV across sanitized returns;
 observed control-mode/DAIF/PAN fields are checked against the process contract
 in captured SPSR, not settable user sentinels.
+
+Pinned QEMU 7.2.22 clears DIT on exception entry instead of retaining it as Arm
+specifies. These fixtures verify user writes and sanitized zero on resume plus
+kernel zero readback, but do not dynamically prove restoration from retained
+DIT1. The architecture-correct save/restore remains required; see the exact
+source investigation in [review 0023](../reviews/0023-arm-native-process.md).
 
 The fixture reaches EXIT(0) only after every comparison; a fixed success label
 alone is not evidence. Independently inspect the complete disassembly path
@@ -188,8 +201,26 @@ HMPROC RESULT index=I ordinal=J status=STATUS bytes=W
 HMPROC STOP index=I reason=REASON code=CODE calls=NC written=NW esr=ESR far=FAR elr=ELR spsr=SPSR irqs=NI
 HMPROC RESTORE index=I root=BR vbar=BV controls=1 inactive=1 before=B after=B
 HMPROC PASS index=I pass=P case=C
+HMPROC PREPARE budget=1 exhausted=1 drop=1 before=B after=B
 HMPROC END 66
 ```
+
+After the final index-65 PASS and before END, require exactly one PREPARE record
+with all three checks equal to one and before/after equal to the common baseline.
+The safe guest helper must execute three distinct ownership checks: preparing a
+loaded Space with extra-frame budget zero returns Budget and the original
+unchanged Space; retaining real Pool owners to exhaust allocation makes startup
+allocation fail and returns the unchanged Space with no leak; successful prepare
+followed by dropping the inactive Process reclaims every owned frame without
+entry. Check the returned Space's entry, root, frame count and full mapping/byte
+audit against its pre-prepare snapshot, and exact free counts after retained
+pressure owners and Spaces are dropped. Do not simulate exhaustion with budget
+zero. The helper emits its observed booleans only after all checks succeed.
+
+These prepare-only sessions issue generations after all 66 runs, so recorded
+RUN handles and the 132 two-CPU admission HVCs remain unchanged. They perform
+no user entry, native CALL, OUTPUT, process-vector transition or extra HVC.
+They must not supply runtime/EL0 evidence for any inventory case.
 
 RUN..PASS repeat for all 66 runs: P is 0 or 1, and I=P*33 plus the zero-based
 case position, yielding exactly 0..65. CALL/OUTPUT/RESULT are repeated only according
@@ -317,6 +348,12 @@ saved user SPSR in guest evidence separately. Require each successful nontermina
 call to ERET back to the exact SVC successor. No return to EL0 follows a terminal
 exit/fault/deadline. Do not accept an EL1 fault at a similarly named symbol.
 
+After excluding NZCV, require saved user SPSR exactly `0x00400340`, except
+rwexecute and stackexecute require `0x00400740`. Their unguarded BR updates
+PSTATE.BTYPE to 01 before the instruction-permission fault, as specified by
+[Arm BR](https://documentation-service.arm.com/static/68da52dfbd7cab51328c0622).
+Do not accept other BTYPE values or relax any other saved control field.
+
 Require lower-EL instruction-abort EC 0x20 or data-abort EC 0x24 as applicable,
 never same-EL EC 0x21/0x25. For data aborts verify WnR, expected FSC, exact FAR
 when valid, and the fixed fault instruction ELR. Instruction faults identify the
@@ -328,8 +365,15 @@ ISS against the independently disassembled instruction: direction bit 0 is 0
 (write), Rt=31, with fields (op0,op1,op2,CRn,CRm) respectively
 (3,3,1,14,2) for `msr cntp_ctl_el0,xzr` and (0,3,6,4,2) for `msr daifset,#2`.
 The ISS packing is op0[21:20], op2[19:17], op1[16:14], CRn[13:10],
-Rt[9:5], CRm[4:1], direction[0]. The independently reviewed exact raw ESR values are
-0x6232fbe4 and 0x620cd3e4 respectively. Neither fixture may be replaced by
+Rt[9:5], CRm[4:1], direction[0]. The independently reviewed architectural ESR
+values are 0x6232fbe4 and 0x620cd3e4 respectively. This pinned QEMU 7.2.22 gate
+instead requires exact DAIF ESR **0x620793e4**: its
+[DAIF helper](https://github.com/qemu/qemu/blob/v7.2.22/target/arm/helper-a64.c#L69)
+passes op1/op2 in reverse order to the
+[syndrome constructor](https://github.com/qemu/qemu/blob/v7.2.22/target/arm/syndrome.h#L155).
+The first raw failures are retained, and this exact emulator discrepancy is
+classified separately from the architectural contract. CNTP still requires
+0x6232fbe4; no broad alternate-syndrome fallback is permitted. Neither fixture may be replaced by
 an undefined instruction or BRK.
 SVC #1 requires the valid SVC64 syndrome with immediate 1 and successor ELR,
 but there is no CALL/RESULT because native dispatch is forbidden.

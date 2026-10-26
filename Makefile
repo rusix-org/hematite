@@ -37,6 +37,7 @@ test: image
 		python3 tools/test_test_elf.py; \
 		python3 tools/test_test_space.py; \
 		python3 tools/test_test_native.py; \
+		python3 tools/test_test_process.py; \
 		python3 tools/check_repository.py; \
 		python3 tools/check_safety.py; \
 		cargo build --locked --offline -p hm-core --release --features boot-tests --target $(TARGET) --target-dir target/$(ARCH)/boot-test; \
@@ -51,6 +52,7 @@ test: image
 			cargo build --locked --offline -p hm-core --release --features preemption-overflow-test --target $(TARGET) --target-dir target/$(ARCH)/preemption-overflow-test; \
 			cargo build --locked --offline -p hm-core --release --features wait-all-blocked-test --target $(TARGET) --target-dir target/$(ARCH)/wait-all-blocked-test; \
 			cargo build --locked --offline -p hm-core --release --features space-tests --target $(TARGET) --target-dir target/$(ARCH)/space-test; \
+			cargo build --locked --offline -p hm-core --release --features process-tests --target $(TARGET) --target-dir target/$(ARCH)/process-test; \
 			cargo build --locked --offline -p hm-core --release --features secondary-tests --target $(TARGET) --target-dir target/$(ARCH)/secondary-test; \
 			cargo build --locked --offline -p hm-core --release --features secondary-stale-generation-test --target $(TARGET) --target-dir target/$(ARCH)/secondary-stale-test; \
 			cargo build --locked --offline -p hm-core --release --features secondary-cpu-off-return-test --target $(TARGET) --target-dir target/$(ARCH)/secondary-off-return-test; \
@@ -76,6 +78,7 @@ test: image
 		if [ "$(ARCH)" = aarch64 ]; then \
 			cargo build --locked --offline -p hm-kernel --release --target x86_64-unknown-linux-gnu --target-dir target/host-mutex; \
 			python3 tools/check_native.py --output "$$evidence_dir/native-host"; \
+			python3 tools/build_process_fixtures.py --output "$$evidence_dir/process-fixtures"; \
 			python3 tools/check_elf.py --library target/host-mutex/x86_64-unknown-linux-gnu/release/libhm_kernel.rlib --output "$$evidence_dir/elf-host"; \
 			python3 tools/check_cpu_topology.py --library target/host-mutex/x86_64-unknown-linux-gnu/release/libhm_kernel.rlib --output "$$evidence_dir/cpu-topology"; \
 			mutex_host_args=(--host-library target/host-mutex/x86_64-unknown-linux-gnu/release/libhm_kernel.rlib); \
@@ -84,6 +87,9 @@ test: image
 			--library target/$(ARCH)/boot-test/$(TARGET)/release/libhm_kernel.rlib \
 			--target $(TARGET) --output "$$evidence_dir/mutex-types" "$${mutex_host_args[@]}"; \
 		if [ "$(ARCH)" = aarch64 ]; then \
+			python3 tools/check_process_types.py \
+				--library target/$(ARCH)/boot-test/$(TARGET)/release/libhm_kernel.rlib \
+				--target $(TARGET) --output "$$evidence_dir/process-types"; \
 			python3 tools/check_space_types.py \
 				--library target/$(ARCH)/boot-test/$(TARGET)/release/libhm_kernel.rlib \
 				--target $(TARGET) --output "$$evidence_dir/space-types"; \
@@ -110,6 +116,7 @@ test: image
 			python3 tools/test_preemption.py --kernel target/$(ARCH)/preemption-boundary-test/$(TARGET)/release/hematite --boundaries --output "$$evidence_dir/preemption-boundaries"; \
 			python3 tools/test_preemption_negative.py --no-timer-kernel target/$(ARCH)/preemption-no-timer-test/$(TARGET)/release/hematite --overflow-kernel target/$(ARCH)/preemption-overflow-test/$(TARGET)/release/hematite --output "$$evidence_dir/preemption-negative"; \
 			python3 tools/test_wait_blocked.py --kernel target/$(ARCH)/wait-all-blocked-test/$(TARGET)/release/hematite --output "$$evidence_dir/wait-all-blocked"; \
+			python3 tools/test_process.py --kernel target/$(ARCH)/process-test/$(TARGET)/release/hematite --fixtures crates/hm-core/fixtures/process/manifest.json --output "$$evidence_dir/process"; \
 			python3 tools/test_space.py --kernel target/$(ARCH)/space-test/$(TARGET)/release/hematite --output "$$evidence_dir/space"; \
 			python3 tools/test_secondary.py --kernel target/$(ARCH)/secondary-test/$(TARGET)/release/hematite --stale-generation-kernel target/$(ARCH)/secondary-stale-test/$(TARGET)/release/hematite --cpu-off-return-kernel target/$(ARCH)/secondary-off-return-test/$(TARGET)/release/hematite --output "$$evidence_dir/secondary"; \
 			python3 tools/test_smp.py --kernel target/$(ARCH)/smp-test/$(TARGET)/release/hematite --no-peer-timer-kernel target/$(ARCH)/smp-no-peer-timer-test/$(TARGET)/release/hematite --peer-overflow-kernel target/$(ARCH)/smp-peer-overflow-test/$(TARGET)/release/hematite --all-blocked-kernel target/$(ARCH)/smp-all-blocked-test/$(TARGET)/release/hematite --output "$$evidence_dir/smp"; \

@@ -200,6 +200,8 @@ arm_timer_timeout_probe:
     mrs x0, tpidr_el1
     add x0, x0, #{cpu_timer}
     mov x3, #0x1000000         // Secondary bound if counter stops advancing.
+.global arm_timer_window_begin
+arm_timer_window_begin:
 .Ltimer_window_begin:
     msr daifclr, #2
 .Ltimer_poll:
@@ -225,6 +227,8 @@ arm_timer_timeout_probe:
     mov x2, #1
 .Ltimer_mask:
     msr daifset, #2
+.global arm_timer_window_end
+arm_timer_window_end:
 .Ltimer_window_end:
     isb
     str x2, [sp, #1080]

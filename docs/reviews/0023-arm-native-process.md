@@ -6,10 +6,16 @@ soundness audit.
 Current verdict: **safe native policy is locally verified** by ten actual host
 tests and twelve compiler clients on each architecture. **The core process and
 33-case verification designs are approved for implementation**, including the
-final PMU and preflight amendments below. The process runtime is not yet
-implemented or executed. Final parser approval requires inspection of actual
-pinned-QEMU EL0 trace grammar; source review, compiled stack bounds and all
-process execution gates remain open.
+final PMU and preflight amendments below. **The initial runtime and fixture
+sources are approved for compilation** after the source corrections recorded
+below, including the subsequently corrected DIT/SSBS restoration finding.
+Integration, nineteen actual compiler clients and the fourth candidate's
+compiled-stack/linked-fixture gates are now reviewed. **That exact candidate is
+approved for first QEMU execution**, as identified in the
+[stack review](../evidence/process-stack-review.md). The first three actual
+traces have now been inspected and the parser approved with the exact
+architectural/emulator corrections below. Initial aggregate failures are
+preserved; a fresh complete execution gate remains pending.
 
 ## Staged scope
 
@@ -228,3 +234,223 @@ the implementation must still observe actual PMUVer/PMUSERENR at runtime.
 The admitted set is absent 0, or implemented 1/4/5/6 with PMUSERENR zero;
 unknown versions remain unsupported. This is an explicit target-profile
 correction, not removal of the register-access requirement.
+
+## Initial runtime source review
+
+Reviewed `process.rs`, `process-aarch64.S`, `process_layout.rs` and the startup
+and cache-maintenance additions to `user_space.rs`. Four findings were fixed
+before compilation approval: one named Rust/assembly frame layout with geometry
+assertions, readback of all 24 listed saved/unchanged controls, verification of
+GIC setup writes before entry, and a borrowing `execute` helper that lets `run`
+reclaim Process before releasing BUSY on every returning path after acquisition.
+The private ROOT argument uses offset 1560 within the existing 2048-byte frame;
+this is an approved private-layout amendment. TCR/MAIR and returned-kind slots
+are populated consistently with their names.
+
+The source retains owned backing and tables throughout entry and restoration.
+It copies the private context only under the boot root, uses the reserved
+exception stack while the process root is active, and captures all user GPRs
+before using scratch registers. No Rust callback runs with that root installed.
+Timer status and count precede source disable; ID30 EOI follows deassertion,
+and pending/active checks precede restoring the original GIC/timer configuration.
+The boot root and translations are restored before copying out context. The
+coordinator SP and original SP_EL0 are restored before installing the old VBAR
+last, with no subsequent fixed-frame access. Control mismatches enter the
+stack-independent terminal failure path rather than reclaiming active owners.
+
+Startup installation completes every fallible check before committing the leaf
+and owner. Its added page is user RO/NX; executable cache maintenance uses
+retained identity aliases and explicit compiler memory effects/barriers. Safe
+callers cannot supply context registers, another Host, a callback, or a second
+hardware issuer. These are source arguments, not proof of actual timer delivery
+or hardware register behavior.
+
+Reviewed the three fixture sources. The register entry branch changes no
+register or flags before capture; all GPR/SIMD state is saved before scratch
+use, and the entire 1024-byte snapshot is initialized before Rust borrows it.
+Syscall shims preserve AAPCS64 and return the two-word C-layout reply. The bad-SP
+case reaches SVC without further user-stack access. Deliberate faults have
+separate instruction aliases and failure continuations. Linked permissions,
+symbols, code generation and aggregate kernel/user stack bounds still require
+compiled-artifact inspection.
+
+Initial host-parser review found `controls()` accepted missing, repeated or
+reordered GICC control writes and could consume baseline writes after the final
+process. Exact per-slice sequences were requested before parser approval.
+Compiler-boundary evidence must also hash the included layout and assembly
+inputs. The deliberate unreviewed-trace gate remains closed pending actual
+pinned-QEMU output.
+
+Both harness findings are fixed in the reviewed source: each slice now requires
+the exact three setup and four restoration CPU-interface writes, with timer
+EOI before restoration, and compiler evidence includes layout/assembly hashes.
+Missing, duplicate and reordered setup/cleanup mutation cases were added.
+The strict serial inventory, actual-output hex, per-case calls and faults,
+resource accounting, preflight/process/baseline trace separation and nineteen
+actual-module compiler clients are approved for execution. Reported mutation
+test success is the author's execution claim at this stage; compiler clients
+and real guest traces have not yet been inspected for this implementation.
+
+Integration source review approves the feature dispatch, private BootPlatform
+constructor callsite after timer preflight, and safe 66-run runner. The runner
+checks all loaded bytes/padding/BSS, zero stack pages, distinct mapped frame
+addresses and resource recovery. Exported timer-window aliases add no machine
+instructions. Fixture snapshot tail clearing now uses encodable single-register
+stores at offsets 808 through 1016, preserving flags and initializing every
+byte. The manifest producer/consumer schema mismatch was corrected: independent
+ELF LOAD decoding checks all segment fields, and fixture absolute kernel symbols
+must match the tested kernel's actual text/BSS symbols before launch.
+
+The new prepare Budget/Exhausted rollback branches currently have source review,
+not direct process runtime coverage; the 66-run suite exercises successful
+preparation and all declared terminal outcomes. Earlier Space allocation tests
+do not establish execution coverage for these new preparation branches.
+
+Approved an additive verification amendment after all 66 runs: exercise zero
+startup budget, actual Pool exhaustion held by a Block, and successful prepare
+followed by inactive drop. Failed preparation must return an audited Space with
+unchanged root/entry/frame count and absent startup mapping; successful prepare
+must own exactly one additional frame. Every path must recover the baseline.
+The required PREPARE record occurs before END and after run generations are
+finished, preserving the existing token and PSCI inventory. Implementation and
+execution of this amendment remain to be checked.
+
+Read-only inspection of all 33 `process-fixtures-third` disassemblies found
+bounded user stacks: register capture uses 1024 bytes with a leaf checker;
+ordinary fixture frames use 16 or 32 bytes. Even summing all stack decrements
+within the largest ELF, including its panic chain, gives 1168 bytes without
+recursion, below the 64KiB mapping. The intentional bad-SP case is separate.
+Hello has two RX, one RO and two RW pages, with an additional 4096 zero-initialized
+memory bytes in its RW LOAD and actual compiled data/BSS reads. The final
+kernel-address fixed-point fixture rebuild still needs hash confirmation.
+
+A subsequent architectural review found an additional state-domain issue before
+guest execution: EL0 can write DIT when implemented, and it remains unchanged
+on exception entry. This is confirmed by Arm's
+[A-profile known-issues clarification, D1.3.2 IX0001](https://documentation-service.arm.com/static/686bf0c446dc1e49e34b8121).
+The first source candidate did not restore or observe that field. The integrating
+agent is holding the next build for a concrete DIT admission/restoration
+amendment and hostile-register check. Earlier compilation approval does not
+constitute execution approval with this finding open.
+
+The concrete amendment is approved: conditionally save/restore/read back DIT
+for feature encoding 1 and SSBS for encoding 2, admitting their absent encoding
+0 without accessing the register; reject other encodings and require MTE0.
+This explicitly excludes TCO from the admitted profile. New named metadata
+slots 1568/1576/1584 remain within the reserved frame. The existing register
+fixture will set DIT1 before its three SVCs and check DIT0 on each sanitized
+resume. Arm semantics and the independently inspected pinned QEMU encoding
+definitions are distinguished in the design's provenance. Source implementation
+review remains pending.
+
+The PSTATE source amendment has now been independently reviewed and approved.
+Admission validates the feature nibbles before optional accesses; observe also
+guards each access independently by its exact supported encoding. Assembly
+stores feature bits and zero/actual snapshots in the named in-bounds slots,
+then restores supported fields with an ISB before Rust resumes. The control
+comparison now covers 26 registers/fields. This resolves the source finding;
+compiled artifacts and the hostile-DIT fixture remain separate execution gates.
+
+## Preliminary compiled-stack findings
+
+The first emitted assembly, preserved in `process-first-stack.s.gz` with SHA
+`de7fbf067bd0ef55e642afbc4db2f3d625114e12c5af8fee510e3c3f0e5c6187`,
+had a 64,320-byte normal loading chain. In particular `one` used 38,816 bytes:
+its 4KiB stack-probe decrement executes nine times. Counting individual emitted
+SUB instructions once would have understated the frame. This candidate was
+within 64KiB but had little margin; loading and execution helpers were split.
+
+The second assembly, preserved in `process-second-stack.s.gz` with SHA
+`2208b979be7a7a7436b63441336b27bd5a05e0d875de2efa339721c61277976a`,
+reduced the ordinary path but its new failure-preparation path used 64,624 bytes:
+boot 7440 + wrapper 16 + checks 752 + prepare_failure 18432 +
+check_prepare_failure 28880 + prepare 9056 + audit 48. This still fits, with
+912 bytes remaining. The integrating agent changed the failure checker to
+borrow the Err owner inside its Result instead of moving another large Space
+onto the stack. Linked memcpy/memset/memcmp were independently confirmed leaf
+functions without stack adjustment. Neither preliminary calculation approves
+the forthcoming revised binary: final prologues and simultaneous call chains
+must be checked after the PSTATE amendment and fixture fixed point.
+
+The third emitted assembly SHA
+`4351374a8b6f54026b5aad0cd1906b48996ddba4a7d100d98b5d1b4568ba0b7c`
+contains the PSTATE fix and borrowed-result checker. Its compile succeeded;
+the subsequent clippy gate failed and is separate from this stack calculation.
+The failure helper now uses 20,848 bytes. Its aggregate path is **56,592 bytes**;
+the successful inactive-drop path is **56,496 bytes**. The ordinary execution
+chain is boot7440 + wrapper16 + checks752 + one18992 + run_loaded21056 +
+Executor::run9872 + execute976 = **59,104 bytes**. A conservative further 640
+bytes covers the observed console/formatter/padding/output/terminal helpers,
+giving **59,744 bytes**. Formatting accepts fixed scalar fields, without recursive
+user formatters. Direct loading is shallower at **44,528 bytes** including audit.
+
+The post-process baseline's inspected topology path remains **61,712 bytes**
+(7440 + 35072 + 8320 + 4240 + 6464 + 128 + 48), the largest reviewed aggregate,
+leaving 3824 below the 65,536-byte coordinator mapping. Linked memory builtins
+were rechecked as stackless leaves. The process transition instead uses its
+separate fixed 2048-byte exception frame, without calling Rust there, and
+unexpected nested exceptions use the stack-independent fatal path.
+**This emitted candidate passes the static stack gate.** A final lint-clean
+rebuild must preserve these prologues/call paths or undergo another inspection;
+this is neither a runtime watermark measurement nor approval of future code.
+
+## First actual trace review
+
+Independently inspected the raw serial and complete trace grammar in
+`docs/evidence/process-first-qemu` for 64MiB/one CPU, 128MiB/one CPU and
+128MiB/two CPUs. All guests exited successfully and ran the existing 41-case
+baseline. Each serial stream contains 66 runs, 488 dispatched calls, 34 normal
+exits, 26 contained faults, four call-limit stops and two deadline stops;
+the additive PREPARE checks restore the same 2988-frame baseline. Exact output
+bytes and bad-pointer/handle/resource outcomes are part of the strict parser.
+
+Each trace contains 516 EL0 entries and 516 lower-EL exceptions: 488 dispatch
+SVCs, two deliberately invalid-immediate SVCs, fourteen data aborts, four
+instruction aborts, six undefined/system-access exceptions and two timer IRQs.
+The preflight has eight EL1 IRQs and the later baseline sixteen; only the two
+loop cases have EL0 timer IRQs, each acknowledged and EOIed as ID30. The two-CPU
+trace adds exactly 132 PSCI transactions and no CPU1 execution. Only the final
+EL1 exit uses semihosting. Setup/teardown, vector addresses, SVC successor PCs,
+terminal no-resume behavior and complete line inventory match the reviewed
+grammar. The first aggregate results remain failures because of these two
+overly narrow test expectations, investigated before any acceptance change:
+
+- The two BR-to-NX fixtures capture BTYPE01, adding `0x400` to saved PSTATE.
+  [Arm's BR specification](https://documentation-service.arm.com/static/68da52dfbd7cab51328c0622)
+  defines that update for an unguarded source page. Approve exact saved base
+  `0x00400740` for rwexecute/stackexecute only, and `0x00400340` elsewhere,
+  allowing NZCV in both. Do not mask arbitrary BTYPE values or other fields.
+- The pinned emulator reports DAIF ESR `0x620793e4`, whereas instruction-field
+  packing gives architectural `0x620cd3e4`. Independently fetched the exact
+  [QEMU v7.2.22 DAIF helper](https://raw.githubusercontent.com/qemu/qemu/v7.2.22/target/arm/helper-a64.c)
+  (lines 69–84) and its
+  [syndrome constructor](https://raw.githubusercontent.com/qemu/qemu/v7.2.22/target/arm/syndrome.h)
+  (155–161). The helper supplies low three bits of operation `0x1e` as op1 and
+  high three bits as op2, reversing the instruction fields. The constructor
+  therefore produces the observed value exactly. Approve only that literal for
+  this pinned QEMU profile; preserve the architectural value and discrepancy
+  in the contract. CNTP's architectural ESR matches without exception.
+
+**Actual trace grammar is approved after these exact corrections and mutation
+coverage; the deliberate parser-review gate may be opened.** The architecture
+rules are not weakened, and no core/emulator code was changed to accommodate
+the observations. Fresh gate results and the full regression suite are separate.
+
+DIT evidence has a specific limitation. All lower-EL target PSTATE trace words
+are `0x4003c5`, even following the fixture's DIT1 writes. This is not merely
+omitted logging: pinned
+[QEMU exception entry](https://github.com/qemu/qemu/blob/v7.2.22/target/arm/helper.c#L10211)
+initializes a new mode, carries PAN and selects TCO/SSBS, but does not carry DIT
+(lines 10359–10391); it then logs the full PSTATE read at 10398.
+[PSTATE helpers](https://github.com/qemu/qemu/blob/v7.2.22/target/arm/cpu.h#L1509)
+read the stored field and replace it on write. The observed fixture verifies
+actual user DIT/SSBS writes and sanitized zero on resume, plus kernel zero
+readback. It does **not** dynamically prove recovery from architecturally
+retained DIT1; the explicit save/restore remains required by Arm semantics.
+
+Two fixture-description inaccuracies are corrected without changing acceptance:
+the deliberate-fault fallback exits 205 (a required nonzero failure), not 255.
+The post-64th SVC instruction is RET into the checked helper, with eventual
+exit202 if execution continued; it is not an immediate sentinel store. The host
+already forbids every ERET after the terminal 64th result and any 65th SVC, so
+neither fallback is accepted as a substitute for correct termination.

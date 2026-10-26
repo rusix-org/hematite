@@ -13,6 +13,8 @@ global_asm!(include_str!("boot-aarch64.S"), rust_entry = sym super::boot_main,
 // assembly. Tables are mutable hardware storage; no Rust references escape.
 // Address-only linker markers are zero-sized, not immutable byte objects.
 unsafe extern "C" {
+    #[cfg(feature = "process-tests")]
+    static arm_vectors: [u8; 0];
     static mut arm_root: [u64; 512];
     static mut arm_secondary_root: [u64; 512];
     static mut arm_device_l2: [u64; 512];
@@ -63,7 +65,9 @@ pub(super) const BANNER: &str = "hematite: ARM64 Rust kernel entered at EL1\n";
 
 impl Platform for BootPlatform {
     fn expected_cpu_count(&self) -> usize {
-        if cfg!(feature = "space-tests") && !cfg!(feature = "secondary-tests") {
+        if (cfg!(feature = "space-tests") || cfg!(feature = "process-tests"))
+            && !cfg!(feature = "secondary-tests")
+        {
             self.topology.as_ref().map_or(0, |t| t.affinities().len())
         } else if cfg!(feature = "secondary-tests") {
             2
@@ -927,5 +931,67 @@ pub(super) fn space_tests(platform: &mut BootPlatform) -> bool {
         topology.affinities().len(),
         core::ptr::addr_of!(__text_start) as u64,
         core::ptr::addr_of!(__bss_start) as u64,
+    )
+}
+
+#[cfg(feature = "process-tests")]
+#[cfg_attr(
+    any(
+        feature = "secondary-tests",
+        feature = "nested-fault-test",
+        feature = "unhandled-fault-test",
+        feature = "thread-overflow-test",
+        feature = "preemption-overflow-test",
+        feature = "wait-all-blocked-test"
+    ),
+    allow(dead_code)
+)]
+pub(super) fn process_tests(platform: &mut BootPlatform) -> bool {
+    struct Output;
+    impl core::fmt::Write for Output {
+        fn write_str(&mut self, text: &str) -> core::fmt::Result {
+            for byte in text.bytes() {
+                if byte == b'\n' {
+                    serial_byte(b'\r');
+                }
+                serial_byte(byte);
+            }
+            Ok(())
+        }
+    }
+    let checks = super::timer::checks();
+    let bits = u8::from(checks.delivery)
+        | (u8::from(checks.context) << 1)
+        | (u8::from(checks.quiescent) << 2)
+        | (u8::from(checks.timeout) << 3);
+    let _ = core::fmt::write(
+        &mut Output,
+        format_args!("HMPROC PREFLIGHT checks={bits} irqs=8\n"),
+    );
+    if bits != 15 {
+        return false;
+    }
+    let (Some(pool), Some(topology)) = (platform.pool.as_ref(), platform.topology.as_ref()) else {
+        return false;
+    };
+    // SAFETY: The private initialized BootPlatform proved actual boot roots,
+    // frame exclusions and topology; timer preflight above proved delivery and
+    // quiescence. No peers or DMA have started; all core mappings remain owned.
+    let Ok(factory) = (unsafe { super::user_space::Factory::from_boot(pool, topology) }) else {
+        return false;
+    };
+    // SAFETY: Same verified BootPlatform authority and completed preflight;
+    // the permanent executor latch admits only this private process namespace.
+    let Ok(mut executor) = (unsafe { super::process::Executor::from_boot(topology) }) else {
+        return false;
+    };
+    super::process_checks::run(
+        pool,
+        &factory,
+        &mut executor,
+        topology.affinities().len(),
+        core::ptr::addr_of!(arm_root) as u64,
+        core::ptr::addr_of!(arm_vectors) as u64,
+        &mut Output,
     )
 }

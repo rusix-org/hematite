@@ -84,6 +84,8 @@ pub struct Factory<'pool> {
     _local: PhantomData<*mut ()>,
 }
 pub struct Space<'pool> {
+    pool: &'pool Pool,
+    startup: bool,
     tables: [Option<Frame<'pool>>; TABLES],
     pages: [Option<Frame<'pool>>; 512],
     permissions: [Option<Permissions>; 512],
@@ -116,6 +118,8 @@ impl<'pool> Factory<'pool> {
     pub fn load(&self, image: &Image<'_>, frame_budget: usize) -> Result<Space<'pool>, Error> {
         context()?;
         let mut space = Space {
+            pool: self.pool,
+            startup: false,
             tables: [const { None }; TABLES],
             pages: [const { None }; 512],
             permissions: [None; 512],
@@ -170,6 +174,77 @@ impl<'pool> Factory<'pool> {
 }
 
 impl Space<'_> {
+    pub(super) fn cpus(&self) -> usize {
+        self.cpus
+    }
+    pub(super) fn install_startup(&mut self, bytes: &[u8; 64], budget: usize) -> Result<(), Error> {
+        context()?;
+        if !self.audit()
+            || self.startup
+            || self.pages[256].is_some()
+            || self.word(11, 256) != Some(0)
+        {
+            return Err(Error::Corrupt);
+        }
+        if budget == 0 {
+            return Err(Error::Budget);
+        }
+        let mut page = self.pool.allocate().map_err(|_| Error::Exhausted)?;
+        let pa = page.physical_address();
+        if ram_index(pa).is_none_or(|i| boot_ram(i) != pa | RW) {
+            return Err(Error::Corrupt);
+        }
+        page.bytes_mut()[..64].copy_from_slice(bytes);
+        let Some(table) = self.tables[11].as_mut() else {
+            return Err(Error::Corrupt);
+        };
+        table.bytes_mut()[256 * 8..257 * 8]
+            .copy_from_slice(&(pa | attributes(Permissions::ReadOnly)).to_le_bytes());
+        self.pages[256] = Some(page);
+        self.permissions[256] = Some(Permissions::ReadOnly);
+        self.startup = true;
+        self.count += 1;
+        Ok(())
+    }
+    pub(super) fn prepare_instructions(&self) -> Result<(), Error> {
+        context()?;
+        let ctr: u64;
+        // SAFETY: EL1 read-only cache geometry observation.
+        unsafe {
+            asm!("mrs {}, ctr_el0",out(reg) ctr,options(nomem,nostack,preserves_flags));
+        }
+        let line = 4u64 << ((ctr >> 16) & 15);
+        if line > 4096 || !self.startup || !self.audit() {
+            return Err(Error::Corrupt);
+        }
+        for (frame, permission) in self.pages.iter().zip(self.permissions.iter()) {
+            if *permission == Some(Permissions::ReadExecute) {
+                let Some(frame) = frame else {
+                    return Err(Error::Corrupt);
+                };
+                let start = frame.physical_address();
+                for offset in (0..4096).step_by(line as usize) {
+                    // SAFETY: Retained executable Frame has an aligned accessible
+                    // boot identity alias; no user executes and peer is OFF.
+                    unsafe {
+                        asm!("dc cvau, {}",in(reg) start+offset,options(nostack,preserves_flags));
+                    }
+                }
+            }
+        }
+        // SAFETY: CPU0-only instruction visibility after all cleans; full local
+        // I-cache invalidation covers future EL0 virtual instruction aliases.
+        unsafe {
+            asm!(
+                "dsb sy",
+                "ic iallu",
+                "dsb sy",
+                "isb",
+                options(nostack, preserves_flags)
+            );
+        }
+        Ok(())
+    }
     pub fn entry(&self) -> u64 {
         self.entry
     }
@@ -254,8 +329,9 @@ impl Space<'_> {
         if context().is_err() {
             return false;
         }
-        if self.count != TABLES + self.pages.iter().filter(|p| p.is_some()).count()
-            || self.count > 284
+        if (self.startup && self.pages[256].is_none())
+            || self.count != TABLES + self.pages.iter().filter(|p| p.is_some()).count()
+            || self.count > if self.startup { 285 } else { 284 }
         {
             return false;
         }
@@ -296,7 +372,11 @@ impl Space<'_> {
             }
             let expected = match (&self.pages[i], self.permissions[i]) {
                 (None, None) => 0,
-                (Some(frame), Some(p)) if i < 256 || (i >= 496 && p == Permissions::ReadWrite) => {
+                (Some(frame), Some(p))
+                    if i < 256
+                        || (i == 256 && self.startup && p == Permissions::ReadOnly)
+                        || (i >= 496 && p == Permissions::ReadWrite) =>
+                {
                     let pa = frame.physical_address();
                     if ram_index(pa).is_none_or(|j| boot_ram(j) != pa | RW) {
                         return false;
@@ -460,7 +540,7 @@ fn controls() -> [u64; 10] {
     }
     [root, ttbr1, tcr, mair, sctlr, vbar, sp0, daif, pan, par]
 }
-fn context() -> Result<(), Error> {
+pub(super) fn context() -> Result<(), Error> {
     if super::cpu_local::current_id() != Some(0) {
         return Err(Error::Context);
     }
