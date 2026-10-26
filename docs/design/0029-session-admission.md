@@ -1,7 +1,9 @@
 # 0029 supplement: owned Session admission
 
-Status: **draft, unapproved**. This proposes the next safe policy and core
-integration boundary; it does not amend the frozen codec or authorize code.
+Status: **safe policy API approved for implementation; core integration remains
+draft and unapproved**. The scoped decision is recorded in
+[review 0029](../reviews/0029-native-task-creation.md). It does not amend the
+frozen codec or authorize Process/Group changes.
 It complements [task creation](0029-native-task-creation.md). Existing WRITE,
 EXIT, startup bytes, console issuer and legacy dispatch remain compatible.
 
@@ -31,8 +33,7 @@ nonce tokens that could be applied to another Session or another Issuer.
 
 Names below are proposed exact interfaces in `hm_kernel::native`; the standalone
 `task_wire` codec remains unchanged. `TaskOperation` is a copied enum containing
-Spawn, Wait and Cancel. Existing `Response` gains the reviewed task statuses only
-when this policy stage is approved; `Stop` and legacy meanings are unchanged.
+Spawn, Wait and Cancel, deriving Clone, Copy, Debug, Eq and PartialEq. Existing `Status` gains Denied = 8, Resources = 9 and Pending = 10; `Stop` and legacy meanings are unchanged.
 
 ```rust
 pub enum Admission {
@@ -135,3 +136,8 @@ private construction/Clone/Copy fails to compile. Core tests must prove original
 Session continuity through child allocation failure and parent teardown, and
 actual EL0 WAIT parking/wake with no second attempt. This supplement alone is
 not approval of the Group transition machine or hardware protocol.
+
+The safe implementation preserves the existing Session fields and their order.
+The owned guard types have no Clone/Copy or public construction. Legacy dispatch
+and the new entry share private attempt/finalization helpers; only the new entry
+recognizes task operations. Core Process storage is unchanged by this stage.

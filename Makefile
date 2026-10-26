@@ -39,6 +39,7 @@ test: image
 		python3 tools/test_test_native.py; \
 		python3 tools/test_test_startup_input.py; \
 		python3 tools/test_test_task_wire.py; \
+		python3 tools/test_test_task_admission.py; \
 		python3 tools/test_test_process_budget.py; \
 		python3 tools/test_test_process.py; \
 		python3 tools/test_test_initramfs.py; \
@@ -86,6 +87,9 @@ test: image
 		python3 tools/check_task_wire_types.py \
 			--library target/$(ARCH)/boot-test/$(TARGET)/release/libhm_kernel.rlib \
 			--target $(TARGET) --output "$$evidence_dir/task-wire-types"; \
+		python3 tools/check_task_admission_types.py \
+			--library target/$(ARCH)/boot-test/$(TARGET)/release/libhm_kernel.rlib \
+			--target $(TARGET) --output "$$evidence_dir/task-admission-types"; \
 		python3 tools/check_process_budget_types.py \
 			--library target/$(ARCH)/boot-test/$(TARGET)/release/libhm_kernel.rlib \
 			--target $(TARGET) --output "$$evidence_dir/process-budget-types"; \
@@ -109,6 +113,8 @@ test: image
 			python3 tools/check_startup_input.py --output "$$evidence_dir/startup-input-host"; \
 			cargo clippy -p hm-kernel --test task_wire --locked --offline --target x86_64-unknown-linux-gnu --target-dir target/host-task-wire -- -D warnings; \
 			python3 tools/check_task_wire.py --output "$$evidence_dir/task-wire-host"; \
+			cargo clippy -p hm-kernel --test task_admission --locked --offline --target x86_64-unknown-linux-gnu --target-dir target/host-task-admission -- -D warnings; \
+			python3 tools/check_task_admission.py --output "$$evidence_dir/task-admission-host"; \
 			cargo clippy -p hm-kernel --test process_budget --locked --offline --target x86_64-unknown-linux-gnu --target-dir target/host-process-budget -- -D warnings; \
 			python3 tools/check_process_budget.py --output "$$evidence_dir/process-budget-host"; \
 			python3 tools/build_apps.py --output "$$evidence_dir/apps-fixtures"; \

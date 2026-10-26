@@ -74,7 +74,8 @@ def main():
     write('command.json', command)
     sources = ('rust-toolchain.toml', 'Cargo.lock', 'Cargo.toml', 'crates/hm-kernel/Cargo.toml',
                'crates/hm-kernel/src/lib.rs', 'crates/hm-kernel/src/native.rs',
-               'crates/hm-kernel/src/native_tests.rs', 'tools/check_native.py')
+               'crates/hm-kernel/src/native_tests.rs', 'crates/hm-kernel/src/task_wire.rs',
+               'tools/check_native.py')
     write('input.json', {'cwd': str(root), 'expected_cases': list(CASES), 'sources': {
         name: hashlib.sha256((root / name).read_bytes()).hexdigest() for name in sources}})
     started = time.monotonic()

@@ -28,6 +28,9 @@ pub enum Status {
     Length = 5,
     Budget = 6,
     Argument = 7,
+    Denied = 8,
+    Resources = 9,
+    Pending = 10,
 }
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub struct Response {
@@ -94,6 +97,71 @@ pub struct Session {
     written: usize,
     stopped: Option<Stop>,
 }
+
+/// Safe policy metadata, not permission to operate on a real task.
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub enum TaskOperation {
+    Spawn,
+    Wait,
+    Cancel,
+}
+
+pub enum Admission {
+    Complete { session: Session, outcome: Outcome },
+    Task(TaskAdmission),
+}
+
+/// Owns the original session while a task request is evaluated. Dropping this
+/// value abandons that session; it cannot restore or resume a process.
+pub struct TaskAdmission {
+    session: Session,
+    request: Request,
+    operation: TaskOperation,
+}
+impl TaskAdmission {
+    pub fn operation(&self) -> TaskOperation {
+        self.operation
+    }
+    pub fn request(&self) -> Request {
+        self.request
+    }
+    pub fn calls(&self) -> usize {
+        self.session.calls()
+    }
+    pub fn written(&self) -> usize {
+        self.session.written()
+    }
+    pub fn reply(self, response: Response) -> (Session, Outcome) {
+        (self.session, Outcome::Reply(response))
+    }
+    pub fn park_wait(self) -> Result<ParkedSession, Self> {
+        if self.operation == TaskOperation::Wait {
+            Ok(ParkedSession {
+                session: self.session,
+            })
+        } else {
+            Err(self)
+        }
+    }
+}
+
+/// Already-accounted WAIT state. Real task identity and wake authority remain
+/// the responsibility of the sealed core; this value retains no user borrow.
+pub struct ParkedSession {
+    session: Session,
+}
+impl ParkedSession {
+    pub fn calls(&self) -> usize {
+        self.session.calls()
+    }
+    pub fn written(&self) -> usize {
+        self.session.written()
+    }
+    pub fn wake(self, response: Response) -> (Session, Outcome) {
+        (self.session, Outcome::Reply(response))
+    }
+}
+
 impl Session {
     pub fn calls(&self) -> usize {
         self.calls
@@ -124,24 +192,74 @@ impl Session {
         bytes
     }
     pub fn dispatch(&mut self, request: Request, host: &mut impl Host) -> Outcome {
-        if let Some(stop) = self.stopped {
+        if let Err(stop) = self.begin_call() {
             return Outcome::Stop(stop);
         }
+        let outcome = self.evaluate(request, host);
+        self.finish_call(outcome)
+    }
+    /// Opt-in policy entry. Legacy dispatch continues to reject task opcodes.
+    /// Task guards own the original counters and grant, not a new allowance.
+    pub fn admit_task(mut self, request: Request, host: &mut impl Host) -> Admission {
+        if let Err(stop) = self.begin_call() {
+            return Admission::Complete {
+                session: self,
+                outcome: Outcome::Stop(stop),
+            };
+        }
+        let operation = if request.version == VERSION {
+            match request.operation {
+                crate::task_wire::SPAWN => Some(TaskOperation::Spawn),
+                crate::task_wire::WAIT => Some(TaskOperation::Wait),
+                crate::task_wire::CANCEL => Some(TaskOperation::Cancel),
+                _ => None,
+            }
+        } else {
+            None
+        };
+        if let Some(operation) = operation {
+            if self.calls == CALL_LIMIT {
+                self.stop_calls();
+                return Admission::Complete {
+                    session: self,
+                    outcome: Outcome::Stop(Stop::CallLimit),
+                };
+            }
+            return Admission::Task(TaskAdmission {
+                session: self,
+                request,
+                operation,
+            });
+        }
+        let outcome = self.evaluate(request, host);
+        let outcome = self.finish_call(outcome);
+        Admission::Complete {
+            session: self,
+            outcome,
+        }
+    }
+    fn stop_calls(&mut self) {
+        self.console = None;
+        self.stopped = Some(Stop::CallLimit);
+    }
+    fn begin_call(&mut self) -> Result<(), Stop> {
+        if let Some(stop) = self.stopped {
+            return Err(stop);
+        }
         if self.calls >= CALL_LIMIT {
-            self.console = None;
-            self.stopped = Some(Stop::CallLimit);
-            return Outcome::Stop(Stop::CallLimit);
+            self.stop_calls();
+            return Err(Stop::CallLimit);
         }
         let Some(calls) = self.calls.checked_add(1) else {
-            self.console = None;
-            self.stopped = Some(Stop::CallLimit);
-            return Outcome::Stop(Stop::CallLimit);
+            self.stop_calls();
+            return Err(Stop::CallLimit);
         };
         self.calls = calls;
-        let outcome = self.evaluate(request, host);
+        Ok(())
+    }
+    fn finish_call(&mut self, outcome: Outcome) -> Outcome {
         if self.calls == CALL_LIMIT && matches!(outcome, Outcome::Reply(_)) {
-            self.console = None;
-            self.stopped = Some(Stop::CallLimit);
+            self.stop_calls();
         }
         outcome
     }
