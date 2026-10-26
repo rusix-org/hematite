@@ -1,0 +1,9 @@
+{
+  "passed": true,
+  "scope": "bootstrap CPU rejection and serial monitor; no Linux ABI claims",
+  "profiles": {
+    "missing-pan": true,
+    "monitor": true
+  },
+  "arch": "aarch64"
+}

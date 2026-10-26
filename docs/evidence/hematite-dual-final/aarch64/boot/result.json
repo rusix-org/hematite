@@ -1,0 +1,37 @@
+{
+  "passed": true,
+  "arch": "aarch64",
+  "expected_exit": 0,
+  "scope": "hematite bootstrap tests; no Linux ABI compatibility claim",
+  "expected_cases": [
+    "write_protect",
+    "nx",
+    "user_execute_protect",
+    "user_access_protect",
+    "wx",
+    "stack_guard",
+    "null_guard",
+    "checked_range",
+    "monitor_bounds"
+  ],
+  "observed_records": [
+    "HMTEST BEGIN 9",
+    "HMTEST PASS write_protect",
+    "HMTEST PASS nx",
+    "HMTEST PASS user_execute_protect",
+    "HMTEST PASS user_access_protect",
+    "HMTEST PASS wx",
+    "HMTEST PASS stack_guard",
+    "HMTEST PASS null_guard",
+    "HMTEST PASS checked_range",
+    "HMTEST PASS monitor_bounds",
+    "HMTEST END 9"
+  ],
+  "returncode": 0,
+  "timed_out": false,
+  "launch_error": null,
+  "errors": [],
+  "started_utc": "2026-10-26T05:47:28.880257+00:00",
+  "elapsed_seconds": 0.06483546702656895,
+  "timeout_seconds": 20
+}

@@ -82,4 +82,5 @@ remains pending (ADR 0002); preliminary naming findings remain in ADR 0003.
   bootstrap and made it the default. Fixed review findings around CurrentEL,
   WXN observations and address-only linker symbols. Final dual-architecture
   suite and interactive ARM monitor passed. Physical ARM and native ARM/KVM
-  performance remain untested; no public remote or release was created.
+  performance remain untested. This implementation session made no publication
+  changes; separate publication authorization/work is recorded in ADR 0007.

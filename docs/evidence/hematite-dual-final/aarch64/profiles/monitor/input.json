@@ -1,0 +1,7 @@
+{
+  "kernel": "/workspace/target/aarch64/monitor/aarch64-unknown-none/release/hematite",
+  "sha256": "a0a7ea968c4fa7bf716bf02d64645cf4f4c60c02d0bb4aee920ba09481f6114d",
+  "accel": "tcg",
+  "cpu": "max",
+  "arch": "aarch64"
+}

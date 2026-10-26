@@ -1,0 +1,38 @@
+hematite: x86_64 Rust kernel entered via PVH
+Hematite bootstrap monitor (local working name)
+Commands: help, status, test. This is not a Linux shell.
+hm> help
+help   - show commands
+status - inspect boot protections
+test   - run bootstrap tests
+hm> status
+write protection: OK
+NX: OK
+user execution protection: OK
+user access protection: OK
+W^X mappings: OK
+stack guard: OK
+null guard: OK
+Bootstrap only: one CPU; no userspace, storage, or networking.
+hm> test
+HMTEST BEGIN 9
+HMTEST PASS write_protect
+HMTEST PASS nx
+HMTEST PASS user_execute_protect
+HMTEST PASS user_access_protect
+HMTEST PASS wx
+HMTEST PASS stack_guard
+HMTEST PASS null_guard
+HMTEST PASS checked_range
+HMTEST PASS monitor_bounds
+HMTEST END 9
+Bootstrap tests passed.
+hm> xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+Rejected: use at most 64 printable ASCII bytes.
+hm> unknown
+Unknown command; type help.
+hm> help
+help   - show commands
+status - inspect boot protections
+test   - run bootstrap tests
+hm> qemu-system-x86_64: terminating on signal 15 from pid 1 (python3)
