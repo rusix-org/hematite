@@ -1,9 +1,30 @@
 # ADR 0001: evaluate upstream before choosing project direction
 
-Status: proposed; baseline build/boot evaluated; Aaron's approval pending.
+Status: accepted — scratch selected by Aaron on 2026-10-25.
 Date: 2026-10-25.
 
-## Recommendation
+## Decision
+
+Aaron's follow-up: "Scratch is the approach, build until we have something we
+can run." Proceed with an original local kernel and runnable bootstrap. This
+supersedes the contribution-first recommendation below; it does not approve
+public release, a license, or claim that scratch development is cheaper.
+
+Concrete design scope: a fixed x86_64 virtual-machine profile and a small
+capability-bearing core, with no loadable modules, PCI/physical-device support,
+graphics stack or general hardware discovery in the bootstrap. Safe policy
+receives a narrow platform interface rather than arbitrary device/register
+access. The research goal is to make that smaller workload-specific trusted
+surface reviewable; its advantage over Asterinas remains unproven. The cost is
+owning every missing Linux ABI, device, scheduler and security implementation.
+Aaron chose that cost after the upstream build/boot baseline.
+
+The later [native-first decision](0005-native-first-design.md) supplies a
+stronger architectural distinction: native capability/resource-lifetime
+contracts take priority, with Linux semantics in a selective adapter. That
+research objective is not strict Linux ABI replacement.
+
+## Original recommendation (not selected)
 
 Prefer contributing workload coverage and ABI fixes to Asterinas, subject to
 the build/boot experiment below. Do not start a permanent fork or a new kernel
@@ -59,9 +80,7 @@ evaluation and the contribution-first recommendation, not production adoption.
 The alternative projects were assessed from documentation only and were not
 built or booted for this comparison.
 
-After the experiment, Aaron chooses contribution, fork or scratch. If scratch
-is chosen, revise this ADR with a concrete design difference and why it cannot
-reasonably be contributed upstream. A possible research question is whether
+Aaron selected scratch after this experiment; see the decision above. A possible research question is whether
 a substantially smaller, workload-specific trusted core can be audited more
 effectively; this has **not** been demonstrated and is not the current
 recommendation. Any route also needs an explicit target workload, versioned

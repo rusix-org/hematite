@@ -1,28 +1,33 @@
 # hematite
 
-A from-scratch kernel written in Rust that runs unmodified Linux userspace
-binaries for a declared target workload. This file is the founding plan:
-objective, requirements, phases, and working rules. It is the only file at
-project start; agents create everything else from it.
+A from-scratch Rust-native kernel exploring safer, simpler OS designs, with
+best-effort Linux userspace compatibility where useful. This file holds the
+objective, requirements, phases, and working rules. The original strict Linux
+ABI objective was revised by Aaron on 2026-10-25; see ADR 0005.
 
 The name is a placeholder until a conflict check passes (Phase 0).
 
 ## Objective
 
-Build a memory-safe, Rust-native kernel that implements the **Linux userspace
-ABI** (syscalls, ELF loading, `/proc`/`/sys`/`/dev` semantics needed by real
-programs, on-disk formats) for a narrow, declared target, then widen that
-target over time.
+Build a memory-safe Rust-native operating system for a narrow, declared target
+workload. Explore better resource, concurrency, isolation and I/O interfaces
+without inheriting Linux's internal design or every historical ABI constraint.
+"Better" requires explicit hypotheses and measurements, not a blanket claim.
 
-- Compatibility target: the observable userspace behavior of a pinned Linux
-  LTS release. Linux is a **behavioral reference and test oracle**, not a code
-  source. Internal Linux APIs, structures, and module ABI are not goals.
+- Native interfaces are the primary design surface. Define versioned, explicit
+  wire layouts at userspace boundaries; do not expose the compiler's Rust ABI.
+- Linux userspace compatibility is a useful secondary surface, implemented
+  selectively through an adapter. Use a pinned Linux LTS as a behavioral
+  reference for supported interfaces, not as a universal conformance mandate.
+  Document deliberate differences and missing features. Do not label a native
+  or ported program as an unmodified Linux workload.
 - Initial deployment target: an **x86_64 virtio guest** (QEMU/KVM microVM
   class): virtio-blk, virtio-net, virtio-console/serial, no legacy hardware.
   arm64 virtio guest is the second target. Nothing else until those work.
-- "Useful" means: a real server workload (e.g. nginx, Redis, or a Postgres
-  client/server) runs unmodified on the target, with every userspace-reachable
-  path in memory-safe Rust and `unsafe` confined to an audited core.
+- "Useful" means: a declared real service workload runs end to end, with every
+  userspace-reachable path in memory-safe Rust and `unsafe` confined to an
+  audited core. State whether each workload is native, ported, or an unmodified
+  Linux binary. Demonstrate the chosen design improvements with evidence.
 - Not goals: running every Linux binary, supporting physical hardware broadly,
   loading Linux kernel modules, or matching Linux internals or performance in
   every case. Gaps are documented, not hidden.
@@ -32,8 +37,14 @@ discipline carries over; its code and Linux-fork architecture do not.
 
 ## Phase 0 gate: decide before building
 
-No kernel code until these are written up as decision records and Aaron has
-approved them:
+The founding approval gate covered the decisions below. Aaron subsequently
+selected scratch and explicitly authorized a runnable local kernel, then
+approved the native-first objective (ADRs 0001 and 0005). This authorizes the
+local bootstrap; unresolved licensing and public naming remain restrictions
+on distribution/public use, not a reason to stop the authorized local work.
+Core mechanisms still require written design and independent review.
+
+Decision records:
 
 1. **Evaluate existing projects, especially Asterinas.** Asterinas is a
    Rust, Linux-ABI-compatible "framekernel" aimed at VMs, which is close to
@@ -103,13 +114,17 @@ approved them:
 - Userspace compatibility suites, added as phases allow:
   gVisor's syscall tests, LTP, musl `libc-test`, busybox's test suite, and
   selected kselftests that exercise userspace ABI.
-- **Differential testing:** every compatibility test also runs on the pinned
-  Linux LTS kernel in the same VM configuration. Linux's result is the
-  expected result; deviations are bugs or documented, approved differences.
-- Maintain a generated **compatibility matrix**: each syscall (and major
-  `/proc`, ioctl, and socket option surface) as unimplemented, partial, or
-  complete, with the tests that cover it. Progress is measured by this matrix
-  and test pass rates, not lines of code.
+- **Differential testing:** Linux compatibility tests also run on a pinned
+  Linux LTS in the same VM configuration. Classify results as matching,
+  unsupported, intentionally different (with a decision record), or buggy.
+  Native interface tests establish their own explicit contracts; Linux does
+  not define those contracts.
+- Maintain a generated **compatibility matrix** as compatibility interfaces
+  are introduced: syscalls and major `/proc`, ioctl and socket-option surfaces,
+  with supported scope and covering tests. Track native progress separately
+  through invariant/lifetime tests, resource bounds, isolation behavior,
+  workload success and performance measurements. Neither line count nor Linux
+  syscall coverage alone establishes success.
 - Fuzz syscalls (start with a simple argument fuzzer; evaluate syzkaller
   descriptions) once Phase 3 exists. Any kernel crash is a release blocker.
 - Record exact commands, toolchain, commit, and raw logs for verification
@@ -135,21 +150,25 @@ spinlocks/mutexes/wait queues, SMP bring-up.
 allocator and scheduler tests including exhaustion and concurrency cases.
 
 ### Phase 2: first userspace
-User address spaces, ELF loader (static first), syscall entry/exit, safe user
-memory copy, initramfs (cpio newc) into an in-memory filesystem, minimal
-syscalls (`write`, `read`, `exit_group`, `brk`, `mmap`/`munmap`, `arch_prctl`,
-`set_tid_address`, `uname`, ...).
-**Exit:** unmodified static musl binaries run, starting with hello-world and
-then a static busybox running a scripted shell session. Matching tests pass
-differentially against Linux.
+User address spaces, static ELF loader, protected entry/return, safe user-memory
+copy, initramfs, and a minimal versioned native ABI for process startup, owned
+handles, console I/O and exit. Add a small Linux adapter for unmodified static
+musl hello-world when it fits the design; do not embed Linux semantics in core
+ownership APIs.
+**Exit:** an isolated native program runs; bad pointers/handles and process
+termination cannot violate ownership. Resource reclamation tests pass. Report
+Linux hello-world compatibility separately, including any remaining gaps.
 
-### Phase 3: processes, VFS, and the core ABI
-`clone`/`fork`/`execve`/`wait4`, signals, pipes, futexes, threads, `poll`/
-`epoll`, timers and clocks, VFS with tmpfs, devtmpfs basics, minimal procfs and
-sysfs, TTY/console semantics, credentials. Dynamic linking (musl, then glibc).
-**Exit:** interactive busybox and scripted workloads; agreed subsets of musl
-libc-test, gVisor syscall tests, and LTP pass; syscall fuzzer runs crash-free
-for an agreed duration.
+### Phase 3: processes, services, and selected compatibility
+Capability-scoped spawn, resource budgets, threads, wait/cancellation semantics,
+service communication, clocks and a VFS with explicit ownership. Give each
+experiment a written hypothesis and exit tests. Add Linux process, pipe, futex,
+TTY, procfs and linking features as selected workloads need them; `fork`, global
+namespaces and POSIX signals are not mandatory native mechanisms.
+**Exit:** multi-process native workloads under resource exhaustion/cancellation
+and isolation tests; chosen Linux tests have documented results, and syscall
+fuzzing runs crash-free for an agreed duration. Unsupported compatibility is
+visible and does not silently weaken native contracts.
 
 ### Phase 4: devices and storage
 PCI and virtio (virtio-pci and/or virtio-mmio), virtio-blk, block layer, page
@@ -161,13 +180,16 @@ after workloads; filesystem LTP subsets pass differentially.
 ### Phase 5: networking
 virtio-net, TCP/IP (own or a vetted crate), sockets API including
 `AF_INET`/`AF_INET6`/`AF_UNIX`, socket options used by target workloads.
-**Exit:** an unmodified target server workload serves traffic from the host;
-network LTP and gVisor socket subsets pass.
+**Exit:** the declared native or compatibility service serves host traffic;
+resource-lifetime and cancellation stress tests pass. Run differential network
+tests for the Linux socket behavior actually claimed.
 
 ### Phase 6: useful system
-Run the declared target workloads end to end. Performance comparison with the
-pinned Linux kernel on the same VM (throughput, latency, memory), with a
-recorded budget. `unsafe` audit of `hm-core`. Published compatibility matrix
+Run the declared target workloads end to end. Compare equivalent workloads
+against pinned Linux on the same VM (throughput, latency, memory), with a
+recorded budget and explicit native/ported/compatible implementation labels.
+Measure the chosen architecture hypotheses, including failed hypotheses.
+`unsafe` audit of `hm-core`. Published native contracts, compatibility matrix
 and known-gaps list.
 **Exit:** the "useful" definition in Objective is met and independently
 reproducible from a fresh clone.

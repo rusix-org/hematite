@@ -1,16 +1,20 @@
 # ADR 0004: core architecture and boot contract
 
-Status: **Proposed; requires Aaron's approval and independent design review.**
+Status: **Bootstrap implementation authorized by Aaron's 2026-10-25 follow-up;
+later memory/concurrency/syscall mechanisms remain proposed.**
 Date: 2026-10-25
 Scope: a from-scratch implementation, conditional on the project-selection ADR.
-No implementation, boot, or soundness claim is made here.
+The local PVH bootstrap is implemented; later mechanisms below are design
+constraints, not claims of implementation. See the bootstrap design and evidence.
 
 ## Context and proposed decision
 
 Use the framekernel boundary required by [AGENTS.md](../../AGENTS.md), with
 an explicit capability model for physical memory, address spaces, devices,
 and CPU execution. Keep Linux ABI policy outside the trusted core. This
-document proposes mechanisms; it does not authorize kernel implementation.
+document proposes mechanisms. Aaron subsequently selected scratch and explicitly
+authorized building a runnable kernel; the bounded first implementation is
+[bootstrap design 0001](../design/0001-bootstrap.md).
 
 ### Crates and trust boundary
 
@@ -107,6 +111,11 @@ guard non-transferable is only one part of that contract.
 
 ### Syscall boundary
 
+The [native-first decision](0005-native-first-design.md) now governs the native
+ABI. The Linux-specific dispatch details below apply only to a future Linux
+adapter, not to every native operation. Neither userspace ABI exists yet.
+
+
 Core entry assembly switches to a guarded kernel stack before handling user
 state, saves registers and masks unsafe flag states. A safe dispatcher accepts
 six integer arguments and the syscall number; x86_64 Linux is the only initial
@@ -143,7 +152,8 @@ Limine would simplify the initial long-mode transition, but introduces a
 bootloader/image path to reconcile with direct microVM loading. Multiboot2
 likewise needs a compatible loader. PVH costs extra entry/boot-information
 review; its direct-loader fit is the reason for the proposal, pending a pinned
-QEMU feasibility check. No loader code has been written or executed.
+QEMU feasibility check. The original PVH bootstrap now boots in the measured QEMU test profile;
+full device/memory-map discovery remains later work.
 
 ## Verification and remaining decisions
 
