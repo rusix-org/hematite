@@ -6,7 +6,7 @@ from strict Linux parity to native OS design with selective compatibility.
 [ADR 0005](docs/adr/0005-native-first-design.md) records the native direction;
 [ADR 0006](docs/adr/0006-arm64-priority.md) makes ARM64 primary now.
 
-## Implemented and verified locally
+## Implemented and verified locally and in CI
 
 - Stable Rust 1.99.0 workspace, no external kernel crates, locked dependencies.
 - Original ARM64 direct-ELF entry at EL1, 4 KiB translation tables,
@@ -22,7 +22,7 @@ from strict Linux parity to native OS design with selective compatibility.
   22 host harness tests, 26 guest tests per architecture, ARM no-PAN rejection,
   x86 missing-NX/SMEP/SMAP rejection, and live monitor recovery tests on both.
   ARM discovery matches both 128 MiB and 64 MiB guest configurations.
-  All passed locally. `make test` tests ARM64 alone by default.
+  All passed locally and in CI at `8014e2f`. `make test` tests ARM64 alone by default.
 - Pinned Rust base and Debian package snapshot, QEMU 7.2.22. One CPU/128 MiB
   guest by default; ARM discovery also tests 64 MiB; no attached disks or networking. Both targets use TCG.
 
@@ -164,9 +164,10 @@ probes per target verify the safe-client type boundary. This is metadata only: o
 labels are trusted inputs and completion is a simulated backend acknowledgment.
 See [model verification](docs/evidence/capability-model.md).
 
-Published bootstrap CI passed at `b1b824c` ([run 40276324135](https://github.com/rusix-org/hematite/actions/runs/40276324135)).
-The capability, memory, heap, exception, mapping and timer changes passed locally; remote CI has not
-run these changes. Aaron authorized public repository creation
+Published kernel CI passed at `8014e2f` ([run 40320742456](https://github.com/rusix-org/hematite/actions/runs/40320742456)),
+including capability, memory, heap, exception, mapping and timer changes.
+The exact commit/job result and raw logs are archived in
+[timer verification](docs/evidence/arm-timer.md). Aaron authorized public repository creation
 and push in [ADR 0007](docs/adr/0007-public-repository.md). License selection
 remains pending (ADR 0002); preliminary naming findings remain in ADR 0003.
 
@@ -178,7 +179,7 @@ remains pending (ADR 0002); preliminary naming findings remain in ADR 0003.
    implement measured small-object allocation before service workloads.
 2. Define the native userspace wire contract from those experiments; select
    compatibility workloads and pin a Linux oracle when the adapter exists.
-3. Resolve the license selection; run remote CI for the new changes when published.
+3. Resolve the license selection; keep remote CI current as further milestones are published.
 
 ## Session ledger
 
@@ -249,3 +250,6 @@ remains pending (ADR 0002); preliminary naming findings remain in ADR 0003.
   DTB. Review prompted explicit Group0 configuration. Final dual suite passes
   26 guest and 22 host cases; independent trace checks pass exact 16/32 IRQ
   transactions. No preemption, SMP or IRQ-enabled Rust execution is claimed.
+- 2026-10-26: Published through timer commit `8014e2f` under ADR 0007 authorization.
+  GitHub run `40320742456` completed successfully, including environment build,
+  all tests and evidence upload. Archived exact run/job metadata and raw logs.

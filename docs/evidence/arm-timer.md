@@ -57,4 +57,14 @@ Rust runs masked; no handler calls Rust or touches allocator/mapping state.
 This is not preemption, general IRQ dispatch, SMP, native hardware validation,
 timer precision or latency evidence. See the independent
 [design/source review](../reviews/0009-arm-timer-irq.md). AI review and QEMU
-tests are not a full soundness audit. Remote CI is recorded separately once run.
+tests are not a full soundness audit.
+
+## Published CI
+
+Published source commit `8014e2f9dd3f6b63ac436fc30b2323771af3da45` passed
+[GitHub run 40320742456](https://github.com/rusix-org/hematite/actions/runs/40320742456).
+The environment build, full `make test-all` step and evidence upload each report
+success. [Exact run/job metadata](timer-ci-result.json), [raw CI log](timer-ci.log)
+and [watch log](timer-ci-watch.log) are preserved. This covers the previously
+local capability, memory, heap, exception and mapping milestones as well as
+timer delivery. It does not satisfy the remaining Phase 1 scheduling/SMP gate.
