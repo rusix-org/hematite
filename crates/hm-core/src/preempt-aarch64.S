@@ -14,7 +14,8 @@
     mrs x10, nzcv
     str x10, [sp, #32]
     tbnz x9, #7, arm_exception_fatal
-    ldr x11, =arm_preempt_boundary_flags
+    mrs x11, tpidr_el1
+    add x11, x11, #{cpu_boundary_flags}
     ldr x12, [x11]
     tst x12, #\mask
     b.ne .Lboundary_done\@
@@ -47,10 +48,12 @@ arm_preempt_setup:
     mrs x0, daif
     cmp x0, #0x3c0
     b.ne .Lsetup_fail
-    ldr x0, =arm_preempt_state
+    mrs x0, tpidr_el1
+    add x0, x0, #{cpu_preempt}
     ldr x1, [x0, #16]
     cbnz x1, .Lsetup_fail
-    ldr x0, =arm_timer_state
+    mrs x0, tpidr_el1
+    add x0, x0, #{cpu_timer}
     ldr x1, [x0, #16]
     cbnz x1, .Lsetup_fail
     ldr x0, =0x08000000
@@ -111,11 +114,13 @@ arm_preempt_setup:
     str w2, [x1]
     str w2, [x0]
     dsb sy
-    ldr x0, =arm_preempt_state
+    mrs x0, tpidr_el1
+    add x0, x0, #{cpu_preempt}
     str xzr, [x0]
     str xzr, [x0, #8]
     str x6, [x0, #24]
-    ldr x3, =arm_preempt_boundary_flags
+    mrs x3, tpidr_el1
+    add x3, x3, #{cpu_boundary_flags}
     str xzr, [x3]
     str x2, [x0, #16]
     mov x0, x6
@@ -157,7 +162,8 @@ arm_preempt_stop:
     cbnz w2, arm_exception_fatal
     ldr w2, [x0, #0x100]
     tbnz w2, #30, arm_exception_fatal
-    ldr x0, =arm_preempt_state
+    mrs x0, tpidr_el1
+    add x0, x0, #{cpu_preempt}
     str xzr, [x0, #16]
     str xzr, [x0]
     str xzr, [x0, #8]
@@ -185,7 +191,8 @@ arm_preempt_dispatch:
     str x3, [x0, #240]
     mrs x3, fpsr
     str x3, [x0, #248]
-    ldr x3, =arm_preempt_state
+    mrs x3, tpidr_el1
+    add x3, x3, #{cpu_preempt}
     str x0, [x3]
     str x1, [x3, #8]
     mov x4, #1
@@ -262,7 +269,8 @@ arm_preempt_park:
     // an IRQ handler against a BLOCKED task. No unmask occurs in this window.
     mrs x2, daif
     tbz x2, #7, arm_exception_fatal
-    ldr x2, =arm_preempt_boundary_flags
+    mrs x2, tpidr_el1
+    add x2, x2, #{cpu_boundary_flags}
     ldr x3, [x2]
     tbnz x3, #4, .Lpark_expiry_done
     orr x3, x3, #16
@@ -271,7 +279,8 @@ arm_preempt_park:
     isb
     mrs x2, cntp_ctl_el0
     tbz x2, #2, arm_exception_fatal
-    ldr x2, =arm_wait_masked_expiries
+    mrs x2, tpidr_el1
+    add x2, x2, #{cpu_wait_expiries}
     ldr x3, [x2]
     adds x4, x3, #1
     csel x3, x3, x4, cs
@@ -369,7 +378,8 @@ arm_preempt_irq:
     and x0, x0, x1
     cmp x0, #0x345
     b.ne arm_exception_fatal
-    ldr x4, =arm_preempt_state
+    mrs x4, tpidr_el1
+    add x4, x4, #{cpu_preempt}
     // Coordinator publishes only a bounded admitted task pointer; safe policy
     // cannot write publication. Pointer+RUNNING validate that authority here.
     ldr x5, [x4, #8]
@@ -390,7 +400,8 @@ arm_preempt_irq:
     msr spsel, #1
     b .Lrestore_image
 .Lreal_preemption:
-    ldr x6, =arm_preempt_irq_count
+    mrs x6, tpidr_el1
+    add x6, x6, #{cpu_irq_count}
     ldr x7, [x6]
     adds x8, x7, #1
     csel x7, x7, x8, cs
@@ -473,23 +484,3 @@ arm_preempt_irq:
     clrex
     eret
     .ltorg
-.section .bss.preempt,"aw",@nobits
-.balign 8
-.global arm_preempt_state
-arm_preempt_state:
-    .skip 32
-
-
-.balign 8
-.global arm_preempt_irq_count
-arm_preempt_irq_count:
-    .skip 8
-
-.balign 8
-arm_preempt_boundary_flags:
-    .skip 8
-
-.balign 8
-.global arm_wait_masked_expiries
-arm_wait_masked_expiries:
-    .skip 8

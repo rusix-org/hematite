@@ -3,7 +3,11 @@ use hm_kernel::{BootChecks, Platform};
 
 // SAFETY: Direct-ELF entry checks EL1/reset state, owns all linker storage,
 // establishes the MMU and stack, then calls the shared Rust entry at its ABI.
-global_asm!(include_str!("boot-aarch64.S"), rust_entry = sym super::boot_main);
+global_asm!(include_str!("boot-aarch64.S"), rust_entry = sym super::boot_main,
+    cpu_affinity_mask = const super::cpu_local::AFFINITY_MASK,
+    cpu_stride = const super::cpu_local::STRIDE,
+    cpu_words = const super::cpu_local::STRIDE / 8,
+    cpu_canary = const super::cpu_local::CANARY);
 
 // SAFETY: These objects have exact sizes/alignment supplied by the linker and
 // assembly. Tables are mutable hardware storage; no Rust references escape.
@@ -84,7 +88,11 @@ impl Platform for BootPlatform {
                 && super::preempt::context_checks(runner)
                 && super::preempt::control_checks()
                 && super::preempt::wait_boundary_check()
+                && super::cpu_local::checks()
         })
+    }
+    fn cpu_local_check(&self) -> Option<bool> {
+        Some(super::cpu_local::checks())
     }
     fn preemption_irq_count(&self) -> Option<u64> {
         Some(super::preempt::irq_count())

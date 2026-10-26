@@ -261,7 +261,8 @@ arm_preempt_context_probe:
     ldr x17, [sp, #1056]
     lsl x17, x17, #8
     add x17, x17, #273
-    ldr x0, =arm_preempt_irq_count
+    mrs x0, tpidr_el1
+    add x0, x0, #{cpu_irq_count}
     ldr x2, [x0]
     add x2, x2, #8
 .Lprobe_poll0:
@@ -501,7 +502,8 @@ arm_preempt_context_probe:
     ldr x17, [sp, #1056]
     lsl x17, x17, #8
     add x17, x17, #273
-    ldr x3, =arm_preempt_irq_count
+    mrs x3, tpidr_el1
+    add x3, x3, #{cpu_irq_count}
     ldr x5, [x3]
     add x5, x5, #8
 .Lprobe_poll1:

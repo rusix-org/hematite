@@ -1,0 +1,8 @@
+{
+  "kernel": "/workspace/target/aarch64/nested-test/aarch64-unknown-none/release/hematite",
+  "sha256": "94d83089a4e01c29d78c122967f1b30a51cf66c25157f5c2c3c4f5ccaf25c2be",
+  "accel": "tcg",
+  "cpu": "max",
+  "arch": "aarch64",
+  "ram_mb": 128
+}

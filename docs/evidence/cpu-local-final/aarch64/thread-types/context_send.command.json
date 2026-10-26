@@ -1,0 +1,20 @@
+[
+  "rustc",
+  "--edition=2024",
+  "--target",
+  "aarch64-unknown-none",
+  "-C",
+  "panic=abort",
+  "--extern",
+  "hm_kernel=/workspace/target/aarch64/boot-test/aarch64-unknown-none/release/libhm_kernel.rlib",
+  "-L",
+  "dependency=/workspace/target/aarch64/boot-test/aarch64-unknown-none/release/deps",
+  "--crate-type=lib",
+  "--emit=metadata",
+  "--error-format=json",
+  "--extern",
+  "hm_threads=/workspace/target/evidence/20261026T143457-157538842-aarch64/thread-types/libhm_threads.rlib",
+  "/workspace/target/evidence/20261026T143457-157538842-aarch64/thread-types/context_send.rs",
+  "-o",
+  "/workspace/target/evidence/20261026T143457-157538842-aarch64/thread-types/context_send.rmeta"
+]

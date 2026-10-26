@@ -81,6 +81,7 @@ const _: () = {
 
 /// Boot capability; neither transferable across CPUs nor shareable concurrently.
 pub struct Runner {
+    cpu_id: Option<u64>,
     _single_cpu: PhantomData<*mut ()>,
 }
 
@@ -92,6 +93,7 @@ impl Runner {
     // additionally acquires exclusive use before touching any worker storage.
     pub(crate) unsafe fn from_boot() -> Self {
         Self {
+            cpu_id: super::cpu_local::current_id(),
             _single_cpu: PhantomData,
         }
     }
@@ -100,10 +102,16 @@ impl Runner {
         &self,
         jobs: &[ThreadJob],
     ) -> Result<hm_kernel::thread_api::PreemptReport, ThreadError> {
+        if self.cpu_id.is_none() || super::cpu_local::current_id() != self.cpu_id {
+            return Err(ThreadError::Unsupported);
+        }
         super::preempt::run(jobs)
     }
 
     pub fn run(&self, jobs: &[ThreadJob]) -> Result<RunReport, ThreadError> {
+        if self.cpu_id.is_none() || super::cpu_local::current_id() != self.cpu_id {
+            return Err(ThreadError::Unsupported);
+        }
         if jobs.len() > MAX_THREADS {
             return Err(ThreadError::TooMany);
         }
@@ -179,6 +187,16 @@ impl Runner {
 
     pub(super) fn checks(&self) -> hm_kernel::ThreadChecks {
         let before = control_state();
+        // Private invalid capabilities must reject both entry points before
+        // acquiring BUSY; the normal context and nested-run checks follow.
+        let affinity = [Some(1), None].into_iter().all(|cpu_id| {
+            let foreign = Self {
+                cpu_id,
+                _single_cpu: PhantomData,
+            };
+            matches!(foreign.run(&[]), Err(ThreadError::Unsupported))
+                && matches!(foreign.run_preemptive(&[]), Err(ThreadError::Unsupported))
+        });
         let context = self
             .run(&[
                 ThreadJob {
@@ -207,7 +225,7 @@ impl Runner {
             .is_ok_and(|r| r.completed == 1 && r.results[0] == 1);
         hm_kernel::ThreadChecks {
             context: context && before.0 == 0x3c0 && control_state() == before,
-            reentrant,
+            reentrant: reentrant && affinity,
             guards: guards_valid(),
         }
     }

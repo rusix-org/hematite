@@ -9,6 +9,10 @@ arm_start:
     mrs x0, CurrentEL
     cmp x0, #4
     b.ne arm_exception_fail
+    mrs x0, mpidr_el1
+    ldr x1, ={cpu_affinity_mask}
+    tst x0, x1
+    b.ne arm_exception_fail          // Reject peers before any shared stack/BSS write.
     msr spsel, #1
     ldr x0, =__stack_top
     mov sp, x0
@@ -29,6 +33,16 @@ arm_start:
     str xzr, [x0], #8
     b 1b
 2:
+    ldr x0, =arm_cpu_records
+    msr tpidr_el1, x0
+    isb
+    add x0, x0, #{cpu_stride}
+    ldr x1, ={cpu_canary}
+    mov x2, #{cpu_words}
+.Lseed_inactive_cpu:
+    str x1, [x0], #8
+    subs x2, x2, #1
+    b.ne .Lseed_inactive_cpu
     bl arm_uart_init
     mrs x0, id_aa64mmfr0_el1
     ubfx x0, x0, #28, #4            // 4 KiB granule supported (0 or LPA2=1).

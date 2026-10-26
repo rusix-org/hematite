@@ -1,0 +1,32 @@
+{
+  "started_utc": "2026-10-26T14:35:36.880066+00:00",
+  "timeout_seconds": 2,
+  "timed_out": true,
+  "returncode": -9,
+  "launch_error": null,
+  "scope": "retained blocked run; not wakeup or CPU-idle proof",
+  "elapsed_seconds": 2.005466963048093,
+  "checks": {
+    "registered_all_blocked": true,
+    "no_partial_marker": true,
+    "no_completion_or_fault": true,
+    "host_deadline": true,
+    "launched": true,
+    "bounded_logs": true
+  },
+  "artifacts": {
+    "serial.log": {
+      "exists": true,
+      "bytes": 191,
+      "sha256": "2bec73d1101081004caaed1f125adabeddad6340bec168aaa7b6c55068a74088",
+      "within_size_limit": true
+    },
+    "exceptions.log": {
+      "exists": true,
+      "bytes": 291,
+      "sha256": "600326bf36bd332af4f845847a6f8cb4d55125d99f19e5234bdc44e0e0cea617",
+      "within_size_limit": true
+    }
+  },
+  "passed": true
+}

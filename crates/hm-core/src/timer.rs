@@ -4,7 +4,9 @@ use hm_kernel::TimerChecks;
 
 // SAFETY: Design 0009 confines IRQ delivery to an ABI-preserving assembly
 // window; the handler touches only private timer/GIC state and its own stack.
-global_asm!(include_str!("timer-aarch64.S"));
+global_asm!(include_str!("timer-aarch64.S"),
+    cpu_timer = const super::cpu_local::TIMER,
+    cpu_preempt = const super::cpu_local::PREEMPT);
 
 // SAFETY: Fixed no-argument assembly probes preserve AAPCS64, both stacks and
 // DAIF. They access only boot-mapped GIC registers and private image storage.

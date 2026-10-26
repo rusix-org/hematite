@@ -10,11 +10,17 @@ use hm_kernel::wait_api::{Event, WaitError};
 
 // SAFETY: Private assembly saves full interrupted state in task-owned storage,
 // releases the emergency stack, and resumes only live scheduler continuations.
-global_asm!(include_str!("preempt-aarch64.S"), entry = sym entry, delivery = const if cfg!(feature = "preemption-no-timer-test") { 0 } else { 1 }, boundary = const if cfg!(feature = "preemption-boundary-test") { 1 } else { 0 });
+global_asm!(include_str!("preempt-aarch64.S"), entry = sym entry, delivery = const if cfg!(feature = "preemption-no-timer-test") { 0 } else { 1 }, boundary = const if cfg!(feature = "preemption-boundary-test") { 1 } else { 0 },
+    cpu_timer = const super::cpu_local::TIMER,
+    cpu_preempt = const super::cpu_local::PREEMPT,
+    cpu_irq_count = const super::cpu_local::IRQ_COUNT,
+    cpu_boundary_flags = const super::cpu_local::BOUNDARY_FLAGS,
+    cpu_wait_expiries = const super::cpu_local::WAIT_EXPIRIES);
 
 // SAFETY: The diagnostic owns its stack frame, preserves the caller ABI and
 // observes only the IRQ counter while real scheduling changes worker contexts.
-global_asm!(include_str!("preempt-probe-aarch64.S"));
+global_asm!(include_str!("preempt-probe-aarch64.S"),
+    cpu_irq_count = const super::cpu_local::IRQ_COUNT);
 
 #[repr(C, align(16))]
 struct Context {
@@ -80,9 +86,6 @@ const _: () = {
 // SAFETY: Only this module calls these fixed assembly entries with private,
 // live aligned context records under the global execution lease and masked IRQ.
 unsafe extern "C" {
-    static arm_preempt_irq_count: u64;
-    #[cfg(feature = "preemption-boundary-test")]
-    static arm_wait_masked_expiries: u64;
     static __exception_stack_top: [u8; 0];
     fn arm_preempt_context_probe(seed: u64) -> u64;
     fn arm_preempt_setup() -> u64;
@@ -346,9 +349,7 @@ unsafe extern "C" fn entry(state: *mut core::ffi::c_void, id: usize) -> u64 {
 
 /// Observation for the masked platform test coordinator; not worker authority.
 pub(super) fn irq_count() -> u64 {
-    // SAFETY: Called only by the masked platform coordinator on the sole CPU.
-    // The assembly handler is the sole writer and no reference is constructed.
-    unsafe { core::ptr::addr_of!(arm_preempt_irq_count).read_volatile() }
+    super::cpu_local::irq_count()
 }
 
 /// Require that the boundary image actually executed its masked-expiry path.
@@ -356,9 +357,7 @@ pub(super) fn irq_count() -> u64 {
 pub(super) fn wait_boundary_check() -> bool {
     #[cfg(feature = "preemption-boundary-test")]
     {
-        // SAFETY: Only masked park assembly writes this private diagnostic;
-        // the platform reads it outside a running worker lease on the sole CPU.
-        unsafe { core::ptr::addr_of!(arm_wait_masked_expiries).read_volatile() != 0 }
+        super::cpu_local::wait_expiries() != 0
     }
     #[cfg(not(feature = "preemption-boundary-test"))]
     true

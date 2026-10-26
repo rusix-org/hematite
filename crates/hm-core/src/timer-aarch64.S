@@ -104,7 +104,8 @@ arm_timer_timeout_probe:
     sub x3, x3, x1             // Reserve1second before minimum56-bit wrap.
     cmp x2, x3
     b.hi .Ltimer_cleanup
-    ldr x0, =arm_timer_state
+    mrs x0, tpidr_el1
+    add x0, x0, #{cpu_timer}
     str xzr, [x0]
     str xzr, [x0, #32]
     mov x3, #1000
@@ -196,7 +197,8 @@ arm_timer_timeout_probe:
     mov x30, #286
     mov x0, #0xa0000000
     msr nzcv, x0
-    ldr x0, =arm_timer_state
+    mrs x0, tpidr_el1
+    add x0, x0, #{cpu_timer}
     mov x3, #0x1000000         // Secondary bound if counter stops advancing.
 .Ltimer_window_begin:
     msr daifclr, #2
@@ -331,7 +333,8 @@ arm_timer_timeout_probe:
     str wzr, [x1]
     dsb sy
     isb
-    ldr x3, =arm_timer_state
+    mrs x3, tpidr_el1
+    add x3, x3, #{cpu_timer}
     ldr x4, [x3]
     str x4, [sp, #1104]        // No subsequent delivery may change this.
     ldr x4, [x3, #8]
@@ -387,7 +390,8 @@ arm_timer_timeout_probe:
     orr x2, x2, #4
     str x2, [sp, #1080]
 .Ltimer_no_quiescence:
-    ldr x0, =arm_timer_state
+    mrs x0, tpidr_el1
+    add x0, x0, #{cpu_timer}
     str xzr, [x0, #16]        // End handler authority only after shutdown.
 .Ltimer_restore:
     ldr x0, [sp, #1080]
@@ -440,7 +444,8 @@ arm_timer_irq:
     stp x26, x27, [sp, #208]
     stp x28, x29, [sp, #224]
     str x30, [sp, #240]
-    ldr x0, =arm_preempt_state
+    mrs x0, tpidr_el1
+    add x0, x0, #{cpu_preempt}
     ldr x1, [x0, #16]
     cbnz x1, arm_preempt_irq
     mrs x0, spsr_el1
@@ -448,7 +453,8 @@ arm_timer_irq:
     and x0, x0, x1
     cmp x0, #0x345             // EL1h with only IRQ unmasked.
     b.ne arm_exception_fatal
-    ldr x0, =arm_timer_state
+    mrs x0, tpidr_el1
+    add x0, x0, #{cpu_timer}
     ldr x1, [x0, #16]
     cmp x1, #1
     b.ne arm_exception_fatal
@@ -470,7 +476,8 @@ arm_timer_irq:
 .Ltimer_irq_real:
     mrs x2, cntp_ctl_el0
     tbz x2, #2, arm_exception_fatal
-    ldr x2, =arm_timer_state
+    mrs x2, tpidr_el1
+    add x2, x2, #{cpu_timer}
     ldr x3, [x2]
     cmp x3, #8
     b.hs arm_exception_fatal
@@ -521,9 +528,3 @@ arm_timer_irq:
     msr spsel, #1
     eret
     .ltorg
-
-.section .bss.timer,"aw",@nobits
-.balign 8
-// Private assembly storage: delivered, interval, active, deadline, error.
-// No Rust reference exists; ordinary access occurs only with IRQ masked.
-arm_timer_state: .skip 40

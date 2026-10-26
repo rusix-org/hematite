@@ -52,7 +52,7 @@ PROBES = {
     "runner_sync": ('''fn sync<T: Sync>() {} pub fn client() { sync::<Runner>(); }''', "E0277"),
     "private_constructor": ('''pub fn client() { let _ = Runner::from_boot(); }''', "E0624"),
     "forge_runner": ('''pub fn client() {
-        let _ = Runner { _single_cpu: core::marker::PhantomData };
+        let _ = Runner { cpu_id: Some(0), _single_cpu: core::marker::PhantomData };
     }''', "E0451"),
     "private_register_context": ('''use hm_threads::threads::Context;
         pub fn client(_: &mut Context) {}
@@ -122,6 +122,7 @@ def main():
     source = root / "crates/hm-core/src/threads.rs"
     wrapper = output / "hm_threads.rs"
     wrapper.write_text('#![no_std]\n#![deny(unsafe_op_in_unsafe_fn)]\n'
+                       f'#[path={json.dumps(str(source.with_name("cpu_local.rs")))}] mod cpu_local;\n'
                        f'#[path={json.dumps(str(source.with_name("preempt.rs")))}] mod preempt;\n'
                        f'#[path={json.dumps(str(source))}] pub mod threads;\n'
                        'pub use threads::Runner;\n')
