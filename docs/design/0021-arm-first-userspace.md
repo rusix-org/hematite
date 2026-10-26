@@ -4,7 +4,8 @@ Status: Stage A approved by independent [review 0021](../reviews/0021-arm-first-
 2026-10-26. Stage B owned loading and bounded installed-translation diagnostics
 are separately specified and approved in [design 0022](0022-arm-owned-address-spaces.md).
 [Design 0023](0023-arm-native-process.md) now specifies independently approved
-EL0 entry, process copy and teardown mechanisms; implementation remains pending.
+EL0 entry, process copy and teardown mechanisms, now implemented and locally
+verified in [native-process evidence](../evidence/native-process.md).
 Its safe native wire policy is implemented and host-verified. This is Phase 2 work,
 not a claim that the unpublished Phase 1 gate has passed CI.
 
@@ -91,8 +92,8 @@ A parsing success does not claim the fixture was executed.
 ## Stage B: owned address spaces
 
 Owned inactive loading and AT diagnostics are implemented in design 0022.
-The startup-page and execution-cache extensions are approved in design 0023
-but remain implementation work.
+The startup-page and execution-cache extensions are implemented and verified
+in design 0023.
 
 Reserve one CPU0-only execution capability and retain the existing joined CPU
 lease. A safe construction API takes a validated Image and a Pool borrow, owns
@@ -130,7 +131,7 @@ the stage's independent implementation review, not an inference from this plan.
 ## Stage C: entry, native calls and containment
 
 Design 0023 now owns the approved concrete implementation contract. Its safe
-call policy is verified; the core runtime has not been implemented.
+call policy and core runtime are locally verified; see native-process evidence.
 
 The current kernel uses SP_EL0 as a kernel emergency stack. It cannot be reused
 unchanged when EL0 owns SP_EL0. Provide dedicated lower-EL AArch64 vector paths
@@ -165,8 +166,8 @@ explicitly before exposing the API.
 
 ## Stage D: teardown and first-program gate
 
-The process teardown contract is approved in design 0023. Actual execution,
-containment, reclamation and the independent initramfs gate remain pending.
+Execution, containment and reclamation are locally verified under design 0023.
+The independent initramfs gate remains pending.
 
 Normal exit, user fault and timeout converge on one quiescent teardown path.
 No active user frame or root is freed while EL0 or a translation can access it.

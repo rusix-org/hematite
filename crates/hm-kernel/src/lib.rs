@@ -16,6 +16,7 @@ pub mod frame_plan;
 mod frame_plan_tests;
 pub mod heap_api;
 mod heap_tests;
+pub mod initramfs;
 pub mod mapping_api;
 mod mapping_tests;
 pub mod mutex_api;

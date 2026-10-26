@@ -19,7 +19,7 @@ from strict Linux parity to native OS design with selective compatibility.
 - Serial monitor: `make run` defaults to ARM64; `ARCH=x86_64` selects the
   regression port. Commands `help`, `status`, `test`; Ctrl-C exits.
 - `make test-all`: formatting, Clippy and safety checks for both targets,
-  115 host harness tests, ten native-policy host tests, 41 guest tests per architecture, ARM no-PAN rejection,
+  123 host harness tests, ten native-policy host tests, sixteen initramfs host cases, 41 guest tests per architecture, ARM no-PAN rejection,
   x86 missing-NX/SMEP/SMAP rejection, and live monitor recovery tests on both.
   ARM discovery matches both 128 MiB and 64 MiB guest configurations.
   Separate ARM images run five scheduling/wait cases at both memory sizes, then
@@ -35,7 +35,11 @@ from strict Linux parity to native OS design with selective compatibility.
   guest by default; lifecycle and SMP tests use two CPUs with TCG thread=multi. ARM also
   tests 64 MiB; no attached disks or networking. Both targets use TCG.
 
-Latest execution evidence: [protected native processes](docs/evidence/native-process.md),
+Latest input-boundary evidence: [checked initramfs admission](docs/evidence/initramfs-admission.md),
+with [complete ARM/x86 regressions](docs/evidence/initramfs-final/verification-summary.json).
+The process executable is unchanged; archive-backed execution remains open.
+
+Earlier execution evidence: [protected native processes](docs/evidence/native-process.md),
 with [complete ARM/x86 regressions](docs/evidence/process-final/verification-summary.json).
 All three process profiles pass 66 runs each; the reviewed executable matches
 the tested ELF. Pinned-emulator coverage limitations are recorded explicitly.
@@ -424,11 +428,19 @@ budget/exhaustion failures and inactive drop preserve ownership. Kernel source,
 compiled stacks and actual traces have independent AI review. Pinned-QEMU DAIF
 syndrome and DIT coverage limitations are explicit; no hardware or Linux claim.
 
+The bounded newc initramfs parser is implemented and independently reviewed.
+Sixteen host tests validate complete admission before lookup, GNU cpio reference
+payloads, traversal/alias rejection, all declared limits and borrowed lifetimes.
+Eleven compiler clients per target check encapsulation and input ownership.
+The guest still selects individual embedded ELF fixtures; archive-backed
+execution remains a separate gate. See [archive evidence](docs/evidence/initramfs-admission.md).
+
 ## Next actions
 
-1. Design and independently review checked initramfs input, then connect it to
-   the verified ELF/process path and finish the native Phase 2 gate. Embedded
-   fixtures currently provide inputs; concurrent userspace remains outside scope.
+1. Review the archive-backed execution design, then connect the checked input
+   to the verified ELF/process path and finish the native Phase 2 gate. Preserve
+   all 33 program cases and recheck compiled stacks before guest execution.
+   Concurrent userspace remains outside scope.
 2. Use these experiments to refine the native wire contract; select compatibility
    workloads and pin a Linux oracle when the adapter exists.
 3. Resolve the license selection; keep remote CI current as further milestones are published.
@@ -636,3 +648,13 @@ syndrome and DIT coverage limitations are explicit; no hardware or Linux claim.
   Full ARM/x86 suite passes 115 Python cases per target, 19 process compiler
   clients and all prior profiles. See [evidence](docs/evidence/native-process.md).
   Initramfs remains next; no new remote CI or public push.
+
+- 2026-10-26: Implemented reviewed allocation-free newc archive admission with
+  complete validation before lookup. Deterministic and independently GNU-built
+  archives match payloads; sixteen real parser tests and eleven compiler clients
+  per architecture pass. Full ARM/x86 suite passes 123 Python tests per target
+  and all prior runtime profiles; reviewed process ELF remains byte-identical.
+  Preserved initial formatting and test-only Clippy failures. The positive
+  directory-link profile was settled before implementation from actual GNU
+  filesystem behavior. See [evidence](docs/evidence/initramfs-admission.md).
+  Archive-backed execution remains next; no new remote CI or push.
