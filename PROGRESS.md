@@ -19,7 +19,7 @@ from strict Linux parity to native OS design with selective compatibility.
 - Serial monitor: `make run` defaults to ARM64; `ARCH=x86_64` selects the
   regression port. Commands `help`, `status`, `test`; Ctrl-C exits.
 - `make test-all`: formatting, Clippy and safety checks for both targets,
-  90 host harness tests, 41 guest tests per architecture, ARM no-PAN rejection,
+  97 host harness tests, ten native-policy host tests, 41 guest tests per architecture, ARM no-PAN rejection,
   x86 missing-NX/SMEP/SMAP rejection, and live monitor recovery tests on both.
   ARM discovery matches both 128 MiB and 64 MiB guest configurations.
   Separate ARM images run five scheduling/wait cases at both memory sizes, then
@@ -35,7 +35,9 @@ from strict Linux parity to native OS design with selective compatibility.
   guest by default; lifecycle and SMP tests use two CPUs with TCG thread=multi. ARM also
   tests 64 MiB; no attached disks or networking. Both targets use TCG.
 
-Latest evidence: [owned ARM address spaces](docs/evidence/owned-address-spaces.md),
+Latest policy evidence: [native call policy](docs/evidence/native-policy.md), with
+[complete local regressions](docs/evidence/native-policy-final/verification-summary.json).
+Hardware evidence: [owned ARM address spaces](docs/evidence/owned-address-spaces.md),
 [compiled stack review](docs/evidence/space-stack-review.md), and
 [three guest profiles](docs/evidence/space-first-qemu/result.json). Full ARM/x86
 regressions pass in [the final archive](docs/evidence/space-final/verification-summary.json).
@@ -402,15 +404,24 @@ SP_EL0 still holds a kernel emergency stack; entering EL0 requires a separately
 reviewed trap-stack and instruction-cache protocol. Initramfs, safe process copy,
 owned handles and process reclamation remain Phase 2 work.
 
+The versioned native console/exit policy is now implemented in safe Rust and
+verified with ten host cases and twelve compiler clients per target. It defines
+startup bytes, scoped generation handles, all-or-nothing copy-before-output,
+independent byte/call limits and terminal revocation. The 64th returning call
+records a Reply and stops; replies never grant hardware resume authority.
+[Evidence](docs/evidence/native-policy.md) explicitly excludes the real user-copy
+adapter and EL0 execution. Design 0023 specifies their implementation contract.
+
 ## Next actions
 
-1. Design and independently review the remaining runtime stages of design 0021:
-   protected EL0 entry/return, versioned native calls and process reclamation,
-   then initramfs. Review exact root, cache, trap-stack and
-   identity-alias transitions before core edits. Keep CPU1 OFF for first-process
-   execution; concurrent address spaces need separate shootdown proofs.
-2. Define the native userspace wire contract from those experiments; select
-   compatibility workloads and pin a Linux oracle when the adapter exists.
+1. Implement the reviewed [native process design](docs/design/0023-arm-native-process.md)
+   and its [execution gate](docs/design/0023-process-verification.md): protected
+   EL0 entry/return, actual console/exit calls, fault/deadline containment and
+   reclamation. Review source and compiled stack bounds before QEMU; inspect
+   actual EL0 traces before freezing the strict parser. Keep CPU1 OFF.
+2. Add a checked initramfs input and finish the Phase 2 gate. Use these experiments
+   to refine the native wire contract; select compatibility workloads and pin a
+   Linux oracle when the adapter exists.
 3. Resolve the license selection; keep remote CI current as further milestones are published.
 
 ## Session ledger
@@ -596,3 +607,12 @@ owned handles and process reclamation remain Phase 2 work.
   caught before boot; split test cases resolve it. Exact source/ELF identities,
   assembly, raw logs and review are archived. EL0 execution remains next; no
   remote push or new CI claim. See [evidence](docs/evidence/owned-address-spaces.md).
+
+- 2026-10-26: Designed the protected native process transition and strict
+  execution evidence, and implemented its independently reviewed safe wire
+  policy. Ten policy tests, twelve compiler clients per target and all ARM/x86
+  regressions pass; 97 Python harness tests include seven new strict-inventory
+  cases. Fixed ambiguous call-limit resume semantics before integration; the
+  64th reply immediately revokes the grant and stores termination. Archived raw
+  logs/source identities. Core EL0 execution remains implementation work, with
+  no new kernel entry/exception code or remote publication in this milestone.

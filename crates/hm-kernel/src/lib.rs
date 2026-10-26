@@ -20,6 +20,7 @@ pub mod mapping_api;
 mod mapping_tests;
 pub mod mutex_api;
 mod mutex_tests;
+pub mod native;
 mod preemption_tests;
 pub mod thread_api;
 mod thread_tests;

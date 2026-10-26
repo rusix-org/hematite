@@ -1,0 +1,13 @@
+{
+  "passed": true,
+  "command": "make test-all",
+  "exit_code": 0,
+  "result_counts": {
+    "aarch64": 58,
+    "x86_64": 11
+  },
+  "python_harness_cases": 97,
+  "native_host_cases": 10,
+  "native_compiler_clients_per_arch": 12,
+  "space_executable_unchanged": true
+}

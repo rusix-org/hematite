@@ -1,0 +1,18 @@
+[
+  "rustc",
+  "--edition=2024",
+  "--crate-type=lib",
+  "--emit=metadata",
+  "--error-format=json",
+  "--target",
+  "aarch64-unknown-none",
+  "-C",
+  "panic=abort",
+  "--extern",
+  "hm_kernel=/workspace/target/aarch64/boot-test/aarch64-unknown-none/release/libhm_kernel.rlib",
+  "-L",
+  "dependency=/workspace/target/aarch64/boot-test/aarch64-unknown-none/release/deps",
+  "-o",
+  "/workspace/target/evidence/20261026T174637-483999557-aarch64/elf-types/valid_bytes_after_image_drop.rmeta",
+  "/workspace/target/evidence/20261026T174637-483999557-aarch64/elf-types/valid_bytes_after_image_drop.rs"
+]

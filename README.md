@@ -100,6 +100,10 @@ read-only data, writable data and guarded stacks. Three QEMU profiles verify
 allocation rollback, maximum-size loading, ownership retention and repeated
 page-table restoration using ARM translation probes. Actual EL0 execution is
 next; see [owned-space evidence](docs/evidence/owned-address-spaces.md).
+The native console/exit policy now has versioned startup bytes, scoped grants,
+checked copying and resource limits, verified on the host and by compiler
+boundary tests. Its actual EL0 adapter remains to be implemented; see
+[native policy evidence](docs/evidence/native-policy.md).
 
 The safe capability experiment checks rights attenuation, bounded accounting,
 stale handles, revocation and cancellation/completion lifetimes. It models

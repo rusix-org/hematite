@@ -1,0 +1,2 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.12s
+     Running unittests src/lib.rs (target/host-native/x86_64-unknown-linux-gnu/debug/deps/hm_kernel-0c1ef25c03d05ae9)

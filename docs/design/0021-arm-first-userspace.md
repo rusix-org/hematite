@@ -3,8 +3,9 @@
 Status: Stage A approved by independent [review 0021](../reviews/0021-arm-first-userspace.md),
 2026-10-26. Stage B owned loading and bounded installed-translation diagnostics
 are separately specified and approved in [design 0022](0022-arm-owned-address-spaces.md).
-EL0 entry, process copy and teardown mechanisms remain proposed until their
-own independent review. This is Phase 2 work,
+[Design 0023](0023-arm-native-process.md) now specifies independently approved
+EL0 entry, process copy and teardown mechanisms; implementation remains pending.
+Its safe native wire policy is implemented and host-verified. This is Phase 2 work,
 not a claim that the unpublished Phase 1 gate has passed CI.
 
 The target is a separately linked static native AArch64 program loaded from an
@@ -87,7 +88,11 @@ must never panic. Verify the accepted plan against the fixture's bytes and ELF
 headers. Actual-type clients reject field forging and escaping the input borrow.
 A parsing success does not claim the fixture was executed.
 
-## Stage B: owned address spaces (proposed)
+## Stage B: owned address spaces
+
+Owned inactive loading and AT diagnostics are implemented in design 0022.
+The startup-page and execution-cache extensions are approved in design 0023
+but remain implementation work.
 
 Reserve one CPU0-only execution capability and retain the existing joined CPU
 lease. A safe construction API takes a validated Image and a Pool borrow, owns
@@ -122,7 +127,10 @@ with the prescribed DSB/ISB sequence before first EL0 entry. The exact descripto
 bits, table-copy procedure, cache instructions and full mapping audit belong to
 the stage's independent implementation review, not an inference from this plan.
 
-## Stage C: entry, native calls and containment (proposed)
+## Stage C: entry, native calls and containment
+
+Design 0023 now owns the approved concrete implementation contract. Its safe
+call policy is verified; the core runtime has not been implemented.
 
 The current kernel uses SP_EL0 as a kernel emergency stack. It cannot be reused
 unchanged when EL0 owns SP_EL0. Provide dedicated lower-EL AArch64 vector paths
@@ -155,7 +163,10 @@ a declared process error. It must not enter kernel fixed-site fault recovery or
 kill the whole kernel. Define copy fault handling and partial-copy semantics
 explicitly before exposing the API.
 
-## Stage D: teardown and first-program gate (proposed)
+## Stage D: teardown and first-program gate
+
+The process teardown contract is approved in design 0023. Actual execution,
+containment, reclamation and the independent initramfs gate remain pending.
 
 Normal exit, user fault and timeout converge on one quiescent teardown path.
 No active user frame or root is freed while EL0 or a translation can access it.

@@ -1,0 +1,25 @@
+{
+  "cwd": "/workspace",
+  "expected_cases": [
+    "byte_budget_exhaustion_is_independent_of_calls",
+    "failed_copy_never_emits_or_charges",
+    "generations_retire_without_wrap",
+    "invalid_exit_is_recoverable_but_success_revokes_execution",
+    "invalid_storm_exhausts_calls_and_stops_effects",
+    "last_call_can_exit_and_terminal_result_is_stable",
+    "stale_foreign_absent_and_wrong_slot_handles",
+    "startup_bytes_and_scope",
+    "validation_precedence_has_no_effects",
+    "zero_and_maximum_write_are_exact"
+  ],
+  "sources": {
+    "rust-toolchain.toml": "da55df283f88667ec7a31b7392d493f574a36c88467b955d467c3a3cbe2e9fb1",
+    "Cargo.lock": "383e08e95bee956a6cc81d5ee51e1b4dca8355d92c80473228e2c1413b7b177b",
+    "Cargo.toml": "b5ce112343302244db423f588b44e1c4da81b030bf2a3b2d66c7552a94bec1d8",
+    "crates/hm-kernel/Cargo.toml": "5b738f47733eb9c7ff18b1a4a635da1f747595796e3f68ba812379f03c694b9c",
+    "crates/hm-kernel/src/lib.rs": "15b43dec498662566e31c8ce5399932a74c94da949379c842faf1cf018934bc4",
+    "crates/hm-kernel/src/native.rs": "3643ebc632409b0d25d4ddba82b1afe30b08ab2aab04c40f34a11a05a0631e48",
+    "crates/hm-kernel/src/native_tests.rs": "08f07a4254f014af134e988d879c8f6051a9c8fe682b9fa53e391f4e89384e7e",
+    "tools/check_native.py": "c2f1a29c05a39edc51a09aa19ec147f26410fdea6295948fab8ce297035649a4"
+  }
+}

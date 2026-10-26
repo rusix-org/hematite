@@ -1,0 +1,2687 @@
+make test ARCH=aarch64
+make[1]: Entering directory '/home/aaron/code/hematite'
+docker build --tag hematite-build:phase0 .
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 801B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/rust:1.99.0-slim-bookworm@sha256:2c3a22f0a5533ea2dd5a16627bc841228151faa2d4de2644ac9987e4a2f1f2fa
+#2 DONE 0.7s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 54B done
+#3 DONE 0.0s
+
+#4 [1/4] FROM docker.io/library/rust:1.99.0-slim-bookworm@sha256:2c3a22f0a5533ea2dd5a16627bc841228151faa2d4de2644ac9987e4a2f1f2fa
+#4 resolve docker.io/library/rust:1.99.0-slim-bookworm@sha256:2c3a22f0a5533ea2dd5a16627bc841228151faa2d4de2644ac9987e4a2f1f2fa 0.0s done
+#4 DONE 0.0s
+
+#5 [2/4] RUN rm -f /etc/apt/sources.list.d/debian.sources     && printf 'deb [check-valid-until=no] https://snapshot.debian.org/archive/debian/20261025T000000Z/ bookworm main\n' > /etc/apt/sources.list     && apt-get update     && apt-get install -y --no-install-recommends qemu-system-x86 qemu-system-arm python3 make binutils     && rm -rf /var/lib/apt/lists/*
+#5 CACHED
+
+#6 [3/4] RUN rustup component add rustfmt clippy --toolchain 1.99.0     && rustup target add x86_64-unknown-none aarch64-unknown-none --toolchain 1.99.0
+#6 CACHED
+
+#7 [4/4] WORKDIR /workspace
+#7 CACHED
+
+#8 exporting to image
+#8 exporting layers done
+#8 exporting manifest sha256:fa8372b0ff4554cee9473e5bd7b37cc7fd2bfe5e51cafaba2ae39343a541f11a done
+#8 exporting config sha256:ee4ff07f9a7ccee825f9f03c19a9b1945edc40231be30a402b9780ffcb180764 done
+#8 exporting attestation manifest sha256:89ff0be49d600a71c0ad0371c2e9868db8ad27684fb18ab4cc37ee436db87c82 0.0s done
+#8 exporting manifest list sha256:7c941a43020e3f0f7d9abbfc88f5327d1155aa890fe90d7bf03d511297979ee4 0.0s done
+#8 naming to docker.io/library/hematite-build:phase0
+#8 naming to docker.io/library/hematite-build:phase0 done
+#8 unpacking to docker.io/library/hematite-build:phase0 done
+#8 DONE 0.1s
+bash tools/dev.sh bash -eu -c '\
+	evidence_dir="target/evidence/$(date -u +%Y%m%dT%H%M%S-%N)-aarch64"; \
+	mkdir -p "$evidence_dir"; \
+	{ rustc --version; cargo --version; qemu-system-aarch64 --version; \
+		if [ "aarch64" = x86_64 ]; then sha256sum /usr/share/qemu/bios-microvm.bin; \
+		else printf "Boot: direct ELF; no external firmware.\n"; fi; \
+	} > "$evidence_dir/environment.log"; \
+	cargo fmt --all -- --check; \
+	cargo clippy --workspace --all-features --locked --offline --target aarch64-unknown-none --target-dir target/aarch64/clippy -- -D warnings; \
+	python3 tools/test_test_kernel.py; \
+	python3 tools/test_timer_trace.py; \
+	python3 tools/test_test_preemption.py; \
+	python3 tools/test_test_preemption_negative.py; \
+	python3 tools/test_preemption_boundaries.py; \
+	python3 tools/test_test_wait_blocked.py; \
+	python3 tools/test_test_secondary.py; \
+	python3 tools/test_test_smp.py; \
+	python3 tools/test_test_elf.py; \
+	python3 tools/test_test_space.py; \
+	python3 tools/test_test_native.py; \
+	python3 tools/check_repository.py; \
+	python3 tools/check_safety.py; \
+	cargo build --locked --offline -p hm-core --release --features boot-tests --target aarch64-unknown-none --target-dir target/aarch64/boot-test; \
+	cargo build --locked --offline -p hm-core --release --target aarch64-unknown-none --target-dir target/aarch64/monitor; \
+	if [ "aarch64" = aarch64 ]; then \
+		cargo build --locked --offline -p hm-core --release --features unhandled-fault-test --target aarch64-unknown-none --target-dir target/aarch64/fault-test; \
+		cargo build --locked --offline -p hm-core --release --features nested-fault-test --target aarch64-unknown-none --target-dir target/aarch64/nested-test; \
+		cargo build --locked --offline -p hm-core --release --features thread-overflow-test --target aarch64-unknown-none --target-dir target/aarch64/thread-overflow-test; \
+		cargo build --locked --offline -p hm-core --release --features preemption-tests --target aarch64-unknown-none --target-dir target/aarch64/preemption-test; \
+		cargo build --locked --offline -p hm-core --release --features preemption-boundary-test --target aarch64-unknown-none --target-dir target/aarch64/preemption-boundary-test; \
+		cargo build --locked --offline -p hm-core --release --features preemption-no-timer-test --target aarch64-unknown-none --target-dir target/aarch64/preemption-no-timer-test; \
+		cargo build --locked --offline -p hm-core --release --features preemption-overflow-test --target aarch64-unknown-none --target-dir target/aarch64/preemption-overflow-test; \
+		cargo build --locked --offline -p hm-core --release --features wait-all-blocked-test --target aarch64-unknown-none --target-dir target/aarch64/wait-all-blocked-test; \
+		cargo build --locked --offline -p hm-core --release --features space-tests --target aarch64-unknown-none --target-dir target/aarch64/space-test; \
+		cargo build --locked --offline -p hm-core --release --features secondary-tests --target aarch64-unknown-none --target-dir target/aarch64/secondary-test; \
+		cargo build --locked --offline -p hm-core --release --features secondary-stale-generation-test --target aarch64-unknown-none --target-dir target/aarch64/secondary-stale-test; \
+		cargo build --locked --offline -p hm-core --release --features secondary-cpu-off-return-test --target aarch64-unknown-none --target-dir target/aarch64/secondary-off-return-test; \
+		cargo build --locked --offline -p hm-core --release --features smp-tests --target aarch64-unknown-none --target-dir target/aarch64/smp-test; \
+		cargo build --locked --offline -p hm-core --release --features smp-no-peer-timer-test --target aarch64-unknown-none --target-dir target/aarch64/smp-no-peer-timer-test; \
+		cargo build --locked --offline -p hm-core --release --features smp-peer-overflow-test --target aarch64-unknown-none --target-dir target/aarch64/smp-peer-overflow-test; \
+		cargo build --locked --offline -p hm-core --release --features smp-all-blocked-test --target aarch64-unknown-none --target-dir target/aarch64/smp-all-blocked-test; \
+	fi; \
+	cargo build --locked --offline -p hm-kernel --release --target aarch64-unknown-none --target-dir target/aarch64/boot-test; \
+	python3 tools/check_capability_types.py \
+		--library target/aarch64/boot-test/aarch64-unknown-none/release/libhm_kernel.rlib \
+		--target aarch64-unknown-none --output "$evidence_dir/type-boundary"; \
+	python3 tools/check_native_types.py \
+		--library target/aarch64/boot-test/aarch64-unknown-none/release/libhm_kernel.rlib \
+		--target aarch64-unknown-none --output "$evidence_dir/native-types"; \
+	python3 tools/check_elf_types.py \
+		--library target/aarch64/boot-test/aarch64-unknown-none/release/libhm_kernel.rlib \
+		--target aarch64-unknown-none --output "$evidence_dir/elf-types"; \
+	python3 tools/check_frame_types.py \
+		--library target/aarch64/boot-test/aarch64-unknown-none/release/libhm_kernel.rlib \
+		--target aarch64-unknown-none --output "$evidence_dir/frame-types"; \
+	mutex_host_args=(); \
+	if [ "aarch64" = aarch64 ]; then \
+		cargo build --locked --offline -p hm-kernel --release --target x86_64-unknown-linux-gnu --target-dir target/host-mutex; \
+		python3 tools/check_native.py --output "$evidence_dir/native-host"; \
+		python3 tools/check_elf.py --library target/host-mutex/x86_64-unknown-linux-gnu/release/libhm_kernel.rlib --output "$evidence_dir/elf-host"; \
+		python3 tools/check_cpu_topology.py --library target/host-mutex/x86_64-unknown-linux-gnu/release/libhm_kernel.rlib --output "$evidence_dir/cpu-topology"; \
+		mutex_host_args=(--host-library target/host-mutex/x86_64-unknown-linux-gnu/release/libhm_kernel.rlib); \
+	fi; \
+	python3 tools/check_mutex_types.py \
+		--library target/aarch64/boot-test/aarch64-unknown-none/release/libhm_kernel.rlib \
+		--target aarch64-unknown-none --output "$evidence_dir/mutex-types" "${mutex_host_args[@]}"; \
+	if [ "aarch64" = aarch64 ]; then \
+		python3 tools/check_space_types.py \
+			--library target/aarch64/boot-test/aarch64-unknown-none/release/libhm_kernel.rlib \
+			--target aarch64-unknown-none --output "$evidence_dir/space-types"; \
+		python3 tools/check_mapping_types.py \
+			--library target/aarch64/boot-test/aarch64-unknown-none/release/libhm_kernel.rlib \
+			--target aarch64-unknown-none --output "$evidence_dir/mapping-types"; \
+		python3 tools/check_thread_types.py \
+			--library target/aarch64/boot-test/aarch64-unknown-none/release/libhm_kernel.rlib \
+			--target aarch64-unknown-none --output "$evidence_dir/thread-types"; \
+	fi; \
+	python3 tools/test_kernel.py \
+		--kernel target/aarch64/boot-test/aarch64-unknown-none/release/hematite \
+		--output "$evidence_dir/boot" --accel tcg --arch aarch64; \
+	python3 tools/test_boot_profiles.py \
+		--test-kernel target/aarch64/boot-test/aarch64-unknown-none/release/hematite \
+		--monitor-kernel target/aarch64/monitor/aarch64-unknown-none/release/hematite \
+		--fault-kernel target/aarch64/fault-test/aarch64-unknown-none/release/hematite \
+		--nested-kernel target/aarch64/nested-test/aarch64-unknown-none/release/hematite \
+		--thread-overflow-kernel target/aarch64/thread-overflow-test/aarch64-unknown-none/release/hematite \
+		--output "$evidence_dir/profiles" --arch aarch64; \
+	if [ "aarch64" = aarch64 ]; then \
+		python3 tools/test_preemption.py --kernel target/aarch64/preemption-test/aarch64-unknown-none/release/hematite --output "$evidence_dir/preemption-128m"; \
+		python3 tools/test_preemption.py --kernel target/aarch64/preemption-test/aarch64-unknown-none/release/hematite --memory 64 --output "$evidence_dir/preemption-64m"; \
+		python3 tools/test_preemption.py --kernel target/aarch64/preemption-boundary-test/aarch64-unknown-none/release/hematite --boundaries --output "$evidence_dir/preemption-boundaries"; \
+		python3 tools/test_preemption_negative.py --no-timer-kernel target/aarch64/preemption-no-timer-test/aarch64-unknown-none/release/hematite --overflow-kernel target/aarch64/preemption-overflow-test/aarch64-unknown-none/release/hematite --output "$evidence_dir/preemption-negative"; \
+		python3 tools/test_wait_blocked.py --kernel target/aarch64/wait-all-blocked-test/aarch64-unknown-none/release/hematite --output "$evidence_dir/wait-all-blocked"; \
+		python3 tools/test_space.py --kernel target/aarch64/space-test/aarch64-unknown-none/release/hematite --output "$evidence_dir/space"; \
+		python3 tools/test_secondary.py --kernel target/aarch64/secondary-test/aarch64-unknown-none/release/hematite --stale-generation-kernel target/aarch64/secondary-stale-test/aarch64-unknown-none/release/hematite --cpu-off-return-kernel target/aarch64/secondary-off-return-test/aarch64-unknown-none/release/hematite --output "$evidence_dir/secondary"; \
+		python3 tools/test_smp.py --kernel target/aarch64/smp-test/aarch64-unknown-none/release/hematite --no-peer-timer-kernel target/aarch64/smp-no-peer-timer-test/aarch64-unknown-none/release/hematite --peer-overflow-kernel target/aarch64/smp-peer-overflow-test/aarch64-unknown-none/release/hematite --all-blocked-kernel target/aarch64/smp-all-blocked-test/aarch64-unknown-none/release/hematite --output "$evidence_dir/smp"; \
+		python3 tools/check_timer_trace.py --trace "$evidence_dir/boot/exceptions.log" \
+			--expected 16 --output "$evidence_dir/boot/timer-trace.json"; \
+		python3 tools/check_timer_trace.py --trace "$evidence_dir/profiles/monitor/exceptions.log" \
+			--expected 32 --output "$evidence_dir/profiles/monitor/timer-trace.json"; \
+		python3 tools/check_timer_trace.py --trace "$evidence_dir/profiles/memory-64m/exceptions.log" \
+			--expected 32 --output "$evidence_dir/profiles/memory-64m/timer-trace.json"; \
+	fi'
+    Checking hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+    Checking hm-core v0.1.0 (/workspace/crates/hm-core)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 1.01s
+..............
+----------------------------------------------------------------------
+Ran 14 tests in 0.010s
+
+OK
+.........
+----------------------------------------------------------------------
+Ran 9 tests in 0.001s
+
+OK
+........
+----------------------------------------------------------------------
+Ran 8 tests in 0.002s
+
+OK
+........
+----------------------------------------------------------------------
+Ran 8 tests in 0.001s
+
+OK
+.
+----------------------------------------------------------------------
+Ran 1 test in 0.000s
+
+OK
+.
+----------------------------------------------------------------------
+Ran 1 test in 0.000s
+
+OK
+............
+----------------------------------------------------------------------
+Ran 12 tests in 0.006s
+
+OK
+......................
+----------------------------------------------------------------------
+Ran 22 tests in 0.026s
+
+OK
+......
+----------------------------------------------------------------------
+Ran 6 tests in 0.002s
+
+OK
+.........
+----------------------------------------------------------------------
+Ran 9 tests in 0.308s
+
+OK
+.......
+----------------------------------------------------------------------
+Ran 7 tests in 0.014s
+
+OK
+PASS: Phase 0 records present; approval and runtime gates not assessed
+PASS: safe crate roots, dependency-free lockfile, core SAFETY-comment hygiene
+Scope: structural hygiene only; compile all targets and review core soundness separately
+   Compiling hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+   Compiling hm-core v0.1.0 (/workspace/crates/hm-core)
+    Finished `release` profile [optimized] target(s) in 3.86s
+   Compiling hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+   Compiling hm-core v0.1.0 (/workspace/crates/hm-core)
+    Finished `release` profile [optimized] target(s) in 4.06s
+   Compiling hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+   Compiling hm-core v0.1.0 (/workspace/crates/hm-core)
+    Finished `release` profile [optimized] target(s) in 1.62s
+   Compiling hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+   Compiling hm-core v0.1.0 (/workspace/crates/hm-core)
+    Finished `release` profile [optimized] target(s) in 1.66s
+   Compiling hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+   Compiling hm-core v0.1.0 (/workspace/crates/hm-core)
+    Finished `release` profile [optimized] target(s) in 1.64s
+   Compiling hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+   Compiling hm-core v0.1.0 (/workspace/crates/hm-core)
+    Finished `release` profile [optimized] target(s) in 4.05s
+   Compiling hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+   Compiling hm-core v0.1.0 (/workspace/crates/hm-core)
+    Finished `release` profile [optimized] target(s) in 4.18s
+   Compiling hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+   Compiling hm-core v0.1.0 (/workspace/crates/hm-core)
+    Finished `release` profile [optimized] target(s) in 4.02s
+   Compiling hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+   Compiling hm-core v0.1.0 (/workspace/crates/hm-core)
+    Finished `release` profile [optimized] target(s) in 1.67s
+   Compiling hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+   Compiling hm-core v0.1.0 (/workspace/crates/hm-core)
+    Finished `release` profile [optimized] target(s) in 1.85s
+   Compiling hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+   Compiling hm-core v0.1.0 (/workspace/crates/hm-core)
+    Finished `release` profile [optimized] target(s) in 4.59s
+   Compiling hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+   Compiling hm-core v0.1.0 (/workspace/crates/hm-core)
+    Finished `release` profile [optimized] target(s) in 5.04s
+   Compiling hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+   Compiling hm-core v0.1.0 (/workspace/crates/hm-core)
+    Finished `release` profile [optimized] target(s) in 4.62s
+   Compiling hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+   Compiling hm-core v0.1.0 (/workspace/crates/hm-core)
+    Finished `release` profile [optimized] target(s) in 4.35s
+   Compiling hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+   Compiling hm-core v0.1.0 (/workspace/crates/hm-core)
+    Finished `release` profile [optimized] target(s) in 5.29s
+   Compiling hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+   Compiling hm-core v0.1.0 (/workspace/crates/hm-core)
+    Finished `release` profile [optimized] target(s) in 2.41s
+   Compiling hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+   Compiling hm-core v0.1.0 (/workspace/crates/hm-core)
+    Finished `release` profile [optimized] target(s) in 2.58s
+   Compiling hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+   Compiling hm-core v0.1.0 (/workspace/crates/hm-core)
+    Finished `release` profile [optimized] target(s) in 2.71s
+    Finished `release` profile [optimized] target(s) in 0.01s
+{
+  "passed": true,
+  "scope": "safe-client type boundary; not runtime isolation",
+  "probes": {
+    "valid_client": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "cross_instance": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "lifetime"
+    },
+    "escaping_handle": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "lifetime"
+    },
+    "private_generation": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0616"
+    },
+    "uncloneable_instance": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    }
+  }
+}
+{
+  "passed": true,
+  "probes": {
+    "valid_issue_startup": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "valid_dispatch_host": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "valid_move_session": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "forge_issuer": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0451"
+    },
+    "forge_session": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0451"
+    },
+    "issuer_clone": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "session_clone": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "change_generation": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0616"
+    },
+    "change_grant": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0616"
+    },
+    "change_calls": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0616"
+    },
+    "change_budget": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0616"
+    },
+    "revive_session": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0616"
+    }
+  },
+  "target": "aarch64-unknown-none",
+  "scope": "actual safe native-policy type encapsulation; no hardware authority or EL0 execution"
+}
+{
+  "passed": true,
+  "scope": "actual safe ELF metadata and input lifetime boundaries; no execution or isolation claim",
+  "target": "aarch64-unknown-none",
+  "probes": {
+    "valid_parse_use": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "valid_segment_copy": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "valid_bytes_after_image_drop": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "forge_image": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0451"
+    },
+    "forge_segment": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0451"
+    },
+    "private_image_entry": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0616"
+    },
+    "private_segment_permissions": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0616"
+    },
+    "image_outlive_input": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0515"
+    },
+    "mutate_input_while_image_live": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0506"
+    },
+    "file_bytes_outlive_input": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0515"
+    },
+    "mutate_file_bytes": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0594"
+    }
+  }
+}
+{
+  "passed": true,
+  "scope": "actual frame/heap module safe-client types; no runtime physical-memory claim",
+  "probes": {
+    "library": {
+      "passed": true,
+      "returncode": 0
+    },
+    "valid_client": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "frame_clone": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "pool_clone": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "outlive_pool": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0515"
+    },
+    "drop_borrowed": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0505"
+    },
+    "mutable_alias": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0499"
+    },
+    "forge_frame": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0451"
+    },
+    "private_constructor": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0624"
+    },
+    "frame_send": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "pool_sync": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "pool_send": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "frame_sync": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "block_send_sync": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "box_cell_send": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "box_cell_sync": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "box_borrowed_cell_send": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "box_raw_pointer_send": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "private_metadata_guard": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0603"
+    },
+    "valid_heap": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "block_clone": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "box_clone": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "borrowed_value_escape": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0515"
+    },
+    "box_outlive_pool": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0515"
+    },
+    "drop_borrowed_box": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0505"
+    },
+    "box_mutable_alias": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0499"
+    },
+    "private_backing_bytes": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0616"
+    },
+    "forge_box": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0451"
+    },
+    "drop_borrowed_block": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0505"
+    },
+    "box_send": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "box_sync": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    }
+  }
+}
+   Compiling hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+    Finished `release` profile [optimized] target(s) in 1.52s
+{
+  "passed": true,
+  "checks": {
+    "exit_success": true,
+    "within_deadline": true,
+    "launched": true,
+    "complete_report": true,
+    "bounded_logs": true
+  },
+  "execution": {
+    "started_utc": "2026-10-26T17:47:44.668114+00:00",
+    "timeout_seconds": 60,
+    "returncode": 0,
+    "timed_out": false,
+    "launch_error": null,
+    "elapsed_seconds": 0.032343673054128885
+  },
+  "artifacts": {
+    "stdout": {
+      "bytes": 791,
+      "within_limit": true,
+      "sha256": "6d40b075a4026129b0bc5d1436708952ed6f174a19f90906b47f15258aee2d8a"
+    },
+    "stderr": {
+      "bytes": 191,
+      "within_limit": true,
+      "sha256": "3a3ad87a787b38931a1a209cbc363541ee151d1a4f641db81a0bd189c9bbdd39"
+    }
+  },
+  "report": {
+    "passed": true,
+    "errors": [],
+    "expected_cases": [
+      "byte_budget_exhaustion_is_independent_of_calls",
+      "failed_copy_never_emits_or_charges",
+      "generations_retire_without_wrap",
+      "invalid_exit_is_recoverable_but_success_revokes_execution",
+      "invalid_storm_exhausts_calls_and_stops_effects",
+      "last_call_can_exit_and_terminal_result_is_stable",
+      "stale_foreign_absent_and_wrong_slot_handles",
+      "startup_bytes_and_scope",
+      "validation_precedence_has_no_effects",
+      "zero_and_maximum_write_are_exact"
+    ],
+    "observed_lines": [
+      "running 10 tests",
+      "test native::tests::byte_budget_exhaustion_is_independent_of_calls ... ok",
+      "test native::tests::failed_copy_never_emits_or_charges ... ok",
+      "test native::tests::generations_retire_without_wrap ... ok",
+      "test native::tests::invalid_exit_is_recoverable_but_success_revokes_execution ... ok",
+      "test native::tests::invalid_storm_exhausts_calls_and_stops_effects ... ok",
+      "test native::tests::last_call_can_exit_and_terminal_result_is_stable ... ok",
+      "test native::tests::stale_foreign_absent_and_wrong_slot_handles ... ok",
+      "test native::tests::startup_bytes_and_scope ... ok",
+      "test native::tests::validation_precedence_has_no_effects ... ok",
+      "test native::tests::zero_and_maximum_write_are_exact ... ok",
+      "test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s"
+    ]
+  },
+  "scope": "actual safe native policy host tests; no user-memory adapter or EL0 execution evidence"
+}
+{
+  "passed": true,
+  "scope": "actual safe ELF admission and readelf comparison; no ELF loading or EL0 execution",
+  "checks": {
+    "fixture": {
+      "passed": true,
+      "returncode": 0,
+      "sha256": "1671600860226b3e9e0f03851a4827202b4ab9cf9046078f6c084e31c35e1c1c"
+    },
+    "canonical_fixture": {
+      "passed": true,
+      "path": "crates/hm-core/fixtures/native-elf",
+      "sha256": "1671600860226b3e9e0f03851a4827202b4ab9cf9046078f6c084e31c35e1c1c",
+      "regenerated_sha256": "1671600860226b3e9e0f03851a4827202b4ab9cf9046078f6c084e31c35e1c1c",
+      "comparison": "byte-for-byte equality with regenerated pinned-toolchain fixture"
+    },
+    "readelf": {
+      "passed": true
+    },
+    "reference": {
+      "passed": true,
+      "checks": {
+        "elf64": true,
+        "little_endian": true,
+        "static_executable": true,
+        "aarch64": true,
+        "entry_present": true,
+        "three_explicit_loads": true,
+        "rx_r_rw": true,
+        "nonempty_bss": true,
+        "load_bounds": true,
+        "separate_pages": true
+      },
+      "entry": 4294967296,
+      "segments": [
+        {
+          "offset": 4096,
+          "va": 4294967296,
+          "physical": 4294967296,
+          "filesz": 56,
+          "memsz": 56,
+          "flags": 5,
+          "align": 4096,
+          "page_start": 4294967296,
+          "page_end": 4294971392,
+          "file_hash": 5990023392080949802
+        },
+        {
+          "offset": 8192,
+          "va": 4294971392,
+          "physical": 4294971392,
+          "filesz": 16,
+          "memsz": 16,
+          "flags": 4,
+          "align": 4096,
+          "page_start": 4294971392,
+          "page_end": 4294975488,
+          "file_hash": 5298123916349964740
+        },
+        {
+          "offset": 12288,
+          "va": 4294975488,
+          "physical": 4294975488,
+          "filesz": 16,
+          "memsz": 8208,
+          "flags": 6,
+          "align": 4096,
+          "page_start": 4294975488,
+          "page_end": 4294987776,
+          "file_hash": 2014243065793578549
+        }
+      ],
+      "pages": 5
+    },
+    "host_compile": {
+      "passed": true,
+      "returncode": 0
+    },
+    "execution": {
+      "passed": true,
+      "returncode": 0,
+      "stderr_empty": true,
+      "executable_sha256": "1a9dc2c99c8e1517126cfd8eae47726a6144f259626856d76708e500dc75b5cf",
+      "report": {
+        "passed": true,
+        "checks": {
+          "exact_line_count": true,
+          "complete_final_line": true,
+          "image_matches_readelf": true,
+          "segments_match_readelf_and_file_bytes": true,
+          "strict_test_inventory": true
+        },
+        "segments": [
+          {
+            "va": 4294967296,
+            "filesz": 56,
+            "memsz": 56,
+            "flags": 5,
+            "page_start": 4294967296,
+            "page_end": 4294971392,
+            "file_hash": 5990023392080949802
+          },
+          {
+            "va": 4294971392,
+            "filesz": 16,
+            "memsz": 16,
+            "flags": 4,
+            "page_start": 4294971392,
+            "page_end": 4294975488,
+            "file_hash": 5298123916349964740
+          },
+          {
+            "va": 4294975488,
+            "filesz": 16,
+            "memsz": 8208,
+            "flags": 6,
+            "page_start": 4294975488,
+            "page_end": 4294987776,
+            "file_hash": 2014243065793578549
+          }
+        ]
+      }
+    }
+  }
+}
+{
+  "passed": true,
+  "scope": "actual parser against generated device trees; no secondary execution",
+  "checks": {
+    "dump-1": {
+      "passed": true,
+      "returncode": 0,
+      "sha256": "292caa8cbd169d74d0c52d67bf9e5c479d4797ecb61d72bccf8d41530df99f15"
+    },
+    "dump-2": {
+      "passed": true,
+      "returncode": 0,
+      "sha256": "84d8e7544f7a9aa9aff18c39487c3efacae89ff7da2999b91db21e4da68267d6"
+    },
+    "dump-3": {
+      "passed": true,
+      "returncode": 0,
+      "sha256": "b2fb51142a3bbedcf657dbe5506007639c60032f74024c58392cb4524a63d8e7"
+    },
+    "compile": {
+      "passed": true,
+      "returncode": 0
+    },
+    "execution": {
+      "passed": true,
+      "returncode": 0,
+      "sha256": "5e9d630836e764f9983385aad2aee4fd1e4b325b18003dfad4f5b1e9c7b732f7"
+    }
+  }
+}
+{
+  "passed": true,
+  "scope": "actual core mutex safe-client type boundary",
+  "probes": {
+    "library": {
+      "passed": true,
+      "returncode": 0
+    },
+    "valid_owned_access": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "valid_send_nonsync_value": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "valid_borrowed_value": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "valid_const": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "valid_forget": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "mutex_nonsend_sync": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "mutex_nonsend_send": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "guard_send": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "guard_sync": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "cell_guard_sync": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "guard_clone": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "mutex_clone": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "guard_outlives_mutex": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0515"
+    },
+    "borrow_outlives_guard": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0515"
+    },
+    "borrowed_value_escape": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0515"
+    },
+    "drop_borrowed_guard": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0505"
+    },
+    "into_inner_while_locked": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0505"
+    },
+    "get_mut_while_locked": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0502"
+    },
+    "mutable_guard_alias": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0499"
+    },
+    "private_value": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0616"
+    },
+    "private_lock_state": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0616"
+    },
+    "forge_guard": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0451"
+    }
+  },
+  "host_stress": {
+    "passed": true,
+    "scope": "actual kernel mutex under host OS threads; not guest SMP",
+    "target": "x86_64-unknown-linux-gnu",
+    "rustc_verbose_version": "rustc 1.99.0 (b940084d7 2026-09-28)\nbinary: rustc\ncommit-hash: b940084d7eb6a299eb4bfeb8e34901bc051e7ac4\ncommit-date: 2026-09-28\nhost: x86_64-unknown-linux-gnu\nrelease: 1.99.0\nLLVM version: 23.1.1\n",
+    "executable_sha256": "c6924fde43d7177e0860ee087715518c032bab3937dbe3bdc22519cb5b99939a",
+    "panic_strategy": "abort",
+    "checks": {
+      "library": {
+        "passed": true,
+        "returncode": 0
+      },
+      "toolchain": {
+        "passed": true,
+        "returncode": 0
+      },
+      "compile": {
+        "passed": true,
+        "returncode": 0
+      },
+      "execution": {
+        "passed": true,
+        "returncode": 0,
+        "workers": 4,
+        "updates": 80000
+      }
+    }
+  }
+}
+{
+  "passed": true,
+  "probes": {
+    "library": {
+      "passed": true,
+      "returncode": 0
+    },
+    "valid_load": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "valid_release_input": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "valid_forget": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "valid_copied_inspection": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "private_constructor": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0624"
+    },
+    "private_frames": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0616"
+    },
+    "private_tables": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0616"
+    },
+    "space_clone": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "factory_clone": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "space_send": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "space_sync": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "factory_send": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "factory_sync": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "space_use_after_drop": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0382"
+    },
+    "space_outlive_pool": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0515"
+    },
+    "forge_factory": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0451"
+    }
+  },
+  "scope": "actual owned-space/frame safe-client authority and lifetime boundaries; no execution claim"
+}
+{
+  "passed": true,
+  "scope": "actual ARM mapping/frame safe-client types; runtime translation tested separately",
+  "probes": {
+    "library": {
+      "passed": true,
+      "returncode": 0
+    },
+    "valid_map_unmap": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "valid_shared_reads": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "valid_forget": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "frame_after_map": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0382"
+    },
+    "frame_borrow_during_map": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0505"
+    },
+    "borrow_after_unmap": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0505"
+    },
+    "borrow_after_drop": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0505"
+    },
+    "mutable_alias": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0499"
+    },
+    "shared_mutable_alias": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0502"
+    },
+    "outlive_mapper": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0515"
+    },
+    "outlive_pool": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0515"
+    },
+    "mapping_clone": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "mapper_clone": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "mapping_send": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "mapping_sync": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "mapper_send": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "mapper_sync": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "private_backing": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0616"
+    },
+    "forge_mapping": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0451"
+    },
+    "integer_backing": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0308"
+    },
+    "double_unmap": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0382"
+    },
+    "private_constructor": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0624"
+    }
+  }
+}
+{
+  "passed": true,
+  "scope": "actual ARM thread types and pinned compiler stack probing",
+  "probes": {
+    "library": {
+      "passed": true,
+      "returncode": 0
+    },
+    "valid_scoped_pool": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "scoped_pool_escape": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "scope_lifetime"
+    },
+    "scoped_frame_escape": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "scope_lifetime"
+    },
+    "scoped_bytes_escape": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "scope_bytes"
+    },
+    "scoped_owner_store": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0521"
+    },
+    "secondary_runner_send": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "secondary_runner_sync": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "secondary_runner_clone": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "secondary_private_constructor": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0624"
+    },
+    "valid_local_event_wait": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "event_send_sync": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "event_clone": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "event_private_sequence": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0616"
+    },
+    "event_local_escape": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0515"
+    },
+    "valid_callback_run": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "valid_forget_borrow": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "runner_clone": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "runner_send": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "runner_sync": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "private_constructor": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0624"
+    },
+    "forge_runner": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0451"
+    },
+    "private_register_context": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0603"
+    },
+    "private_token": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0603"
+    },
+    "capturing_callback": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0308"
+    },
+    "borrowed_callback": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0308"
+    },
+    "context_escape": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0521"
+    },
+    "context_mutable_alias": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0499"
+    },
+    "context_send": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    }
+  },
+  "stack_probes": {
+    "passed": true,
+    "returncode": 0,
+    "checks": {
+      "compiler_succeeded": true,
+      "inline_probe_attribute": true,
+      "full_128k_page_probe_loop": true
+    },
+    "scope": "pinned compiler fixture; actual worker guard overflow is tested in QEMU"
+  }
+}
+{
+  "passed": true,
+  "arch": "aarch64",
+  "expected_exit": 0,
+  "scope": "hematite bootstrap tests; no Linux ABI compatibility claim",
+  "expected_cases": [
+    "write_protect",
+    "nx",
+    "user_execute_protect",
+    "user_access_protect",
+    "wx",
+    "stack_guard",
+    "null_guard",
+    "checked_range",
+    "monitor_bounds",
+    "cap_authority",
+    "cap_limits",
+    "cap_lifetime",
+    "cap_generation",
+    "boot_memory_valid",
+    "boot_memory_malformed",
+    "cpu_topology_valid",
+    "cpu_topology_malformed",
+    "cpu_topology_live",
+    "elf_valid",
+    "elf_malformed",
+    "frame_ranges",
+    "frame_boundaries",
+    "frame_contract",
+    "heap_blocks",
+    "heap_values",
+    "event_contract",
+    "mutex_contract",
+    "mutex_lifetime",
+    "mutex_workers",
+    "thread_contract",
+    "thread_limits",
+    "thread_core",
+    "timer_contract",
+    "fault_contract",
+    "mapping_contract",
+    "mapping_limits",
+    "mapping_hardware",
+    "cpu_local_state",
+    "gic_ownership",
+    "secondary_memory",
+    "cap_orderings"
+  ],
+  "observed_records": [
+    "HMTEST BEGIN 41",
+    "HMTEST PASS write_protect",
+    "HMTEST PASS nx",
+    "HMTEST PASS user_execute_protect",
+    "HMTEST PASS user_access_protect",
+    "HMTEST PASS wx",
+    "HMTEST PASS stack_guard",
+    "HMTEST PASS null_guard",
+    "HMTEST PASS checked_range",
+    "HMTEST PASS monitor_bounds",
+    "HMTEST PASS cap_authority",
+    "HMTEST PASS cap_limits",
+    "HMTEST PASS cap_lifetime",
+    "HMTEST PASS cap_generation",
+    "HMTEST PASS boot_memory_valid",
+    "HMTEST PASS boot_memory_malformed",
+    "HMTEST PASS cpu_topology_valid",
+    "HMTEST PASS cpu_topology_malformed",
+    "HMTEST PASS cpu_topology_live",
+    "HMTEST PASS elf_valid",
+    "HMTEST PASS elf_malformed",
+    "HMTEST PASS frame_ranges",
+    "HMTEST PASS frame_boundaries",
+    "HMTEST PASS frame_contract",
+    "HMTEST PASS heap_blocks",
+    "HMTEST PASS heap_values",
+    "HMTEST PASS event_contract",
+    "HMTEST PASS mutex_contract",
+    "HMTEST PASS mutex_lifetime",
+    "HMTEST PASS mutex_workers",
+    "HMTEST PASS thread_contract",
+    "HMTEST PASS thread_limits",
+    "HMTEST PASS thread_core",
+    "HMTEST PASS timer_contract",
+    "HMTEST PASS fault_contract",
+    "HMTEST PASS mapping_contract",
+    "HMTEST PASS mapping_limits",
+    "HMTEST PASS mapping_hardware",
+    "HMTEST PASS cpu_local_state",
+    "HMTEST PASS gic_ownership",
+    "HMTEST PASS secondary_memory",
+    "HMTEST PASS cap_orderings",
+    "HMTEST END 41"
+  ],
+  "returncode": 0,
+  "timed_out": false,
+  "launch_error": null,
+  "errors": [],
+  "started_utc": "2026-10-26T17:47:51.369017+00:00",
+  "elapsed_seconds": 0.817116713966243,
+  "timeout_seconds": 20
+}
+{
+  "passed": true,
+  "scope": "bootstrap CPU rejection and serial monitor; no Linux ABI claims",
+  "profiles": {
+    "missing-pan": true,
+    "monitor": true,
+    "memory-64m": true,
+    "unexpected-fault": true,
+    "nested-fault": true,
+    "thread-overflow": true
+  },
+  "arch": "aarch64"
+}
+{
+  "passed": true,
+  "errors": [],
+  "observed_records": [
+    "HMPREEMPT BEGIN 5",
+    "HMPREEMPT PASS preempt_progress",
+    "HMPREEMPT PASS preempt_mixed",
+    "HMPREEMPT PASS preempt_limits",
+    "HMPREEMPT PASS wait_workers",
+    "HMPREEMPT PASS preempt_core",
+    "HMPREEMPT END 5"
+  ],
+  "expected_cases": [
+    "preempt_progress",
+    "preempt_mixed",
+    "preempt_limits",
+    "wait_workers",
+    "preempt_core"
+  ],
+  "returncode": 0,
+  "timed_out": false,
+  "launch_error": null,
+  "scheduler_irqs": 102,
+  "post_scheduling": {
+    "passed": true,
+    "arch": "aarch64",
+    "expected_exit": 0,
+    "scope": "hematite bootstrap tests; no Linux ABI compatibility claim",
+    "expected_cases": [
+      "write_protect",
+      "nx",
+      "user_execute_protect",
+      "user_access_protect",
+      "wx",
+      "stack_guard",
+      "null_guard",
+      "checked_range",
+      "monitor_bounds",
+      "cap_authority",
+      "cap_limits",
+      "cap_lifetime",
+      "cap_generation",
+      "boot_memory_valid",
+      "boot_memory_malformed",
+      "cpu_topology_valid",
+      "cpu_topology_malformed",
+      "cpu_topology_live",
+      "elf_valid",
+      "elf_malformed",
+      "frame_ranges",
+      "frame_boundaries",
+      "frame_contract",
+      "heap_blocks",
+      "heap_values",
+      "event_contract",
+      "mutex_contract",
+      "mutex_lifetime",
+      "mutex_workers",
+      "thread_contract",
+      "thread_limits",
+      "thread_core",
+      "timer_contract",
+      "fault_contract",
+      "mapping_contract",
+      "mapping_limits",
+      "mapping_hardware",
+      "cpu_local_state",
+      "gic_ownership",
+      "secondary_memory",
+      "cap_orderings"
+    ],
+    "observed_records": [
+      "HMTEST BEGIN 41",
+      "HMTEST PASS write_protect",
+      "HMTEST PASS nx",
+      "HMTEST PASS user_execute_protect",
+      "HMTEST PASS user_access_protect",
+      "HMTEST PASS wx",
+      "HMTEST PASS stack_guard",
+      "HMTEST PASS null_guard",
+      "HMTEST PASS checked_range",
+      "HMTEST PASS monitor_bounds",
+      "HMTEST PASS cap_authority",
+      "HMTEST PASS cap_limits",
+      "HMTEST PASS cap_lifetime",
+      "HMTEST PASS cap_generation",
+      "HMTEST PASS boot_memory_valid",
+      "HMTEST PASS boot_memory_malformed",
+      "HMTEST PASS cpu_topology_valid",
+      "HMTEST PASS cpu_topology_malformed",
+      "HMTEST PASS cpu_topology_live",
+      "HMTEST PASS elf_valid",
+      "HMTEST PASS elf_malformed",
+      "HMTEST PASS frame_ranges",
+      "HMTEST PASS frame_boundaries",
+      "HMTEST PASS frame_contract",
+      "HMTEST PASS heap_blocks",
+      "HMTEST PASS heap_values",
+      "HMTEST PASS event_contract",
+      "HMTEST PASS mutex_contract",
+      "HMTEST PASS mutex_lifetime",
+      "HMTEST PASS mutex_workers",
+      "HMTEST PASS thread_contract",
+      "HMTEST PASS thread_limits",
+      "HMTEST PASS thread_core",
+      "HMTEST PASS timer_contract",
+      "HMTEST PASS fault_contract",
+      "HMTEST PASS mapping_contract",
+      "HMTEST PASS mapping_limits",
+      "HMTEST PASS mapping_hardware",
+      "HMTEST PASS cpu_local_state",
+      "HMTEST PASS gic_ownership",
+      "HMTEST PASS secondary_memory",
+      "HMTEST PASS cap_orderings",
+      "HMTEST END 41"
+    ],
+    "returncode": 0,
+    "timed_out": false,
+    "launch_error": null,
+    "errors": []
+  },
+  "diagnostic_irqs": 16,
+  "scope": "single-CPU ARM timer-driven scheduling; not SMP",
+  "trace": {
+    "passed": true,
+    "errors": [],
+    "counts": {
+      "irq": 118,
+      "vector": 118,
+      "ack": 118,
+      "eoi": 118
+    },
+    "expected_interrupts": 118,
+    "sha256": "d34470b6b97937c889a6398c13045b8e86753fa56e60df42a24471fe6fcd11f5"
+  },
+  "started_utc": "2026-10-26T17:47:55.155985+00:00",
+  "elapsed_seconds": 0.9705147841013968,
+  "timeout_seconds": 20
+}
+{
+  "passed": true,
+  "errors": [],
+  "observed_records": [
+    "HMPREEMPT BEGIN 5",
+    "HMPREEMPT PASS preempt_progress",
+    "HMPREEMPT PASS preempt_mixed",
+    "HMPREEMPT PASS preempt_limits",
+    "HMPREEMPT PASS wait_workers",
+    "HMPREEMPT PASS preempt_core",
+    "HMPREEMPT END 5"
+  ],
+  "expected_cases": [
+    "preempt_progress",
+    "preempt_mixed",
+    "preempt_limits",
+    "wait_workers",
+    "preempt_core"
+  ],
+  "returncode": 0,
+  "timed_out": false,
+  "launch_error": null,
+  "scheduler_irqs": 102,
+  "post_scheduling": {
+    "passed": true,
+    "arch": "aarch64",
+    "expected_exit": 0,
+    "scope": "hematite bootstrap tests; no Linux ABI compatibility claim",
+    "expected_cases": [
+      "write_protect",
+      "nx",
+      "user_execute_protect",
+      "user_access_protect",
+      "wx",
+      "stack_guard",
+      "null_guard",
+      "checked_range",
+      "monitor_bounds",
+      "cap_authority",
+      "cap_limits",
+      "cap_lifetime",
+      "cap_generation",
+      "boot_memory_valid",
+      "boot_memory_malformed",
+      "cpu_topology_valid",
+      "cpu_topology_malformed",
+      "cpu_topology_live",
+      "elf_valid",
+      "elf_malformed",
+      "frame_ranges",
+      "frame_boundaries",
+      "frame_contract",
+      "heap_blocks",
+      "heap_values",
+      "event_contract",
+      "mutex_contract",
+      "mutex_lifetime",
+      "mutex_workers",
+      "thread_contract",
+      "thread_limits",
+      "thread_core",
+      "timer_contract",
+      "fault_contract",
+      "mapping_contract",
+      "mapping_limits",
+      "mapping_hardware",
+      "cpu_local_state",
+      "gic_ownership",
+      "secondary_memory",
+      "cap_orderings"
+    ],
+    "observed_records": [
+      "HMTEST BEGIN 41",
+      "HMTEST PASS write_protect",
+      "HMTEST PASS nx",
+      "HMTEST PASS user_execute_protect",
+      "HMTEST PASS user_access_protect",
+      "HMTEST PASS wx",
+      "HMTEST PASS stack_guard",
+      "HMTEST PASS null_guard",
+      "HMTEST PASS checked_range",
+      "HMTEST PASS monitor_bounds",
+      "HMTEST PASS cap_authority",
+      "HMTEST PASS cap_limits",
+      "HMTEST PASS cap_lifetime",
+      "HMTEST PASS cap_generation",
+      "HMTEST PASS boot_memory_valid",
+      "HMTEST PASS boot_memory_malformed",
+      "HMTEST PASS cpu_topology_valid",
+      "HMTEST PASS cpu_topology_malformed",
+      "HMTEST PASS cpu_topology_live",
+      "HMTEST PASS elf_valid",
+      "HMTEST PASS elf_malformed",
+      "HMTEST PASS frame_ranges",
+      "HMTEST PASS frame_boundaries",
+      "HMTEST PASS frame_contract",
+      "HMTEST PASS heap_blocks",
+      "HMTEST PASS heap_values",
+      "HMTEST PASS event_contract",
+      "HMTEST PASS mutex_contract",
+      "HMTEST PASS mutex_lifetime",
+      "HMTEST PASS mutex_workers",
+      "HMTEST PASS thread_contract",
+      "HMTEST PASS thread_limits",
+      "HMTEST PASS thread_core",
+      "HMTEST PASS timer_contract",
+      "HMTEST PASS fault_contract",
+      "HMTEST PASS mapping_contract",
+      "HMTEST PASS mapping_limits",
+      "HMTEST PASS mapping_hardware",
+      "HMTEST PASS cpu_local_state",
+      "HMTEST PASS gic_ownership",
+      "HMTEST PASS secondary_memory",
+      "HMTEST PASS cap_orderings",
+      "HMTEST END 41"
+    ],
+    "returncode": 0,
+    "timed_out": false,
+    "launch_error": null,
+    "errors": []
+  },
+  "diagnostic_irqs": 16,
+  "scope": "single-CPU ARM timer-driven scheduling; not SMP",
+  "trace": {
+    "passed": true,
+    "errors": [],
+    "counts": {
+      "irq": 118,
+      "vector": 118,
+      "ack": 118,
+      "eoi": 118
+    },
+    "expected_interrupts": 118,
+    "sha256": "1c9435731b7def58d44570f4a5ffee7dd14072ea2ce0ecc73a489b794c8e2fce"
+  },
+  "started_utc": "2026-10-26T17:47:56.176250+00:00",
+  "elapsed_seconds": 0.8691281588980928,
+  "timeout_seconds": 20
+}
+{
+  "passed": true,
+  "errors": [],
+  "observed_records": [
+    "HMPREEMPT BEGIN 5",
+    "HMPREEMPT PASS preempt_progress",
+    "HMPREEMPT PASS preempt_mixed",
+    "HMPREEMPT PASS preempt_limits",
+    "HMPREEMPT PASS wait_workers",
+    "HMPREEMPT PASS preempt_core",
+    "HMPREEMPT END 5"
+  ],
+  "expected_cases": [
+    "preempt_progress",
+    "preempt_mixed",
+    "preempt_limits",
+    "wait_workers",
+    "preempt_core"
+  ],
+  "returncode": 0,
+  "timed_out": false,
+  "launch_error": null,
+  "scheduler_irqs": 145,
+  "post_scheduling": {
+    "passed": true,
+    "arch": "aarch64",
+    "expected_exit": 0,
+    "scope": "hematite bootstrap tests; no Linux ABI compatibility claim",
+    "expected_cases": [
+      "write_protect",
+      "nx",
+      "user_execute_protect",
+      "user_access_protect",
+      "wx",
+      "stack_guard",
+      "null_guard",
+      "checked_range",
+      "monitor_bounds",
+      "cap_authority",
+      "cap_limits",
+      "cap_lifetime",
+      "cap_generation",
+      "boot_memory_valid",
+      "boot_memory_malformed",
+      "cpu_topology_valid",
+      "cpu_topology_malformed",
+      "cpu_topology_live",
+      "elf_valid",
+      "elf_malformed",
+      "frame_ranges",
+      "frame_boundaries",
+      "frame_contract",
+      "heap_blocks",
+      "heap_values",
+      "event_contract",
+      "mutex_contract",
+      "mutex_lifetime",
+      "mutex_workers",
+      "thread_contract",
+      "thread_limits",
+      "thread_core",
+      "timer_contract",
+      "fault_contract",
+      "mapping_contract",
+      "mapping_limits",
+      "mapping_hardware",
+      "cpu_local_state",
+      "gic_ownership",
+      "secondary_memory",
+      "cap_orderings"
+    ],
+    "observed_records": [
+      "HMTEST BEGIN 41",
+      "HMTEST PASS write_protect",
+      "HMTEST PASS nx",
+      "HMTEST PASS user_execute_protect",
+      "HMTEST PASS user_access_protect",
+      "HMTEST PASS wx",
+      "HMTEST PASS stack_guard",
+      "HMTEST PASS null_guard",
+      "HMTEST PASS checked_range",
+      "HMTEST PASS monitor_bounds",
+      "HMTEST PASS cap_authority",
+      "HMTEST PASS cap_limits",
+      "HMTEST PASS cap_lifetime",
+      "HMTEST PASS cap_generation",
+      "HMTEST PASS boot_memory_valid",
+      "HMTEST PASS boot_memory_malformed",
+      "HMTEST PASS cpu_topology_valid",
+      "HMTEST PASS cpu_topology_malformed",
+      "HMTEST PASS cpu_topology_live",
+      "HMTEST PASS elf_valid",
+      "HMTEST PASS elf_malformed",
+      "HMTEST PASS frame_ranges",
+      "HMTEST PASS frame_boundaries",
+      "HMTEST PASS frame_contract",
+      "HMTEST PASS heap_blocks",
+      "HMTEST PASS heap_values",
+      "HMTEST PASS event_contract",
+      "HMTEST PASS mutex_contract",
+      "HMTEST PASS mutex_lifetime",
+      "HMTEST PASS mutex_workers",
+      "HMTEST PASS thread_contract",
+      "HMTEST PASS thread_limits",
+      "HMTEST PASS thread_core",
+      "HMTEST PASS timer_contract",
+      "HMTEST PASS fault_contract",
+      "HMTEST PASS mapping_contract",
+      "HMTEST PASS mapping_limits",
+      "HMTEST PASS mapping_hardware",
+      "HMTEST PASS cpu_local_state",
+      "HMTEST PASS gic_ownership",
+      "HMTEST PASS secondary_memory",
+      "HMTEST PASS cap_orderings",
+      "HMTEST END 41"
+    ],
+    "returncode": 0,
+    "timed_out": false,
+    "launch_error": null,
+    "errors": []
+  },
+  "diagnostic_irqs": 16,
+  "scope": "single-CPU ARM timer-driven scheduling; not SMP",
+  "trace": {
+    "passed": true,
+    "errors": [],
+    "counts": {
+      "irq": 161,
+      "vector": 161,
+      "ack": 161,
+      "eoi": 161
+    },
+    "expected_interrupts": 161,
+    "sha256": "1df5257f35db9f65b2f55953d019e1742ba6976d7a3aa4a26ef81984348efbc6"
+  },
+  "boundaries": {
+    "passed": true,
+    "errors": [],
+    "hits": {
+      "start": 13,
+      "yield": 8,
+      "complete": 13,
+      "park": 5
+    },
+    "ranges": {
+      "start": [
+        1075848632,
+        1075848764
+      ],
+      "yield": [
+        1075847992,
+        1075848124
+      ],
+      "complete": [
+        1075848864,
+        1075848996
+      ],
+      "park": [
+        1075848292,
+        1075848424
+      ]
+    }
+  },
+  "started_utc": "2026-10-26T17:47:57.114159+00:00",
+  "elapsed_seconds": 0.7744681240292266,
+  "timeout_seconds": 20
+}
+{'passed': True, 'profiles': {'no-timer': True, 'overflow': True}}
+{'started_utc': '2026-10-26T17:48:00.055940+00:00', 'timeout_seconds': 2, 'timed_out': True, 'returncode': -9, 'launch_error': None, 'scope': 'retained blocked run; not wakeup or CPU-idle proof', 'elapsed_seconds': 2.0070315019693226, 'checks': {'registered_all_blocked': True, 'no_partial_marker': True, 'no_completion_or_fault': True, 'host_deadline': True, 'launched': True, 'bounded_logs': True}, 'artifacts': {'serial.log': {'exists': True, 'bytes': 191, 'sha256': 'd542b485ab268761c754b8774fc6d948b4af1f91b76fe12735bd99e9e894db7c', 'within_size_limit': True}, 'exceptions.log': {'exists': True, 'bytes': 291, 'sha256': 'c15114248392c325cb95ce700b4f9f8b5d9883eb0e1330557135fa565990d702', 'within_size_limit': True}}, 'passed': True}
+{'passed': True, 'profiles': {'space-64m-1cpu': True, 'space-128m-1cpu': True, 'space-128m-2cpu': True}}
+{'passed': True, 'profiles': {'lifecycle-128m': True, 'lifecycle-64m': True, 'topology': True, 'stale-generation': True, 'cpu-off-return': True}}
+{'passed': True, 'profiles': {'smp-128m': True, 'smp-64m': True, 'no-peer-timer': True, 'peer-overflow': True, 'all-blocked': True}}
+{
+  "passed": true,
+  "scope": "QEMU CPU0 physical timer IRQ/EOI trace",
+  "expected_interrupts": 16,
+  "counts": {
+    "irq_entries": 16,
+    "irq_vectors": 16,
+    "acknowledgments": 16,
+    "eois": 16,
+    "irq_returns": 16
+  },
+  "errors": [],
+  "trace_sha256": "52073c731cdeb11cc7359cb900dbc2acfe42ed2fded55785b8779cccb3dd8b08",
+  "trace": "target/evidence/20261026T174637-483999557-aarch64/boot/exceptions.log"
+}
+{
+  "passed": true,
+  "scope": "QEMU CPU0 physical timer IRQ/EOI trace",
+  "expected_interrupts": 32,
+  "counts": {
+    "irq_entries": 32,
+    "irq_vectors": 32,
+    "acknowledgments": 32,
+    "eois": 32,
+    "irq_returns": 32
+  },
+  "errors": [],
+  "trace_sha256": "3f0f6a0b4823b08a3aa59efadb1f0e22e97bf8b65a15680c2313e39cc6aca858",
+  "trace": "target/evidence/20261026T174637-483999557-aarch64/profiles/monitor/exceptions.log"
+}
+{
+  "passed": true,
+  "scope": "QEMU CPU0 physical timer IRQ/EOI trace",
+  "expected_interrupts": 32,
+  "counts": {
+    "irq_entries": 32,
+    "irq_vectors": 32,
+    "acknowledgments": 32,
+    "eois": 32,
+    "irq_returns": 32
+  },
+  "errors": [],
+  "trace_sha256": "3f0f6a0b4823b08a3aa59efadb1f0e22e97bf8b65a15680c2313e39cc6aca858",
+  "trace": "target/evidence/20261026T174637-483999557-aarch64/profiles/memory-64m/exceptions.log"
+}
+make[1]: Leaving directory '/home/aaron/code/hematite'
+make test ARCH=x86_64
+make[1]: Entering directory '/home/aaron/code/hematite'
+docker build --tag hematite-build:phase0 .
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 801B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/rust:1.99.0-slim-bookworm@sha256:2c3a22f0a5533ea2dd5a16627bc841228151faa2d4de2644ac9987e4a2f1f2fa
+#2 DONE 0.0s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 54B done
+#3 DONE 0.0s
+
+#4 [1/4] FROM docker.io/library/rust:1.99.0-slim-bookworm@sha256:2c3a22f0a5533ea2dd5a16627bc841228151faa2d4de2644ac9987e4a2f1f2fa
+#4 resolve docker.io/library/rust:1.99.0-slim-bookworm@sha256:2c3a22f0a5533ea2dd5a16627bc841228151faa2d4de2644ac9987e4a2f1f2fa 0.0s done
+#4 DONE 0.0s
+
+#5 [2/4] RUN rm -f /etc/apt/sources.list.d/debian.sources     && printf 'deb [check-valid-until=no] https://snapshot.debian.org/archive/debian/20261025T000000Z/ bookworm main\n' > /etc/apt/sources.list     && apt-get update     && apt-get install -y --no-install-recommends qemu-system-x86 qemu-system-arm python3 make binutils     && rm -rf /var/lib/apt/lists/*
+#5 CACHED
+
+#6 [3/4] RUN rustup component add rustfmt clippy --toolchain 1.99.0     && rustup target add x86_64-unknown-none aarch64-unknown-none --toolchain 1.99.0
+#6 CACHED
+
+#7 [4/4] WORKDIR /workspace
+#7 CACHED
+
+#8 exporting to image
+#8 exporting layers done
+#8 exporting manifest sha256:fa8372b0ff4554cee9473e5bd7b37cc7fd2bfe5e51cafaba2ae39343a541f11a done
+#8 exporting config sha256:ee4ff07f9a7ccee825f9f03c19a9b1945edc40231be30a402b9780ffcb180764 done
+#8 exporting attestation manifest sha256:28fc70a11e89c615d31d9750d08637f1de8f1d33c5f8a647822d6c24cca9d2e9
+#8 exporting attestation manifest sha256:28fc70a11e89c615d31d9750d08637f1de8f1d33c5f8a647822d6c24cca9d2e9 0.0s done
+#8 exporting manifest list sha256:44cd6f5d21a979645b09a7e82c9fab242b18c7f92a24f282e4f7da2c05566c09 0.0s done
+#8 naming to docker.io/library/hematite-build:phase0 done
+#8 unpacking to docker.io/library/hematite-build:phase0 done
+#8 DONE 0.1s
+bash tools/dev.sh bash -eu -c '\
+	evidence_dir="target/evidence/$(date -u +%Y%m%dT%H%M%S-%N)-x86_64"; \
+	mkdir -p "$evidence_dir"; \
+	{ rustc --version; cargo --version; qemu-system-x86_64 --version; \
+		if [ "x86_64" = x86_64 ]; then sha256sum /usr/share/qemu/bios-microvm.bin; \
+		else printf "Boot: direct ELF; no external firmware.\n"; fi; \
+	} > "$evidence_dir/environment.log"; \
+	cargo fmt --all -- --check; \
+	cargo clippy --workspace --all-features --locked --offline --target x86_64-unknown-none --target-dir target/x86_64/clippy -- -D warnings; \
+	python3 tools/test_test_kernel.py; \
+	python3 tools/test_timer_trace.py; \
+	python3 tools/test_test_preemption.py; \
+	python3 tools/test_test_preemption_negative.py; \
+	python3 tools/test_preemption_boundaries.py; \
+	python3 tools/test_test_wait_blocked.py; \
+	python3 tools/test_test_secondary.py; \
+	python3 tools/test_test_smp.py; \
+	python3 tools/test_test_elf.py; \
+	python3 tools/test_test_space.py; \
+	python3 tools/test_test_native.py; \
+	python3 tools/check_repository.py; \
+	python3 tools/check_safety.py; \
+	cargo build --locked --offline -p hm-core --release --features boot-tests --target x86_64-unknown-none --target-dir target/x86_64/boot-test; \
+	cargo build --locked --offline -p hm-core --release --target x86_64-unknown-none --target-dir target/x86_64/monitor; \
+	if [ "x86_64" = aarch64 ]; then \
+		cargo build --locked --offline -p hm-core --release --features unhandled-fault-test --target x86_64-unknown-none --target-dir target/x86_64/fault-test; \
+		cargo build --locked --offline -p hm-core --release --features nested-fault-test --target x86_64-unknown-none --target-dir target/x86_64/nested-test; \
+		cargo build --locked --offline -p hm-core --release --features thread-overflow-test --target x86_64-unknown-none --target-dir target/x86_64/thread-overflow-test; \
+		cargo build --locked --offline -p hm-core --release --features preemption-tests --target x86_64-unknown-none --target-dir target/x86_64/preemption-test; \
+		cargo build --locked --offline -p hm-core --release --features preemption-boundary-test --target x86_64-unknown-none --target-dir target/x86_64/preemption-boundary-test; \
+		cargo build --locked --offline -p hm-core --release --features preemption-no-timer-test --target x86_64-unknown-none --target-dir target/x86_64/preemption-no-timer-test; \
+		cargo build --locked --offline -p hm-core --release --features preemption-overflow-test --target x86_64-unknown-none --target-dir target/x86_64/preemption-overflow-test; \
+		cargo build --locked --offline -p hm-core --release --features wait-all-blocked-test --target x86_64-unknown-none --target-dir target/x86_64/wait-all-blocked-test; \
+		cargo build --locked --offline -p hm-core --release --features space-tests --target x86_64-unknown-none --target-dir target/x86_64/space-test; \
+		cargo build --locked --offline -p hm-core --release --features secondary-tests --target x86_64-unknown-none --target-dir target/x86_64/secondary-test; \
+		cargo build --locked --offline -p hm-core --release --features secondary-stale-generation-test --target x86_64-unknown-none --target-dir target/x86_64/secondary-stale-test; \
+		cargo build --locked --offline -p hm-core --release --features secondary-cpu-off-return-test --target x86_64-unknown-none --target-dir target/x86_64/secondary-off-return-test; \
+		cargo build --locked --offline -p hm-core --release --features smp-tests --target x86_64-unknown-none --target-dir target/x86_64/smp-test; \
+		cargo build --locked --offline -p hm-core --release --features smp-no-peer-timer-test --target x86_64-unknown-none --target-dir target/x86_64/smp-no-peer-timer-test; \
+		cargo build --locked --offline -p hm-core --release --features smp-peer-overflow-test --target x86_64-unknown-none --target-dir target/x86_64/smp-peer-overflow-test; \
+		cargo build --locked --offline -p hm-core --release --features smp-all-blocked-test --target x86_64-unknown-none --target-dir target/x86_64/smp-all-blocked-test; \
+	fi; \
+	cargo build --locked --offline -p hm-kernel --release --target x86_64-unknown-none --target-dir target/x86_64/boot-test; \
+	python3 tools/check_capability_types.py \
+		--library target/x86_64/boot-test/x86_64-unknown-none/release/libhm_kernel.rlib \
+		--target x86_64-unknown-none --output "$evidence_dir/type-boundary"; \
+	python3 tools/check_native_types.py \
+		--library target/x86_64/boot-test/x86_64-unknown-none/release/libhm_kernel.rlib \
+		--target x86_64-unknown-none --output "$evidence_dir/native-types"; \
+	python3 tools/check_elf_types.py \
+		--library target/x86_64/boot-test/x86_64-unknown-none/release/libhm_kernel.rlib \
+		--target x86_64-unknown-none --output "$evidence_dir/elf-types"; \
+	python3 tools/check_frame_types.py \
+		--library target/x86_64/boot-test/x86_64-unknown-none/release/libhm_kernel.rlib \
+		--target x86_64-unknown-none --output "$evidence_dir/frame-types"; \
+	mutex_host_args=(); \
+	if [ "x86_64" = aarch64 ]; then \
+		cargo build --locked --offline -p hm-kernel --release --target x86_64-unknown-linux-gnu --target-dir target/host-mutex; \
+		python3 tools/check_native.py --output "$evidence_dir/native-host"; \
+		python3 tools/check_elf.py --library target/host-mutex/x86_64-unknown-linux-gnu/release/libhm_kernel.rlib --output "$evidence_dir/elf-host"; \
+		python3 tools/check_cpu_topology.py --library target/host-mutex/x86_64-unknown-linux-gnu/release/libhm_kernel.rlib --output "$evidence_dir/cpu-topology"; \
+		mutex_host_args=(--host-library target/host-mutex/x86_64-unknown-linux-gnu/release/libhm_kernel.rlib); \
+	fi; \
+	python3 tools/check_mutex_types.py \
+		--library target/x86_64/boot-test/x86_64-unknown-none/release/libhm_kernel.rlib \
+		--target x86_64-unknown-none --output "$evidence_dir/mutex-types" "${mutex_host_args[@]}"; \
+	if [ "x86_64" = aarch64 ]; then \
+		python3 tools/check_space_types.py \
+			--library target/x86_64/boot-test/x86_64-unknown-none/release/libhm_kernel.rlib \
+			--target x86_64-unknown-none --output "$evidence_dir/space-types"; \
+		python3 tools/check_mapping_types.py \
+			--library target/x86_64/boot-test/x86_64-unknown-none/release/libhm_kernel.rlib \
+			--target x86_64-unknown-none --output "$evidence_dir/mapping-types"; \
+		python3 tools/check_thread_types.py \
+			--library target/x86_64/boot-test/x86_64-unknown-none/release/libhm_kernel.rlib \
+			--target x86_64-unknown-none --output "$evidence_dir/thread-types"; \
+	fi; \
+	python3 tools/test_kernel.py \
+		--kernel target/x86_64/boot-test/x86_64-unknown-none/release/hematite \
+		--output "$evidence_dir/boot" --accel tcg --arch x86_64; \
+	python3 tools/test_boot_profiles.py \
+		--test-kernel target/x86_64/boot-test/x86_64-unknown-none/release/hematite \
+		--monitor-kernel target/x86_64/monitor/x86_64-unknown-none/release/hematite \
+		--fault-kernel target/x86_64/fault-test/x86_64-unknown-none/release/hematite \
+		--nested-kernel target/x86_64/nested-test/x86_64-unknown-none/release/hematite \
+		--thread-overflow-kernel target/x86_64/thread-overflow-test/x86_64-unknown-none/release/hematite \
+		--output "$evidence_dir/profiles" --arch x86_64; \
+	if [ "x86_64" = aarch64 ]; then \
+		python3 tools/test_preemption.py --kernel target/x86_64/preemption-test/x86_64-unknown-none/release/hematite --output "$evidence_dir/preemption-128m"; \
+		python3 tools/test_preemption.py --kernel target/x86_64/preemption-test/x86_64-unknown-none/release/hematite --memory 64 --output "$evidence_dir/preemption-64m"; \
+		python3 tools/test_preemption.py --kernel target/x86_64/preemption-boundary-test/x86_64-unknown-none/release/hematite --boundaries --output "$evidence_dir/preemption-boundaries"; \
+		python3 tools/test_preemption_negative.py --no-timer-kernel target/x86_64/preemption-no-timer-test/x86_64-unknown-none/release/hematite --overflow-kernel target/x86_64/preemption-overflow-test/x86_64-unknown-none/release/hematite --output "$evidence_dir/preemption-negative"; \
+		python3 tools/test_wait_blocked.py --kernel target/x86_64/wait-all-blocked-test/x86_64-unknown-none/release/hematite --output "$evidence_dir/wait-all-blocked"; \
+		python3 tools/test_space.py --kernel target/x86_64/space-test/x86_64-unknown-none/release/hematite --output "$evidence_dir/space"; \
+		python3 tools/test_secondary.py --kernel target/x86_64/secondary-test/x86_64-unknown-none/release/hematite --stale-generation-kernel target/x86_64/secondary-stale-test/x86_64-unknown-none/release/hematite --cpu-off-return-kernel target/x86_64/secondary-off-return-test/x86_64-unknown-none/release/hematite --output "$evidence_dir/secondary"; \
+		python3 tools/test_smp.py --kernel target/x86_64/smp-test/x86_64-unknown-none/release/hematite --no-peer-timer-kernel target/x86_64/smp-no-peer-timer-test/x86_64-unknown-none/release/hematite --peer-overflow-kernel target/x86_64/smp-peer-overflow-test/x86_64-unknown-none/release/hematite --all-blocked-kernel target/x86_64/smp-all-blocked-test/x86_64-unknown-none/release/hematite --output "$evidence_dir/smp"; \
+		python3 tools/check_timer_trace.py --trace "$evidence_dir/boot/exceptions.log" \
+			--expected 16 --output "$evidence_dir/boot/timer-trace.json"; \
+		python3 tools/check_timer_trace.py --trace "$evidence_dir/profiles/monitor/exceptions.log" \
+			--expected 32 --output "$evidence_dir/profiles/monitor/timer-trace.json"; \
+		python3 tools/check_timer_trace.py --trace "$evidence_dir/profiles/memory-64m/exceptions.log" \
+			--expected 32 --output "$evidence_dir/profiles/memory-64m/timer-trace.json"; \
+	fi'
+    Checking hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+    Checking hm-core v0.1.0 (/workspace/crates/hm-core)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.72s
+..............
+----------------------------------------------------------------------
+Ran 14 tests in 0.011s
+
+OK
+.........
+----------------------------------------------------------------------
+Ran 9 tests in 0.002s
+
+OK
+........
+----------------------------------------------------------------------
+Ran 8 tests in 0.003s
+
+OK
+........
+----------------------------------------------------------------------
+Ran 8 tests in 0.001s
+
+OK
+.
+----------------------------------------------------------------------
+Ran 1 test in 0.000s
+
+OK
+.
+----------------------------------------------------------------------
+Ran 1 test in 0.000s
+
+OK
+............
+----------------------------------------------------------------------
+Ran 12 tests in 0.006s
+
+OK
+......................
+----------------------------------------------------------------------
+Ran 22 tests in 0.028s
+
+OK
+......
+----------------------------------------------------------------------
+Ran 6 tests in 0.002s
+
+OK
+.........
+----------------------------------------------------------------------
+Ran 9 tests in 0.330s
+
+OK
+.......
+----------------------------------------------------------------------
+Ran 7 tests in 0.015s
+
+OK
+PASS: Phase 0 records present; approval and runtime gates not assessed
+PASS: safe crate roots, dependency-free lockfile, core SAFETY-comment hygiene
+Scope: structural hygiene only; compile all targets and review core soundness separately
+   Compiling hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+   Compiling hm-core v0.1.0 (/workspace/crates/hm-core)
+    Finished `release` profile [optimized] target(s) in 2.87s
+   Compiling hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+   Compiling hm-core v0.1.0 (/workspace/crates/hm-core)
+    Finished `release` profile [optimized] target(s) in 2.96s
+    Finished `release` profile [optimized] target(s) in 0.00s
+{
+  "passed": true,
+  "scope": "safe-client type boundary; not runtime isolation",
+  "probes": {
+    "valid_client": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "cross_instance": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "lifetime"
+    },
+    "escaping_handle": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "lifetime"
+    },
+    "private_generation": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0616"
+    },
+    "uncloneable_instance": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    }
+  }
+}
+{
+  "passed": true,
+  "probes": {
+    "valid_issue_startup": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "valid_dispatch_host": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "valid_move_session": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "forge_issuer": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0451"
+    },
+    "forge_session": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0451"
+    },
+    "issuer_clone": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "session_clone": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "change_generation": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0616"
+    },
+    "change_grant": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0616"
+    },
+    "change_calls": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0616"
+    },
+    "change_budget": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0616"
+    },
+    "revive_session": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0616"
+    }
+  },
+  "target": "x86_64-unknown-none",
+  "scope": "actual safe native-policy type encapsulation; no hardware authority or EL0 execution"
+}
+{
+  "passed": true,
+  "scope": "actual safe ELF metadata and input lifetime boundaries; no execution or isolation claim",
+  "target": "x86_64-unknown-none",
+  "probes": {
+    "valid_parse_use": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "valid_segment_copy": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "valid_bytes_after_image_drop": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "forge_image": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0451"
+    },
+    "forge_segment": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0451"
+    },
+    "private_image_entry": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0616"
+    },
+    "private_segment_permissions": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0616"
+    },
+    "image_outlive_input": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0515"
+    },
+    "mutate_input_while_image_live": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0506"
+    },
+    "file_bytes_outlive_input": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0515"
+    },
+    "mutate_file_bytes": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0594"
+    }
+  }
+}
+{
+  "passed": true,
+  "scope": "actual frame/heap module safe-client types; no runtime physical-memory claim",
+  "probes": {
+    "library": {
+      "passed": true,
+      "returncode": 0
+    },
+    "valid_client": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "frame_clone": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "pool_clone": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "outlive_pool": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0515"
+    },
+    "drop_borrowed": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0505"
+    },
+    "mutable_alias": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0499"
+    },
+    "forge_frame": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0451"
+    },
+    "private_constructor": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0624"
+    },
+    "frame_send": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "pool_sync": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "pool_send": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "frame_sync": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "block_send_sync": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "box_cell_send": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "box_cell_sync": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "box_borrowed_cell_send": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "box_raw_pointer_send": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "private_metadata_guard": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0603"
+    },
+    "valid_heap": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "block_clone": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "box_clone": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "borrowed_value_escape": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0515"
+    },
+    "box_outlive_pool": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0515"
+    },
+    "drop_borrowed_box": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0505"
+    },
+    "box_mutable_alias": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0499"
+    },
+    "private_backing_bytes": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0616"
+    },
+    "forge_box": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0451"
+    },
+    "drop_borrowed_block": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0505"
+    },
+    "box_send": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "box_sync": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    }
+  }
+}
+{
+  "passed": true,
+  "scope": "actual core mutex safe-client type boundary",
+  "probes": {
+    "library": {
+      "passed": true,
+      "returncode": 0
+    },
+    "valid_owned_access": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "valid_send_nonsync_value": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "valid_borrowed_value": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "valid_const": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "valid_forget": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "mutex_nonsend_sync": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "mutex_nonsend_send": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "guard_send": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "guard_sync": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "cell_guard_sync": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "guard_clone": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "mutex_clone": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "guard_outlives_mutex": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0515"
+    },
+    "borrow_outlives_guard": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0515"
+    },
+    "borrowed_value_escape": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0515"
+    },
+    "drop_borrowed_guard": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0505"
+    },
+    "into_inner_while_locked": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0505"
+    },
+    "get_mut_while_locked": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0502"
+    },
+    "mutable_guard_alias": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0499"
+    },
+    "private_value": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0616"
+    },
+    "private_lock_state": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0616"
+    },
+    "forge_guard": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0451"
+    }
+  }
+}
+{
+  "passed": true,
+  "arch": "x86_64",
+  "expected_exit": 33,
+  "scope": "hematite bootstrap tests; no Linux ABI compatibility claim",
+  "expected_cases": [
+    "write_protect",
+    "nx",
+    "user_execute_protect",
+    "user_access_protect",
+    "wx",
+    "stack_guard",
+    "null_guard",
+    "checked_range",
+    "monitor_bounds",
+    "cap_authority",
+    "cap_limits",
+    "cap_lifetime",
+    "cap_generation",
+    "boot_memory_valid",
+    "boot_memory_malformed",
+    "cpu_topology_valid",
+    "cpu_topology_malformed",
+    "cpu_topology_live",
+    "elf_valid",
+    "elf_malformed",
+    "frame_ranges",
+    "frame_boundaries",
+    "frame_contract",
+    "heap_blocks",
+    "heap_values",
+    "event_contract",
+    "mutex_contract",
+    "mutex_lifetime",
+    "mutex_workers",
+    "thread_contract",
+    "thread_limits",
+    "thread_core",
+    "timer_contract",
+    "fault_contract",
+    "mapping_contract",
+    "mapping_limits",
+    "mapping_hardware",
+    "cpu_local_state",
+    "gic_ownership",
+    "secondary_memory",
+    "cap_orderings"
+  ],
+  "observed_records": [
+    "HMTEST BEGIN 41",
+    "HMTEST PASS write_protect",
+    "HMTEST PASS nx",
+    "HMTEST PASS user_execute_protect",
+    "HMTEST PASS user_access_protect",
+    "HMTEST PASS wx",
+    "HMTEST PASS stack_guard",
+    "HMTEST PASS null_guard",
+    "HMTEST PASS checked_range",
+    "HMTEST PASS monitor_bounds",
+    "HMTEST PASS cap_authority",
+    "HMTEST PASS cap_limits",
+    "HMTEST PASS cap_lifetime",
+    "HMTEST PASS cap_generation",
+    "HMTEST PASS boot_memory_valid",
+    "HMTEST PASS boot_memory_malformed",
+    "HMTEST PASS cpu_topology_valid",
+    "HMTEST PASS cpu_topology_malformed",
+    "HMTEST PASS cpu_topology_live",
+    "HMTEST PASS elf_valid",
+    "HMTEST PASS elf_malformed",
+    "HMTEST PASS frame_ranges",
+    "HMTEST PASS frame_boundaries",
+    "HMTEST PASS frame_contract",
+    "HMTEST PASS heap_blocks",
+    "HMTEST PASS heap_values",
+    "HMTEST PASS event_contract",
+    "HMTEST PASS mutex_contract",
+    "HMTEST PASS mutex_lifetime",
+    "HMTEST PASS mutex_workers",
+    "HMTEST PASS thread_contract",
+    "HMTEST PASS thread_limits",
+    "HMTEST PASS thread_core",
+    "HMTEST PASS timer_contract",
+    "HMTEST PASS fault_contract",
+    "HMTEST PASS mapping_contract",
+    "HMTEST PASS mapping_limits",
+    "HMTEST PASS mapping_hardware",
+    "HMTEST PASS cpu_local_state",
+    "HMTEST PASS gic_ownership",
+    "HMTEST PASS secondary_memory",
+    "HMTEST PASS cap_orderings",
+    "HMTEST END 41"
+  ],
+  "returncode": 33,
+  "timed_out": false,
+  "launch_error": null,
+  "errors": [],
+  "started_utc": "2026-10-26T17:48:27.854090+00:00",
+  "elapsed_seconds": 0.11485462298151106,
+  "timeout_seconds": 20
+}
+{
+  "passed": true,
+  "scope": "bootstrap CPU rejection and serial monitor; no Linux ABI claims",
+  "profiles": {
+    "missing-nx": true,
+    "missing-smep": true,
+    "missing-smap": true,
+    "monitor": true
+  },
+  "arch": "x86_64"
+}
+make[1]: Leaving directory '/home/aaron/code/hematite'
