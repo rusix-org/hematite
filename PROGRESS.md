@@ -20,7 +20,7 @@ from strict Linux parity to native OS design with selective compatibility.
   regression port. Commands `help`, `status`, `test`, `apps`, `run <path>`; Ctrl-C exits.
   Native launch is supported on one ARM CPU at 64/128 MiB.
 - `make test-all`: formatting, Clippy and safety checks for both targets,
-  164 host harness tests, ten native-policy host tests, sixteen initramfs and eight boot-image host cases, 41 guest tests per architecture, ARM no-PAN rejection,
+  169 host harness tests, ten native-policy host tests, sixteen initramfs and eight boot-image host cases, 41 guest tests per architecture, ARM no-PAN rejection,
   x86 missing-NX/SMEP/SMAP rejection, and live monitor recovery tests on both.
   ARM discovery matches both 128 MiB and 64 MiB guest configurations.
   Separate ARM images run five scheduling/wait cases at both memory sizes, then
@@ -465,12 +465,19 @@ separately from actual [delivery evidence](docs/evidence/native-startup-delivery
 The legacy native ABI header remains unchanged. Typed callers can supply 256
 opaque bytes; the monitor retains its 64-character line limit.
 
+The safe persistent turn-accounting component is locally verified separately
+from runtime integration: fifteen host cases and ten compiler clients per target,
+with all 22 existing runtime ELFs unchanged. [Evidence](docs/evidence/native-process-budget.md)
+does not claim resumable execution or process-group support.
+
 ## Next actions
 
-1. Design capability-scoped process creation and owned completion/cancellation
-   for the first multi-process native workload. Define authority transfer,
-   resource accounting, scheduling and teardown before core implementation;
-   follow the independent source, stack and runtime review gates.
+1. Finish independent approval and implement Stage B of
+   [runtime design 0028](docs/design/0028-native-process-runtime.md): actual
+   resumable EL0 turns, bounded owned groups, quiescent cancellation and retained
+   completions, including ordinary monitor use. Then connect explicit EL0
+   spawn/wait/cancel authority in Stage C. The reviewed accounting component
+   must be used by actual execution; it does not replace those requirements.
 2. Use these experiments to refine the native wire contract; select compatibility
    workloads and pin a Linux oracle when the adapter exists.
 3. Resolve the license selection; keep remote CI current as further milestones are published.
@@ -727,3 +734,11 @@ opaque bytes; the monitor retains its 64-character line limit.
   regressions include 164 Python cases per target and 26 process compiler
   clients. [Evidence](docs/evidence/native-startup-delivery.md). Spawn/IPC remain
   next; no new remote CI or publication.
+
+- 2026-10-26: Designed the next real multi-process runtime and implemented its
+  independently reviewed persistent active-turn ledger. Fifteen host cases and
+  ten compiler clients per target verify checked time, uncharged parked periods,
+  transactional failures and terminal non-revival. Full ARM/x86 suite passes
+  169 Python cases per target; all 22 runtime binaries remain unchanged.
+  [Evidence](docs/evidence/native-process-budget.md). Actual resumable groups,
+  cancellation and scoped userspace creation remain next; no new remote CI.
