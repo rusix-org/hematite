@@ -255,9 +255,13 @@ publication awaits Aaron's response. Local kernel development remains authorized
 
 ## Next actions
 
-1. Design/review SMP-safe resource/scheduler ownership before
-   enabling additional CPUs. Preserve the restricted allocator/mapping capability
-   boundary until its synchronization is implemented. Extend recovery to fault-aware user operations only with
+1. Implement the [reviewed two-CPU execution contract](docs/design/0014-arm-smp.md):
+   validate topology/PSCI, refactor CPU-local records and shared/local GIC ownership
+   under existing regressions, then add secondary startup and simultaneous
+   preemptive callbacks. [Independent review](docs/reviews/0014-arm-smp.md) is
+   complete at design level. Preserve CPU0-only allocator/mapping authority;
+   concurrent allocator ownership still needs its own design and stress tests.
+   Extend recovery to fault-aware user operations only with
    address-space and lifetime proofs. Add interrupt/SMP-safe ownership before concurrency;
    implement measured small-object allocation before service workloads.
 2. Define the native userspace wire contract from those experiments; select
@@ -372,3 +376,11 @@ publication awaits Aaron's response. Local kernel development remains authorized
   five ARM scheduling cases, park-boundary pressure and all-blocked retention.
   Added five actual-type compiler clients (19 thread/event total). Archived exact
   source/ELF identities and full logs; no remote publication attempted.
+- 2026-10-26: Completed independent prerequisite audit and design 0014 for
+  true two-CPU preemptive execution. Captured the pinned QEMU two-CPU DTB without
+  executing a kernel: affinities 0/1 and PSCI/HVC are described by the profile.
+  [Configuration evidence](docs/evidence/smp-investigation/README.md) includes
+  raw bytes, commands and reproducible decoding. Review required per-CPU stacks/
+  counters, immutable secondary tables excluding the owned arena, shared GIC
+  ownership and confirmed CPU_OFF before reuse. No CPU_ON, SMP implementation
+  or multicore execution verification occurred in this design increment.

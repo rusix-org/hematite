@@ -1,0 +1,26 @@
+{
+  "wrapper": [
+    "bash",
+    "tools/dev.sh"
+  ],
+  "timeout_seconds": 10,
+  "command": [
+    "qemu-system-aarch64",
+    "-machine",
+    "virt,gic-version=2,dumpdtb=docs/evidence/smp-investigation/two-cpu.dtb",
+    "-cpu",
+    "max",
+    "-accel",
+    "tcg",
+    "-smp",
+    "2",
+    "-m",
+    "128M",
+    "-display",
+    "none",
+    "-nodefaults",
+    "-no-user-config"
+  ],
+  "returncode": 0,
+  "scope": "device-tree generation only; no kernel execution"
+}
