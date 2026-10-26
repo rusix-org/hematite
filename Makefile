@@ -34,6 +34,7 @@ test: image
 		python3 tools/test_test_wait_blocked.py; \
 		python3 tools/test_test_secondary.py; \
 		python3 tools/test_test_smp.py; \
+		python3 tools/test_test_elf.py; \
 		python3 tools/check_repository.py; \
 		python3 tools/check_safety.py; \
 		cargo build --locked --offline -p hm-core --release --features boot-tests --target $(TARGET) --target-dir target/$(ARCH)/boot-test; \
@@ -59,12 +60,16 @@ test: image
 		python3 tools/check_capability_types.py \
 			--library target/$(ARCH)/boot-test/$(TARGET)/release/libhm_kernel.rlib \
 			--target $(TARGET) --output "$$evidence_dir/type-boundary"; \
+		python3 tools/check_elf_types.py \
+			--library target/$(ARCH)/boot-test/$(TARGET)/release/libhm_kernel.rlib \
+			--target $(TARGET) --output "$$evidence_dir/elf-types"; \
 		python3 tools/check_frame_types.py \
 			--library target/$(ARCH)/boot-test/$(TARGET)/release/libhm_kernel.rlib \
 			--target $(TARGET) --output "$$evidence_dir/frame-types"; \
 		mutex_host_args=(); \
 		if [ "$(ARCH)" = aarch64 ]; then \
 			cargo build --locked --offline -p hm-kernel --release --target x86_64-unknown-linux-gnu --target-dir target/host-mutex; \
+			python3 tools/check_elf.py --library target/host-mutex/x86_64-unknown-linux-gnu/release/libhm_kernel.rlib --output "$$evidence_dir/elf-host"; \
 			python3 tools/check_cpu_topology.py --library target/host-mutex/x86_64-unknown-linux-gnu/release/libhm_kernel.rlib --output "$$evidence_dir/cpu-topology"; \
 			mutex_host_args=(--host-library target/host-mutex/x86_64-unknown-linux-gnu/release/libhm_kernel.rlib); \
 		fi; \

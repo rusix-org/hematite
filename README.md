@@ -89,6 +89,12 @@ sizes and checks failure paths. Concurrent scheduling tests verify each CPU's
 interrupts, worker stacks and register preservation, then confirm CPU1 is OFF
 before reuse. See [SMP verification](docs/evidence/arm-smp-scheduling.md).
 
+A safe ELF parser now admits a bounded static AArch64 profile and produces a
+validated, borrowed load plan. Tests compare a separately linked ELF with
+`readelf` and reject malformed images, unsafe permissions and lifetime escapes.
+The kernel does not yet load or enter that program at EL0. See
+[ELF admission evidence](docs/evidence/elf-admission.md).
+
 The safe capability experiment checks rights attenuation, bounded accounting,
 stale handles, revocation and cancellation/completion lifetimes. It models
 metadata only; userspace identities and actual device ownership come later.

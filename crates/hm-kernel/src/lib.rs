@@ -9,6 +9,8 @@ pub mod capability;
 mod capability_tests;
 pub mod cpu_topology;
 mod cpu_topology_tests;
+pub mod elf;
+mod elf_tests;
 pub mod frame_api;
 pub mod frame_plan;
 mod frame_plan_tests;
@@ -503,6 +505,8 @@ pub fn run_tests(platform: &mut impl Platform) -> bool {
                 platform.cpu_topology().is_none()
             },
         ),
+        ("elf_valid", elf_tests::valid()),
+        ("elf_malformed", elf_tests::malformed()),
         ("frame_ranges", frame_plan_tests::ranges()),
         ("frame_boundaries", frame_plan_tests::boundaries()),
         ("frame_contract", frame_api::contract(platform)),
@@ -543,7 +547,7 @@ pub fn run_tests(platform: &mut impl Platform) -> bool {
             capability_tests::orderings(|message| platform.write(message)),
         ),
     ];
-    platform.write("HMTEST BEGIN 39\n");
+    platform.write("HMTEST BEGIN 41\n");
     let mut passed = true;
     for (name, success) in cases {
         platform.write(if success {
@@ -555,7 +559,7 @@ pub fn run_tests(platform: &mut impl Platform) -> bool {
         platform.write("\n");
         passed &= success;
     }
-    platform.write("HMTEST END 39\n");
+    platform.write("HMTEST END 41\n");
     passed
 }
 

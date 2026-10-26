@@ -1,6 +1,6 @@
 # Progress
 
-Current phase: **Phase 1 underway: two-CPU ARM scheduling and concurrent page-backed allocation verified locally**.
+Current phase: **Phase 1 locally verified within its ARM scope; Phase 2 ELF admission verified, protected userspace still planned**.
 Aaron approved scratch implementation and then changed the primary objective
 from strict Linux parity to native OS design with selective compatibility.
 [ADR 0005](docs/adr/0005-native-first-design.md) records the native direction;
@@ -19,7 +19,7 @@ from strict Linux parity to native OS design with selective compatibility.
 - Serial monitor: `make run` defaults to ARM64; `ARCH=x86_64` selects the
   regression port. Commands `help`, `status`, `test`; Ctrl-C exits.
 - `make test-all`: formatting, Clippy and safety checks for both targets,
-  75 host harness tests, 39 guest tests per architecture, ARM no-PAN rejection,
+  81 host harness tests, 41 guest tests per architecture, ARM no-PAN rejection,
   x86 missing-NX/SMEP/SMAP rejection, and live monitor recovery tests on both.
   ARM discovery matches both 128 MiB and 64 MiB guest configurations.
   Separate ARM images run five scheduling/wait cases at both memory sizes, then
@@ -35,10 +35,10 @@ from strict Linux parity to native OS design with selective compatibility.
   guest by default; lifecycle and SMP tests use two CPUs with TCG thread=multi. ARM also
   tests 64 MiB; no attached disks or networking. Both targets use TCG.
 
-Latest evidence: [concurrent allocator verification](docs/evidence/concurrent-allocation.md),
-[source identities](docs/evidence/allocation-final/source-sha256.txt),
-[SMP profiles](docs/evidence/allocation-final/aarch64/smp/result.json),
-and matching ARM/x86 regressions under `docs/evidence/allocation-final/`.
+Latest evidence: [safe ELF admission](docs/evidence/elf-admission.md),
+[source identities](docs/evidence/elf-final/source-sha256.txt),
+[real ELF inspection](docs/evidence/elf-final/aarch64/elf-host/result.json),
+and matching ARM/x86 regressions under `docs/evidence/elf-final/`.
 Earlier [bootstrap verification](docs/evidence/hematite-bootstrap.md) is retained.
 The earlier [Asterinas baseline](docs/evidence/asterinas-evaluation.md) remains
 an evaluation only; it is not this kernel's implementation.
@@ -371,14 +371,35 @@ review rejected its public push, requiring direct authorization in the current
 conversation despite ADR 0007. No push retry or remote mutex CI run has occurred;
 publication awaits Aaron's response. Local kernel development remains authorized.
 
+## Phase 1 audit and first userspace preparation
+
+The [Phase 1 audit](docs/evidence/phase1-audit.md) matches the local ARM
+mechanisms to actual source hashes, strict guest results and raw traces. It
+finds evidence for the bounded local functional exit clauses, while the formal
+CI gate remains open at the earlier published milestone. Small-object heaps,
+CPU idle and task migration are not prerequisites for one CPU0-only process.
+
+[Design 0021](docs/design/0021-arm-first-userspace.md) separates safe ELF
+admission from owned page tables, EL0 exception entry, native calls and teardown.
+Its parser stage is independently reviewed and verified: bounded ELF64/LE
+AArch64 static plans, checked ranges/permissions/entry, ignored section tables,
+private metadata and immutable input lifetimes. A real separately linked ELF
+matches readelf; 32 invalid mutations, all 13649 prefixes, 4096 deterministic
+random/mutated inputs and file-capacity boundaries pass. Eleven actual-library
+compiler clients pass on each target. This is admission evidence, not loading
+or EL0 execution. See [verification](docs/evidence/elf-admission.md).
+SP_EL0 currently holds a
+kernel emergency stack; entering EL0 requires a new reviewed trap-stack protocol.
+Executable user mappings also need explicit protection of every active identity
+alias. Initramfs, safe copy, owned handles and reclamation remain Phase 2 work.
+
 ## Next actions
 
-1. Audit the remaining Phase 1 exit requirements against the local evidence;
-   remote CI still covers the earlier published commit. Prepare the reviewed
-   ARM EL0 address-space, static ELF and native startup contract for first
-   isolated userspace. Mapper remains CPU0-only: sharing address spaces requires
-   separate lifetime and shootdown proofs. Measure small-object allocation
-   before service workloads; the current heap still charges whole pages.
+1. Implement the separately reviewed runtime stages of design 0021: owned
+   CPU0 user address spaces, protected EL0 entry/return, versioned native calls
+   and reclamation, then initramfs. Review exact root, cache, trap-stack and
+   identity-alias transitions before core edits. Keep CPU1 OFF for first-process
+   execution; concurrent address spaces need separate shootdown proofs.
 2. Define the native userspace wire contract from those experiments; select
    compatibility workloads and pin a Linux oracle when the adapter exists.
 3. Resolve the license selection; keep remote CI current as further milestones are published.
@@ -549,3 +570,10 @@ publication awaits Aaron's response. Local kernel development remains authorized
   strengthening; final compiler assembly and
   independent stack review match the tested ELF. See
   [allocator evidence](docs/evidence/concurrent-allocation.md). No public push.
+
+- 2026-10-26: Audited bounded Phase 1 local evidence against ac10326; formal
+  matching CI remains absent. Implemented the independently approved ELF
+  admission stage of design0021 and real linked-fixture/readelf verification.
+  Full ARM/x86 suite passes 41 guest cases and all prior profiles; first suite
+  stopped on two test-only Clippy warnings, preserved and corrected. Protected
+  runtime stages remain proposed. See [ELF evidence](docs/evidence/elf-admission.md).

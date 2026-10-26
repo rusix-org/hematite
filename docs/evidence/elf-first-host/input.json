@@ -1,0 +1,11 @@
+{
+  "library": "/workspace/target/host-mutex/x86_64-unknown-linux-gnu/release/libhm_kernel.rlib",
+  "library_sha256": "056f5951a1b9fd084a3360fe5a70cb39ae3774863ccf6af1e4493a947aa9c8d4",
+  "sources": {
+    "crates/hm-core/fixtures/native-elf.rs": "ceef1c3ee6b3e6ba42d1185dbd8ee10faecea9571ed525cc45401b9b4dddc295",
+    "crates/hm-core/fixtures/native-elf.ld": "20a9ff90960aaaad9f0c680c8bcef4e155038888ff3afbbd207c1b0fe28528f1",
+    "tools/test_elf_host.rs": "6dcee74dc38a9fe454e7e9e55f8c7f9bbb03a03e87dda8893199bddd29e893b2",
+    "tools/check_elf.py": "41e2fcd66b1536c4f67a2aca30d4538229f0f12e4c43e9f21c24aa5744c57033",
+    "crates/hm-kernel/src/elf.rs": "d03ef069e9cce1b1324533207e9dd5cb5e4e1b914e0eeebf47af78241654ed32"
+  }
+}

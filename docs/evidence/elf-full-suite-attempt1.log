@@ -1,0 +1,157 @@
+make test ARCH=aarch64
+make[1]: Entering directory '/home/aaron/code/hematite'
+docker build --tag hematite-build:phase0 .
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 801B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/rust:1.99.0-slim-bookworm@sha256:2c3a22f0a5533ea2dd5a16627bc841228151faa2d4de2644ac9987e4a2f1f2fa
+#2 DONE 0.7s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 54B done
+#3 DONE 0.0s
+
+#4 [1/4] FROM docker.io/library/rust:1.99.0-slim-bookworm@sha256:2c3a22f0a5533ea2dd5a16627bc841228151faa2d4de2644ac9987e4a2f1f2fa
+#4 resolve docker.io/library/rust:1.99.0-slim-bookworm@sha256:2c3a22f0a5533ea2dd5a16627bc841228151faa2d4de2644ac9987e4a2f1f2fa 0.0s done
+#4 DONE 0.0s
+
+#5 [2/4] RUN rm -f /etc/apt/sources.list.d/debian.sources     && printf 'deb [check-valid-until=no] https://snapshot.debian.org/archive/debian/20261025T000000Z/ bookworm main\n' > /etc/apt/sources.list     && apt-get update     && apt-get install -y --no-install-recommends qemu-system-x86 qemu-system-arm python3 make binutils     && rm -rf /var/lib/apt/lists/*
+#5 CACHED
+
+#6 [3/4] RUN rustup component add rustfmt clippy --toolchain 1.99.0     && rustup target add x86_64-unknown-none aarch64-unknown-none --toolchain 1.99.0
+#6 CACHED
+
+#7 [4/4] WORKDIR /workspace
+#7 CACHED
+
+#8 exporting to image
+#8 exporting layers done
+#8 exporting manifest sha256:fa8372b0ff4554cee9473e5bd7b37cc7fd2bfe5e51cafaba2ae39343a541f11a done
+#8 exporting config sha256:ee4ff07f9a7ccee825f9f03c19a9b1945edc40231be30a402b9780ffcb180764 done
+#8 exporting attestation manifest sha256:7d6977f10dcbe3ecd084b4b4dbee30bc7072c7f01867f6d4cb3e9c5f761b165c 0.0s done
+#8 exporting manifest list sha256:0b2286593b115c6c8f226a119c07e431c44c455ef2b324e287c8425ce350287b 0.0s done
+#8 naming to docker.io/library/hematite-build:phase0 done
+#8 unpacking to docker.io/library/hematite-build:phase0 done
+#8 DONE 0.1s
+bash tools/dev.sh bash -eu -c '\
+	evidence_dir="target/evidence/$(date -u +%Y%m%dT%H%M%S-%N)-aarch64"; \
+	mkdir -p "$evidence_dir"; \
+	{ rustc --version; cargo --version; qemu-system-aarch64 --version; \
+		if [ "aarch64" = x86_64 ]; then sha256sum /usr/share/qemu/bios-microvm.bin; \
+		else printf "Boot: direct ELF; no external firmware.\n"; fi; \
+	} > "$evidence_dir/environment.log"; \
+	cargo fmt --all -- --check; \
+	cargo clippy --workspace --all-features --locked --offline --target aarch64-unknown-none --target-dir target/aarch64/clippy -- -D warnings; \
+	python3 tools/test_test_kernel.py; \
+	python3 tools/test_timer_trace.py; \
+	python3 tools/test_test_preemption.py; \
+	python3 tools/test_test_preemption_negative.py; \
+	python3 tools/test_preemption_boundaries.py; \
+	python3 tools/test_test_wait_blocked.py; \
+	python3 tools/test_test_secondary.py; \
+	python3 tools/test_test_smp.py; \
+	python3 tools/test_test_elf.py; \
+	python3 tools/check_repository.py; \
+	python3 tools/check_safety.py; \
+	cargo build --locked --offline -p hm-core --release --features boot-tests --target aarch64-unknown-none --target-dir target/aarch64/boot-test; \
+	cargo build --locked --offline -p hm-core --release --target aarch64-unknown-none --target-dir target/aarch64/monitor; \
+	if [ "aarch64" = aarch64 ]; then \
+		cargo build --locked --offline -p hm-core --release --features unhandled-fault-test --target aarch64-unknown-none --target-dir target/aarch64/fault-test; \
+		cargo build --locked --offline -p hm-core --release --features nested-fault-test --target aarch64-unknown-none --target-dir target/aarch64/nested-test; \
+		cargo build --locked --offline -p hm-core --release --features thread-overflow-test --target aarch64-unknown-none --target-dir target/aarch64/thread-overflow-test; \
+		cargo build --locked --offline -p hm-core --release --features preemption-tests --target aarch64-unknown-none --target-dir target/aarch64/preemption-test; \
+		cargo build --locked --offline -p hm-core --release --features preemption-boundary-test --target aarch64-unknown-none --target-dir target/aarch64/preemption-boundary-test; \
+		cargo build --locked --offline -p hm-core --release --features preemption-no-timer-test --target aarch64-unknown-none --target-dir target/aarch64/preemption-no-timer-test; \
+		cargo build --locked --offline -p hm-core --release --features preemption-overflow-test --target aarch64-unknown-none --target-dir target/aarch64/preemption-overflow-test; \
+		cargo build --locked --offline -p hm-core --release --features wait-all-blocked-test --target aarch64-unknown-none --target-dir target/aarch64/wait-all-blocked-test; \
+		cargo build --locked --offline -p hm-core --release --features secondary-tests --target aarch64-unknown-none --target-dir target/aarch64/secondary-test; \
+		cargo build --locked --offline -p hm-core --release --features secondary-stale-generation-test --target aarch64-unknown-none --target-dir target/aarch64/secondary-stale-test; \
+		cargo build --locked --offline -p hm-core --release --features secondary-cpu-off-return-test --target aarch64-unknown-none --target-dir target/aarch64/secondary-off-return-test; \
+		cargo build --locked --offline -p hm-core --release --features smp-tests --target aarch64-unknown-none --target-dir target/aarch64/smp-test; \
+		cargo build --locked --offline -p hm-core --release --features smp-no-peer-timer-test --target aarch64-unknown-none --target-dir target/aarch64/smp-no-peer-timer-test; \
+		cargo build --locked --offline -p hm-core --release --features smp-peer-overflow-test --target aarch64-unknown-none --target-dir target/aarch64/smp-peer-overflow-test; \
+		cargo build --locked --offline -p hm-core --release --features smp-all-blocked-test --target aarch64-unknown-none --target-dir target/aarch64/smp-all-blocked-test; \
+	fi; \
+	cargo build --locked --offline -p hm-kernel --release --target aarch64-unknown-none --target-dir target/aarch64/boot-test; \
+	python3 tools/check_capability_types.py \
+		--library target/aarch64/boot-test/aarch64-unknown-none/release/libhm_kernel.rlib \
+		--target aarch64-unknown-none --output "$evidence_dir/type-boundary"; \
+	python3 tools/check_elf_types.py \
+		--library target/aarch64/boot-test/aarch64-unknown-none/release/libhm_kernel.rlib \
+		--target aarch64-unknown-none --output "$evidence_dir/elf-types"; \
+	python3 tools/check_frame_types.py \
+		--library target/aarch64/boot-test/aarch64-unknown-none/release/libhm_kernel.rlib \
+		--target aarch64-unknown-none --output "$evidence_dir/frame-types"; \
+	mutex_host_args=(); \
+	if [ "aarch64" = aarch64 ]; then \
+		cargo build --locked --offline -p hm-kernel --release --target x86_64-unknown-linux-gnu --target-dir target/host-mutex; \
+		python3 tools/check_elf.py --library target/host-mutex/x86_64-unknown-linux-gnu/release/libhm_kernel.rlib --output "$evidence_dir/elf-host"; \
+		python3 tools/check_cpu_topology.py --library target/host-mutex/x86_64-unknown-linux-gnu/release/libhm_kernel.rlib --output "$evidence_dir/cpu-topology"; \
+		mutex_host_args=(--host-library target/host-mutex/x86_64-unknown-linux-gnu/release/libhm_kernel.rlib); \
+	fi; \
+	python3 tools/check_mutex_types.py \
+		--library target/aarch64/boot-test/aarch64-unknown-none/release/libhm_kernel.rlib \
+		--target aarch64-unknown-none --output "$evidence_dir/mutex-types" "${mutex_host_args[@]}"; \
+	if [ "aarch64" = aarch64 ]; then \
+		python3 tools/check_mapping_types.py \
+			--library target/aarch64/boot-test/aarch64-unknown-none/release/libhm_kernel.rlib \
+			--target aarch64-unknown-none --output "$evidence_dir/mapping-types"; \
+		python3 tools/check_thread_types.py \
+			--library target/aarch64/boot-test/aarch64-unknown-none/release/libhm_kernel.rlib \
+			--target aarch64-unknown-none --output "$evidence_dir/thread-types"; \
+	fi; \
+	python3 tools/test_kernel.py \
+		--kernel target/aarch64/boot-test/aarch64-unknown-none/release/hematite \
+		--output "$evidence_dir/boot" --accel tcg --arch aarch64; \
+	python3 tools/test_boot_profiles.py \
+		--test-kernel target/aarch64/boot-test/aarch64-unknown-none/release/hematite \
+		--monitor-kernel target/aarch64/monitor/aarch64-unknown-none/release/hematite \
+		--fault-kernel target/aarch64/fault-test/aarch64-unknown-none/release/hematite \
+		--nested-kernel target/aarch64/nested-test/aarch64-unknown-none/release/hematite \
+		--thread-overflow-kernel target/aarch64/thread-overflow-test/aarch64-unknown-none/release/hematite \
+		--output "$evidence_dir/profiles" --arch aarch64; \
+	if [ "aarch64" = aarch64 ]; then \
+		python3 tools/test_preemption.py --kernel target/aarch64/preemption-test/aarch64-unknown-none/release/hematite --output "$evidence_dir/preemption-128m"; \
+		python3 tools/test_preemption.py --kernel target/aarch64/preemption-test/aarch64-unknown-none/release/hematite --memory 64 --output "$evidence_dir/preemption-64m"; \
+		python3 tools/test_preemption.py --kernel target/aarch64/preemption-boundary-test/aarch64-unknown-none/release/hematite --boundaries --output "$evidence_dir/preemption-boundaries"; \
+		python3 tools/test_preemption_negative.py --no-timer-kernel target/aarch64/preemption-no-timer-test/aarch64-unknown-none/release/hematite --overflow-kernel target/aarch64/preemption-overflow-test/aarch64-unknown-none/release/hematite --output "$evidence_dir/preemption-negative"; \
+		python3 tools/test_wait_blocked.py --kernel target/aarch64/wait-all-blocked-test/aarch64-unknown-none/release/hematite --output "$evidence_dir/wait-all-blocked"; \
+		python3 tools/test_secondary.py --kernel target/aarch64/secondary-test/aarch64-unknown-none/release/hematite --stale-generation-kernel target/aarch64/secondary-stale-test/aarch64-unknown-none/release/hematite --cpu-off-return-kernel target/aarch64/secondary-off-return-test/aarch64-unknown-none/release/hematite --output "$evidence_dir/secondary"; \
+		python3 tools/test_smp.py --kernel target/aarch64/smp-test/aarch64-unknown-none/release/hematite --no-peer-timer-kernel target/aarch64/smp-no-peer-timer-test/aarch64-unknown-none/release/hematite --peer-overflow-kernel target/aarch64/smp-peer-overflow-test/aarch64-unknown-none/release/hematite --all-blocked-kernel target/aarch64/smp-all-blocked-test/aarch64-unknown-none/release/hematite --output "$evidence_dir/smp"; \
+		python3 tools/check_timer_trace.py --trace "$evidence_dir/boot/exceptions.log" \
+			--expected 16 --output "$evidence_dir/boot/timer-trace.json"; \
+		python3 tools/check_timer_trace.py --trace "$evidence_dir/profiles/monitor/exceptions.log" \
+			--expected 32 --output "$evidence_dir/profiles/monitor/timer-trace.json"; \
+		python3 tools/check_timer_trace.py --trace "$evidence_dir/profiles/memory-64m/exceptions.log" \
+			--expected 32 --output "$evidence_dir/profiles/memory-64m/timer-trace.json"; \
+	fi'
+    Checking hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+error: taken reference of right operand
+  --> crates/hm-kernel/src/elf_tests.rs:61:8
+   |
+61 |     if code.file_bytes() != &[0xa5; 32]
+   |        ^^^^^^^^^^^^^^^^^^^^^-----------
+   |                             |
+   |                             help: use the right value directly: `[0xa5; 32]`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#op_ref
+   = note: `-D clippy::op-ref` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(clippy::op_ref)]`
+
+error: taken reference of right operand
+  --> crates/hm-kernel/src/elf_tests.rs:67:12
+   |
+67 |         || data.file_bytes() != &[0x5a; 16]
+   |            ^^^^^^^^^^^^^^^^^^^^^-----------
+   |                                 |
+   |                                 help: use the right value directly: `[0x5a; 16]`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#op_ref
+
+error: could not compile `hm-kernel` (lib) due to 2 previous errors
+make[1]: *** [Makefile:20: test] Error 101
+make[1]: Leaving directory '/home/aaron/code/hematite'
+make: *** [Makefile:114: test-all] Error 2

@@ -1,0 +1,5 @@
+[
+  "readelf",
+  "-sW",
+  "/workspace/docs/evidence/elf-first-host/native-elf"
+]
