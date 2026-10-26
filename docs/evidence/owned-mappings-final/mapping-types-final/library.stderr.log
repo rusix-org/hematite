@@ -1,0 +1,19 @@
+warning: static `CLAIMED` is never used
+  --> /workspace/crates/hm-core/src/mappings.rs:15:8
+   |
+15 | static CLAIMED: AtomicBool = AtomicBool::new(false);
+   |        ^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: associated function `from_boot` is never used
+  --> /workspace/crates/hm-core/src/mappings.rs:41:26
+   |
+35 | impl Mapper {
+   | ----------- associated function in this implementation
+...
+41 |     pub(crate) unsafe fn from_boot() -> Result<Self, ()> {
+   |                          ^^^^^^^^^
+
+warning: 2 warnings emitted
+

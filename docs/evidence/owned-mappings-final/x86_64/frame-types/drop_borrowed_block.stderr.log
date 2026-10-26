@@ -1,0 +1,26 @@
+warning: unused imports: `Frame`, `KernelBox`, and `Pool`
+ --> /workspace/target/evidence/20261026T071613-861856356-x86_64/frame-types/drop_borrowed_block.rs:3:17
+  |
+3 | use hm_frames::{Frame, Pool, Block, KernelBox};
+  |                 ^^^^^  ^^^^         ^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `hm_kernel::frame_api::OwnedFrame`
+ --> /workspace/target/evidence/20261026T071613-861856356-x86_64/frame-types/drop_borrowed_block.rs:4:5
+  |
+4 | use hm_kernel::frame_api::OwnedFrame;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0505]: cannot move out of `b` because it is borrowed
+ --> /workspace/target/evidence/20261026T071613-861856356-x86_64/frame-types/drop_borrowed_block.rs:6:59
+  |
+6 | pub fn client(b: Block<'_>) -> u8 { let r=b.bytes(); drop(b); r[0] }
+  |               -                           -               ^   ---- borrow later used here
+  |               |                           |               |
+  |               |                           |               move out of `b` occurs here
+  |               binding `b` declared here   borrow of `b` occurs here
+
+error: aborting due to 1 previous error; 2 warnings emitted
+
+For more information about this error, try `rustc --explain E0505`.

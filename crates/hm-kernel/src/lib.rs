@@ -12,6 +12,8 @@ pub mod frame_plan;
 mod frame_plan_tests;
 pub mod heap_api;
 mod heap_tests;
+pub mod mapping_api;
+mod mapping_tests;
 
 use core::ops::Range;
 
@@ -33,6 +35,21 @@ pub struct BootChecks {
 
 /// The core retains all hardware authority; policy only exchanges owned values.
 pub trait Platform {
+    type Mapping<'a>: mapping_api::OwnedMapping<Frame = Self::Frame<'a>>
+    where
+        Self: 'a;
+    fn map_frame<'a>(
+        &'a self,
+        frame: Self::Frame<'a>,
+    ) -> Result<Self::Mapping<'a>, (mapping_api::MapError, Self::Frame<'a>)> {
+        Err((mapping_api::MapError::Unsupported, frame))
+    }
+    fn mapping_stats(&self) -> Option<mapping_api::MapStats> {
+        None
+    }
+    fn mapping_hardware_check(&self) -> bool {
+        false
+    }
     fn fault_checks(&self) -> Option<FaultChecks> {
         None
     }
@@ -301,12 +318,15 @@ pub fn run_tests(platform: &mut impl Platform) -> bool {
         ("heap_blocks", heap_tests::blocks(platform)),
         ("heap_values", heap_tests::values(platform)),
         ("fault_contract", fault_contract(platform)),
+        ("mapping_contract", mapping_tests::contract(platform)),
+        ("mapping_limits", mapping_tests::limits(platform)),
+        ("mapping_hardware", mapping_tests::hardware(platform)),
         (
             "cap_orderings",
             capability_tests::orderings(|message| platform.write(message)),
         ),
     ];
-    platform.write("HMTEST BEGIN 22\n");
+    platform.write("HMTEST BEGIN 25\n");
     let mut passed = true;
     for (name, success) in cases {
         platform.write(if success {
@@ -318,7 +338,7 @@ pub fn run_tests(platform: &mut impl Platform) -> bool {
         platform.write("\n");
         passed &= success;
     }
-    platform.write("HMTEST END 22\n");
+    platform.write("HMTEST END 25\n");
     passed
 }
 

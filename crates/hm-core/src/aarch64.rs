@@ -14,6 +14,7 @@ unsafe extern "C" {
     static mut arm_device_l3: [u64; 512];
     static mut arm_ram_l2: [u64; 512];
     static mut arm_ram_l3: [u64; 4096];
+    static mut arm_owned_l2: [u64; 512];
     static __text_start: [u8; 0];
     static __text_end: [u8; 0];
     static __rodata_start: [u8; 0];
@@ -34,10 +35,34 @@ const UART_PAGE: u64 = 0x0060_0000_0900_0407;
 pub(super) struct BootPlatform {
     memory: hm_kernel::boot_memory::MemoryMap,
     pool: Option<super::frames::Pool>,
+    mapper: Option<super::mappings::Mapper>,
 }
 pub(super) const BANNER: &str = "hematite: ARM64 Rust kernel entered at EL1\n";
 
 impl Platform for BootPlatform {
+    type Mapping<'a> = super::mappings::MappedPage<'a, 'a>;
+
+    fn map_frame<'a>(
+        &'a self,
+        frame: Self::Frame<'a>,
+    ) -> Result<Self::Mapping<'a>, (hm_kernel::mapping_api::MapError, Self::Frame<'a>)> {
+        match self.mapper.as_ref() {
+            Some(mapper) => mapper.map(frame),
+            None => Err((hm_kernel::mapping_api::MapError::Unsupported, frame)),
+        }
+    }
+
+    fn mapping_stats(&self) -> Option<hm_kernel::mapping_api::MapStats> {
+        self.mapper.as_ref().map(super::mappings::Mapper::stats)
+    }
+
+    fn mapping_hardware_check(&self) -> bool {
+        match (self.mapper.as_ref(), self.pool.as_ref()) {
+            (Some(mapper), Some(pool)) => mapper.hardware_check(pool),
+            _ => false,
+        }
+    }
+
     fn fault_checks(&self) -> Option<hm_kernel::FaultChecks> {
         Some(super::exceptions::checks())
     }
@@ -141,13 +166,17 @@ impl Platform for BootPlatform {
         let dev_l3 = core::ptr::addr_of!(arm_device_l3) as u64;
         let ram_l2 = core::ptr::addr_of!(arm_ram_l2) as u64;
         let ram_l3 = core::ptr::addr_of!(arm_ram_l3) as u64;
+        let owned_l2 = core::ptr::addr_of!(arm_owned_l2) as u64;
         let text = (core::ptr::addr_of!(__text_start) as usize)
             ..(core::ptr::addr_of!(__text_end) as usize);
         let rodata = (core::ptr::addr_of!(__rodata_start) as usize)
             ..(core::ptr::addr_of!(__rodata_end) as usize);
         let guard = core::ptr::addr_of!(__stack_guard) as usize;
         let exception_guard = core::ptr::addr_of!(__exception_stack_guard) as usize;
-        let mut mappings = ttbr == root && tcr == 0x8099_3519 && mair == 0xff;
+        let mut mappings = ttbr == root
+            && tcr == 0x8099_3519
+            && mair == 0xff
+            && super::mappings::tables_match(self.mapper.as_ref());
         // SAFETY: Each loop index lies within its named linker-owned array.
         // These initialized tables are mapped and not mutated by safe policy;
         // raw volatile access respects their status as hardware-owned storage.
@@ -156,6 +185,7 @@ impl Platform for BootPlatform {
                 let root_expected = match index {
                     0 => dev_l2 | 3,
                     1 => ram_l2 | 3,
+                    2 => owned_l2 | 3,
                     _ => 0,
                 };
                 mappings &= core::ptr::addr_of!(arm_root)
@@ -254,7 +284,11 @@ fn initialize() -> Result<BootPlatform, ()> {
     use hm_kernel::boot_memory::Region;
     use hm_kernel::frame_plan::Plan;
     let memory = discover_memory()?;
-    let mut platform = BootPlatform { memory, pool: None };
+    let mut platform = BootPlatform {
+        memory,
+        pool: None,
+        mapper: None,
+    };
     let checks = platform.checks();
     if !checks.write_protect
         || !checks.wx
@@ -304,11 +338,17 @@ fn initialize() -> Result<BootPlatform, ()> {
     // advertised full RAM pages in the checked identity map, excluding every
     // reservation, all kernel/table/stack storage and the entire DTB prefix.
     // checks proved the full mapping tree: eligible leaves are exclusive
-    // supervisor RW/NX normal RAM, with no alias. One CPU/interrupts masked;
-    // no API changes mappings. Constructor permanently claims singleton use.
+    // supervisor RW/NX normal RAM, initially without aliases. Identity maps
+    // never change. Only consuming Frame mappings may add matching-attribute
+    // aliases, keeping identity bytes private until completed invalidation.
+    // One CPU/interrupts masked. Constructor permanently claims singleton use.
     // SAFETY: The checks and exclusions above prove the constructor contract;
     // repeated initialization is rejected before any physical memory access.
     platform.pool = Some(unsafe { super::frames::Pool::from_boot(plan) }.map_err(|_| ())?);
+    // SAFETY: The full initial checks proved the permanent arena hierarchy
+    // and zero leaves. Bootstrap is EL1, one CPU, exceptions masked, no DMA.
+    // The mapper owns all later leaf changes; identity mappings stay fixed.
+    platform.mapper = Some(unsafe { super::mappings::Mapper::from_boot() }?);
     Ok(platform)
 }
 

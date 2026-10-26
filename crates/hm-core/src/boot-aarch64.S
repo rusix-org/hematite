@@ -45,6 +45,13 @@ arm_start:
     ldr x1, =arm_ram_l2
     orr x1, x1, #3
     str x1, [x0, #8]
+    ldr x1, =arm_owned_l2
+    orr x1, x1, #3
+    str x1, [x0, #16]              // Owned data arena at VA 0x80000000.
+    ldr x0, =arm_owned_l2
+    ldr x1, =arm_owned_l3
+    orr x1, x1, #3
+    str x1, [x0]                  // Leaves remain invalid until owned map.
     ldr x0, =arm_device_l2
     ldr x1, =arm_device_l3
     orr x1, x1, #3
@@ -186,8 +193,11 @@ pan_message: .asciz "HMBOOT REJECT PAN\n"
 .section .bss.tables,"aw",@nobits
 .balign 4096
 .global arm_root, arm_device_l2, arm_device_l3, arm_ram_l2, arm_ram_l3
+.global arm_owned_l2, arm_owned_l3
 arm_root: .skip 4096
 arm_device_l2: .skip 4096
 arm_device_l3: .skip 4096
 arm_ram_l2: .skip 4096
 arm_ram_l3: .skip 32768
+arm_owned_l2: .skip 4096
+arm_owned_l3: .skip 4096

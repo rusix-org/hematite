@@ -27,6 +27,7 @@ unsafe extern "C" {
 pub(super) struct BootPlatform;
 
 impl Platform for BootPlatform {
+    type Mapping<'a> = hm_kernel::mapping_api::UnsupportedMapping;
     type HeapBlock<'a> = hm_kernel::heap_api::UnsupportedBlock;
     type HeapBox<'a, T: 'a> = hm_kernel::heap_api::UnsupportedBox<T>;
 

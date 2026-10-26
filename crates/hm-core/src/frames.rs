@@ -22,9 +22,11 @@ pub struct Frame<'pool> {
 impl Pool {
     /// If this call claims the previously-unclaimed latch, the caller proves
     /// every eligible page is exclusively owned, initialized,
-    /// mapped writable normal RAM, with no aliases, users or DMA. The plan
-    /// excludes all boot storage and reservations. No mapping may change
-    /// while the pool or any frame exists. Single CPU, interrupts masked.
+    /// mapped writable normal RAM, initially with no aliases, users or DMA.
+    /// The plan excludes all boot storage and reservations. Identity mappings
+    /// never change. Only the consuming owned-mapping protocol (design 0008)
+    /// may create matching-attribute aliases, without identity byte access until
+    /// invalidation completes. Single CPU, interrupts masked.
     /// If already claimed, no physical precondition applies: the method returns
     /// AlreadyInitialized before using the supplied plan.
     // SAFETY: Caller establishes the documented physical ownership contract

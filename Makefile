@@ -42,6 +42,11 @@ test: image
 		python3 tools/check_frame_types.py \
 			--library target/$(ARCH)/boot-test/$(TARGET)/release/libhm_kernel.rlib \
 			--target $(TARGET) --output "$$evidence_dir/frame-types"; \
+		if [ "$(ARCH)" = aarch64 ]; then \
+			python3 tools/check_mapping_types.py \
+				--library target/$(ARCH)/boot-test/$(TARGET)/release/libhm_kernel.rlib \
+				--target $(TARGET) --output "$$evidence_dir/mapping-types"; \
+		fi; \
 		python3 tools/test_kernel.py \
 			--kernel target/$(ARCH)/boot-test/$(TARGET)/release/hematite \
 			--output "$$evidence_dir/boot" --accel tcg --arch $(ARCH); \

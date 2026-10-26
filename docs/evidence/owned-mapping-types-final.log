@@ -1,0 +1,115 @@
+{
+  "passed": true,
+  "scope": "actual ARM mapping/frame safe-client types; runtime translation tested separately",
+  "probes": {
+    "library": {
+      "passed": true,
+      "returncode": 0
+    },
+    "valid_map_unmap": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "valid_shared_reads": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "valid_forget": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "frame_after_map": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0382"
+    },
+    "frame_borrow_during_map": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0505"
+    },
+    "borrow_after_unmap": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0505"
+    },
+    "borrow_after_drop": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0505"
+    },
+    "mutable_alias": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0499"
+    },
+    "shared_mutable_alias": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0502"
+    },
+    "outlive_mapper": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0515"
+    },
+    "outlive_pool": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0515"
+    },
+    "mapping_clone": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "mapper_clone": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "mapping_send": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "mapping_sync": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "mapper_sync": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "private_backing": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0616"
+    },
+    "forge_mapping": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0451"
+    },
+    "integer_backing": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0308"
+    },
+    "double_unmap": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0382"
+    },
+    "private_constructor": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0624"
+    }
+  }
+}

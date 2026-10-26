@@ -9,6 +9,8 @@ use hm_kernel::Platform;
 mod exceptions;
 #[cfg(target_arch = "aarch64")]
 mod frames;
+#[cfg(target_arch = "aarch64")]
+mod mappings;
 
 #[cfg(target_arch = "x86_64")]
 #[path = "x86_64.rs"]

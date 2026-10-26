@@ -1,6 +1,6 @@
 # Progress
 
-Current phase: **Phase 1 underway: ARM64 fixed-site fault recovery verified**.
+Current phase: **Phase 1 underway: ARM64 owned data-page mappings verified**.
 Aaron approved scratch implementation and then changed the primary objective
 from strict Linux parity to native OS design with selective compatibility.
 [ADR 0005](docs/adr/0005-native-first-design.md) records the native direction;
@@ -19,17 +19,17 @@ from strict Linux parity to native OS design with selective compatibility.
 - Serial monitor: `make run` defaults to ARM64; `ARCH=x86_64` selects the
   regression port. Commands `help`, `status`, `test`; Ctrl-C exits.
 - `make test-all`: formatting, Clippy and safety checks for both targets,
-  13 host harness tests, 22 guest tests per architecture, ARM no-PAN rejection,
+  13 host harness tests, 25 guest tests per architecture, ARM no-PAN rejection,
   x86 missing-NX/SMEP/SMAP rejection, and live monitor recovery tests on both.
   ARM discovery matches both 128 MiB and 64 MiB guest configurations.
   All passed locally. `make test` tests ARM64 alone by default.
 - Pinned Rust base and Debian package snapshot, QEMU 7.2.22. One CPU/128 MiB
   guest by default; ARM discovery also tests 64 MiB; no attached disks or networking. Both targets use TCG.
 
-Latest evidence: [exception verification](docs/evidence/arm-exceptions.md),
-[ARM guest results](docs/evidence/exception-final/aarch64/boot/result.json),
-[ARM profiles](docs/evidence/exception-final/aarch64/profiles/result.json),
-and matching x86 results under `docs/evidence/exception-final/x86_64/`.
+Latest evidence: [owned mapping verification](docs/evidence/owned-mappings.md),
+[ARM guest results](docs/evidence/owned-mappings-final/aarch64/boot/result.json),
+[ARM profiles](docs/evidence/owned-mappings-final/aarch64/profiles/result.json),
+and matching x86 results under `docs/evidence/owned-mappings-final/x86_64/`.
 Earlier [bootstrap verification](docs/evidence/hematite-bootstrap.md) is retained.
 The earlier [Asterinas baseline](docs/evidence/asterinas-evaluation.md) remains
 an evaluation only; it is not this kernel's implementation.
@@ -108,6 +108,25 @@ See [design](docs/design/0007-arm-exceptions.md),
 [review](docs/reviews/0007-arm-exceptions.md) and
 [evidence](docs/evidence/arm-exceptions.md).
 
+## ARM owned data-page mappings verified locally
+
+A 64-page kernel virtual arena consumes frame owners and retains backing until
+unmap completes local TLB invalidation. Safe clients access only the mapped
+alias; explicit unmap returns the original frame, and Drop invalidates before
+reclamation. Forgotten mappings retain their slot and backing, even if the
+mapper/pool later disappear. Two permanent table pages remain linker-owned.
+
+Tests cover live contents and protection checks, warmed-slot replacement with
+different physical pages, translation faults after unmap/Drop, zeroed physical
+reuse, full-arena failure returning the original frame, and one bounded forgotten
+mapping per boot. Twenty-one ARM compiler probes check consuming lifetimes and
+private authority. There are now three deliberately retained diagnostic pages
+per boot across frame, heap and mapping checks. x86 mapping is unsupported.
+See [design](docs/design/0008-arm-owned-mappings.md),
+[review](docs/reviews/0008-arm-owned-mappings.md) and
+[evidence](docs/evidence/owned-mappings.md). Dynamic table allocation, address
+spaces, executable mappings and SMP shootdowns remain unimplemented.
+
 ## Limits and gates
 
 No userspace, syscall ABI, general interrupt/exception handling, SMP, storage,
@@ -124,15 +143,15 @@ labels are trusted inputs and completion is a simulated backend acknowledgment.
 See [model verification](docs/evidence/capability-model.md).
 
 Published bootstrap CI passed at `b1b824c` ([run 40276324135](https://github.com/rusix-org/hematite/actions/runs/40276324135)).
-The capability, memory, heap and exception changes passed locally; remote CI has not
+The capability, memory, heap, exception and owned mapping changes passed locally; remote CI has not
 run these changes. Aaron authorized public repository creation
 and push in [ADR 0007](docs/adr/0007-public-repository.md). License selection
 remains pending (ADR 0002); preliminary naming findings remain in ADR 0003.
 
 ## Next actions
 
-1. Design/review page-table ownership, then timer/interrupt delivery and
-   scheduling. Extend recovery to fault-aware user operations only with
+1. Design/review ARM timer/interrupt delivery and scheduling, including how
+   existing single-CPU ownership remains protected. Extend recovery to fault-aware user operations only with
    address-space and lifetime proofs. Add interrupt/SMP-safe ownership before concurrency;
    implement measured small-object allocation before service workloads.
 2. Define the native userspace wire contract from those experiments; select
@@ -196,3 +215,9 @@ remains pending (ADR 0002); preliminary naming findings remain in ADR 0003.
   harness tests pass on both targets; ARM invalid-normal-stack and nested-fault
   images exit through their required fatal routes. Preserved raw QEMU exception
   traces, exact source/ELF identities and compiler evidence.
+
+- 2026-10-26: Implemented independently reviewed ARM owned data mappings with
+  completed invalidation before backing reclamation. Dual suite passes 25 guest
+  cases and 13 host tests; final 21 mapping compiler probes pass. Preserved raw
+  results and source identities. The bounded arena uses permanent table storage;
+  no general address-space teardown or concurrency support is claimed.
