@@ -1,0 +1,17 @@
+
+running 12 tests
+test absent_dispatch ... ok
+test core_errors_are_reported ... ok
+test empty_dispatch ... ok
+test empty_or_whitespace_path_rejected ... ok
+test group_completion_order ... ok
+test group_malformed_order_rejected ... ok
+test group_path_arity ... ok
+test group_paths_and_unsupported ... ok
+test maximum_payload ... ok
+test oversize_rejected ... ok
+test spaces_preserved ... ok
+test unsupported_input ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

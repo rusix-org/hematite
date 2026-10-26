@@ -8,15 +8,15 @@ ARTIFACTS = {'stdout': {'within_limit': True}, 'stderr': {'within_limit': True}}
 
 
 def report():
-    lines = ['running 8 tests'] + [f'test {case} ... ok' for case in harness.CASES]
-    lines += ['test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s']
+    lines = ['running 12 tests'] + [f'test {case} ... ok' for case in harness.CASES]
+    lines += ['test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s']
     return ('\n' + '\n'.join(lines) + '\n\n').encode()
 
 
 class LaunchInputHarnessTests(unittest.TestCase):
     def test_exact_host_inventory(self):
         self.assertTrue(harness.validate_execution(report(), EXECUTION, ARTIFACTS)['passed'])
-        self.assertEqual(len(harness.CASES), 8)
+        self.assertEqual(len(harness.CASES), 12)
         self.assertIn('absent_dispatch', harness.CASES)
 
     def test_every_test_and_delimiter_is_mandatory_once(self):
@@ -30,9 +30,9 @@ class LaunchInputHarnessTests(unittest.TestCase):
     def test_skip_filter_wrong_summary_and_wrong_test_module(self):
         raw = report()
         for old, new in ((b'... ok', b'... ignored'), (b'... ok', b'... FAILED'),
-                (b'8 passed', b'7 passed'), (b'0 ignored', b'1 ignored'),
+                (b'12 passed', b'7 passed'), (b'0 ignored', b'1 ignored'),
                 (b'0 filtered out', b'1 filtered out'), (b'0 failed', b'1 failed'),
-                (b'0 measured', b'1 measured'), (b'running 8 tests', b'running 0 tests'),
+                (b'0 measured', b'1 measured'), (b'running 12 tests', b'running 0 tests'),
                 (b'test absent_dispatch', b'test native::tests::absent_dispatch')):
             self.assertFalse(harness.validate(raw.replace(old, new, 1))['passed'])
         self.assertFalse(harness.validate(raw + b'unknown test output\n')['passed'])

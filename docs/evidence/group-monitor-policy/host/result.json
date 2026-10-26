@@ -1,0 +1,65 @@
+{
+  "passed": true,
+  "checks": {
+    "exit_success": true,
+    "within_deadline": true,
+    "launched": true,
+    "complete_report": true,
+    "bounded_logs": true
+  },
+  "execution": {
+    "started_utc": "2026-10-26T21:11:34.381897+00:00",
+    "timeout_seconds": 60,
+    "returncode": 0,
+    "timed_out": false,
+    "launch_error": null,
+    "elapsed_seconds": 0.415470008039847
+  },
+  "artifacts": {
+    "stdout": {
+      "bytes": 517,
+      "within_limit": true,
+      "sha256": "bf310492a57b2c5eecd42df7729d1ebd86852f1721ac8730b638edcb07d3d3df"
+    },
+    "stderr": {
+      "bytes": 261,
+      "within_limit": true,
+      "sha256": "edba5c9aeb2c4791239aea61ab650799b7f260eead64a58deac21030e243e284"
+    }
+  },
+  "report": {
+    "passed": true,
+    "errors": [],
+    "expected_cases": [
+      "absent_dispatch",
+      "core_errors_are_reported",
+      "empty_dispatch",
+      "empty_or_whitespace_path_rejected",
+      "group_completion_order",
+      "group_malformed_order_rejected",
+      "group_path_arity",
+      "group_paths_and_unsupported",
+      "maximum_payload",
+      "oversize_rejected",
+      "spaces_preserved",
+      "unsupported_input"
+    ],
+    "observed_lines": [
+      "running 12 tests",
+      "test absent_dispatch ... ok",
+      "test core_errors_are_reported ... ok",
+      "test empty_dispatch ... ok",
+      "test empty_or_whitespace_path_rejected ... ok",
+      "test group_completion_order ... ok",
+      "test group_malformed_order_rejected ... ok",
+      "test group_path_arity ... ok",
+      "test group_paths_and_unsupported ... ok",
+      "test maximum_payload ... ok",
+      "test oversize_rejected ... ok",
+      "test spaces_preserved ... ok",
+      "test unsupported_input ... ok",
+      "test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s"
+    ]
+  },
+  "scope": "actual monitor command parsing and dispatch with effect recorder; real Platform and hardware checked separately"
+}

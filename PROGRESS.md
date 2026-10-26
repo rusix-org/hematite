@@ -8,6 +8,13 @@ from strict Linux parity to native OS design with selective compatibility.
 
 ## Implementation and verification
 
+- Stage B group runtime is in design review. Safe monitor groundwork recognizes
+  `run-group <path1> <path2>` and renders copied results in completion order;
+  the platform still returns Unsupported until the real core is connected.
+  Twelve monitor policy cases pass, including four group cases, with strict
+  [host evidence](docs/evidence/group-monitor-policy/group-cases/result.json).
+  Safe-crate Clippy passes on ARM/x86; no new guest/runtime claim is made.
+
 - Stable Rust 1.99.0 workspace, no external kernel crates, locked dependencies.
 - Original ARM64 direct-ELF entry at EL1, 4 KiB translation tables,
   privileged-only W^X/PXN/UXN mappings, PAN, guarded stack and PL011 console.

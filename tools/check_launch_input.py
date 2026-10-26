@@ -13,7 +13,8 @@ import sys
 import time
 
 CASES = tuple(sorted(('absent_dispatch', 'empty_dispatch', 'spaces_preserved', 'maximum_payload',
-    'oversize_rejected', 'empty_or_whitespace_path_rejected', 'core_errors_are_reported', 'unsupported_input')))
+    'oversize_rejected', 'empty_or_whitespace_path_rejected', 'core_errors_are_reported', 'unsupported_input', 'group_path_arity', 'group_paths_and_unsupported',
+    'group_completion_order', 'group_malformed_order_rejected')))
 TIMEOUT_SECONDS = 60
 MAX_LOG_BYTES = 4 * 1024 * 1024
 
@@ -28,10 +29,10 @@ def validate(raw):
     if not raw.endswith(b'\n') or len(raw) > MAX_LOG_BYTES:
         errors.append('Incomplete or oversized test output')
     lines = [line for line in text.split('\n') if line]
-    expected = ['running 8 tests'] + [f'test {case} ... ok' for case in CASES]
+    expected = ['running 12 tests'] + [f'test {case} ... ok' for case in CASES]
     if lines[:-1] != expected:
-        errors.append('Test inventory/order/results differ from the exact eight cases')
-    if not lines or not re.fullmatch(r'test result: ok\. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in [0-9]+\.[0-9]+s', lines[-1]):
+        errors.append('Test inventory/order/results differ from the exact twelve cases')
+    if not lines or not re.fullmatch(r'test result: ok\. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in [0-9]+\.[0-9]+s', lines[-1]):
         errors.append('Missing or unsuccessful complete summary')
     return {'passed': not errors, 'errors': errors, 'expected_cases': list(CASES), 'observed_lines': lines}
 
@@ -48,7 +49,7 @@ def validate_execution(raw, execution, artifacts):
     }
     return {'passed': all(checks.values()), 'checks': checks, 'execution': execution,
             'artifacts': artifacts, 'report': report,
-            'scope': 'actual actual monitor command parsing and dispatch with effect recorder; real Platform and hardware checked separately'}
+            'scope': 'actual monitor command parsing and dispatch with effect recorder; real Platform and hardware checked separately'}
 
 
 def main():

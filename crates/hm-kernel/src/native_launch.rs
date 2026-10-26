@@ -41,6 +41,26 @@ pub struct LaunchReport {
     pub before: usize,
     pub after: usize,
 }
+/// Detached results, returned only after both process owners are reclaimed.
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub enum GroupOutcome {
+    Exited(u8),
+    Fault,
+    Budget,
+    CallLimit,
+    TurnLimit,
+    Cancelled,
+    Unavailable,
+}
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub struct GroupLaunchReport {
+    pub outcomes: [GroupOutcome; 2],
+    pub completion_order: [usize; 2],
+    pub completed: u64,
+    pub generation: u32,
+    pub before: usize,
+    pub after: usize,
+}
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum LaunchError {
     Unsupported,
@@ -53,6 +73,51 @@ pub enum LaunchError {
     Resources,
 }
 const UNSUPPORTED: &str = "Native launching is unsupported on this platform.\n";
+
+/// Parse two exact archive paths; output occurs after synchronous teardown.
+#[inline(never)]
+pub(crate) fn run_group_command(platform: &mut impl Platform, command: &str) {
+    let mut words = command.split_ascii_whitespace();
+    let (Some(first), Some(second), None) = (words.next(), words.next(), words.next()) else {
+        platform.write("Usage: run-group <archive-path> <archive-path>.\n");
+        return;
+    };
+    match platform.run_native_group([first, second]) {
+        Ok(report) => {
+            if !matches!(report.completion_order, [0, 1] | [1, 0]) {
+                platform.write("Invalid group completion report.\n");
+                return;
+            }
+            for index in report.completion_order {
+                platform.write(if index == 0 { first } else { second });
+                platform.write(": ");
+                match report.outcomes[index] {
+                    GroupOutcome::Exited(code) => {
+                        platform.write("exited (status ");
+                        number(platform, u64::from(code));
+                        platform.write(").\n");
+                    }
+                    GroupOutcome::Fault => platform.write("faulted.\n"),
+                    GroupOutcome::Budget => platform.write("exhausted its active-time budget.\n"),
+                    GroupOutcome::CallLimit => platform.write("exceeded its call limit.\n"),
+                    GroupOutcome::TurnLimit => platform.write("exceeded its turn limit.\n"),
+                    GroupOutcome::Cancelled => platform.write("cancelled.\n"),
+                    GroupOutcome::Unavailable => platform.write("execution unavailable.\n"),
+                }
+            }
+        }
+        Err(error) => platform.write(match error {
+            LaunchError::Unsupported => UNSUPPORTED,
+            LaunchError::Archive(_) => "Native application archive is invalid.\n",
+            LaunchError::Missing => "Program not found.\n",
+            LaunchError::Directory => "Cannot launch a directory.\n",
+            LaunchError::Elf(_) => "Program is not a supported native ELF.\n",
+            LaunchError::Unavailable => "Native launcher is unavailable.\n",
+            LaunchError::Busy => "Native launcher is busy.\n",
+            LaunchError::Resources => "Insufficient resources to launch group.\n",
+        }),
+    }
+}
 
 #[inline(never)]
 pub(crate) fn list_apps(platform: &mut impl Platform) {

@@ -52,6 +52,12 @@ pub struct BootChecks {
 
 /// The core retains all hardware authority; policy only exchanges owned values.
 pub trait Platform {
+    fn run_native_group(
+        &mut self,
+        _paths: [&str; 2],
+    ) -> Result<native_launch::GroupLaunchReport, native_launch::LaunchError> {
+        Err(native_launch::LaunchError::Unsupported)
+    }
     fn native_archive(&self) -> Option<&'static [u8]> {
         None
     }
@@ -675,6 +681,12 @@ pub fn run_monitor(platform: &mut impl Platform) -> ! {
                     Some(b"status") => status(platform),
                     Some(b"apps") => native_launch::list_apps(platform),
                     Some(b"run") => native_launch::run_command(platform, ""),
+                    Some(b"run-group") => native_launch::run_group_command(platform, ""),
+                    Some(command) if command.starts_with(b"run-group ") => {
+                        if let Ok(paths) = core::str::from_utf8(&command[10..]) {
+                            native_launch::run_group_command(platform, paths);
+                        }
+                    },
                     Some(command) if command.starts_with(b"run ") => {
                         if let Ok(path) = core::str::from_utf8(&command[4..]) {
                             native_launch::run_command(platform, path);
