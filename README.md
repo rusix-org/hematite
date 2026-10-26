@@ -30,9 +30,9 @@ KVM and host boot changes are not required. Builds use two CPUs and at most
 Test runs preserve serial output, input hash, expanded QEMU command and results
 under `target/evidence/`. Missing/duplicate/failed cases, unexpected exit status
 and timeouts fail the command. GitHub CI runs the same `make test-all` command;
-remote CI has not been executed because no remote has been published.
+remote results are available in the repository’s GitHub Actions tab.
 
 See [PROGRESS.md](PROGRESS.md), [the bootstrap design](docs/design/0001-bootstrap.md),
-[decision records](docs/adr/), and [AGENTS.md](AGENTS.md). The name remains local
-and provisional, and the proposed license has not been adopted. The evaluated
+[decision records](docs/adr/), and [AGENTS.md](AGENTS.md). Public repository publication is authorized by [ADR 0007](docs/adr/0007-public-repository.md);
+the proposed license has not been adopted. The evaluated
 Asterinas code in ignored `.work/` is not part of this kernel.
