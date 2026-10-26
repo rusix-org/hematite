@@ -1,0 +1,5 @@
+HMELF IMAGE entry=4294967296 pages=5 segments=3
+HMELF LOAD va=4294967296 filesz=56 memsz=56 flags=5 page_start=4294967296 page_end=4294971392 file_hash=5990023392080949802
+HMELF LOAD va=4294971392 filesz=16 memsz=16 flags=4 page_start=4294971392 page_end=4294975488 file_hash=5298123916349964740
+HMELF LOAD va=4294975488 filesz=16 memsz=8208 flags=6 page_start=4294975488 page_end=4294987776 file_hash=2014243065793578549
+HMELF HOST PASS cases=5 mutations=32 truncations=13649 random=4096

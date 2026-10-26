@@ -127,9 +127,13 @@ impl Pool {
     /// every eligible page is exclusively owned, initialized,
     /// mapped writable normal RAM, initially with no aliases, users or DMA.
     /// The plan excludes all boot storage and reservations. Identity mappings
-    /// never change. Only the consuming owned-mapping protocol (design 0008)
-    /// may create matching-attribute aliases, without identity byte access until
-    /// invalidation completes. All admitted CPUs use coherent matching normal
+    /// in the boot tables never change. The consuming owned-mapping protocol
+    /// (design 0008) creates matching-attribute aliases without identity byte
+    /// access until invalidation completes. Design 0022 additionally permits
+    /// private user roots to tighten owned RX identity aliases to read-only:
+    /// no Rust byte access occurs under those roots, and the original root is
+    /// restored with full invalidation before any owner operation resumes.
+    /// All admitted CPUs use coherent matching normal
     /// identity mappings. Only metadata is locked; zeroing and value access
     /// retain exclusive frame/run ownership outside that lock.
     /// Scoped timer IRQs (design 0009) touch only private assembly/GIC state,

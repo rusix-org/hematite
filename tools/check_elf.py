@@ -104,6 +104,7 @@ def main():
     root = Path(__file__).resolve().parents[1]
     fixture_source = root / "crates/hm-core/fixtures/native-elf.rs"
     fixture_linker = root / "crates/hm-core/fixtures/native-elf.ld"
+    canonical_fixture = root / "crates/hm-core/fixtures/native-elf"
     host_source = root / "tools/test_elf_host.rs"
     fixture, executable = output / "native-elf", output / "elf-host"
     source_paths = [fixture_source, fixture_linker, host_source, Path(__file__).resolve(), root / "crates/hm-kernel/src/elf.rs"]
@@ -120,6 +121,14 @@ def main():
     good_fixture = code == 0 and fixture.is_file() and 64 <= fixture.stat().st_size <= 1024 * 1024
     results["fixture"] = {"passed": good_fixture, "returncode": code,
                           "sha256": digest(fixture) if good_fixture else None}
+    canonical_present = canonical_fixture.is_file()
+    results["canonical_fixture"] = {
+        "passed": good_fixture and canonical_present and fixture.read_bytes() == canonical_fixture.read_bytes(),
+        "path": str(canonical_fixture.relative_to(root)),
+        "sha256": digest(canonical_fixture) if canonical_present else None,
+        "regenerated_sha256": digest(fixture) if good_fixture else None,
+        "comparison": "byte-for-byte equality with regenerated pinned-toolchain fixture",
+    }
     reference = None
     if good_fixture:
         readelf_okay = True
@@ -144,7 +153,7 @@ def main():
             results["execution"] = {"passed": code == 0 and not stderr and checked["passed"],
                                     "returncode": code, "stderr_empty": not stderr,
                                     "executable_sha256": digest(executable), "report": checked}
-    result = {"passed": len(results) == 5 and all(item["passed"] for item in results.values()),
+    result = {"passed": len(results) == 6 and all(item["passed"] for item in results.values()),
               "scope": "actual safe ELF admission and readelf comparison; no ELF loading or EL0 execution",
               "checks": results}
     (output / "result.json").write_text(json.dumps(result, indent=2) + "\n")

@@ -9,6 +9,7 @@ hm-kernel = { path = "../hm-kernel" }
 
 [features]
 boot-tests = []
+space-tests = []
 unhandled-fault-test = []
 nested-fault-test = []
 thread-overflow-test = []

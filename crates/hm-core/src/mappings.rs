@@ -36,7 +36,10 @@ pub struct MappedPage<'mapper, 'pool> {
 impl Mapper {
     /// Caller proves the permanent arena hierarchy is installed, all leaves
     /// invalid, and one CPU at EL1 with asynchronous exceptions masked owns
-    /// all table writes. Pool identity mappings cannot change. No DMA exists.
+    /// all table writes. Boot identity mappings cannot change. Design 0022
+    /// may temporarily omit this arena only inside an assembly-only probe,
+    /// restoring the boot root/TLB before any mapping operation or byte access.
+    /// No DMA exists.
     /// Later scoped timer IRQs touch only private assembly/GIC state; all
     /// mapping operations remain masked (design 0009). Preemptible jobs cannot
     /// capture this private non-Sync capability; scheduler IRQs never map.

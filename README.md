@@ -92,8 +92,14 @@ before reuse. See [SMP verification](docs/evidence/arm-smp-scheduling.md).
 A safe ELF parser now admits a bounded static AArch64 profile and produces a
 validated, borrowed load plan. Tests compare a separately linked ELF with
 `readelf` and reject malformed images, unsafe permissions and lifetime escapes.
-The kernel does not yet load or enter that program at EL0. See
+See
 [ELF admission evidence](docs/evidence/elf-admission.md).
+
+ARM now also loads that ELF into owned address spaces with protected code,
+read-only data, writable data and guarded stacks. Three QEMU profiles verify
+allocation rollback, maximum-size loading, ownership retention and repeated
+page-table restoration using ARM translation probes. Actual EL0 execution is
+next; see [owned-space evidence](docs/evidence/owned-address-spaces.md).
 
 The safe capability experiment checks rights attenuation, bounded accounting,
 stale handles, revocation and cancellation/completion lifetimes. It models

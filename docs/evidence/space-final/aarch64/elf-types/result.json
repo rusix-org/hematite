@@ -1,0 +1,62 @@
+{
+  "passed": true,
+  "scope": "actual safe ELF metadata and input lifetime boundaries; no execution or isolation claim",
+  "target": "aarch64-unknown-none",
+  "probes": {
+    "valid_parse_use": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "valid_segment_copy": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "valid_bytes_after_image_drop": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "forge_image": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0451"
+    },
+    "forge_segment": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0451"
+    },
+    "private_image_entry": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0616"
+    },
+    "private_segment_permissions": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0616"
+    },
+    "image_outlive_input": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0515"
+    },
+    "mutate_input_while_image_live": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0506"
+    },
+    "file_bytes_outlive_input": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0515"
+    },
+    "mutate_file_bytes": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0594"
+    }
+  }
+}

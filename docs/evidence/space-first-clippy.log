@@ -1,0 +1,42 @@
+    Checking hm-core v0.1.0 (/workspace/crates/hm-core)
+error: operator precedence might not be obvious
+   --> crates/hm-core/src/user_space.rs:343:28
+    |
+343 |             let expected = RAM + i as u64 * PAGE as u64 | RW;
+    |                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: consider parenthesizing your expression: `(RAM + i as u64 * PAGE as u64) | RW`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#precedence
+    = note: `-D clippy::precedence` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::precedence)]`
+
+error: this function has too many arguments (11/7)
+   --> crates/hm-core/src/space_checks.rs:111:1
+    |
+111 | / fn fixture_case(
+112 | |     pool: &Pool,
+113 | |     factory: &Factory<'_>,
+114 | |     image: &Image<'_>,
+...   |
+122 | |     kernel_data: u64,
+123 | | ) -> CheckResult {
+    | |________________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#too_many_arguments
+    = note: `-D clippy::too-many-arguments` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::too_many_arguments)]`
+
+error: this function has too many arguments (8/7)
+   --> crates/hm-core/src/space_checks.rs:332:1
+    |
+332 | / fn probes(
+333 | |     space: &mut Space<'_>,
+334 | |     indices: &[usize; 21],
+335 | |     arena_va: u64,
+...   |
+340 | |     output: &mut dyn Write,
+341 | | ) -> CheckResult {
+    | |________________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#too_many_arguments
+
+error: could not compile `hm-core` (bin "hematite") due to 3 previous errors

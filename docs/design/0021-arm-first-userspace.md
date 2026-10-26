@@ -1,9 +1,10 @@
 # First protected native ARM userspace
 
 Status: Stage A approved by independent [review 0021](../reviews/0021-arm-first-userspace.md),
-2026-10-26. It is the safe ELF admission contract only. Later runtime stages
-remain proposed until their entry,
-copy and teardown mechanisms receive independent review. This is Phase 2 work,
+2026-10-26. Stage B owned loading and bounded installed-translation diagnostics
+are separately specified and approved in [design 0022](0022-arm-owned-address-spaces.md).
+EL0 entry, process copy and teardown mechanisms remain proposed until their
+own independent review. This is Phase 2 work,
 not a claim that the unpublished Phase 1 gate has passed CI.
 
 The target is a separately linked static native AArch64 program loaded from an

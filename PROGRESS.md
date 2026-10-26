@@ -1,6 +1,6 @@
 # Progress
 
-Current phase: **Phase 1 locally verified within its ARM scope; Phase 2 ELF admission verified, protected userspace still planned**.
+Current phase: **Phase 1 locally verified within its ARM scope; Phase 2 owned ELF loading and installed translations verified; EL0 execution planned**.
 Aaron approved scratch implementation and then changed the primary objective
 from strict Linux parity to native OS design with selective compatibility.
 [ADR 0005](docs/adr/0005-native-first-design.md) records the native direction;
@@ -19,7 +19,7 @@ from strict Linux parity to native OS design with selective compatibility.
 - Serial monitor: `make run` defaults to ARM64; `ARCH=x86_64` selects the
   regression port. Commands `help`, `status`, `test`; Ctrl-C exits.
 - `make test-all`: formatting, Clippy and safety checks for both targets,
-  81 host harness tests, 41 guest tests per architecture, ARM no-PAN rejection,
+  90 host harness tests, 41 guest tests per architecture, ARM no-PAN rejection,
   x86 missing-NX/SMEP/SMAP rejection, and live monitor recovery tests on both.
   ARM discovery matches both 128 MiB and 64 MiB guest configurations.
   Separate ARM images run five scheduling/wait cases at both memory sizes, then
@@ -35,10 +35,12 @@ from strict Linux parity to native OS design with selective compatibility.
   guest by default; lifecycle and SMP tests use two CPUs with TCG thread=multi. ARM also
   tests 64 MiB; no attached disks or networking. Both targets use TCG.
 
-Latest evidence: [safe ELF admission](docs/evidence/elf-admission.md),
-[source identities](docs/evidence/elf-final/source-sha256.txt),
-[real ELF inspection](docs/evidence/elf-final/aarch64/elf-host/result.json),
-and matching ARM/x86 regressions under `docs/evidence/elf-final/`.
+Latest evidence: [owned ARM address spaces](docs/evidence/owned-address-spaces.md),
+[compiled stack review](docs/evidence/space-stack-review.md), and
+[three guest profiles](docs/evidence/space-first-qemu/result.json). Full ARM/x86
+regressions pass in [the final archive](docs/evidence/space-final/verification-summary.json).
+Earlier [safe ELF admission](docs/evidence/elf-admission.md) and its matching
+ARM/x86 regressions remain archived under `docs/evidence/elf-final/`.
 Earlier [bootstrap verification](docs/evidence/hematite-bootstrap.md) is retained.
 The earlier [Asterinas baseline](docs/evidence/asterinas-evaluation.md) remains
 an evaluation only; it is not this kernel's implementation.
@@ -388,16 +390,23 @@ matches readelf; 32 invalid mutations, all 13649 prefixes, 4096 deterministic
 random/mutated inputs and file-capacity boundaries pass. Eleven actual-library
 compiler clients pass on each target. This is admission evidence, not loading
 or EL0 execution. See [verification](docs/evidence/elf-admission.md).
-SP_EL0 currently holds a
-kernel emergency stack; entering EL0 requires a new reviewed trap-stack protocol.
-Executable user mappings also need explicit protection of every active identity
-alias. Initramfs, safe copy, owned handles and reclamation remain Phase 2 work.
+[Design 0022](docs/design/0022-arm-owned-address-spaces.md) now implements owned
+CPU0 user spaces and bounded assembly-only translation probes. Actual ELF bytes,
+BSS, permissions and stack pages load into owned frames; private roots protect
+RX identity aliases and restore the boot root before Rust resumes. Three ARM
+profiles pass five ownership cases, 142 before/active/after translation queries,
+and 41 baseline cases each. All budget prefixes and real allocator exhaustion
+roll back; maximum-size and forgotten-owner cases pass. Sixteen compiler clients
+verify authority/lifetime boundaries. See [evidence](docs/evidence/owned-address-spaces.md).
+SP_EL0 still holds a kernel emergency stack; entering EL0 requires a separately
+reviewed trap-stack and instruction-cache protocol. Initramfs, safe process copy,
+owned handles and process reclamation remain Phase 2 work.
 
 ## Next actions
 
-1. Implement the separately reviewed runtime stages of design 0021: owned
-   CPU0 user address spaces, protected EL0 entry/return, versioned native calls
-   and reclamation, then initramfs. Review exact root, cache, trap-stack and
+1. Design and independently review the remaining runtime stages of design 0021:
+   protected EL0 entry/return, versioned native calls and process reclamation,
+   then initramfs. Review exact root, cache, trap-stack and
    identity-alias transitions before core edits. Keep CPU1 OFF for first-process
    execution; concurrent address spaces need separate shootdown proofs.
 2. Define the native userspace wire contract from those experiments; select
@@ -577,3 +586,13 @@ alias. Initramfs, safe copy, owned handles and reclamation remain Phase 2 work.
   Full ARM/x86 suite passes 41 guest cases and all prior profiles; first suite
   stopped on two test-only Clippy warnings, preserved and corrected. Protected
   runtime stages remain proposed. See [ELF evidence](docs/evidence/elf-admission.md).
+
+- 2026-10-26: Implemented independently reviewed owned ARM spaces and bounded
+  installed-translation probes (design 0022). All three QEMU profiles pass five
+  ownership cases, 142 PAR triples and 41 baseline cases; all 33 failure budgets,
+  real exhaustion, maximum loading and forgotten ownership are covered. Sixteen
+  compiler clients and the full ARM/x86 regression suite pass. Preserved the
+  initial PAN encoding failure, Clippy warnings, and an oversized compiled stack
+  caught before boot; split test cases resolve it. Exact source/ELF identities,
+  assembly, raw logs and review are archived. EL0 execution remains next; no
+  remote push or new CI claim. See [evidence](docs/evidence/owned-address-spaces.md).

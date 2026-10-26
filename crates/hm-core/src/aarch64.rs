@@ -21,6 +21,8 @@ unsafe extern "C" {
     static mut arm_ram_l2: [u64; 512];
     static mut arm_ram_l3: [u64; 4096];
     static mut arm_owned_l2: [u64; 512];
+    #[cfg(feature = "space-tests")]
+    static __bss_start: [u8; 0];
     static __text_start: [u8; 0];
     static __text_end: [u8; 0];
     static __rodata_start: [u8; 0];
@@ -61,7 +63,9 @@ pub(super) const BANNER: &str = "hematite: ARM64 Rust kernel entered at EL1\n";
 
 impl Platform for BootPlatform {
     fn expected_cpu_count(&self) -> usize {
-        if cfg!(feature = "secondary-tests") {
+        if cfg!(feature = "space-tests") && !cfg!(feature = "secondary-tests") {
+            self.topology.as_ref().map_or(0, |t| t.affinities().len())
+        } else if cfg!(feature = "secondary-tests") {
             2
         } else {
             1
@@ -562,8 +566,10 @@ fn initialize() -> Result<BootPlatform, ()> {
     // reservation, all kernel/table/stack storage and the entire DTB prefix.
     // checks proved the full mapping tree: eligible leaves are exclusive
     // supervisor RW/NX normal RAM, initially without aliases. Identity maps
-    // never change. Only consuming Frame mappings may add matching-attribute
-    // aliases, keeping identity bytes private until completed invalidation.
+    // in the boot tables never change. Consuming Frame mappings may add
+    // matching-attribute aliases; design 0022 also permits private roots to
+    // tighten owned RX aliases during assembly-only probes, with full root/TLB
+    // restoration before Rust owner byte access resumes.
     // Construction occurs with one CPU/interrupts masked. Admitted secondary
     // CPUs install the same coherent identity subtrees before pool access;
     // allocator metadata masks local IRQs and synchronizes between CPUs.
@@ -873,4 +879,53 @@ pub(super) fn smp_peer_started_marker(sp: u64) {
 #[cfg(feature = "smp-all-blocked-test")]
 pub(super) fn smp_both_blocked_marker() {
     smp_marker(format_args!("HMSCHED BLOCKED cpu0=1 cpu1=1\n"));
+}
+
+#[cfg(feature = "space-tests")]
+#[cfg_attr(
+    any(
+        feature = "secondary-tests",
+        feature = "nested-fault-test",
+        feature = "unhandled-fault-test",
+        feature = "thread-overflow-test",
+        feature = "preemption-overflow-test",
+        feature = "wait-all-blocked-test"
+    ),
+    allow(dead_code)
+)]
+pub(super) fn space_tests(platform: &mut BootPlatform) -> bool {
+    struct Output;
+    impl core::fmt::Write for Output {
+        fn write_str(&mut self, text: &str) -> core::fmt::Result {
+            for byte in text.bytes() {
+                if byte == b'\n' {
+                    serial_byte(b'\r');
+                }
+                serial_byte(byte);
+            }
+            Ok(())
+        }
+    }
+    let (Some(pool), Some(mapper), Some(topology)) = (
+        platform.pool.as_ref(),
+        platform.mapper.as_ref(),
+        platform.topology.as_ref(),
+    ) else {
+        return false;
+    };
+    // SAFETY: initialize validated this actual DTB topology, boot mappings and
+    // reserved exclusions before minting the unique pool/mapper. This private
+    // coordinator entry has not started peers or DMA; boot tables are immutable.
+    let Ok(factory) = (unsafe { super::user_space::Factory::from_boot(pool, topology) }) else {
+        return false;
+    };
+    super::space_checks::run(
+        pool,
+        mapper,
+        &factory,
+        &mut Output,
+        topology.affinities().len(),
+        core::ptr::addr_of!(__text_start) as u64,
+        core::ptr::addr_of!(__bss_start) as u64,
+    )
 }

@@ -1,0 +1,5 @@
+[
+  "readelf",
+  "-lW",
+  "/workspace/target/evidence/20261026T172839-521867638-aarch64/elf-host/native-elf"
+]

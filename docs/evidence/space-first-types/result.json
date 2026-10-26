@@ -1,0 +1,10 @@
+{
+  "passed": false,
+  "probes": {
+    "library": {
+      "passed": false,
+      "returncode": 1
+    }
+  },
+  "scope": "actual owned-space/frame safe-client authority and lifetime boundaries; no execution claim"
+}
