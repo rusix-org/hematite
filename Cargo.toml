@@ -1,0 +1,11 @@
+[workspace]
+members = ["crates/hm-core", "crates/hm-kernel"]
+resolver = "3"
+
+[profile.dev]
+panic = "abort"
+
+[profile.release]
+panic = "abort"
+lto = true
+codegen-units = 1

@@ -1,0 +1,17 @@
+[package]
+name = "hm-core"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+hm-kernel = { path = "../hm-kernel" }
+
+[features]
+boot-tests = []
+
+[[bin]]
+name = "hematite"
+path = "src/main.rs"
+test = false
+bench = false

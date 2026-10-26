@@ -1,12 +1,23 @@
-name: Repository checks
+name: Bootstrap checks
 on: [push, pull_request]
 permissions:
   contents: read
 jobs:
-  phase-zero-records:
+  bootstrap:
     runs-on: ubuntu-24.04
-    timeout-minutes: 5
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
-      - name: Validate decision records (not a kernel gate)
-        run: python3 tools/check_repository.py
+      - name: Build environment, check source, and run QEMU bootstrap tests
+        run: |
+          mkdir -p target/evidence
+          set -o pipefail
+          make test 2>&1 | tee target/evidence/checks.log
+      - name: Preserve verification evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: bootstrap-evidence
+          path: target/evidence/
+          if-no-files-found: error
+          retention-days: 14
