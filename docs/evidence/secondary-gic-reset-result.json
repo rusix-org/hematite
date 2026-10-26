@@ -1,0 +1,6 @@
+{
+  "passed": false,
+  "returncode": -11,
+  "scope": "Read-only halted QEMU HMP target-byte inspection failed; no register value obtained.",
+  "stdin": "xp /1bx 0x08000820\nquit\n"
+}

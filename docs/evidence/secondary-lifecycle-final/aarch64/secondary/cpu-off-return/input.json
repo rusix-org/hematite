@@ -1,0 +1,9 @@
+{
+  "kernel": "/workspace/target/aarch64/secondary-off-return-test/aarch64-unknown-none/release/hematite",
+  "sha256": "17fb5d70cc41f844dd486ef469c3bb2a89ed7b23c83c63f9f083d9e6e4677bc6",
+  "arch": "aarch64",
+  "accel": "tcg,thread=multi",
+  "cpus": 2,
+  "ram_mb": 128,
+  "negative": "cpu-off-return"
+}

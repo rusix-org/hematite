@@ -17,6 +17,9 @@ preemption-no-timer-test = ["preemption-tests"]
 preemption-boundary-test = ["preemption-tests"]
 preemption-overflow-test = []
 wait-all-blocked-test = []
+secondary-tests = []
+secondary-stale-generation-test = ["secondary-tests"]
+secondary-cpu-off-return-test = ["secondary-tests"]
 
 [[bin]]
 name = "hematite"

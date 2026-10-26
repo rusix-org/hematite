@@ -56,7 +56,8 @@ Each cycle also attempts a duplicate local setup while its first setup is
 active, requires rejection, then stops normally to prove cleanup remains usable.
 After each local cycle it checks SPI32 remains disabled and pending; shared
 stop removes that diagnostic pending state. The fixture never creates active
-state or changes interrupt targets. With SPI32 disabled it cannot be delivered
+state. The target-byte preparation/restoration amendment below applies when
+the GIC exposes multiple CPU interfaces. With SPI32 disabled it cannot be delivered
 even though shared forwarding is enabled. It never unmasks IRQ or dispatches tasks.
 After global stop it verifies existing full control-state checks and releases
 BUSY. The baseline gic_ownership case invokes this; repeated preemption suites
@@ -68,3 +69,36 @@ sections4.3.6 and4.3.8 (banked register0, shared SPI banks), existing GICv2
 MMIO contract/designs0009/0012/0014 and previously reviewed register addresses; no Linux source. Remaining blockers for CPU1 are
 private stacks/entry, CPU-local mappings, mailbox/lifetime protocol and a global
 session coordinating both CPUs. This change does not establish SMP execution.
+
+
+## Two-CPU diagnostic target amendment (0018 bring-up)
+
+Independently approved before implementation; see review0016. The first real two-CPU lifecycle
+passed both sessions, but the subsequent SPI32 preservation diagnostic failed.
+The preserved GIC trace shows ISPENDR1 seed readback zero while forwarding and
+local teardown checks pass. A zero target is a suspected explanation, not yet
+an observed reset value: the separate halted-monitor read failed in QEMU. The
+revised fixture will capture actual target readback. Regardless of reset value,
+the diagnostic must establish its disabled SPI target explicitly rather than
+rely on the one-CPU profile's implicit targeting.
+
+Under BUSY with CPU1 confirmed OFF and shared session initialized, first verify
+SPI32 disabled, nonpending and inactive, then save its ITARGETSR byte at0x820.
+If GICD_TYPER.CPUNumber is nonzero, set only that byte to CPU0 mask1 and verify
+readback before seeding. On a one-interface GIC the target registers may be
+RAZ/WI; leave them untouched and retain existing implicit CPU0 behavior. Both
+local cycles must preserve the explicit target as well as pending state. After
+shared stop verifies disabled/nonpending/inactive SPI state and CTLR0, restore
+the saved target byte and verify readback before releasing BUSY. Restoration is
+mandatory even if any ordinary seed/cycle diagnostic check fails; irrecoverable
+readback/quiescence failure terminates the VM. No production local setup/stop
+path gains target writes, no active bit is written, and no IRQ is enabled.
+
+Source basis is the GICv2 ITARGETSR register contract and the preserved QEMU
+observations above. QEMU's upstream arm_gic.c was consulted solely to explain
+the target-dependent pending emulation, not copied or translated into kernel
+code: https://raw.githubusercontent.com/qemu/qemu/master/hw/intc/arm_gic.c .
+
+Subsequent [verification](../evidence/arm-secondary-lifecycle.md) records actual
+target 0, explicit target 1 with a preserved pending seed, and restored target 0
+on the pinned two-CPU guest. Both one- and two-CPU regression profiles pass.

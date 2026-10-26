@@ -44,6 +44,7 @@ arm_preempt_boundary_\name\()_end:
 // Shared distributor state is never accessed through the local lifecycle.
 .global arm_gic_session_start, arm_gic_session_stop
 .global arm_gic_probe_seed, arm_gic_probe_preserved
+.global arm_gic_probe_target, arm_gic_probe_restore_target
 arm_gic_session_start:
     mrs x0, daif
     cmp x0, #0x3c0
@@ -147,6 +148,53 @@ arm_gic_session_stop:
     mov x0, #1
     ret
 
+// Lease-owned diagnostic target only; not part of local setup/teardown.
+arm_gic_probe_target:
+    ldr x1, =0x08000000
+    ldr w2, [x1, #0x104]
+    tbnz w2, #0, arm_exception_fatal
+    ldr w2, [x1, #0x204]
+    tbnz w2, #0, arm_exception_fatal
+    ldr w2, [x1, #0x304]
+    tbnz w2, #0, arm_exception_fatal
+    ldrb w3, [x1, #0x820]         // Save only SPI32's target byte.
+    ldr w2, [x1, #4]
+    ubfx w2, w2, #5, #3          // CPUNumber: zero permits RAZ/WI targets.
+    cbz w2, .Lgic_target_saved
+    mov w2, #1
+    strb w2, [x1, #0x820]
+    dsb sy
+    ldrb w2, [x1, #0x820]
+    cmp w2, #1
+    b.ne arm_exception_fatal
+.Lgic_target_saved:
+    mov w0, w3
+    ret
+
+arm_gic_probe_restore_target:
+    cmp x0, #255
+    b.hi arm_exception_fatal
+    ldr x1, =0x08000000
+    ldr w2, [x1]
+    cbnz w2, arm_exception_fatal
+    ldr w2, [x1, #0x104]
+    tbnz w2, #0, arm_exception_fatal
+    ldr w2, [x1, #0x204]
+    tbnz w2, #0, arm_exception_fatal
+    ldr w2, [x1, #0x304]
+    tbnz w2, #0, arm_exception_fatal
+    ldr w2, [x1, #4]
+    ubfx w2, w2, #5, #3
+    cbz w2, .Lgic_target_restored
+    strb w0, [x1, #0x820]
+    dsb sy
+.Lgic_target_restored:
+    ldrb w2, [x1, #0x820]
+    cmp w2, w0
+    b.ne arm_exception_fatal
+    mov x0, #1
+    ret
+
 // Lease-owned diagnostic: SPI32 was cleared/disabled by session start.
 arm_gic_probe_seed:
     ldr x0, =0x08000000
@@ -159,6 +207,13 @@ arm_gic_probe_seed:
     dsb sy
 arm_gic_probe_preserved:
     ldr x0, =0x08000000
+    ldr w1, [x0, #4]
+    ubfx w1, w1, #5, #3
+    cbz w1, .Lgic_probe_target_ok
+    ldrb w1, [x0, #0x820]
+    cmp w1, #1
+    b.ne .Lgic_probe_fail
+.Lgic_probe_target_ok:
     ldr w1, [x0]
     cmp w1, #1
     b.ne .Lgic_probe_fail

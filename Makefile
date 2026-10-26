@@ -32,6 +32,7 @@ test: image
 		python3 tools/test_test_preemption_negative.py; \
 		python3 tools/test_preemption_boundaries.py; \
 		python3 tools/test_test_wait_blocked.py; \
+		python3 tools/test_test_secondary.py; \
 		python3 tools/check_repository.py; \
 		python3 tools/check_safety.py; \
 		cargo build --locked --offline -p hm-core --release --features boot-tests --target $(TARGET) --target-dir target/$(ARCH)/boot-test; \
@@ -45,6 +46,9 @@ test: image
 			cargo build --locked --offline -p hm-core --release --features preemption-no-timer-test --target $(TARGET) --target-dir target/$(ARCH)/preemption-no-timer-test; \
 			cargo build --locked --offline -p hm-core --release --features preemption-overflow-test --target $(TARGET) --target-dir target/$(ARCH)/preemption-overflow-test; \
 			cargo build --locked --offline -p hm-core --release --features wait-all-blocked-test --target $(TARGET) --target-dir target/$(ARCH)/wait-all-blocked-test; \
+			cargo build --locked --offline -p hm-core --release --features secondary-tests --target $(TARGET) --target-dir target/$(ARCH)/secondary-test; \
+			cargo build --locked --offline -p hm-core --release --features secondary-stale-generation-test --target $(TARGET) --target-dir target/$(ARCH)/secondary-stale-test; \
+			cargo build --locked --offline -p hm-core --release --features secondary-cpu-off-return-test --target $(TARGET) --target-dir target/$(ARCH)/secondary-off-return-test; \
 		fi; \
 		cargo build --locked --offline -p hm-kernel --release --target $(TARGET) --target-dir target/$(ARCH)/boot-test; \
 		python3 tools/check_capability_types.py \
@@ -86,6 +90,7 @@ test: image
 			python3 tools/test_preemption.py --kernel target/$(ARCH)/preemption-boundary-test/$(TARGET)/release/hematite --boundaries --output "$$evidence_dir/preemption-boundaries"; \
 			python3 tools/test_preemption_negative.py --no-timer-kernel target/$(ARCH)/preemption-no-timer-test/$(TARGET)/release/hematite --overflow-kernel target/$(ARCH)/preemption-overflow-test/$(TARGET)/release/hematite --output "$$evidence_dir/preemption-negative"; \
 			python3 tools/test_wait_blocked.py --kernel target/$(ARCH)/wait-all-blocked-test/$(TARGET)/release/hematite --output "$$evidence_dir/wait-all-blocked"; \
+			python3 tools/test_secondary.py --kernel target/$(ARCH)/secondary-test/$(TARGET)/release/hematite --stale-generation-kernel target/$(ARCH)/secondary-stale-test/$(TARGET)/release/hematite --cpu-off-return-kernel target/$(ARCH)/secondary-off-return-test/$(TARGET)/release/hematite --output "$$evidence_dir/secondary"; \
 			python3 tools/check_timer_trace.py --trace "$$evidence_dir/boot/exceptions.log" \
 				--expected 16 --output "$$evidence_dir/boot/timer-trace.json"; \
 			python3 tools/check_timer_trace.py --trace "$$evidence_dir/profiles/monitor/exceptions.log" \

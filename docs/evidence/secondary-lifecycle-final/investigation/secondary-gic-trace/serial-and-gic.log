@@ -1,0 +1,339 @@
+hematite: ARM64 Rust kernel entered at EL1
+Boot RAM bytes: 0x0000000008000000 (discovered RAM)
+Frame pool pages: 0x0000000000000cfa (4 KiB each; boot reservations excluded)
+HMSMP BEGIN 2
+HMSMP INFO version=65537 cpu_on=0 cpu_off=0 affinity_info=0
+gic_dist_write dist write at 0x00000180 size 4: 0x40000000
+gic_dist_write dist write at 0x00000280 size 4: 0x40000000
+gic_dist_read dist read at 0x00000100 size 4: 0x0000ffff
+gic_dist_read dist read at 0x00000200 size 4: 0x00000000
+gic_dist_read dist read at 0x00000300 size 4: 0x00000000
+gic_dist_write dist write at 0x00000180 size 4: 0x40000000
+gic_dist_write dist write at 0x00000280 size 4: 0x40000000
+gic_dist_read dist read at 0x00000100 size 4: 0x0000ffff
+gic_dist_read dist read at 0x00000200 size 4: 0x00000000
+gic_dist_read dist read at 0x00000300 size 4: 0x00000000
+HMSMP SESSION generation=1 cpu=1 on=0 returned=1 off=1 checks=255 root=1076109312 sp=1076613088
+gic_dist_write dist write at 0x00000180 size 4: 0x40000000
+gic_dist_write dist write at 0x00000280 size 4: 0x40000000
+gic_dist_read dist read at 0x00000100 size 4: 0x0000ffff
+gic_dist_read dist read at 0x00000200 size 4: 0x00000000
+gic_dist_read dist read at 0x00000300 size 4: 0x00000000
+gic_dist_write dist write at 0x00000180 size 4: 0x40000000
+gic_dist_write dist write at 0x00000280 size 4: 0x40000000
+gic_dist_read dist read at 0x00000100 size 4: 0x0000ffff
+gic_dist_read dist read at 0x00000200 size 4: 0x00000000
+gic_dist_read dist read at 0x00000300 size 4: 0x00000000
+HMSMP SESSION generation=2 cpu=1 on=0 returned=1 off=1 checks=255 root=1076109312 sp=1076613088
+HMSMP PASS lifecycle
+HMSMP END 2
+gic_dist_read dist read at 0x00000004 size 4: 0x00000028
+gic_dist_write dist write at 0x00000000 size 4: 0x00000000
+gic_dist_write dist write at 0x00000180 size 4: 0xffffffff
+gic_dist_write dist write at 0x00000280 size 4: 0xffffffff
+gic_dist_write dist write at 0x00000184 size 4: 0xffffffff
+gic_dist_write dist write at 0x00000284 size 4: 0xffffffff
+gic_dist_write dist write at 0x00000188 size 4: 0xffffffff
+gic_dist_write dist write at 0x00000288 size 4: 0xffffffff
+gic_dist_write dist write at 0x0000018c size 4: 0xffffffff
+gic_dist_write dist write at 0x0000028c size 4: 0xffffffff
+gic_dist_write dist write at 0x00000190 size 4: 0xffffffff
+gic_dist_write dist write at 0x00000290 size 4: 0xffffffff
+gic_dist_write dist write at 0x00000194 size 4: 0xffffffff
+gic_dist_write dist write at 0x00000294 size 4: 0xffffffff
+gic_dist_write dist write at 0x00000198 size 4: 0xffffffff
+gic_dist_write dist write at 0x00000298 size 4: 0xffffffff
+gic_dist_write dist write at 0x0000019c size 4: 0xffffffff
+gic_dist_write dist write at 0x0000029c size 4: 0xffffffff
+gic_dist_write dist write at 0x000001a0 size 4: 0xffffffff
+gic_dist_write dist write at 0x000002a0 size 4: 0xffffffff
+gic_dist_read dist read at 0x00000080 size 4: 0x00000000
+gic_dist_write dist write at 0x00000080 size 4: 0x00000000
+gic_dist_read dist read at 0x00000080 size 4: 0x00000000
+gic_dist_read dist read at 0x00000c04 size 4: 0x00000000
+gic_dist_write dist write at 0x00000c04 size 4: 0x00000000
+gic_dist_read dist read at 0x00000c04 size 4: 0x00000000
+gic_dist_read dist read at 0x0000041c size 4: 0x00000000
+gic_dist_write dist write at 0x0000041c size 4: 0x00800000
+gic_dist_write dist write at 0x00000000 size 4: 0x00000001
+gic_dist_write dist write at 0x00000100 size 4: 0x40000000
+gic_dist_write dist write at 0x00000180 size 4: 0x40000000
+gic_dist_write dist write at 0x00000280 size 4: 0x40000000
+gic_dist_write dist write at 0x00000000 size 4: 0x00000000
+gic_dist_read dist read at 0x00000300 size 4: 0x00000000
+gic_dist_read dist read at 0x00000200 size 4: 0x00000000
+gic_dist_read dist read at 0x00000100 size 4: 0x0000ffff
+gic_dist_read dist read at 0x00000000 size 4: 0x00000000
+gic_dist_read dist read at 0x00000004 size 4: 0x00000028
+gic_dist_write dist write at 0x00000000 size 4: 0x00000000
+gic_dist_write dist write at 0x00000180 size 4: 0xffffffff
+gic_dist_write dist write at 0x00000280 size 4: 0xffffffff
+gic_dist_write dist write at 0x00000184 size 4: 0xffffffff
+gic_dist_write dist write at 0x00000284 size 4: 0xffffffff
+gic_dist_write dist write at 0x00000188 size 4: 0xffffffff
+gic_dist_write dist write at 0x00000288 size 4: 0xffffffff
+gic_dist_write dist write at 0x0000018c size 4: 0xffffffff
+gic_dist_write dist write at 0x0000028c size 4: 0xffffffff
+gic_dist_write dist write at 0x00000190 size 4: 0xffffffff
+gic_dist_write dist write at 0x00000290 size 4: 0xffffffff
+gic_dist_write dist write at 0x00000194 size 4: 0xffffffff
+gic_dist_write dist write at 0x00000294 size 4: 0xffffffff
+gic_dist_write dist write at 0x00000198 size 4: 0xffffffff
+gic_dist_write dist write at 0x00000298 size 4: 0xffffffff
+gic_dist_write dist write at 0x0000019c size 4: 0xffffffff
+gic_dist_write dist write at 0x0000029c size 4: 0xffffffff
+gic_dist_write dist write at 0x000001a0 size 4: 0xffffffff
+gic_dist_write dist write at 0x000002a0 size 4: 0xffffffff
+gic_dist_read dist read at 0x00000080 size 4: 0x00000000
+gic_dist_write dist write at 0x00000080 size 4: 0x00000000
+gic_dist_read dist read at 0x00000080 size 4: 0x00000000
+gic_dist_read dist read at 0x00000c04 size 4: 0x00000000
+gic_dist_write dist write at 0x00000c04 size 4: 0x00000000
+gic_dist_read dist read at 0x00000c04 size 4: 0x00000000
+gic_dist_read dist read at 0x0000041c size 4: 0x00800000
+gic_dist_write dist write at 0x0000041c size 4: 0x00800000
+gic_dist_write dist write at 0x00000000 size 4: 0x00000001
+gic_dist_write dist write at 0x00000180 size 4: 0x40000000
+gic_dist_write dist write at 0x00000280 size 4: 0x40000000
+gic_dist_write dist write at 0x00000000 size 4: 0x00000000
+gic_dist_read dist read at 0x00000300 size 4: 0x00000000
+gic_dist_read dist read at 0x00000200 size 4: 0x00000000
+gic_dist_read dist read at 0x00000100 size 4: 0x0000ffff
+gic_dist_read dist read at 0x00000000 size 4: 0x00000000
+gic_dist_read dist read at 0x00000004 size 4: 0x00000028
+gic_dist_write dist write at 0x00000000 size 4: 0x00000000
+gic_dist_write dist write at 0x00000180 size 4: 0xffffffff
+gic_dist_write dist write at 0x00000280 size 4: 0xffffffff
+gic_dist_write dist write at 0x00000184 size 4: 0xffffffff
+gic_dist_write dist write at 0x00000284 size 4: 0xffffffff
+gic_dist_write dist write at 0x00000188 size 4: 0xffffffff
+gic_dist_write dist write at 0x00000288 size 4: 0xffffffff
+gic_dist_write dist write at 0x0000018c size 4: 0xffffffff
+gic_dist_write dist write at 0x0000028c size 4: 0xffffffff
+gic_dist_write dist write at 0x00000190 size 4: 0xffffffff
+gic_dist_write dist write at 0x00000290 size 4: 0xffffffff
+gic_dist_write dist write at 0x00000194 size 4: 0xffffffff
+gic_dist_write dist write at 0x00000294 size 4: 0xffffffff
+gic_dist_write dist write at 0x00000198 size 4: 0xffffffff
+gic_dist_write dist write at 0x00000298 size 4: 0xffffffff
+gic_dist_write dist write at 0x0000019c size 4: 0xffffffff
+gic_dist_write dist write at 0x0000029c size 4: 0xffffffff
+gic_dist_write dist write at 0x000001a0 size 4: 0xffffffff
+gic_dist_write dist write at 0x000002a0 size 4: 0xffffffff
+gic_dist_read dist read at 0x00000080 size 4: 0x00000000
+gic_dist_write dist write at 0x00000080 size 4: 0x00000000
+gic_dist_read dist read at 0x00000080 size 4: 0x00000000
+gic_dist_read dist read at 0x00000c04 size 4: 0x00000000
+gic_dist_write dist write at 0x00000c04 size 4: 0x00000000
+gic_dist_read dist read at 0x00000c04 size 4: 0x00000000
+gic_dist_read dist read at 0x0000041c size 4: 0x00800000
+gic_dist_write dist write at 0x0000041c size 4: 0x00800000
+gic_dist_write dist write at 0x00000000 size 4: 0x00000001
+gic_dist_write dist write at 0x00000100 size 4: 0x40000000
+gic_dist_write dist write at 0x00000180 size 4: 0x40000000
+gic_dist_write dist write at 0x00000280 size 4: 0x40000000
+gic_dist_write dist write at 0x00000000 size 4: 0x00000000
+gic_dist_read dist read at 0x00000300 size 4: 0x00000000
+gic_dist_read dist read at 0x00000200 size 4: 0x00000000
+gic_dist_read dist read at 0x00000100 size 4: 0x0000ffff
+gic_dist_read dist read at 0x00000000 size 4: 0x00000000
+gic_dist_read dist read at 0x00000004 size 4: 0x00000028
+gic_dist_write dist write at 0x00000000 size 4: 0x00000000
+gic_dist_write dist write at 0x00000180 size 4: 0xffffffff
+gic_dist_write dist write at 0x00000280 size 4: 0xffffffff
+gic_dist_write dist write at 0x00000184 size 4: 0xffffffff
+gic_dist_write dist write at 0x00000284 size 4: 0xffffffff
+gic_dist_write dist write at 0x00000188 size 4: 0xffffffff
+gic_dist_write dist write at 0x00000288 size 4: 0xffffffff
+gic_dist_write dist write at 0x0000018c size 4: 0xffffffff
+gic_dist_write dist write at 0x0000028c size 4: 0xffffffff
+gic_dist_write dist write at 0x00000190 size 4: 0xffffffff
+gic_dist_write dist write at 0x00000290 size 4: 0xffffffff
+gic_dist_write dist write at 0x00000194 size 4: 0xffffffff
+gic_dist_write dist write at 0x00000294 size 4: 0xffffffff
+gic_dist_write dist write at 0x00000198 size 4: 0xffffffff
+gic_dist_write dist write at 0x00000298 size 4: 0xffffffff
+gic_dist_write dist write at 0x0000019c size 4: 0xffffffff
+gic_dist_write dist write at 0x0000029c size 4: 0xffffffff
+gic_dist_write dist write at 0x000001a0 size 4: 0xffffffff
+gic_dist_write dist write at 0x000002a0 size 4: 0xffffffff
+gic_dist_read dist read at 0x00000080 size 4: 0x00000000
+gic_dist_write dist write at 0x00000080 size 4: 0x00000000
+gic_dist_read dist read at 0x00000080 size 4: 0x00000000
+gic_dist_read dist read at 0x00000c04 size 4: 0x00000000
+gic_dist_write dist write at 0x00000c04 size 4: 0x00000000
+gic_dist_read dist read at 0x00000c04 size 4: 0x00000000
+gic_dist_read dist read at 0x0000041c size 4: 0x00800000
+gic_dist_write dist write at 0x0000041c size 4: 0x00800000
+gic_dist_write dist write at 0x00000000 size 4: 0x00000001
+gic_dist_write dist write at 0x00000180 size 4: 0x40000000
+gic_dist_write dist write at 0x00000280 size 4: 0x40000000
+gic_dist_write dist write at 0x00000000 size 4: 0x00000000
+gic_dist_read dist read at 0x00000300 size 4: 0x00000000
+gic_dist_read dist read at 0x00000200 size 4: 0x00000000
+gic_dist_read dist read at 0x00000100 size 4: 0x0000ffff
+gic_dist_read dist read at 0x00000000 size 4: 0x00000000
+gic_dist_read dist read at 0x00000000 size 4: 0x00000000
+gic_dist_read dist read at 0x00000004 size 4: 0x00000028
+gic_dist_read dist read at 0x00000100 size 4: 0x0000ffff
+gic_dist_read dist read at 0x00000200 size 4: 0x00000000
+gic_dist_read dist read at 0x00000300 size 4: 0x00000000
+gic_dist_read dist read at 0x00000304 size 4: 0x00000000
+gic_dist_read dist read at 0x00000308 size 4: 0x00000000
+gic_dist_read dist read at 0x0000030c size 4: 0x00000000
+gic_dist_read dist read at 0x00000310 size 4: 0x00000000
+gic_dist_read dist read at 0x00000314 size 4: 0x00000000
+gic_dist_read dist read at 0x00000318 size 4: 0x00000000
+gic_dist_read dist read at 0x0000031c size 4: 0x00000000
+gic_dist_read dist read at 0x00000320 size 4: 0x00000000
+gic_dist_write dist write at 0x00000184 size 4: 0xffffffff
+gic_dist_write dist write at 0x00000284 size 4: 0xffffffff
+gic_dist_write dist write at 0x00000188 size 4: 0xffffffff
+gic_dist_write dist write at 0x00000288 size 4: 0xffffffff
+gic_dist_write dist write at 0x0000018c size 4: 0xffffffff
+gic_dist_write dist write at 0x0000028c size 4: 0xffffffff
+gic_dist_write dist write at 0x00000190 size 4: 0xffffffff
+gic_dist_write dist write at 0x00000290 size 4: 0xffffffff
+gic_dist_write dist write at 0x00000194 size 4: 0xffffffff
+gic_dist_write dist write at 0x00000294 size 4: 0xffffffff
+gic_dist_write dist write at 0x00000198 size 4: 0xffffffff
+gic_dist_write dist write at 0x00000298 size 4: 0xffffffff
+gic_dist_write dist write at 0x0000019c size 4: 0xffffffff
+gic_dist_write dist write at 0x0000029c size 4: 0xffffffff
+gic_dist_write dist write at 0x000001a0 size 4: 0xffffffff
+gic_dist_write dist write at 0x000002a0 size 4: 0xffffffff
+gic_dist_write dist write at 0x00000000 size 4: 0x00000001
+gic_dist_read dist read at 0x00000000 size 4: 0x00000001
+gic_dist_read dist read at 0x00000104 size 4: 0x00000000
+gic_dist_read dist read at 0x00000204 size 4: 0x00000000
+gic_dist_write dist write at 0x00000204 size 4: 0x00000001
+gic_dist_read dist read at 0x00000000 size 4: 0x00000001
+gic_dist_read dist read at 0x00000104 size 4: 0x00000000
+gic_dist_read dist read at 0x00000204 size 4: 0x00000000
+gic_dist_read dist read at 0x00000004 size 4: 0x00000028
+gic_dist_read dist read at 0x00000000 size 4: 0x00000001
+gic_dist_read dist read at 0x00000100 size 4: 0x0000ffff
+gic_dist_read dist read at 0x00000200 size 4: 0x00000000
+gic_dist_read dist read at 0x00000300 size 4: 0x00000000
+gic_dist_write dist write at 0x00000180 size 4: 0x40000000
+gic_dist_write dist write at 0x00000280 size 4: 0x40000000
+gic_dist_read dist read at 0x00000080 size 4: 0x00000000
+gic_dist_write dist write at 0x00000080 size 4: 0x00000000
+gic_dist_read dist read at 0x00000080 size 4: 0x00000000
+gic_dist_read dist read at 0x00000c04 size 4: 0x00000000
+gic_dist_write dist write at 0x00000c04 size 4: 0x00000000
+gic_dist_read dist read at 0x00000c04 size 4: 0x00000000
+gic_dist_read dist read at 0x0000041c size 4: 0x00800000
+gic_dist_write dist write at 0x0000041c size 4: 0x00800000
+gic_dist_write dist write at 0x00000180 size 4: 0x40000000
+gic_dist_write dist write at 0x00000280 size 4: 0x40000000
+gic_dist_read dist read at 0x00000300 size 4: 0x00000000
+gic_dist_read dist read at 0x00000200 size 4: 0x00000000
+gic_dist_read dist read at 0x00000000 size 4: 0x00000001
+gic_dist_read dist read at 0x00000100 size 4: 0x0000ffff
+gic_dist_read dist read at 0x00000000 size 4: 0x00000001
+gic_dist_read dist read at 0x00000104 size 4: 0x00000000
+gic_dist_read dist read at 0x00000204 size 4: 0x00000000
+gic_dist_read dist read at 0x00000004 size 4: 0x00000028
+gic_dist_read dist read at 0x00000000 size 4: 0x00000001
+gic_dist_read dist read at 0x00000100 size 4: 0x0000ffff
+gic_dist_read dist read at 0x00000200 size 4: 0x00000000
+gic_dist_read dist read at 0x00000300 size 4: 0x00000000
+gic_dist_write dist write at 0x00000180 size 4: 0x40000000
+gic_dist_write dist write at 0x00000280 size 4: 0x40000000
+gic_dist_read dist read at 0x00000080 size 4: 0x00000000
+gic_dist_write dist write at 0x00000080 size 4: 0x00000000
+gic_dist_read dist read at 0x00000080 size 4: 0x00000000
+gic_dist_read dist read at 0x00000c04 size 4: 0x00000000
+gic_dist_write dist write at 0x00000c04 size 4: 0x00000000
+gic_dist_read dist read at 0x00000c04 size 4: 0x00000000
+gic_dist_read dist read at 0x0000041c size 4: 0x00800000
+gic_dist_write dist write at 0x0000041c size 4: 0x00800000
+gic_dist_write dist write at 0x00000180 size 4: 0x40000000
+gic_dist_write dist write at 0x00000280 size 4: 0x40000000
+gic_dist_read dist read at 0x00000300 size 4: 0x00000000
+gic_dist_read dist read at 0x00000200 size 4: 0x00000000
+gic_dist_read dist read at 0x00000000 size 4: 0x00000001
+gic_dist_read dist read at 0x00000100 size 4: 0x0000ffff
+gic_dist_read dist read at 0x00000000 size 4: 0x00000001
+gic_dist_read dist read at 0x00000104 size 4: 0x00000000
+gic_dist_read dist read at 0x00000204 size 4: 0x00000000
+gic_dist_read dist read at 0x00000100 size 4: 0x0000ffff
+gic_dist_read dist read at 0x00000200 size 4: 0x00000000
+gic_dist_read dist read at 0x00000300 size 4: 0x00000000
+gic_dist_write dist write at 0x00000000 size 4: 0x00000000
+gic_dist_read dist read at 0x00000000 size 4: 0x00000000
+gic_dist_read dist read at 0x00000004 size 4: 0x00000028
+gic_dist_write dist write at 0x00000284 size 4: 0xffffffff
+gic_dist_write dist write at 0x00000288 size 4: 0xffffffff
+gic_dist_write dist write at 0x0000028c size 4: 0xffffffff
+gic_dist_write dist write at 0x00000290 size 4: 0xffffffff
+gic_dist_write dist write at 0x00000294 size 4: 0xffffffff
+gic_dist_write dist write at 0x00000298 size 4: 0xffffffff
+gic_dist_write dist write at 0x0000029c size 4: 0xffffffff
+gic_dist_write dist write at 0x000002a0 size 4: 0xffffffff
+gic_dist_read dist read at 0x00000104 size 4: 0x00000000
+gic_dist_read dist read at 0x00000204 size 4: 0x00000000
+gic_dist_read dist read at 0x00000304 size 4: 0x00000000
+gic_dist_read dist read at 0x00000108 size 4: 0x00000000
+gic_dist_read dist read at 0x00000208 size 4: 0x00000000
+gic_dist_read dist read at 0x00000308 size 4: 0x00000000
+gic_dist_read dist read at 0x0000010c size 4: 0x00000000
+gic_dist_read dist read at 0x0000020c size 4: 0x00000000
+gic_dist_read dist read at 0x0000030c size 4: 0x00000000
+gic_dist_read dist read at 0x00000110 size 4: 0x00000000
+gic_dist_read dist read at 0x00000210 size 4: 0x00000000
+gic_dist_read dist read at 0x00000310 size 4: 0x00000000
+gic_dist_read dist read at 0x00000114 size 4: 0x00000000
+gic_dist_read dist read at 0x00000214 size 4: 0x00000000
+gic_dist_read dist read at 0x00000314 size 4: 0x00000000
+gic_dist_read dist read at 0x00000118 size 4: 0x00000000
+gic_dist_read dist read at 0x00000218 size 4: 0x00000000
+gic_dist_read dist read at 0x00000318 size 4: 0x00000000
+gic_dist_read dist read at 0x0000011c size 4: 0x00000000
+gic_dist_read dist read at 0x0000021c size 4: 0x00000000
+gic_dist_read dist read at 0x0000031c size 4: 0x00000000
+gic_dist_read dist read at 0x00000120 size 4: 0x00000000
+gic_dist_read dist read at 0x00000220 size 4: 0x00000000
+gic_dist_read dist read at 0x00000320 size 4: 0x00000000
+HMTEST BEGIN 39
+HMTEST PASS write_protect
+HMTEST PASS nx
+HMTEST PASS user_execute_protect
+HMTEST PASS user_access_protect
+HMTEST PASS wx
+HMTEST PASS stack_guard
+HMTEST PASS null_guard
+HMTEST PASS checked_range
+HMTEST PASS monitor_bounds
+HMTEST PASS cap_authority
+HMTEST PASS cap_limits
+HMTEST PASS cap_lifetime
+HMTEST PASS cap_generation
+HMTEST PASS boot_memory_valid
+HMTEST PASS boot_memory_malformed
+HMTEST PASS cpu_topology_valid
+HMTEST PASS cpu_topology_malformed
+HMTEST PASS cpu_topology_live
+HMTEST PASS frame_ranges
+HMTEST PASS frame_boundaries
+HMTEST PASS frame_contract
+HMTEST PASS heap_blocks
+HMTEST PASS heap_values
+HMTEST PASS event_contract
+HMTEST PASS mutex_contract
+HMTEST PASS mutex_lifetime
+HMTEST PASS mutex_workers
+HMTEST PASS thread_contract
+HMTEST PASS thread_limits
+HMTEST PASS thread_core
+HMTEST PASS timer_contract
+HMTEST PASS fault_contract
+HMTEST PASS mapping_contract
+HMTEST PASS mapping_limits
+HMTEST PASS mapping_hardware
+HMTEST PASS cpu_local_state
+HMTEST FAIL gic_ownership
+HMTEST PASS secondary_memory
+HMTEST PASS cap_orderings
+HMTEST END 39

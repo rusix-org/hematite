@@ -1,6 +1,6 @@
 # Progress
 
-Current phase: **Phase 1 underway: secondary ARM memory reserved; execution remains single-CPU**.
+Current phase: **Phase 1 underway: ARM secondary startup/shutdown verified; concurrent scheduling remains open**.
 Aaron approved scratch implementation and then changed the primary objective
 from strict Linux parity to native OS design with selective compatibility.
 [ADR 0005](docs/adr/0005-native-first-design.md) records the native direction;
@@ -19,21 +19,24 @@ from strict Linux parity to native OS design with selective compatibility.
 - Serial monitor: `make run` defaults to ARM64; `ARCH=x86_64` selects the
   regression port. Commands `help`, `status`, `test`; Ctrl-C exits.
 - `make test-all`: formatting, Clippy and safety checks for both targets,
-  41 host harness tests, 39 guest tests per architecture, ARM no-PAN rejection,
+  53 host harness tests, 39 guest tests per architecture, ARM no-PAN rejection,
   x86 missing-NX/SMEP/SMAP rejection, and live monitor recovery tests on both.
   ARM discovery matches both 128 MiB and 64 MiB guest configurations.
   Separate ARM images run five scheduling/wait cases at both memory sizes, then
   repeat the 39 baseline cases in the same guest. Forced-transition, withheld
   timer delivery, stack-overflow and all-blocked retention profiles also pass.
+  Two-CPU lifecycle profiles at both RAM sizes and three admission/fatal profiles
+  also pass; successful shutdown is followed by all 39 baseline cases.
   All passed locally; CI at `d13b032` covers the preceding thread milestone.
   `make test` tests ARM64 alone by default.
 - Pinned Rust base and Debian package snapshot, QEMU 7.2.22. One CPU/128 MiB
-  guest by default; ARM discovery also tests 64 MiB; no attached disks or networking. Both targets use TCG.
+  guest by default; lifecycle tests use two CPUs with TCG thread=multi. ARM also
+  tests 64 MiB; no attached disks or networking. Both targets use TCG.
 
-Latest evidence: [secondary memory verification](docs/evidence/arm-secondary-memory.md),
-[source identities](docs/evidence/secondary-memory-final/source-sha256.txt),
-[ARM profiles](docs/evidence/secondary-memory-final/aarch64/profiles/result.json),
-and matching x86 results under `docs/evidence/secondary-memory-final/x86_64/`.
+Latest evidence: [secondary lifecycle verification](docs/evidence/arm-secondary-lifecycle.md),
+[source identities](docs/evidence/secondary-lifecycle-final/source-sha256.txt),
+[lifecycle profiles](docs/evidence/secondary-lifecycle-final/aarch64/secondary/result.json),
+and matching ARM/x86 regressions under `docs/evidence/secondary-lifecycle-final/`.
 Earlier [bootstrap verification](docs/evidence/hematite-bootstrap.md) is retained.
 The earlier [Asterinas baseline](docs/evidence/asterinas-evaluation.md) remains
 an evaluation only; it is not this kernel's implementation.
@@ -49,8 +52,8 @@ continue rejecting safe Runner transfer and construction. See
 [design](docs/design/0015-arm-cpu-local-state.md),
 [independent review](docs/reviews/0015-arm-cpu-local-state.md) and
 [evidence](docs/evidence/arm-cpu-local-state.md).
-CPU1 remains off: runner stack selection and a global lease still need the
-two-CPU session protocol. GIC shared/local separation is now verified below.
+CPU1 now runs a fixed lifecycle diagnostic, with its slot restored only after
+confirmed OFF. Concurrent runner stack selection and scheduling remain open.
 
 ## ARM GIC ownership verified locally
 
@@ -62,8 +65,9 @@ exact IRQ traces pass. The diagnostic itself dispatches no task or interrupt;
 see [design](docs/design/0016-arm-gic-ownership.md),
 [review](docs/reviews/0016-arm-gic-ownership.md) and
 [evidence](docs/evidence/arm-gic-ownership.md). The older scoped timer diagnostics
-still require exclusive whole-controller ownership with CPU1 off. No secondary
-startup or concurrent interrupt handling is established.
+still require exclusive whole-controller ownership with CPU1 off. The disabled
+SPI diagnostic now explicitly establishes and restores its target on two-CPU
+GICs; concurrent interrupt handling remains unverified.
 
 ## Secondary ARM memory verified locally
 
@@ -74,9 +78,24 @@ geometry and live frame-pool exclusions pass, including malformed exclusion
 queries and an eligible-page counterexample. See
 [design](docs/design/0017-arm-secondary-memory.md),
 [review](docs/reviews/0017-arm-secondary-memory.md) and
-[evidence](docs/evidence/arm-secondary-memory.md). CPU1 has neither installed
-this root nor used the stacks; secondary hardware translation, overflow and
-simultaneous execution remain unverified.
+[evidence](docs/evidence/arm-secondary-memory.md). The lifecycle milestone below
+now installs the root and uses the coordinator stack. Worker stack execution,
+actual secondary guard overflow and simultaneous scheduling remain unverified.
+
+## Secondary CPU lifecycle verified locally
+
+A private non-Send/non-Sync capability uses a permanent monotonic generation,
+Release/Acquire mailbox and PSCI/HVC to start CPU1 twice and confirm OFF before
+report consumption or stack reuse. CPU1 runs a fixed Rust diagnostic and returns
+normally before assembly publishes Returned and calls CPU_OFF. Actual MPIDR,
+TPIDR, TTBR, SP and controls pass; AT/PAR probes validate stack translation and
+reject the guard/owned arena. Both RAM profiles pass all baseline cases after
+shutdown. One-CPU admission, stale-generation and simulated CPU_OFF-return
+profiles fail explicitly with their expected codes. See
+[design](docs/design/0018-arm-secondary-lifecycle.md),
+[review](docs/reviews/0018-arm-secondary-lifecycle.md) and
+[evidence](docs/evidence/arm-secondary-lifecycle.md). This does not yet run
+preemptive callbacks on CPU1 or satisfy the simultaneous execution gate.
 
 ## Boot-memory discovery verified locally
 
@@ -85,8 +104,8 @@ It validates CPU identities, hierarchy/cell widths, enabled status, duplicate
 properties and PSCI compatibility/conduit; malformed or unsupported inputs
 return no partial topology. ARM derives this description through the same
 existing bounded DTB borrow. Invalid topology leaves no descriptor, rather than
-preventing otherwise valid single-CPU memory initialization. No startup
-capability or PSCI call exists yet. Live boot, malformed fixtures and actual
+preventing otherwise valid single-CPU memory initialization. The parser itself grants no startup
+authority; the lifecycle capability above consumes this metadata. Live boot, malformed fixtures and actual
 QEMU one/two/three-CPU trees pass their declared checks; see
 [source review](docs/reviews/0014-cpu-topology-source.md) and
 [evidence](docs/evidence/cpu-topology.md).
@@ -223,7 +242,7 @@ The pinned compiler's page probing is checked in emitted IR/assembly; an actual
 128 KiB callback frame faults in worker zero's guard and exits fatally.
 See [design](docs/design/0010-arm-kernel-threads.md),
 [review](docs/reviews/0010-arm-kernel-threads.md) and
-[evidence](docs/evidence/arm-threads.md). SMP, cancellation and dynamically
+[evidence](docs/evidence/arm-threads.md). Concurrent SMP scheduling, cancellation and dynamically
 allocated thread stacks remain unimplemented.
 
 ## Mutex ownership and contention verified locally
@@ -277,9 +296,9 @@ is exposed; allocator/mapping capabilities remain unavailable to workers.
 See [design](docs/design/0012-arm-preemption.md),
 [source review](docs/reviews/0012-arm-preemption-source.md) and
 [evidence](docs/evidence/arm-preemption.md). This does not satisfy Phase 1's
-multi-CPU gate; general wait queues, SMP-safe resource ownership and SMP remain ahead.
+multi-CPU gate; general wait queues, SMP-safe resource ownership and concurrent scheduling remain ahead.
 
-No userspace, syscall ABI, general interrupt/exception handling, SMP, storage,
+No userspace, syscall ABI, general interrupt/exception handling, concurrent SMP scheduling, storage,
 virtio drivers or networking exists. ARM recovery is restricted to the fixed
 EL1 probe sites above; general user-copy and process-fault handling remain
 unimplemented. x86 guards are checked through mappings and unexpected x86
@@ -308,9 +327,9 @@ publication awaits Aaron's response. Local kernel development remains authorized
 
 1. Implement the [reviewed two-CPU execution contract](docs/design/0014-arm-smp.md):
    topology/PSCI parsing, CPU-local records, shared/local GIC ownership, and
-   secondary memory reservations are verified. Add secondary entry, the session
-   mailbox and confirmed CPU_OFF lifecycle, then simultaneous
-   preemptive callbacks. [Independent review](docs/reviews/0014-arm-smp.md) is
+   secondary memory and repeated startup/OFF lifecycle are verified. Extend the
+   mailbox to owned jobs/reports, select per-CPU worker/emergency stacks and run
+   simultaneous preemptive callbacks with shared Mutex/Event stress. [Independent review](docs/reviews/0014-arm-smp.md) is
    complete at design level. Preserve CPU0-only allocator/mapping authority;
    concurrent allocator ownership still needs its own design and stress tests.
    Extend recovery to fault-aware user operations only with
@@ -463,3 +482,12 @@ publication awaits Aaron's response. Local kernel development remains authorized
   Second full suite passes 41 host/39 baseline guest cases per target and all
   scheduling/negative regressions. Archived failures, source/ELF identities and
   raw results. CPU1 never installed the root or used these stacks.
+- 2026-10-26: CPU1 now starts, runs a Rust diagnostic and shuts down twice via
+  PSCI with generation checks and confirmed OFF before reuse. First guest passed
+  lifecycle but exposed a one-CPU target assumption in the old GIC sentinel;
+  reviewed explicit target setup/restoration fixes it. Retained failed guest,
+  register traces and a failed halted-QEMU inspection. First full suite stopped
+  at comment placement; corrected it. Final full suite passes 53 host/39 baseline
+  guest cases, 23 actual thread/event/secondary type clients, every prior profile
+  and five lifecycle profiles. Actual two-CPU traces/ELF identities archived;
+  concurrent preemptive workers remain the next design0014 gate.

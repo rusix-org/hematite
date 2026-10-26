@@ -1,4 +1,4 @@
-//! CPU0-only software state prerequisite; ownership proof: design 0015.
+//! CPU-local software state; ownership proofs: designs 0015 and 0018.
 use core::arch::{asm, global_asm};
 
 #[repr(C, align(64))]
@@ -26,7 +26,8 @@ const _: () = {
     assert!(STRIDE == 128 && core::mem::align_of::<Record>() == 64);
 };
 
-// SAFETY: Assembly owns these two disjoint records. Only CPU0 is active;
+// SAFETY: Assembly owns these two disjoint records. CPU1 accesses its slot
+// only during the exclusive lifecycle session; CPU0 waits for Returned+OFF.
 // IRQ-masked Rust observations use raw scalar loads and retain no references.
 global_asm!(
     ".section .bss.cpu_local,\"aw\",@nobits",
@@ -114,13 +115,55 @@ pub(super) fn checks() -> bool {
             return false;
         }
         for word in 0..STRIDE / 8 {
-            // SAFETY: CPU1 is never activated. CPU0 owns this separate canary
-            // allocation; bounded aligned scalar loads stay in its 128 bytes.
+            // SAFETY: This private baseline diagnostic runs outside the lifecycle
+            // lease with CPU1 OFF; bounded scalar loads stay in its 128 bytes.
             let value = unsafe { ((base() + STRIDE + word * 8) as *const u64).read_volatile() };
             if value != CANARY {
                 return false;
             }
         }
         true
+    })
+}
+
+/// Caller holds BUSY and has confirmed CPU1 OFF before transferring slot1.
+#[cfg(feature = "secondary-tests")]
+// SAFETY: No live peer can read/write the record; only fixed scalar slots are
+// initialized, with no Rust references retained across admission.
+pub(super) unsafe fn prepare_secondary() {
+    for word in 0..STRIDE / 8 {
+        // SAFETY: Exact slot1 bounds and exclusive OFF ownership above.
+        unsafe {
+            ((base() + STRIDE + word * 8) as *mut u64).write_volatile(0);
+        }
+    }
+    // SAFETY: Asserted identity offset lies within the same exclusive slot.
+    unsafe {
+        ((base() + STRIDE + CPU_ID) as *mut u64).write_volatile(1);
+    }
+}
+
+/// Caller holds BUSY and observed Acquire Returned plus PSCI OFF.
+#[cfg(feature = "secondary-tests")]
+// SAFETY: Every peer Rust frame ended and hardware confirms no CPU executes;
+// restore inactive-slot canaries before releasing the session lease.
+pub(super) unsafe fn restore_secondary() {
+    for word in 0..STRIDE / 8 {
+        // SAFETY: Exact slot1 bounds; no live peer reader/writer after OFF.
+        unsafe {
+            ((base() + STRIDE + word * 8) as *mut u64).write_volatile(CANARY);
+        }
+    }
+}
+
+#[cfg(feature = "secondary-tests")]
+pub(super) fn secondary_identity() -> bool {
+    masked(|pointer, mpidr| {
+        if mpidr & AFFINITY_MASK != 1 || pointer != base() + STRIDE {
+            return false;
+        }
+        // SAFETY: Only CPU1 reads its own validated record, with IRQ masked;
+        // CPU0 cannot touch this slot between preparation and Returned+OFF.
+        unsafe { ((pointer + CPU_ID) as *const u64).read_volatile() == 1 }
     })
 }

@@ -1,0 +1,17 @@
+[
+  "qemu-system-aarch64",
+  "-machine",
+  "virt,gic-version=2,dumpdtb=/workspace/target/evidence/20261026T151829-411240214-aarch64/cpu-topology/2-cpu.dtb",
+  "-cpu",
+  "max",
+  "-accel",
+  "tcg",
+  "-smp",
+  "2",
+  "-m",
+  "128M",
+  "-display",
+  "none",
+  "-nodefaults",
+  "-no-user-config"
+]

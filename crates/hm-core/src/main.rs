@@ -10,6 +10,18 @@ mod cpu_local;
 mod mutex;
 #[cfg(target_arch = "aarch64")]
 mod mutex_checks;
+#[cfg(all(target_arch = "aarch64", feature = "secondary-tests"))]
+#[cfg_attr(
+    any(
+        feature = "nested-fault-test",
+        feature = "unhandled-fault-test",
+        feature = "thread-overflow-test",
+        feature = "preemption-overflow-test",
+        feature = "wait-all-blocked-test"
+    ),
+    allow(dead_code)
+)]
+mod secondary;
 
 #[cfg(target_arch = "aarch64")]
 mod exceptions;
@@ -86,17 +98,38 @@ extern "C" fn boot_main(_boot_info: u64) -> ! {
         )
     )))]
     {
-        #[cfg(feature = "preemption-no-timer-test")]
+        #[cfg(all(target_arch = "aarch64", feature = "secondary-tests"))]
+        {
+            if !arch::secondary_tests(&mut platform) {
+                arch::exit(false);
+            }
+            arch::exit(hm_kernel::run_tests(&mut platform));
+        }
+        #[cfg(all(
+            feature = "preemption-no-timer-test",
+            not(all(target_arch = "aarch64", feature = "secondary-tests"))
+        ))]
         platform.write("HMPREEMPT EXPECT NO-TIMER\n");
-        #[cfg(feature = "preemption-tests")]
+        #[cfg(all(
+            feature = "preemption-tests",
+            not(all(target_arch = "aarch64", feature = "secondary-tests"))
+        ))]
         {
             let scheduling = hm_kernel::run_preemption_tests(&mut platform);
             let regression = hm_kernel::run_tests(&mut platform);
             arch::exit(scheduling && regression);
         }
-        #[cfg(all(feature = "boot-tests", not(feature = "preemption-tests")))]
+        #[cfg(all(
+            feature = "boot-tests",
+            not(feature = "preemption-tests"),
+            not(all(target_arch = "aarch64", feature = "secondary-tests"))
+        ))]
         arch::exit(hm_kernel::run_tests(&mut platform));
-        #[cfg(not(any(feature = "boot-tests", feature = "preemption-tests")))]
+        #[cfg(not(any(
+            feature = "boot-tests",
+            feature = "preemption-tests",
+            all(target_arch = "aarch64", feature = "secondary-tests")
+        )))]
         hm_kernel::run_monitor(&mut platform)
     }
 }

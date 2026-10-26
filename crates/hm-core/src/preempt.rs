@@ -90,6 +90,8 @@ unsafe extern "C" {
     fn arm_preempt_context_probe(seed: u64) -> u64;
     fn arm_gic_session_start() -> u64;
     fn arm_gic_session_stop() -> u64;
+    fn arm_gic_probe_target() -> u64;
+    fn arm_gic_probe_restore_target(target: u64) -> u64;
     fn arm_gic_probe_seed() -> u64;
     fn arm_gic_probe_preserved() -> u64;
     fn arm_preempt_setup() -> u64;
@@ -509,6 +511,7 @@ pub(super) fn gic_checks() -> bool {
         if arm_gic_session_start() == 0 {
             false
         } else {
+            let original_target = arm_gic_probe_target();
             let mut passed = arm_gic_probe_seed() == 1;
             for _ in 0..2 {
                 let interval = arm_preempt_setup();
@@ -523,6 +526,10 @@ pub(super) fn gic_checks() -> bool {
                 passed = passed && interval != 0 && duplicate_rejected && preserved;
             }
             if arm_gic_session_stop() != 1 {
+                arm_exception_fail();
+            }
+            // Restore the diagnostic target even when a seed/cycle failed.
+            if arm_gic_probe_restore_target(original_target) != 1 {
                 arm_exception_fail();
             }
             passed && control_checks()

@@ -16,6 +16,18 @@ use hm_threads::Runner;
 use hm_kernel::thread_api::{ThreadContext, ThreadJob, RunReport, ThreadError};
 '''
 PROBES = {
+    "secondary_runner_send": ('''fn send<T: Send>() {} pub fn client() {
+        send::<hm_threads::SecondaryRunner>();
+    }''', "E0277"),
+    "secondary_runner_sync": ('''fn sync<T: Sync>() {} pub fn client() {
+        sync::<hm_threads::SecondaryRunner>();
+    }''', "E0277"),
+    "secondary_runner_clone": ('''pub fn client(runner: &hm_threads::SecondaryRunner) {
+        let _ = <hm_threads::SecondaryRunner as Clone>::clone(runner);
+    }''', "E0277"),
+    "secondary_private_constructor": ('''pub fn client(topology: &hm_kernel::cpu_topology::Topology) {
+        let _ = hm_threads::SecondaryRunner::from_boot(topology);
+    }''', "E0624"),
     "valid_local_event_wait": ('''pub fn client(context: &mut dyn ThreadContext) {
         let event = hm_kernel::wait_api::Event::new();
         let observed = event.snapshot();
@@ -124,9 +136,11 @@ def main():
     wrapper.write_text('#![no_std]\n#![deny(unsafe_op_in_unsafe_fn)]\n'
                        f'#[path={json.dumps(str(source.with_name("cpu_local.rs")))}] mod cpu_local;\n'
                        f'#[path={json.dumps(str(source.with_name("preempt.rs")))}] mod preempt;\n'
+                       f'#[path={json.dumps(str(source.with_name("secondary.rs")))}] mod secondary;\n'
                        f'#[path={json.dumps(str(source))}] pub mod threads;\n'
-                       'pub use threads::Runner;\n')
+                       'pub use threads::Runner;\npub use secondary::Runner as SecondaryRunner;\n')
     base = ["rustc", "--edition=2024", "--target", args.target, "-C", "panic=abort",
+            "--cfg", 'feature="secondary-tests"',
             "--extern", f"hm_kernel={library}", "-L", f"dependency={library.parent / 'deps'}"]
     thread_lib = output / "libhm_threads.rlib"
     code, _ = run(base + ["--crate-type=rlib", "--crate-name=hm_threads", str(wrapper),

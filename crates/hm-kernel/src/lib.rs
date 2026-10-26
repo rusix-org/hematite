@@ -44,6 +44,10 @@ pub struct BootChecks {
 
 /// The core retains all hardware authority; policy only exchanges owned values.
 pub trait Platform {
+    /// Expected boot profile, independent of the discovered device tree.
+    fn expected_cpu_count(&self) -> usize {
+        1
+    }
     fn secondary_memory_check(&self) -> Option<bool> {
         None
     }
@@ -489,7 +493,11 @@ pub fn run_tests(platform: &mut impl Platform) -> bool {
             "cpu_topology_live",
             if cfg!(target_arch = "aarch64") {
                 platform.cpu_topology().is_some_and(|topology| {
-                    topology.cpu_count() == 1 && topology.affinities() == [0]
+                    match platform.expected_cpu_count() {
+                        1 => topology.cpu_count() == 1 && topology.affinities() == [0],
+                        2 => topology.cpu_count() == 2 && topology.affinities() == [0, 1],
+                        _ => false,
+                    }
                 })
             } else {
                 platform.cpu_topology().is_none()

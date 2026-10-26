@@ -1,0 +1,75 @@
+Taking exception 11 [Hypervisor Call] on CPU 0
+...from EL1 to EL2
+...with ESR 0x16/0x5a000000
+...handled as PSCI call
+Taking exception 11 [Hypervisor Call] on CPU 0
+...from EL1 to EL2
+...with ESR 0x16/0x5a000000
+...handled as PSCI call
+Taking exception 11 [Hypervisor Call] on CPU 0
+...from EL1 to EL2
+...with ESR 0x16/0x5a000000
+...handled as PSCI call
+Taking exception 11 [Hypervisor Call] on CPU 0
+...from EL1 to EL2
+...with ESR 0x16/0x5a000000
+...handled as PSCI call
+Taking exception 11 [Hypervisor Call] on CPU 0
+...from EL1 to EL2
+...with ESR 0x16/0x5a000000
+...handled as PSCI call
+Taking exception 11 [Hypervisor Call] on CPU 0
+...from EL1 to EL2
+...with ESR 0x16/0x5a000000
+...handled as PSCI call
+Taking exception 11 [Hypervisor Call] on CPU 0
+...from EL1 to EL2
+...with ESR 0x16/0x5a000000
+...handled as PSCI call
+Taking exception 11 [Hypervisor Call] on CPU 0
+...from EL1 to EL2
+...with ESR 0x16/0x5a000000
+...handled as PSCI call
+Taking exception 11 [Hypervisor Call] on CPU 0
+...from EL1 to EL2
+...with ESR 0x16/0x5a000000
+...handled as PSCI call
+Taking exception 11 [Hypervisor Call] on CPU 0
+...from EL1 to EL2
+...with ESR 0x16/0x5a000000
+...handled as PSCI call
+Taking exception 11 [Hypervisor Call] on CPU 0
+...from EL1 to EL2
+...with ESR 0x16/0x5a000000
+...handled as PSCI call
+Taking exception 11 [Hypervisor Call] on CPU 0
+...from EL1 to EL2
+...with ESR 0x16/0x5a000000
+...handled as PSCI call
+Taking exception 11 [Hypervisor Call] on CPU 0
+...from EL1 to EL2
+...with ESR 0x16/0x5a000000
+...handled as PSCI call
+Taking exception 11 [Hypervisor Call] on CPU 0
+...from EL1 to EL2
+...with ESR 0x16/0x5a000000
+...handled as PSCI call
+Taking exception 11 [Hypervisor Call] on CPU 0
+...from EL1 to EL2
+...with ESR 0x16/0x5a000000
+...handled as PSCI call
+Taking exception 11 [Hypervisor Call] on CPU 0
+...from EL1 to EL2
+...with ESR 0x16/0x5a000000
+...handled as PSCI call
+Taking exception 11 [Hypervisor Call] on CPU 0
+...from EL1 to EL2
+...with ESR 0x16/0x5a000000
+...handled as PSCI call
+Taking exception 11 [Hypervisor Call] on CPU 0
+...from EL1 to EL2
+...with ESR 0x16/0x5a000000
+...handled as PSCI call
+Taking exception 16 [Semihosting call] on CPU 1
+...from EL1 to EL0
+...handling as semihosting call 0x20

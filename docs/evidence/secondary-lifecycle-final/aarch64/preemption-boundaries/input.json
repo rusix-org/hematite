@@ -1,0 +1,7 @@
+{
+  "kernel": "/workspace/target/aarch64/preemption-boundary-test/aarch64-unknown-none/release/hematite",
+  "sha256": "aa4ceaf319333afdfd35673254ed731a86a4f5a5163a62dcbad6a2f597abf255",
+  "arch": "aarch64",
+  "accel": "tcg",
+  "ram_mb": 128
+}

@@ -78,3 +78,32 @@ timer/preemption traces remain the integrating agent's verification gate.
 No build or guest result was produced by this reviewer. CPU1 must remain off;
 the unchanged timer diagnostic and absent secondary lifetime/stack machinery
 preclude any SMP-ready claim.
+
+## Two-CPU fixture amendment review (2026-10-26)
+
+The first lifecycle image's GIC trace shows an ineffective pending seed while
+forwarding/local quiet checks remain correct. The original target byte was not
+successfully observed; a zero-target explanation remains an inference until
+captured by the revised diagnostic. This does not justify weakening the pending
+preservation assertion.
+
+**The amended diagnostic design is approved before implementation.** Under
+the existing lease with CPU1 OFF, save IRQ32's single target byte, establish
+CPU0 targeting on a multiple-interface controller and verify it before seeding.
+Single-interface RAZ/WI target registers retain their existing implicit behavior.
+Preserve target and pending state across local cycles, then perform shared
+shutdown, restore the original byte and verify restoration before lease release.
+Any irrecoverable failure is fatal; ordinary failed assertions cannot bypass
+restoration. No production local lifecycle gains shared target writes, and the
+sentinel remains disabled throughout.
+
+**Amendment source review approved.** The helper validates SPI32 quiet state,
+reads/saves only byte 0x820, extracts CPUNumber bits 7:5, and writes/readbacks
+mask 1 only for multiple interfaces. Local-cycle preservation checks also verify
+that target. Rust retains the original byte across calls and unconditionally
+restores it after shared stop, before evaluating the final diagnostic boolean
+or releasing BUSY. Restoration validates byte range, distributor shutdown and
+SPI quiet state, then verifies exact original readback. Assembly uses only
+caller-saved scratch and preserves the saved value. No ordinary failed assertion
+skips cleanup; irrecoverable checks terminate. No production local lifecycle
+path changed. Revised one-/two-CPU execution evidence remains parent-owned.

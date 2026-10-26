@@ -60,6 +60,13 @@ pub(super) struct BootPlatform {
 pub(super) const BANNER: &str = "hematite: ARM64 Rust kernel entered at EL1\n";
 
 impl Platform for BootPlatform {
+    fn expected_cpu_count(&self) -> usize {
+        if cfg!(feature = "secondary-tests") {
+            2
+        } else {
+            1
+        }
+    }
     fn cpu_topology(&self) -> Option<hm_kernel::cpu_topology::Topology> {
         self.topology
     }
@@ -677,4 +684,79 @@ pub(super) fn exit(success: bool) -> ! {
         // has no scheduler; a missing semihost handler must never return pass.
         unsafe { asm!("wfi", options(nomem, nostack)) }
     }
+}
+
+#[cfg(feature = "secondary-tests")]
+#[cfg_attr(
+    any(
+        feature = "nested-fault-test",
+        feature = "unhandled-fault-test",
+        feature = "thread-overflow-test",
+        feature = "preemption-overflow-test",
+        feature = "wait-all-blocked-test"
+    ),
+    allow(dead_code)
+)]
+pub(super) fn secondary_tests(platform: &mut BootPlatform) -> bool {
+    fn emit(platform: &mut BootPlatform, args: core::fmt::Arguments<'_>) {
+        struct Output<'a>(&'a mut BootPlatform);
+        impl core::fmt::Write for Output<'_> {
+            fn write_str(&mut self, text: &str) -> core::fmt::Result {
+                self.0.write(text);
+                Ok(())
+            }
+        }
+        let _ = core::fmt::write(&mut Output(platform), args);
+    }
+    let Some(topology) = platform.topology.as_ref() else {
+        platform.write("HMSMP REJECT TOPOLOGY\n");
+        return false;
+    };
+    if !super::secondary::admitted(topology) {
+        platform.write("HMSMP REJECT TOPOLOGY\n");
+        return false;
+    }
+    // SAFETY: initialize validated the actual boot DTB, complete immutable
+    // roots/stack mappings and reserved frame exclusions. This private CPU0
+    // entry supplies machine authority; no safe caller can fabricate it.
+    let Some(mut runner) = (unsafe { super::secondary::Runner::from_boot(topology) }) else {
+        platform.write("HMSMP REJECT PSCI\n");
+        return false;
+    };
+    platform.write("HMSMP BEGIN 2\n");
+    let info = runner.info();
+    emit(
+        platform,
+        format_args!(
+            "HMSMP INFO version={} cpu_on={} cpu_off={} affinity_info={}\n",
+            info.version, info.cpu_on, info.cpu_off, info.affinity_info
+        ),
+    );
+    if cfg!(feature = "secondary-stale-generation-test") {
+        platform.write("HMSMP EXPECT STALE-GENERATION\n");
+    } else if cfg!(feature = "secondary-cpu-off-return-test") {
+        platform.write("HMSMP EXPECT CPU-OFF-RETURN\n");
+    }
+    for _ in 0..2 {
+        let Ok(session) = runner.run() else {
+            return false;
+        };
+        emit(
+            platform,
+            format_args!(
+                "HMSMP SESSION generation={} cpu={} on={} returned=1 off=1 checks={} root={} sp={}\n",
+                session.generation,
+                session.cpu,
+                session.on,
+                session.checks,
+                session.root,
+                session.sp
+            ),
+        );
+        if session.checks != 255 || session.cpu != 1 || session.on != 0 {
+            return false;
+        }
+    }
+    platform.write("HMSMP PASS lifecycle\nHMSMP END 2\n");
+    true
 }
