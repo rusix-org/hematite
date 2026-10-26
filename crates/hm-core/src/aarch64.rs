@@ -42,6 +42,16 @@ pub(super) struct BootPlatform {
 pub(super) const BANNER: &str = "hematite: ARM64 Rust kernel entered at EL1\n";
 
 impl Platform for BootPlatform {
+    type Mutex<T> = super::mutex::Mutex<T>;
+
+    fn new_mutex<T>(&self, value: T) -> Self::Mutex<T> {
+        super::mutex::Mutex::new(value)
+    }
+
+    fn mutex_checks(&self) -> Option<hm_kernel::MutexChecks> {
+        self.runner.as_ref().map(super::mutex_checks::checks)
+    }
+
     fn run_threads(
         &self,
         jobs: &[hm_kernel::thread_api::ThreadJob],

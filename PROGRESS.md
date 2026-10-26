@@ -1,6 +1,6 @@
 # Progress
 
-Current phase: **Phase 1 underway: ARM64 cooperative kernel threads verified**.
+Current phase: **Phase 1 underway: mutex ownership and cooperative contention verified**.
 Aaron approved scratch implementation and then changed the primary objective
 from strict Linux parity to native OS design with selective compatibility.
 [ADR 0005](docs/adr/0005-native-first-design.md) records the native direction;
@@ -19,18 +19,18 @@ from strict Linux parity to native OS design with selective compatibility.
 - Serial monitor: `make run` defaults to ARM64; `ARCH=x86_64` selects the
   regression port. Commands `help`, `status`, `test`; Ctrl-C exits.
 - `make test-all`: formatting, Clippy and safety checks for both targets,
-  23 host harness tests, 29 guest tests per architecture, ARM no-PAN rejection,
+  23 host harness tests, 32 guest tests per architecture, ARM no-PAN rejection,
   x86 missing-NX/SMEP/SMAP rejection, and live monitor recovery tests on both.
   ARM discovery matches both 128 MiB and 64 MiB guest configurations.
-  All passed locally and in CI at `d13b032`.
+  All passed locally; CI at `d13b032` covers the preceding thread milestone.
   `make test` tests ARM64 alone by default.
 - Pinned Rust base and Debian package snapshot, QEMU 7.2.22. One CPU/128 MiB
   guest by default; ARM discovery also tests 64 MiB; no attached disks or networking. Both targets use TCG.
 
-Latest evidence: [thread verification](docs/evidence/arm-threads.md),
-[ARM guest results](docs/evidence/threads-final/aarch64/boot/result.json),
-[ARM profiles](docs/evidence/threads-final/aarch64/profiles/result.json),
-and matching x86 results under `docs/evidence/threads-final/x86_64/`.
+Latest evidence: [mutex verification](docs/evidence/kernel-mutex.md),
+[ARM guest results](docs/evidence/mutex-final/aarch64/boot/result.json),
+[ARM profiles](docs/evidence/mutex-final/aarch64/profiles/result.json),
+and matching x86 results under `docs/evidence/mutex-final/x86_64/`.
 Earlier [bootstrap verification](docs/evidence/hematite-bootstrap.md) is retained.
 The earlier [Asterinas baseline](docs/evidence/asterinas-evaluation.md) remains
 an evaluation only; it is not this kernel's implementation.
@@ -172,6 +172,26 @@ See [design](docs/design/0010-arm-kernel-threads.md),
 [evidence](docs/evidence/arm-threads.md). Preemption, SMP, cancellation and
 dynamically allocated thread stacks remain unimplemented.
 
+## Mutex ownership and contention verified locally
+
+Both architectures expose the same allocation-free generic core mutex through
+the safe platform interface. Acquire/Release ownership protects values through
+a private non-Send/non-Sync guard; cooperative acquisition yields when busy.
+Safe tests cover contention, publication, borrowed/non-Copy values, destructor
+counts and forgotten guards. Twenty-two compiler clients per architecture check
+authority, borrowing and Send/Sync bounds, including Mutex<Cell<T>> sharing.
+
+Four actual ARM workers hold guards across yields while their protected Cell
+pair is temporarily inconsistent; only the holder can access it until repaired
+and unlocked. Repeated runs complete with exact totals and unchanged resource
+accounting. The same core module passed a hosted four-thread, 80,000-update
+stress test with forced initial contention and exactly-once payload destruction.
+This is host concurrency evidence, not guest SMP. See
+[design](docs/design/0011-kernel-mutex.md),
+[review](docs/reviews/0011-kernel-mutex.md) and
+[evidence](docs/evidence/kernel-mutex.md). IRQ-safe locking, wait queues,
+preemption-disable ownership and fairness guarantees remain unimplemented.
+
 ## Limits and gates
 
 No userspace, syscall ABI, general interrupt/exception handling, SMP, storage,
@@ -196,7 +216,7 @@ remains pending (ADR 0002); preliminary naming findings remain in ADR 0003.
 
 ## Next actions
 
-1. Design/review synchronization and timer-driven preemption, including how existing
+1. Design/review IRQ-safe synchronization and timer-driven preemption, including how existing
    single-CPU ownership remains protected while tasks are interrupted. Extend recovery to fault-aware user operations only with
    address-space and lifetime proofs. Add interrupt/SMP-safe ownership before concurrency;
    implement measured small-object allocation before service workloads.
@@ -286,3 +306,8 @@ remains pending (ADR 0002); preliminary naming findings remain in ADR 0003.
   passed the complete environment/build/test job and evidence upload. Archived
   exact commit/job metadata and raw logs. Phase 1 remains incomplete without
   preemptive multi-CPU execution and its required stress/synchronization tests.
+- 2026-10-26: Added reviewed mutex/guard ownership on both architectures and
+  actual contending ARM workers. First full suite passes 32 guest/23 host cases,
+  22 new compiler clients per target and hosted four-thread 80,000-update stress.
+  Preserved exact source, commands, host binary hash and raw results. Ordinary
+  cooperative mutexes do not authorize blocking acquisition in interrupt handlers.

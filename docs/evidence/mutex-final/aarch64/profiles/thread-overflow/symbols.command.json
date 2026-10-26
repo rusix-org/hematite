@@ -1,0 +1,5 @@
+[
+  "readelf",
+  "-sW",
+  "/workspace/target/aarch64/thread-overflow-test/aarch64-unknown-none/release/hematite"
+]

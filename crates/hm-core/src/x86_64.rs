@@ -27,6 +27,16 @@ unsafe extern "C" {
 pub(super) struct BootPlatform;
 
 impl Platform for BootPlatform {
+    type Mutex<T> = super::mutex::Mutex<T>;
+
+    fn new_mutex<T>(&self, value: T) -> Self::Mutex<T> {
+        super::mutex::Mutex::new(value)
+    }
+
+    fn mutex_checks(&self) -> Option<hm_kernel::MutexChecks> {
+        None
+    }
+
     type Mapping<'a> = hm_kernel::mapping_api::UnsupportedMapping;
     type HeapBlock<'a> = hm_kernel::heap_api::UnsupportedBlock;
     type HeapBox<'a, T: 'a> = hm_kernel::heap_api::UnsupportedBox<T>;

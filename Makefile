@@ -44,6 +44,14 @@ test: image
 		python3 tools/check_frame_types.py \
 			--library target/$(ARCH)/boot-test/$(TARGET)/release/libhm_kernel.rlib \
 			--target $(TARGET) --output "$$evidence_dir/frame-types"; \
+		mutex_host_args=(); \
+		if [ "$(ARCH)" = aarch64 ]; then \
+			cargo build --locked --offline -p hm-kernel --release --target x86_64-unknown-linux-gnu --target-dir target/host-mutex; \
+			mutex_host_args=(--host-library target/host-mutex/x86_64-unknown-linux-gnu/release/libhm_kernel.rlib); \
+		fi; \
+		python3 tools/check_mutex_types.py \
+			--library target/$(ARCH)/boot-test/$(TARGET)/release/libhm_kernel.rlib \
+			--target $(TARGET) --output "$$evidence_dir/mutex-types" "$${mutex_host_args[@]}"; \
 		if [ "$(ARCH)" = aarch64 ]; then \
 			python3 tools/check_mapping_types.py \
 				--library target/$(ARCH)/boot-test/$(TARGET)/release/libhm_kernel.rlib \

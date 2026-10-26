@@ -14,6 +14,8 @@ pub mod heap_api;
 mod heap_tests;
 pub mod mapping_api;
 mod mapping_tests;
+pub mod mutex_api;
+mod mutex_tests;
 pub mod thread_api;
 mod thread_tests;
 
@@ -37,6 +39,11 @@ pub struct BootChecks {
 
 /// The core retains all hardware authority; policy only exchanges owned values.
 pub trait Platform {
+    type Mutex<T>: mutex_api::OwnedMutex<T>;
+    fn new_mutex<T>(&self, value: T) -> Self::Mutex<T>;
+    fn mutex_checks(&self) -> Option<MutexChecks> {
+        None
+    }
     fn run_threads(
         &self,
         _jobs: &[thread_api::ThreadJob],
@@ -126,6 +133,40 @@ pub struct ThreadChecks {
     pub context: bool,
     pub reentrant: bool,
     pub guards: bool,
+}
+
+/// Observations from actual shared-state cooperative workers on ARM.
+pub struct MutexChecks {
+    pub contention: bool,
+    pub publication: bool,
+    pub completion: bool,
+}
+
+fn mutex_workers(platform: &impl Platform) -> bool {
+    let frames = platform.frame_stats();
+    let mappings = platform.mapping_stats();
+    for _ in 0..2 {
+        let Some(checks) = platform.mutex_checks() else {
+            return cfg!(target_arch = "x86_64");
+        };
+        if !cfg!(target_arch = "aarch64")
+            || !checks.contention
+            || !checks.publication
+            || !checks.completion
+            || platform.frame_stats() != frames
+            || platform.mapping_stats() != mappings
+        {
+            return false;
+        }
+    }
+    let c = platform.checks();
+    c.write_protect
+        && c.nx
+        && c.wx
+        && c.stack_guard
+        && c.null_guard
+        && c.user_access_protect
+        && c.user_execute_protect
 }
 
 fn thread_core(platform: &impl Platform) -> bool {
@@ -418,6 +459,9 @@ pub fn run_tests(platform: &mut impl Platform) -> bool {
         ("frame_contract", frame_api::contract(platform)),
         ("heap_blocks", heap_tests::blocks(platform)),
         ("heap_values", heap_tests::values(platform)),
+        ("mutex_contract", mutex_tests::contract(platform)),
+        ("mutex_lifetime", mutex_tests::lifetime(platform)),
+        ("mutex_workers", mutex_workers(platform)),
         ("thread_contract", thread_tests::contract(platform)),
         ("thread_limits", thread_tests::limits(platform)),
         ("thread_core", thread_core(platform)),
@@ -431,7 +475,7 @@ pub fn run_tests(platform: &mut impl Platform) -> bool {
             capability_tests::orderings(|message| platform.write(message)),
         ),
     ];
-    platform.write("HMTEST BEGIN 29\n");
+    platform.write("HMTEST BEGIN 32\n");
     let mut passed = true;
     for (name, success) in cases {
         platform.write(if success {
@@ -443,7 +487,7 @@ pub fn run_tests(platform: &mut impl Platform) -> bool {
         platform.write("\n");
         passed &= success;
     }
-    platform.write("HMTEST END 29\n");
+    platform.write("HMTEST END 32\n");
     passed
 }
 

@@ -5,6 +5,10 @@
 use core::panic::PanicInfo;
 use hm_kernel::Platform;
 
+mod mutex;
+#[cfg(target_arch = "aarch64")]
+mod mutex_checks;
+
 #[cfg(target_arch = "aarch64")]
 mod exceptions;
 #[cfg(target_arch = "aarch64")]

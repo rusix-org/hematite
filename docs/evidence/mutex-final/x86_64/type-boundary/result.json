@@ -1,0 +1,31 @@
+{
+  "passed": true,
+  "scope": "safe-client type boundary; not runtime isolation",
+  "probes": {
+    "valid_client": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "cross_instance": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "lifetime"
+    },
+    "escaping_handle": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "lifetime"
+    },
+    "private_generation": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0616"
+    },
+    "uncloneable_instance": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    }
+  }
+}

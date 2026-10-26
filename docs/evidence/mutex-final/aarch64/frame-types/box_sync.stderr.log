@@ -1,0 +1,101 @@
+warning: unused imports: `Block`, `Frame`, and `Pool`
+ --> /workspace/target/evidence/20261026T125955-439615205-aarch64/frame-types/box_sync.rs:3:17
+  |
+3 | use hm_frames::{Frame, Pool, Block, KernelBox};
+  |                 ^^^^^  ^^^^  ^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `hm_kernel::frame_api::OwnedFrame`
+ --> /workspace/target/evidence/20261026T125955-439615205-aarch64/frame-types/box_sync.rs:4:5
+  |
+4 | use hm_kernel::frame_api::OwnedFrame;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `hm_kernel::heap_api::OwnedBlock`
+ --> /workspace/target/evidence/20261026T125955-439615205-aarch64/frame-types/box_sync.rs:5:5
+  |
+5 | use hm_kernel::heap_api::OwnedBlock;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0277]: `*mut u64` cannot be shared between threads safely
+   --> /workspace/target/evidence/20261026T125955-439615205-aarch64/frame-types/box_sync.rs:6:48
+    |
+  6 | fn sync<T: Sync>() {} pub fn client() { sync::<KernelBox<'static,u64>>(); }
+    |                                                ^^^^^^^^^^^^^^^^^^^^^^ `*mut u64` cannot be shared between threads safely
+    |
+    = help: within `KernelBox<'static, u64>`, the trait `Sync` is not implemented for `*mut u64`
+note: required because it appears within the type `KernelBox<'static, u64>`
+   --> /workspace/crates/hm-core/src/frames.rs:199:12
+    |
+199 | pub struct KernelBox<'pool, T> {
+    |            ^^^^^^^^^
+note: required by a bound in `sync`
+   --> /workspace/target/evidence/20261026T125955-439615205-aarch64/frame-types/box_sync.rs:6:12
+    |
+  6 | fn sync<T: Sync>() {} pub fn client() { sync::<KernelBox<'static,u64>>(); }
+    |            ^^^^ required by this bound in `sync`
+
+error[E0277]: `Cell<[u64; 64]>` cannot be shared between threads safely
+   --> /workspace/target/evidence/20261026T125955-439615205-aarch64/frame-types/box_sync.rs:6:48
+    |
+  6 | fn sync<T: Sync>() {} pub fn client() { sync::<KernelBox<'static,u64>>(); }
+    |                                                ^^^^^^^^^^^^^^^^^^^^^^ `Cell<[u64; 64]>` cannot be shared between threads safely
+    |
+    = help: within `KernelBox<'static, u64>`, the trait `Sync` is not implemented for `Cell<[u64; 64]>`
+    = note: if you want to do aliasing and mutation between multiple threads, use `std::sync::RwLock`
+note: required because it appears within the type `Pool`
+   --> /workspace/crates/hm-core/src/frames.rs:10:12
+    |
+ 10 | pub struct Pool {
+    |            ^^^^
+    = note: required because it appears within the type `&'static Pool`
+note: required because it appears within the type `Block<'static>`
+   --> /workspace/crates/hm-core/src/frames.rs:190:12
+    |
+190 | pub struct Block<'pool> {
+    |            ^^^^^
+note: required because it appears within the type `KernelBox<'static, u64>`
+   --> /workspace/crates/hm-core/src/frames.rs:199:12
+    |
+199 | pub struct KernelBox<'pool, T> {
+    |            ^^^^^^^^^
+note: required by a bound in `sync`
+   --> /workspace/target/evidence/20261026T125955-439615205-aarch64/frame-types/box_sync.rs:6:12
+    |
+  6 | fn sync<T: Sync>() {} pub fn client() { sync::<KernelBox<'static,u64>>(); }
+    |            ^^^^ required by this bound in `sync`
+
+error[E0277]: `Cell<bool>` cannot be shared between threads safely
+   --> /workspace/target/evidence/20261026T125955-439615205-aarch64/frame-types/box_sync.rs:6:48
+    |
+  6 | fn sync<T: Sync>() {} pub fn client() { sync::<KernelBox<'static,u64>>(); }
+    |                                                ^^^^^^^^^^^^^^^^^^^^^^ `Cell<bool>` cannot be shared between threads safely
+    |
+    = help: within `KernelBox<'static, u64>`, the trait `Sync` is not implemented for `Cell<bool>`
+    = note: if you want to do aliasing and mutation between multiple threads, use `std::sync::RwLock` or `std::sync::atomic::AtomicBool` instead
+note: required because it appears within the type `Pool`
+   --> /workspace/crates/hm-core/src/frames.rs:10:12
+    |
+ 10 | pub struct Pool {
+    |            ^^^^
+    = note: required because it appears within the type `&'static Pool`
+note: required because it appears within the type `Block<'static>`
+   --> /workspace/crates/hm-core/src/frames.rs:190:12
+    |
+190 | pub struct Block<'pool> {
+    |            ^^^^^
+note: required because it appears within the type `KernelBox<'static, u64>`
+   --> /workspace/crates/hm-core/src/frames.rs:199:12
+    |
+199 | pub struct KernelBox<'pool, T> {
+    |            ^^^^^^^^^
+note: required by a bound in `sync`
+   --> /workspace/target/evidence/20261026T125955-439615205-aarch64/frame-types/box_sync.rs:6:12
+    |
+  6 | fn sync<T: Sync>() {} pub fn client() { sync::<KernelBox<'static,u64>>(); }
+    |            ^^^^ required by this bound in `sync`
+
+error: aborting due to 3 previous errors; 3 warnings emitted
+
+For more information about this error, try `rustc --explain E0277`.

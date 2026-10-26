@@ -1,0 +1,17 @@
+[
+  "rustc",
+  "--edition=2024",
+  "--target",
+  "x86_64-unknown-none",
+  "-C",
+  "panic=abort",
+  "--extern",
+  "hm_kernel=/workspace/target/x86_64/boot-test/x86_64-unknown-none/release/libhm_kernel.rlib",
+  "-L",
+  "dependency=/workspace/target/x86_64/boot-test/x86_64-unknown-none/release/deps",
+  "--crate-type=rlib",
+  "--crate-name=hm_frames",
+  "/workspace/target/evidence/20261026T130019-315984527-x86_64/frame-types/hm_frames.rs",
+  "-o",
+  "/workspace/target/evidence/20261026T130019-315984527-x86_64/frame-types/libhm_frames.rlib"
+]
