@@ -1,7 +1,9 @@
 # ADR 0005: native-first Rust OS research
 
 Status: direction accepted from Aaron on 2026-10-25; experiments below are
-proposals, not implemented features or proven improvements.
+research directions, not proven improvements. The first bounded model is
+implemented; see its [design](../design/0003-capability-model.md) and
+[verification record](../evidence/capability-model.md).
 
 ## Decision
 

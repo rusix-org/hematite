@@ -3,6 +3,9 @@
 
 //! Safe bootstrap policy. This monitor is kernel code, not Linux userspace.
 
+pub mod capability;
+mod capability_tests;
+
 use core::ops::Range;
 
 /// Observations collected by the core from the active bootstrap mappings.
@@ -182,8 +185,16 @@ pub fn run_tests(platform: &mut impl Platform) -> bool {
         ("null_guard", checks.null_guard),
         ("checked_range", test_checked_range()),
         ("monitor_bounds", test_monitor_bounds()),
+        ("cap_authority", capability_tests::authority()),
+        ("cap_limits", capability_tests::limits()),
+        ("cap_lifetime", capability_tests::lifetime()),
+        ("cap_generation", capability_tests::generation()),
+        (
+            "cap_orderings",
+            capability_tests::orderings(|message| platform.write(message)),
+        ),
     ];
-    platform.write("HMTEST BEGIN 9\n");
+    platform.write("HMTEST BEGIN 14\n");
     let mut passed = true;
     for (name, success) in cases {
         platform.write(if success {
@@ -195,7 +206,7 @@ pub fn run_tests(platform: &mut impl Platform) -> bool {
         platform.write("\n");
         passed &= success;
     }
-    platform.write("HMTEST END 9\n");
+    platform.write("HMTEST END 14\n");
     passed
 }
 

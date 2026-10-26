@@ -31,6 +31,10 @@ test: image
 		python3 tools/check_safety.py; \
 		cargo build --locked --offline -p hm-core --release --features boot-tests --target $(TARGET) --target-dir target/$(ARCH)/boot-test; \
 		cargo build --locked --offline -p hm-core --release --target $(TARGET) --target-dir target/$(ARCH)/monitor; \
+		cargo build --locked --offline -p hm-kernel --release --target $(TARGET) --target-dir target/$(ARCH)/boot-test; \
+		python3 tools/check_capability_types.py \
+			--library target/$(ARCH)/boot-test/$(TARGET)/release/libhm_kernel.rlib \
+			--target $(TARGET) --output "$$evidence_dir/type-boundary"; \
 		python3 tools/test_kernel.py \
 			--kernel target/$(ARCH)/boot-test/$(TARGET)/release/hematite \
 			--output "$$evidence_dir/boot" --accel tcg --arch $(ARCH); \

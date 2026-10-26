@@ -1,0 +1,6 @@
+{
+  "kernel": "/workspace/target/x86_64/boot-test/x86_64-unknown-none/release/hematite",
+  "sha256": "6b5a2d79badd986827f48028f14489a594f3a8249358034f35d7b2a9f53c6225",
+  "accel": "tcg",
+  "arch": "x86_64"
+}

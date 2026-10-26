@@ -1,6 +1,6 @@
 # Progress
 
-Current phase: **ARM64-first runnable bootstrap; native-first research begins**.
+Current phase: **ARM64-first runnable bootstrap; capability model verified**.
 Aaron approved scratch implementation and then changed the primary objective
 from strict Linux parity to native OS design with selective compatibility.
 [ADR 0005](docs/adr/0005-native-first-design.md) records the native direction;
@@ -19,7 +19,7 @@ from strict Linux parity to native OS design with selective compatibility.
 - Serial monitor: `make run` defaults to ARM64; `ARCH=x86_64` selects the
   regression port. Commands `help`, `status`, `test`; Ctrl-C exits.
 - `make test-all`: formatting, Clippy and safety checks for both targets,
-  12 host harness tests, 9 guest tests per architecture, ARM no-PAN rejection,
+  12 host harness tests, 14 guest tests per architecture, ARM no-PAN rejection,
   x86 missing-NX/SMEP/SMAP rejection, and live monitor recovery tests on both.
   All passed locally. `make test` tests ARM64 alone by default.
 - Pinned Rust base and Debian package snapshot, QEMU 7.2.22. One CPU/128 MiB
@@ -40,22 +40,24 @@ is no recoverable page-fault handler. ARM has minimal fatal exception vectors;
 x86 unexpected exceptions may triple-fault. ARM bootstrap isolation checks are
 not claims about a future EL0 address space or equivalence to SMEP. No Linux
 compatibility claim exists.
-The native capability/cancellation proposals are not yet implemented.
+The safe capability model now checks bounded resource accounting, attenuated
+rights, stale generations and cancellation/completion lifetimes. Five compiler
+probes per target verify the safe-client type boundary. This is metadata only: owner
+labels are trusted inputs and completion is a simulated backend acknowledgment.
+See [model verification](docs/evidence/capability-model.md).
 
-CI runs the same command and retains raw evidence; the remote CI phase-exit
-gate is not yet claimed passed. Aaron authorized public repository creation
+Published bootstrap CI passed at `b1b824c` ([run 40276324135](https://github.com/rusix-org/hematite/actions/runs/40276324135)).
+The new capability model has passed locally; remote CI has not run this change. Aaron authorized public repository creation
 and push in [ADR 0007](docs/adr/0007-public-repository.md). License selection
 remains pending (ADR 0002); preliminary naming findings remain in ADR 0003.
 
 ## Next actions
 
-1. Implement and test ADR 0005's safe capability/resource-lifetime model:
-   stale handles, rights attenuation, budgets, cancellation and reclamation.
-2. Design/review boot-memory discovery, frame allocation, exceptions and
+1. Design/review boot-memory discovery, frame allocation, exceptions and
    scheduling before integrating the model with real resources (Phase 1).
-3. Define the native userspace wire contract from those experiments; select
+2. Define the native userspace wire contract from those experiments; select
    compatibility workloads and pin a Linux oracle when the adapter exists.
-4. Resolve the license selection and review remote CI after publication.
+3. Resolve the license selection; run remote CI for the new model when published.
 
 ## Session ledger
 
@@ -84,3 +86,8 @@ remains pending (ADR 0002); preliminary naming findings remain in ADR 0003.
   suite and interactive ARM monitor passed. Physical ARM and native ARM/KVM
   performance remain untested. This implementation session made no publication
   changes; separate publication authorization/work is recorded in ADR 0007.
+
+- 2026-10-25: Implemented and independently AI-reviewed the safe capability
+  model. Both architecture suites pass 14 guest cases and five compiler probes,
+  including all 24 revoke/release/cancel/complete permutations. Preserved initial
+  Clippy failure and final evidence. No unsafe/core or hardware changes.

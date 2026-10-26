@@ -13,7 +13,7 @@ make run    # build and open the ARM64 monitor; Ctrl-C exits
 ```
 
 Type `help`, `status`, or `test`. `status` reports the active memory protections;
-`test` runs the nine bootstrap checks. This is a kernel monitor, not a shell.
+`test` runs 14 bootstrap and capability-model checks. This is a kernel monitor, not a shell.
 
 ```sh
 make build                  # ARM64 image under target/aarch64/monitor/
@@ -31,6 +31,10 @@ Test runs preserve serial output, input hash, expanded QEMU command and results
 under `target/evidence/`. Missing/duplicate/failed cases, unexpected exit status
 and timeouts fail the command. GitHub CI runs the same `make test-all` command;
 remote results are available in the repository’s GitHub Actions tab.
+
+The safe capability experiment checks rights attenuation, bounded accounting,
+stale handles, revocation and cancellation/completion lifetimes. It models
+metadata only; userspace identities and actual device ownership come later.
 
 See [PROGRESS.md](PROGRESS.md), [the bootstrap design](docs/design/0001-bootstrap.md),
 [decision records](docs/adr/), and [AGENTS.md](AGENTS.md). Public repository publication is authorized by [ADR 0007](docs/adr/0007-public-repository.md);
