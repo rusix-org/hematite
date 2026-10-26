@@ -35,6 +35,7 @@ test: image
 		if [ "$(ARCH)" = aarch64 ]; then \
 			cargo build --locked --offline -p hm-core --release --features unhandled-fault-test --target $(TARGET) --target-dir target/$(ARCH)/fault-test; \
 			cargo build --locked --offline -p hm-core --release --features nested-fault-test --target $(TARGET) --target-dir target/$(ARCH)/nested-test; \
+			cargo build --locked --offline -p hm-core --release --features thread-overflow-test --target $(TARGET) --target-dir target/$(ARCH)/thread-overflow-test; \
 		fi; \
 		cargo build --locked --offline -p hm-kernel --release --target $(TARGET) --target-dir target/$(ARCH)/boot-test; \
 		python3 tools/check_capability_types.py \
@@ -47,6 +48,9 @@ test: image
 			python3 tools/check_mapping_types.py \
 				--library target/$(ARCH)/boot-test/$(TARGET)/release/libhm_kernel.rlib \
 				--target $(TARGET) --output "$$evidence_dir/mapping-types"; \
+			python3 tools/check_thread_types.py \
+				--library target/$(ARCH)/boot-test/$(TARGET)/release/libhm_kernel.rlib \
+				--target $(TARGET) --output "$$evidence_dir/thread-types"; \
 		fi; \
 		python3 tools/test_kernel.py \
 			--kernel target/$(ARCH)/boot-test/$(TARGET)/release/hematite \
@@ -56,6 +60,7 @@ test: image
 			--monitor-kernel target/$(ARCH)/monitor/$(TARGET)/release/hematite \
 			--fault-kernel target/$(ARCH)/fault-test/$(TARGET)/release/hematite \
 			--nested-kernel target/$(ARCH)/nested-test/$(TARGET)/release/hematite \
+			--thread-overflow-kernel target/$(ARCH)/thread-overflow-test/$(TARGET)/release/hematite \
 			--output "$$evidence_dir/profiles" --arch $(ARCH); \
 		if [ "$(ARCH)" = aarch64 ]; then \
 			python3 tools/check_timer_trace.py --trace "$$evidence_dir/boot/exceptions.log" \

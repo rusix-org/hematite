@@ -13,9 +13,9 @@ import test_boot_profiles as profiles
 
 
 def valid_report():
-    lines = ["hematite bootstrap", "HMTEST BEGIN 26"]
+    lines = ["hematite bootstrap", "HMTEST BEGIN 29"]
     lines.extend(f"HMTEST PASS {case}" for case in harness.CASES)
-    lines.append("HMTEST END 26")
+    lines.append("HMTEST END 29")
     return ("\n".join(lines) + "\n").encode("ascii")
 
 
@@ -46,10 +46,10 @@ class ReportTests(unittest.TestCase):
 
     def test_summary_and_inventory_must_be_exact(self):
         for old, new in (
-            (b"HMTEST BEGIN 26\n", b""),
-            (b"HMTEST END 26\n", b""),
-            (b"HMTEST BEGIN 26", b"HMTEST BEGIN 8"),
-            (b"HMTEST END 26", b"HMTEST END 10"),
+            (b"HMTEST BEGIN 29\n", b""),
+            (b"HMTEST END 29\n", b""),
+            (b"HMTEST BEGIN 29", b"HMTEST BEGIN 8"),
+            (b"HMTEST END 29", b"HMTEST END 10"),
             (b"HMTEST PASS nx", b"HMTEST PASS imaginary"),
             (b"HMTEST PASS nx\nHMTEST PASS user_execute_protect",
              b"HMTEST PASS user_execute_protect\nHMTEST PASS nx"),
@@ -109,7 +109,7 @@ class ArchitectureTests(unittest.TestCase):
         for data in (b"", b"qemu: invalid CPU\n", b"prefix HMBOOT REJECT PAN\n",
                      b"HMBOOT REJECT PAN",
                      b"HMBOOT REJECT PAN\nHMBOOT REJECT PAN\n",
-                     b"HMBOOT REJECT PAN\nHMTEST BEGIN 26\n"):
+                     b"HMBOOT REJECT PAN\nHMTEST BEGIN 29\n"):
             with self.subTest(data=data):
                 self.assertFalse(all(profiles.rejection_checks(data, result).values()))
         for update in ({"returncode": 0}, {"timed_out": True}, {"launch_error": "no qemu"}):
@@ -121,6 +121,24 @@ class ArchitectureTests(unittest.TestCase):
 
 
 class ExecutionTests(unittest.TestCase):
+    def test_thread_overflow_requires_exact_guard_read_fault(self):
+        trace = (b"Taking exception 4 [Data Abort] on CPU 0\n"
+                 b"...from EL1 to EL1\n...with ESR 0x25/0x96000007\n"
+                 b"...with FAR 0x40250ff0\n...with ELR 0x40203000\n"
+                 b"...to EL1 PC 0x40200a00 PSTATE 0x4003c5\n"
+                 b"Taking exception 16 [Semihosting call] on CPU 0\n"
+                 b"...from EL1 to EL1\n...handling as semihosting call 0x20\n")
+        self.assertTrue(all(profiles.overflow_trace_checks(trace, 0x40250000).values()))
+        for changed in (b"", trace[:-1], trace + trace,
+                        trace.replace(b"0x40250ff0", b"0x40251000"),
+                        trace.replace(b"0x40250ff0", b"0x4024fff0"),
+                        trace.replace(b"0x96000007", b"0x96000047"),
+                        trace.replace(b"CPU 0", b"CPU 1"),
+                        trace.replace(b"semihosting call 0x20", b"semihosting call 0x01"),
+                        trace + b"Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40203004\n"):
+            with self.subTest(trace=changed):
+                self.assertFalse(all(profiles.overflow_trace_checks(changed, 0x40250000).values()))
+
     def test_unexpected_exception_requires_complete_marker_and_fatal_exit(self):
         result = {"returncode": 2, "timed_out": False, "launch_error": None}
         marker = b"HMEXCEPTION FATAL\r\n"
@@ -149,7 +167,7 @@ class ExecutionTests(unittest.TestCase):
             self.assertEqual(json.loads((output / "result.json").read_text()), result)
 
     def test_timeout_retains_partial_serial_and_fails(self):
-        partial = b"HMTEST BEGIN 26\nHMTEST PASS write_protect\n"
+        partial = b"HMTEST BEGIN 29\nHMTEST PASS write_protect\n"
 
         def timeout(command, **kwargs):
             kwargs["stdout"].write(partial)

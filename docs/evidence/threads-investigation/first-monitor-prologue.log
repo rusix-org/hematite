@@ -1,0 +1,23 @@
+
+target/aarch64/monitor/aarch64-unknown-none/release/hematite:	file format elf64-littleaarch64
+
+Disassembly of section .text:
+
+00000000402020d4 <_RINvCsjStpv0Kdcdo_9hm_kernel11run_monitorNtNtCs9YbYrUQz59w_8hematite4arch12BootPlatformEBH_>:
+402020d4: 6db63bef     	stp	d15, d14, [sp, #-0xa0]!
+402020d8: 6d0133ed     	stp	d13, d12, [sp, #0x10]
+402020dc: 6d022beb     	stp	d11, d10, [sp, #0x20]
+402020e0: 6d0323e9     	stp	d9, d8, [sp, #0x30]
+402020e4: a9047bfd     	stp	x29, x30, [sp, #0x40]
+402020e8: a9056ffc     	stp	x28, x27, [sp, #0x50]
+402020ec: a90667fa     	stp	x26, x25, [sp, #0x60]
+402020f0: a9075ff8     	stp	x24, x23, [sp, #0x70]
+402020f4: a90857f6     	stp	x22, x21, [sp, #0x80]
+402020f8: a9094ff4     	stp	x20, x19, [sp, #0x90]
+402020fc: d14023e9     	sub	x9, sp, #0x8, lsl #12   // =0x8000
+40202100: d14007ff     	sub	sp, sp, #0x1, lsl #12   // =0x1000
+40202104: f94003ff     	ldr	xzr, [sp]
+40202108: eb2963ff     	cmp	sp, x9
+4020210c: 54ffffa1     	b.ne	0x40202100 <_RINvCsjStpv0Kdcdo_9hm_kernel11run_monitorNtNtCs9YbYrUQz59w_8hematite4arch12BootPlatformEBH_+0x2c>
+40202110: d10443ff     	sub	sp, sp, #0x110
+40202114: 91401bf7     	add	x23, sp, #0x6, lsl #12  // =0x6000

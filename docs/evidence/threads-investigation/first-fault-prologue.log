@@ -1,0 +1,17 @@
+
+target/aarch64/monitor/aarch64-unknown-none/release/hematite:	file format elf64-littleaarch64
+
+Disassembly of section .text:
+
+00000000402246fc <_RNvMs0_NtCsjStpv0Kdcdo_9hm_kernel10capabilityNtB5_5Model5stats>:
+402246fc: 6db63bef     	stp	d15, d14, [sp, #-0xa0]!
+40224700: 6d0133ed     	stp	d13, d12, [sp, #0x10]
+40224704: 6d022beb     	stp	d11, d10, [sp, #0x20]
+40224708: 6d0323e9     	stp	d9, d8, [sp, #0x30]
+4022470c: a9047bfd     	stp	x29, x30, [sp, #0x40]
+40224710: a9056ffc     	stp	x28, x27, [sp, #0x50]
+40224714: a90667fa     	stp	x26, x25, [sp, #0x60]
+40224718: a9075ff8     	stp	x24, x23, [sp, #0x70]
+4022471c: a90857f6     	stp	x22, x21, [sp, #0x80]
+40224720: a9094ff4     	stp	x20, x19, [sp, #0x90]
+40224724: d10903ff     	sub	sp, sp, #0x240

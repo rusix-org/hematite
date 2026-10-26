@@ -14,6 +14,8 @@ pub mod heap_api;
 mod heap_tests;
 pub mod mapping_api;
 mod mapping_tests;
+pub mod thread_api;
+mod thread_tests;
 
 use core::ops::Range;
 
@@ -35,6 +37,15 @@ pub struct BootChecks {
 
 /// The core retains all hardware authority; policy only exchanges owned values.
 pub trait Platform {
+    fn run_threads(
+        &self,
+        _jobs: &[thread_api::ThreadJob],
+    ) -> Result<thread_api::RunReport, thread_api::ThreadError> {
+        Err(thread_api::ThreadError::Unsupported)
+    }
+    fn thread_checks(&self) -> Option<ThreadChecks> {
+        None
+    }
     fn timer_checks(&self) -> Option<TimerChecks> {
         None
     }
@@ -108,6 +119,40 @@ pub struct TimerChecks {
     pub context: bool,
     pub quiescent: bool,
     pub timeout: bool,
+}
+
+/// Core observations supplement the safe callback execution tests.
+pub struct ThreadChecks {
+    pub context: bool,
+    pub reentrant: bool,
+    pub guards: bool,
+}
+
+fn thread_core(platform: &impl Platform) -> bool {
+    let frames = platform.frame_stats();
+    let mappings = platform.mapping_stats();
+    for _ in 0..2 {
+        let Some(checks) = platform.thread_checks() else {
+            return cfg!(target_arch = "x86_64");
+        };
+        if !cfg!(target_arch = "aarch64")
+            || !checks.context
+            || !checks.reentrant
+            || !checks.guards
+            || platform.frame_stats() != frames
+            || platform.mapping_stats() != mappings
+        {
+            return false;
+        }
+    }
+    let c = platform.checks();
+    c.write_protect
+        && c.nx
+        && c.wx
+        && c.stack_guard
+        && c.null_guard
+        && c.user_access_protect
+        && c.user_execute_protect
 }
 
 fn timer_contract(platform: &impl Platform) -> bool {
@@ -348,6 +393,8 @@ fn test_monitor_bounds() -> bool {
 
 /// Run the full bootstrap inventory. The core must also return a failure exit
 /// status when this returns false; the serial summary alone is not success.
+// Keep the test inventory's large fixture frame out of the monitor loop.
+#[inline(never)]
 pub fn run_tests(platform: &mut impl Platform) -> bool {
     let checks = platform.checks();
     let cases = [
@@ -371,6 +418,9 @@ pub fn run_tests(platform: &mut impl Platform) -> bool {
         ("frame_contract", frame_api::contract(platform)),
         ("heap_blocks", heap_tests::blocks(platform)),
         ("heap_values", heap_tests::values(platform)),
+        ("thread_contract", thread_tests::contract(platform)),
+        ("thread_limits", thread_tests::limits(platform)),
+        ("thread_core", thread_core(platform)),
         ("timer_contract", timer_contract(platform)),
         ("fault_contract", fault_contract(platform)),
         ("mapping_contract", mapping_tests::contract(platform)),
@@ -381,7 +431,7 @@ pub fn run_tests(platform: &mut impl Platform) -> bool {
             capability_tests::orderings(|message| platform.write(message)),
         ),
     ];
-    platform.write("HMTEST BEGIN 26\n");
+    platform.write("HMTEST BEGIN 29\n");
     let mut passed = true;
     for (name, success) in cases {
         platform.write(if success {
@@ -393,7 +443,7 @@ pub fn run_tests(platform: &mut impl Platform) -> bool {
         platform.write("\n");
         passed &= success;
     }
-    platform.write("HMTEST END 26\n");
+    platform.write("HMTEST END 29\n");
     passed
 }
 

@@ -1,0 +1,18 @@
+{
+  "scope": "nested fault while entering emergency stack must be fatal",
+  "started_utc": "2026-10-26T12:39:58.621378+00:00",
+  "timeout_seconds": 20,
+  "returncode": 2,
+  "timed_out": false,
+  "launch_error": null,
+  "checks": {
+    "explicit_exception_exit": true,
+    "fatal_marker": true,
+    "nested_route": true,
+    "no_test_report": true,
+    "within_deadline": true,
+    "launched": true
+  },
+  "passed": true,
+  "elapsed_seconds": 0.06447947095148265
+}

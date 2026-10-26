@@ -1,12 +1,12 @@
 # Progress
 
-Current phase: **Phase 1 underway: ARM64 scoped timer IRQ delivery verified**.
+Current phase: **Phase 1 underway: ARM64 cooperative kernel threads verified**.
 Aaron approved scratch implementation and then changed the primary objective
 from strict Linux parity to native OS design with selective compatibility.
 [ADR 0005](docs/adr/0005-native-first-design.md) records the native direction;
 [ADR 0006](docs/adr/0006-arm64-priority.md) makes ARM64 primary now.
 
-## Implemented and verified locally and in CI
+## Implementation and verification
 
 - Stable Rust 1.99.0 workspace, no external kernel crates, locked dependencies.
 - Original ARM64 direct-ELF entry at EL1, 4 KiB translation tables,
@@ -19,17 +19,18 @@ from strict Linux parity to native OS design with selective compatibility.
 - Serial monitor: `make run` defaults to ARM64; `ARCH=x86_64` selects the
   regression port. Commands `help`, `status`, `test`; Ctrl-C exits.
 - `make test-all`: formatting, Clippy and safety checks for both targets,
-  22 host harness tests, 26 guest tests per architecture, ARM no-PAN rejection,
+  23 host harness tests, 29 guest tests per architecture, ARM no-PAN rejection,
   x86 missing-NX/SMEP/SMAP rejection, and live monitor recovery tests on both.
   ARM discovery matches both 128 MiB and 64 MiB guest configurations.
-  All passed locally and in CI at `8014e2f`. `make test` tests ARM64 alone by default.
+  All passed locally; CI at `8014e2f` covers the preceding timer milestone.
+  `make test` tests ARM64 alone by default.
 - Pinned Rust base and Debian package snapshot, QEMU 7.2.22. One CPU/128 MiB
   guest by default; ARM discovery also tests 64 MiB; no attached disks or networking. Both targets use TCG.
 
-Latest evidence: [timer verification](docs/evidence/arm-timer.md),
-[ARM guest results](docs/evidence/timer-final/aarch64/boot/result.json),
-[ARM profiles](docs/evidence/timer-final/aarch64/profiles/result.json),
-and matching x86 results under `docs/evidence/timer-final/x86_64/`.
+Latest evidence: [thread verification](docs/evidence/arm-threads.md),
+[ARM guest results](docs/evidence/threads-final/aarch64/boot/result.json),
+[ARM profiles](docs/evidence/threads-final/aarch64/profiles/result.json),
+and matching x86 results under `docs/evidence/threads-final/x86_64/`.
 Earlier [bootstrap verification](docs/evidence/hematite-bootstrap.md) is retained.
 The earlier [Asterinas baseline](docs/evidence/asterinas-evaluation.md) remains
 an evaluation only; it is not this kernel's implementation.
@@ -149,6 +150,28 @@ reject missing, malformed, duplicate and reordered records. See
 [review](docs/reviews/0009-arm-timer-irq.md) and
 [evidence](docs/evidence/arm-timer.md).
 
+## ARM cooperative kernel threads verified locally
+
+A boot-authorized runner executes up to four safe Rust callbacks on distinct
+64 KiB guarded stacks. Callbacks yield cooperatively; the coordinator dispatches
+runnable jobs round-robin and returns only after normal completion of every
+callback. Private context records and a global execution lease prevent forged
+resumption, overlapping stack use and nested runs. No suspended Rust frames
+are discarded. Inputs/results are integers; captured or borrowed closures are
+not accepted by this initial internal API.
+
+Tests verify dispatch order, locals and destructors across yields, completion,
+capacity rejection before callbacks, trace truncation, repeated runs and
+unchanged frame/mapping ownership. Core diagnostics check register sentinels,
+actual SP identity on all four stacks, guard translations and Busy rejection.
+Fourteen compiler probes enforce the public authority/lifetime boundary.
+The pinned compiler's page probing is checked in emitted IR/assembly; an actual
+128 KiB callback frame faults in worker zero's guard and exits fatally.
+See [design](docs/design/0010-arm-kernel-threads.md),
+[review](docs/reviews/0010-arm-kernel-threads.md) and
+[evidence](docs/evidence/arm-threads.md). Preemption, SMP, cancellation and
+dynamically allocated thread stacks remain unimplemented.
+
 ## Limits and gates
 
 No userspace, syscall ABI, general interrupt/exception handling, SMP, storage,
@@ -173,8 +196,8 @@ remains pending (ADR 0002); preliminary naming findings remain in ADR 0003.
 
 ## Next actions
 
-1. Design/review kernel thread contexts and scheduling, including how existing
-   single-CPU ownership remains protected before preemption. Extend recovery to fault-aware user operations only with
+1. Design/review synchronization and timer-driven preemption, including how existing
+   single-CPU ownership remains protected while tasks are interrupted. Extend recovery to fault-aware user operations only with
    address-space and lifetime proofs. Add interrupt/SMP-safe ownership before concurrency;
    implement measured small-object allocation before service workloads.
 2. Define the native userspace wire contract from those experiments; select
@@ -253,3 +276,9 @@ remains pending (ADR 0002); preliminary naming findings remain in ADR 0003.
 - 2026-10-26: Published through timer commit `8014e2f` under ADR 0007 authorization.
   GitHub run `40320742456` completed successfully, including environment build,
   all tests and evidence upload. Archived exact run/job metadata and raw logs.
+- 2026-10-26: Added reviewed cooperative ARM threads with four guarded stacks.
+  Boot passed initially; monitor testing found stack exhaustion from inlined
+  test fixtures. Separating the test function fixed it without enlarging stacks.
+  Final dual suite passes 29 guest/23 host cases, 14 thread compiler probes,
+  compiler stack-probe checks and actual worker guard-overflow rejection.
+  Preserved initial failures, final traces and exact source/ELF identities.

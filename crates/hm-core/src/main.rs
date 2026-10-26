@@ -12,6 +12,8 @@ mod frames;
 #[cfg(target_arch = "aarch64")]
 mod mappings;
 #[cfg(target_arch = "aarch64")]
+mod threads;
+#[cfg(target_arch = "aarch64")]
 mod timer;
 
 #[cfg(target_arch = "x86_64")]
@@ -33,9 +35,19 @@ extern "C" fn boot_main(_boot_info: u64) -> ! {
         not(feature = "nested-fault-test")
     ))]
     exceptions::unexpected();
+    #[cfg(all(
+        target_arch = "aarch64",
+        feature = "thread-overflow-test",
+        not(any(feature = "nested-fault-test", feature = "unhandled-fault-test"))
+    ))]
+    arch::thread_overflow(&platform);
     #[cfg(not(all(
         target_arch = "aarch64",
-        any(feature = "unhandled-fault-test", feature = "nested-fault-test")
+        any(
+            feature = "unhandled-fault-test",
+            feature = "nested-fault-test",
+            feature = "thread-overflow-test"
+        )
     )))]
     {
         #[cfg(feature = "boot-tests")]

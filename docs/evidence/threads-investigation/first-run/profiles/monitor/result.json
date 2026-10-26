@@ -1,0 +1,45 @@
+{
+  "scope": "live bootstrap monitor; host stops VM after serial interactions",
+  "arch": "aarch64",
+  "started_utc": "2026-10-26T12:34:41.567896+00:00",
+  "timeout_seconds": 20,
+  "returncode": 2,
+  "timed_out": false,
+  "launch_error": null,
+  "host_terminated": false,
+  "host_killed": false,
+  "checks": {
+    "initial_prompt_and_banner": true,
+    "discovered_ram_matches_vm": true,
+    "pool_excludes_boot_storage": true,
+    "help": true,
+    "status": true,
+    "complete_test_inventory": false
+  },
+  "errors": [
+    "QEMU output closed before the expected prompt",
+    "missing or failed check: complete_test_inventory",
+    "missing or failed check: help_after_rejection",
+    "missing or failed check: monitor_still_running",
+    "missing or failed check: oversized_line",
+    "missing or failed check: repeated_tests",
+    "missing or failed check: tests",
+    "missing or failed check: unknown_command"
+  ],
+  "interactions": [
+    {
+      "name": "help",
+      "input_hex": "68656c700a",
+      "expected_response_hex": "68656c700a68656c702020202d2073686f7720636f6d6d616e64730a737461747573202d20696e737065637420626f6f742070726f74656374696f6e730a746573742020202d2072756e20626f6f7473747261702074657374730a",
+      "response_hex": "68656c700d0a68656c702020202d2073686f7720636f6d6d616e64730d0a737461747573202d20696e737065637420626f6f742070726f74656374696f6e730d0a746573742020202d2072756e20626f6f7473747261702074657374730d0a"
+    },
+    {
+      "name": "status",
+      "input_hex": "7374617475730a",
+      "expected_response_hex": "7374617475730a77726974652070726f74656374696f6e3a204f4b0a4e583a204f4b0a7573657220657865637574696f6e2070726f74656374696f6e3a204f4b0a75736572206163636573732070726f74656374696f6e3a204f4b0a575e58206d617070696e67733a204f4b0a737461636b2067756172643a204f4b0a6e756c6c2067756172643a204f4b0a426f6f747374726170206f6e6c793a206f6e65204350553b206e6f207573657273706163652c2073746f726167652c206f72206e6574776f726b696e672e0a",
+      "response_hex": "7374617475730d0a77726974652070726f74656374696f6e3a204f4b0d0a4e583a204f4b0d0a7573657220657865637574696f6e2070726f74656374696f6e3a204f4b0d0a75736572206163636573732070726f74656374696f6e3a204f4b0d0a575e58206d617070696e67733a204f4b0d0a737461636b2067756172643a204f4b0d0a6e756c6c2067756172643a204f4b0d0a426f6f747374726170206f6e6c793a206f6e65204350553b206e6f207573657273706163652c2073746f726167652c206f72206e6574776f726b696e672e0d0a"
+    }
+  ],
+  "passed": false,
+  "elapsed_seconds": 0.06700434791855514
+}

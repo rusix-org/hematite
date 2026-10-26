@@ -1,0 +1,8 @@
+Taking exception 7 [Breakpoint] on CPU 0
+...from EL1 to EL1
+...with ESR 0x3c/0xf2000000
+...with ELR 0x40201590
+...to EL1 PC 0x40200a00 PSTATE 0x4003c5
+Taking exception 16 [Semihosting call] on CPU 0
+...from EL1 to EL1
+...handling as semihosting call 0x20

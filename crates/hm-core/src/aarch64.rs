@@ -37,10 +37,24 @@ pub(super) struct BootPlatform {
     memory: hm_kernel::boot_memory::MemoryMap,
     pool: Option<super::frames::Pool>,
     mapper: Option<super::mappings::Mapper>,
+    runner: Option<super::threads::Runner>,
 }
 pub(super) const BANNER: &str = "hematite: ARM64 Rust kernel entered at EL1\n";
 
 impl Platform for BootPlatform {
+    fn run_threads(
+        &self,
+        jobs: &[hm_kernel::thread_api::ThreadJob],
+    ) -> Result<hm_kernel::thread_api::RunReport, hm_kernel::thread_api::ThreadError> {
+        self.runner
+            .as_ref()
+            .ok_or(hm_kernel::thread_api::ThreadError::Unsupported)?
+            .run(jobs)
+    }
+
+    fn thread_checks(&self) -> Option<hm_kernel::ThreadChecks> {
+        self.runner.as_ref().map(super::threads::Runner::checks)
+    }
     fn timer_checks(&self) -> Option<hm_kernel::TimerChecks> {
         Some(super::timer::checks())
     }
@@ -238,7 +252,10 @@ impl Platform for BootPlatform {
         }
         for index in 0..4096usize {
             let address = RAM + index * 4096;
-            let expected = if address == guard || address == exception_guard {
+            let expected = if address == guard
+                || address == exception_guard
+                || super::threads::guards().contains(&address)
+            {
                 0
             } else {
                 address as u64
@@ -307,6 +324,7 @@ fn initialize() -> Result<BootPlatform, ()> {
         memory,
         pool: None,
         mapper: None,
+        runner: None,
     };
     let checks = platform.checks();
     if !checks.write_protect
@@ -368,7 +386,21 @@ fn initialize() -> Result<BootPlatform, ()> {
     // and zero leaves. Bootstrap is EL1, one CPU, exceptions masked, no DMA.
     // The mapper owns all later leaf changes; identity mappings stay fixed.
     platform.mapper = Some(unsafe { super::mappings::Mapper::from_boot() }?);
+    // SAFETY: Full initial checks verified immutable worker/guard mappings;
+    // bootstrap supplies EL1h, masked DAIF, FP/SIMD and the single active CPU.
+    platform.runner = Some(unsafe { super::threads::Runner::from_boot() });
     Ok(platform)
+}
+
+#[cfg(all(
+    feature = "thread-overflow-test",
+    not(any(feature = "nested-fault-test", feature = "unhandled-fault-test"))
+))]
+pub(super) fn thread_overflow(platform: &BootPlatform) -> ! {
+    match platform.runner.as_ref() {
+        Some(runner) => super::threads::overflow(runner),
+        None => exit(false),
+    }
 }
 
 fn discover_memory() -> Result<hm_kernel::boot_memory::MemoryMap, ()> {

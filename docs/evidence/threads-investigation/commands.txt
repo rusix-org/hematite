@@ -1,0 +1,4 @@
+Pinned compiler investigation (exit 0):
+bash tools/dev.sh rustc --edition=2024 --crate-type=lib --target aarch64-unknown-none -C opt-level=3 -C panic=abort --emit=asm,llvm-ir --out-dir target/threads-investigation docs/evidence/threads-investigation/large-frame.rs
+
+Generated IR marks the function probe-stack=inline-asm. Assembly subtracts SP by 4096, reads each new page through ldr xzr,[sp], and loops before memset of the 128 KiB local array. This is evidence for the pinned compiler/target, not every Rust target.

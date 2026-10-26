@@ -13,7 +13,7 @@ make run    # build and open the ARM64 monitor; Ctrl-C exits
 ```
 
 Type `help`, `status`, or `test`. `status` reports the active memory protections;
-`test` runs 26 bootstrap, capability, memory, heap, timer, exception and mapping checks. The ARM boot banner reports discovered RAM and usable frame capacity.
+`test` runs 29 bootstrap, capability, memory, thread, timer, exception and mapping checks. The ARM boot banner reports discovered RAM and usable frame capacity.
 Memory tests exercise real frame, heap and mapping ownership. Three pages are deliberately
 retained once per boot to verify that forgotten owners cannot cause reuse.
 This is a kernel monitor, not a shell.
@@ -50,8 +50,12 @@ user address spaces and concurrent mapping updates remain ahead.
 
 ARM timer interrupts now run inside a bounded assembly operation, with context
 preservation and verified shutdown before returning to Rust. Tests also block
-delivery to exercise timeout handling. Thread scheduling and preemption are
-not implemented yet.
+delivery to exercise timeout handling.
+
+Up to four kernel callbacks can now run on separate guarded stacks and yield
+cooperatively. Tests cover round-robin scheduling, preserved local values,
+normal destructor execution, stack reuse and overflow rejection. Timer-driven
+preemption, SMP and userspace threads are not implemented yet.
 
 The safe capability experiment checks rights attenuation, bounded accounting,
 stale handles, revocation and cancellation/completion lifetimes. It models

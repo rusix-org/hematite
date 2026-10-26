@@ -1,0 +1,20 @@
+hematite: ARM64 Rust kernel entered at EL1
+Boot RAM bytes: 0x0000000008000000 (discovered RAM)
+Frame pool pages: 0x0000000000000d61 (4 KiB each; boot reservations excluded)
+Hematite bootstrap monitor (local working name)
+Commands: help, status, test. This is not a Linux shell.
+hm> help
+help   - show commands
+status - inspect boot protections
+test   - run bootstrap tests
+hm> status
+write protection: OK
+NX: OK
+user execution protection: OK
+user access protection: OK
+W^X mappings: OK
+stack guard: OK
+null guard: OK
+Bootstrap only: one CPU; no userspace, storage, or networking.
+hm> test
+HMEXCEPTION FATAL

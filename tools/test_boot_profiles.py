@@ -5,6 +5,7 @@ import argparse
 from datetime import datetime, timezone
 import hashlib
 import json
+import re
 import os
 from pathlib import Path
 import selectors
@@ -69,7 +70,26 @@ def fatal_checks(console, result, nested=False):
     }
 
 
-def run_fatal_exception(output, kernel, scope, nested=False):
+def overflow_trace_checks(trace, guard):
+    """Require the first and sole data abort to be the worker's page probe."""
+    lines = trace.splitlines()
+    fars = [int(match[1], 16) for line in lines
+            if (match := re.fullmatch(rb"\.\.\.with FAR (0x[0-9a-fA-F]+)", line))]
+    exceptions = [line for line in lines if line.startswith(b"Taking exception")]
+    return {
+        "single_guard_read_abort": exceptions == [
+            b"Taking exception 4 [Data Abort] on CPU 0",
+            b"Taking exception 16 [Semihosting call] on CPU 0",
+        ],
+        "terminal_semihost_exit": bool(lines) and lines[-1] == b"...handling as semihosting call 0x20",
+        "translation_read_fault": lines.count(b"...with ESR 0x25/0x96000007") == 1,
+        "worker_guard_far": len(fars) == 1 and guard <= fars[0] < guard + 4096,
+        "fault_not_resumed": not any(line.startswith(b"Exception return") for line in lines),
+        "complete_trace": bool(trace) and trace.endswith(b"\n"),
+    }
+
+
+def run_fatal_exception(output, kernel, scope, nested=False, guard_symbol=None):
     command = prepare(output, kernel, "max", "aarch64")
     result = {"scope": scope,
               "started_utc": datetime.now(timezone.utc).isoformat(),
@@ -90,6 +110,18 @@ def run_fatal_exception(output, kernel, scope, nested=False):
         except OSError as error:
             result["launch_error"] = str(error)
     result["checks"] = fatal_checks((output / "serial.log").read_bytes(), result, nested)
+    if guard_symbol is not None:
+        command = ["readelf", "-sW", str(kernel)]
+        write_json(output / "symbols.command.json", command)
+        symbols = subprocess.run(command, capture_output=True, check=True, timeout=5).stdout
+        (output / "symbols.log").write_bytes(symbols)
+        guards = [int(line.split()[1], 16) for line in symbols.decode("ascii").splitlines()
+                  if line.split() and line.split()[-1] == guard_symbol]
+        result["checks"]["unique_guard_symbol"] = len(guards) == 1
+        trace_path = output / "exceptions.log"
+        trace = (trace_path.read_bytes() if trace_path.is_file()
+                 and trace_path.stat().st_size <= 16 * 1024 * 1024 else b"")
+        result["checks"].update(overflow_trace_checks(trace, guards[0] if len(guards) == 1 else 0))
     result["passed"] = all(result["checks"].values())
     result["elapsed_seconds"] = time.monotonic() - started
     write_json(output / "result.json", result)
@@ -283,6 +315,7 @@ def main():
     parser.add_argument("--monitor-kernel", type=Path, required=True)
     parser.add_argument("--fault-kernel", type=Path)
     parser.add_argument("--nested-kernel", type=Path)
+    parser.add_argument("--thread-overflow-kernel", type=Path)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--arch", choices=("aarch64", "x86_64"), default="aarch64")
     args = parser.parse_args()
@@ -290,6 +323,8 @@ def main():
         parser.error("ARM verification requires an unexpected-fault kernel")
     if args.arch == "aarch64" and (args.nested_kernel is None or not args.nested_kernel.is_file()):
         parser.error("ARM verification requires a nested-fault kernel")
+    if args.arch == "aarch64" and (args.thread_overflow_kernel is None or not args.thread_overflow_kernel.is_file()):
+        parser.error("ARM verification requires a thread-overflow kernel")
     test_kernel, monitor_kernel = args.test_kernel.resolve(), args.monitor_kernel.resolve()
     output = args.output.resolve()
     for kernel in (test_kernel, monitor_kernel):
@@ -310,6 +345,8 @@ def main():
             "unregistered ARM fault with normal stack in guard must be fatal")
         results["nested-fault"] = run_fatal_exception(output / "nested-fault", args.nested_kernel.resolve(),
             "nested fault while entering emergency stack must be fatal", nested=True)
+        results["thread-overflow"] = run_fatal_exception(output / "thread-overflow", args.thread_overflow_kernel.resolve(),
+            "safe callback stack exhaustion must fault in worker zero guard", guard_symbol="__thread0_guard")
     summary = {
         "passed": all(result["passed"] for result in results.values()),
         "scope": "bootstrap CPU rejection and serial monitor; no Linux ABI claims",

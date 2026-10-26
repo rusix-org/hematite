@@ -86,10 +86,22 @@ arm_start:
     ldr x10, =__rodata_end
     ldr x11, =__stack_guard
     ldr x12, =__exception_stack_guard
+    ldr x13, =__thread0_guard
+    ldr x14, =__thread1_guard
+    ldr x15, =__thread2_guard
+    ldr x16, =__thread3_guard
 4:
     cmp x3, x11
     b.eq 8f
     cmp x3, x12
+    b.eq 8f
+    cmp x3, x13
+    b.eq 8f
+    cmp x3, x14
+    b.eq 8f
+    cmp x3, x15
+    b.eq 8f
+    cmp x3, x16
     b.eq 8f
     cmp x3, x7
     b.lo 7f

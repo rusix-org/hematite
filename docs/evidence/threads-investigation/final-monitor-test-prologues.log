@@ -1,0 +1,65 @@
+["llvm-objdump", "-d", "--start-address=1075847380", "--stop-address=1075847480", "target/aarch64/monitor/aarch64-unknown-none/release/hematite"]
+
+target/aarch64/monitor/aarch64-unknown-none/release/hematite:	file format elf64-littleaarch64
+
+Disassembly of section .text:
+
+00000000402020d4 <_RINvCsjStpv0Kdcdo_9hm_kernel11run_monitorNtNtCs9YbYrUQz59w_8hematite4arch12BootPlatformEBH_>:
+402020d4: d10703ff     	sub	sp, sp, #0x1c0
+402020d8: a9167bfd     	stp	x29, x30, [sp, #0x160]
+402020dc: a9176ffc     	stp	x28, x27, [sp, #0x170]
+402020e0: a91867fa     	stp	x26, x25, [sp, #0x180]
+402020e4: a9195ff8     	stp	x24, x23, [sp, #0x190]
+402020e8: a91a57f6     	stp	x22, x21, [sp, #0x1a0]
+402020ec: a91b4ff4     	stp	x20, x19, [sp, #0x1b0]
+402020f0: 52800313     	mov	w19, #0x18              // =24
+402020f4: 5290d408     	mov	w8, #0x86a0             // =34464
+402020f8: aa1f03e9     	mov	x9, xzr
+402020fc: 72a12013     	movk	w19, #0x900, lsl #16
+40202100: d503201f     	nop
+40202104: 1018c8ea     	adr	x10, 0x40233a20 <pan_message+0x8f8>
+40202108: 72a00028     	movk	w8, #0x1, lsl #16
+4020210c: 52a1200b     	mov	w11, #0x9000000         // =150994944
+40202110: 528001ac     	mov	w12, #0xd               // =13
+40202114: 5290d40d     	mov	w13, #0x86a0            // =34464
+40202118: f100bd3f     	cmp	x9, #0x2f
+4020211c: 72a0002d     	movk	w13, #0x1, lsl #16
+40202120: 540000e1     	b.ne	0x4020213c <_RINvCsjStpv0Kdcdo_9hm_kernel11run_monitorNtNtCs9YbYrUQz59w_8hematite4arch12BootPlatformEBH_+0x68>
+40202124: b940026e     	ldr	w14, [x19]
+40202128: 362801ce     	tbz	w14, #0x5, 0x40202160 <_RINvCsjStpv0Kdcdo_9hm_kernel11run_monitorNtNtCs9YbYrUQz59w_8hematite4arch12BootPlatformEBH_+0x8c>
+4020212c: d5033fdf     	isb
+40202130: 710005ad     	subs	w13, w13, #0x1
+40202134: 54ffff81     	b.ne	0x40202124 <_RINvCsjStpv0Kdcdo_9hm_kernel11run_monitorNtNtCs9YbYrUQz59w_8hematite4arch12BootPlatformEBH_+0x50>
+
+["llvm-objdump", "-d", "--start-address=1075853968", "--stop-address=1075854068", "target/aarch64/monitor/aarch64-unknown-none/release/hematite"]
+
+target/aarch64/monitor/aarch64-unknown-none/release/hematite:	file format elf64-littleaarch64
+
+Disassembly of section .text:
+
+0000000040203a90 <_RINvCsjStpv0Kdcdo_9hm_kernel9run_testsNtNtCs9YbYrUQz59w_8hematite4arch12BootPlatformEBE_>:
+40203a90: 6db63bef     	stp	d15, d14, [sp, #-0xa0]!
+40203a94: 6d0133ed     	stp	d13, d12, [sp, #0x10]
+40203a98: 6d022beb     	stp	d11, d10, [sp, #0x20]
+40203a9c: 6d0323e9     	stp	d9, d8, [sp, #0x30]
+40203aa0: a9047bfd     	stp	x29, x30, [sp, #0x40]
+40203aa4: a9056ffc     	stp	x28, x27, [sp, #0x50]
+40203aa8: a90667fa     	stp	x26, x25, [sp, #0x60]
+40203aac: a9075ff8     	stp	x24, x23, [sp, #0x70]
+40203ab0: a90857f6     	stp	x22, x21, [sp, #0x80]
+40203ab4: a9094ff4     	stp	x20, x19, [sp, #0x90]
+40203ab8: d14023e9     	sub	x9, sp, #0x8, lsl #12   // =0x8000
+40203abc: d14007ff     	sub	sp, sp, #0x1, lsl #12   // =0x1000
+40203ac0: f94003ff     	ldr	xzr, [sp]
+40203ac4: eb2963ff     	cmp	sp, x9
+40203ac8: 54ffffa1     	b.ne	0x40203abc <_RINvCsjStpv0Kdcdo_9hm_kernel9run_testsNtNtCs9YbYrUQz59w_8hematite4arch12BootPlatformEBE_+0x2c>
+40203acc: d10fc3ff     	sub	sp, sp, #0x3f0
+40203ad0: 914007f3     	add	x19, sp, #0x1, lsl #12  // =0x1000
+40203ad4: 91042009     	add	x9, x0, #0x108
+40203ad8: aa0003f7     	mov	x23, x0
+40203adc: 91074273     	add	x19, x19, #0x1d0
+40203ae0: 91206268     	add	x8, x19, #0x818
+40203ae4: a914a3e9     	stp	x9, x8, [sp, #0x148]
+40203ae8: 940094cd     	bl	0x40228e1c <_RNvXNtCs9YbYrUQz59w_8hematite4archNtB2_12BootPlatformNtCsjStpv0Kdcdo_9hm_kernel8Platform6checks>
+40203aec: 9240dc0a     	and	x10, x0, #0xffffffffffffff
+40203af0: 6f00e400     	movi	v0.2d, #0000000000000000
