@@ -1,0 +1,15 @@
+{
+  "argv": [
+    "readelf",
+    "-sW",
+    "/workspace/target/evidence/20261026T205938-739216496-aarch64/apps-fixtures/echo.elf"
+  ],
+  "cwd": "/workspace",
+  "stdin_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout": "/workspace/target/evidence/20261026T205938-739216496-aarch64/apps-fixtures/echo-build-symbols.stdout.log",
+  "env": {
+    "LC_ALL": "C",
+    "TZ": "UTC"
+  },
+  "timeout_seconds": 20
+}

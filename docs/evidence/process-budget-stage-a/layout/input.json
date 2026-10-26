@@ -1,0 +1,15 @@
+{
+  "sources": {
+    "/workspace/target/aarch64/boot-test/aarch64-unknown-none/release/libhm_kernel.rlib": "77a137a99db9824743e5150b9dea133527df9e74556107ca92f293010bd69bd5",
+    "docs/evidence/process-budget-stage-a/layout/sizes.rs": "e013cb9c390e686736007fb15cc7085c52e84fc0615f54bd340b03a8fb78f7fc",
+    "docs/evidence/process-budget-stage-a/layout/hm_layout.rs": "167c2d5bc69581057c68f844528fbbe302bf0f0350d69c3b55ec73f43e3dba05",
+    "/workspace/crates/hm-core/src/frames.rs": "209641c0a9b5c8eccb91fe5be19a34387c31b5af455f444d359982b35c9f035c",
+    "/workspace/crates/hm-core/src/cpu_local.rs": "d8669c95b4c4411d2fbf098bebf71a967e8c536d7393d094d1bf6840c91296db",
+    "/workspace/crates/hm-core/src/threads.rs": "5c4fdbca0121770cec6a2de7b837d5c16d73b7265b65f4f427b0701a43d2474f",
+    "/workspace/crates/hm-core/src/preempt.rs": "4e6715b51a78cd4a12c656175745c5ccaf595d75f03838c013e1f19bea8ef78b",
+    "/workspace/crates/hm-core/src/secondary.rs": "f3ed41f81214d901b7b582192fb25f5e1ac3a5c113fa7aee959cd162da750249",
+    "/workspace/crates/hm-core/src/user_space.rs": "cf84a80e8b11bd18544c971651b7c1bdaaaa2d0befafecfa51eeb59da04c704b",
+    "/workspace/crates/hm-core/src/process.rs": "7abff77289bdf442253c5c43360738ff0e5cf05b98d92beaf2e1a9b16c54f2bb"
+  },
+  "scope": "compile-only actual ARM type sizes, not allocation or stack execution"
+}

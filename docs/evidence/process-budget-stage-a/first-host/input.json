@@ -1,0 +1,31 @@
+{
+  "cwd": "/workspace",
+  "expected_cases": [
+    "backward_begin",
+    "backward_finish",
+    "configuration_bounds",
+    "deadline_overflow",
+    "equal_timestamps",
+    "exact_exhaustion",
+    "invalid_transitions",
+    "overrun_saturation",
+    "parked_time_uncharged",
+    "quantum_clamping",
+    "repeated_turns",
+    "stop_ready_and_exhausted",
+    "terminal_no_revival",
+    "turn_counter_overflow",
+    "zero_and_one_elapsed"
+  ],
+  "sources": {
+    "rust-toolchain.toml": "da55df283f88667ec7a31b7392d493f574a36c88467b955d467c3a3cbe2e9fb1",
+    "Cargo.lock": "383e08e95bee956a6cc81d5ee51e1b4dca8355d92c80473228e2c1413b7b177b",
+    "Cargo.toml": "b5ce112343302244db423f588b44e1c4da81b030bf2a3b2d66c7552a94bec1d8",
+    "crates/hm-kernel/Cargo.toml": "5b738f47733eb9c7ff18b1a4a635da1f747595796e3f68ba812379f03c694b9c",
+    "crates/hm-kernel/src/lib.rs": "caf4b62483df5eddc7412591ca17a4be60752f4526abe0c4c27a18df7d5cd0b5",
+    "crates/hm-kernel/src/process_budget.rs": "65924ff72c47255db0906b670e938e94dc031fd19bba2c827eb78c0d42a8737b",
+    "crates/hm-kernel/tests/process_budget.rs": "b500b2257493347eb480cd1433d2ae6ce0a2a0c5b22b64437453dc0b368f6b8b",
+    "tools/check_process_budget.py": "73e56de042b73b52579b37c181f625e7f777c1844a4b213e180f2a5cbaa615db",
+    "docs/design/0028-native-process-runtime.md": "8434272e6ea1ae3f4510ffac5b9641e8b0f467d8d52579418e9dd44a9c7754e5"
+  }
+}

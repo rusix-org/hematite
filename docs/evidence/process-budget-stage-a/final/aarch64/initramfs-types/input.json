@@ -1,0 +1,19 @@
+{
+  "library": "/workspace/target/aarch64/boot-test/aarch64-unknown-none/release/libhm_kernel.rlib",
+  "library_sha256": "77a137a99db9824743e5150b9dea133527df9e74556107ca92f293010bd69bd5",
+  "target": "aarch64-unknown-none",
+  "source_sha256": "4ed94918c48c0ef554b0dd361cbe7f0f95d4a321c87f1f6ffcc5b8f7a56c1773",
+  "expected_probes": [
+    "valid_parse_lookup",
+    "valid_entry_after_archive_drop",
+    "valid_elf_composition",
+    "valid_entry_copy",
+    "forge_archive",
+    "forge_entry",
+    "archive_outlive_input",
+    "entry_outlive_input",
+    "mutate_input_while_entry_live",
+    "mutate_payload",
+    "mutate_path"
+  ]
+}

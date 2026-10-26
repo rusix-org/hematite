@@ -1,0 +1,120 @@
+{
+  "passed": true,
+  "scope": "actual core mutex safe-client type boundary",
+  "probes": {
+    "library": {
+      "passed": true,
+      "returncode": 0
+    },
+    "valid_owned_access": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "valid_send_nonsync_value": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "valid_borrowed_value": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "valid_const": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "valid_forget": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "mutex_nonsend_sync": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "mutex_nonsend_send": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "guard_send": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "guard_sync": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "cell_guard_sync": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "guard_clone": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "mutex_clone": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "guard_outlives_mutex": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0515"
+    },
+    "borrow_outlives_guard": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0515"
+    },
+    "borrowed_value_escape": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0515"
+    },
+    "drop_borrowed_guard": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0505"
+    },
+    "into_inner_while_locked": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0505"
+    },
+    "get_mut_while_locked": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0502"
+    },
+    "mutable_guard_alias": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0499"
+    },
+    "private_value": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0616"
+    },
+    "private_lock_state": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0616"
+    },
+    "forge_guard": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0451"
+    }
+  }
+}

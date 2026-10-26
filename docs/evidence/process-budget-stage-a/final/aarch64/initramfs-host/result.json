@@ -1,0 +1,73 @@
+{
+  "passed": true,
+  "checks": {
+    "exit_success": true,
+    "within_deadline": true,
+    "launched": true,
+    "complete_report": true,
+    "bounded_logs": true
+  },
+  "execution": {
+    "started_utc": "2026-10-26T21:01:01.039853+00:00",
+    "timeout_seconds": 60,
+    "returncode": 0,
+    "timed_out": false,
+    "launch_error": null,
+    "elapsed_seconds": 1.5686869719065726
+  },
+  "artifacts": {
+    "stdout": {
+      "bytes": 699,
+      "within_limit": true,
+      "sha256": "5ea7c04baf1c78757fe8c36b78c326707a6a2fd0659001798508fd683940c51a"
+    },
+    "stderr": {
+      "bytes": 252,
+      "within_limit": true,
+      "sha256": "3c989f9131fe6425a2a624bc30617cbf1237b0fd0806f9a0e37b8bae828ea744"
+    }
+  },
+  "report": {
+    "passed": true,
+    "errors": [],
+    "expected_cases": [
+      "alignment_and_hex_fields",
+      "borrowed_data_exact",
+      "canonical_payload_and_elf",
+      "complete_admission_no_prefix",
+      "descriptive_metadata_not_authority",
+      "empty_and_zero_length_files",
+      "entry_capacity",
+      "file_and_archive_capacity",
+      "gnu_reference_payload_and_elf",
+      "header_field_rejection",
+      "hierarchy_and_duplicates",
+      "metadata_and_types",
+      "mutations_are_total",
+      "padding_and_trailer",
+      "path_capacity_and_alphabet",
+      "truncation_all_prefixes"
+    ],
+    "observed_lines": [
+      "running 16 tests",
+      "test alignment_and_hex_fields ... ok",
+      "test borrowed_data_exact ... ok",
+      "test canonical_payload_and_elf ... ok",
+      "test complete_admission_no_prefix ... ok",
+      "test descriptive_metadata_not_authority ... ok",
+      "test empty_and_zero_length_files ... ok",
+      "test entry_capacity ... ok",
+      "test file_and_archive_capacity ... ok",
+      "test gnu_reference_payload_and_elf ... ok",
+      "test header_field_rejection ... ok",
+      "test hierarchy_and_duplicates ... ok",
+      "test metadata_and_types ... ok",
+      "test mutations_are_total ... ok",
+      "test padding_and_trailer ... ok",
+      "test path_capacity_and_alphabet ... ok",
+      "test truncation_all_prefixes ... ok",
+      "test result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s"
+    ]
+  },
+  "scope": "actual safe archive admission, canonical/GNU payload comparison and ELF planning; no archive-backed execution"
+}

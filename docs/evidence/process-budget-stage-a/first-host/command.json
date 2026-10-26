@@ -1,0 +1,16 @@
+[
+  "cargo",
+  "test",
+  "-p",
+  "hm-kernel",
+  "--test",
+  "process_budget",
+  "--locked",
+  "--offline",
+  "--target",
+  "x86_64-unknown-linux-gnu",
+  "--target-dir",
+  "target/host-process-budget",
+  "--",
+  "--test-threads=1"
+]

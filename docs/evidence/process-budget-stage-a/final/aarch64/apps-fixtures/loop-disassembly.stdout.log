@@ -1,0 +1,102 @@
+
+/workspace/target/evidence/20261026T205938-739216496-aarch64/apps-fixtures/loop.elf:     file format elf64-littleaarch64
+
+
+Disassembly of section .text:
+
+0000000100000000 <native_start>:
+   100000000:	d2800061 	mov	x1, #0x3                   	// #3
+   100000004:	94000021 	bl	100000088 <app_main>
+   100000008:	14000000 	b	100000008 <native_start+0x8>
+
+000000010000000c <call_write>:
+   10000000c:	aa0203e3 	mov	x3, x2
+   100000010:	aa0103e2 	mov	x2, x1
+   100000014:	aa0003e1 	mov	x1, x0
+   100000018:	d2800020 	mov	x0, #0x1                   	// #1
+   10000001c:	d2800028 	mov	x8, #0x1                   	// #1
+
+0000000100000020 <write_svc>:
+   100000020:	d4000001 	svc	#0x0
+   100000024:	d65f03c0 	ret
+
+0000000100000028 <call_newline>:
+   100000028:	aa0003e1 	mov	x1, x0
+   10000002c:	70007f02 	adr	x2, 10000100f <newline>
+   100000030:	d2800023 	mov	x3, #0x1                   	// #1
+   100000034:	d2800020 	mov	x0, #0x1                   	// #1
+   100000038:	d2800028 	mov	x8, #0x1                   	// #1
+
+000000010000003c <newline_svc>:
+   10000003c:	d4000001 	svc	#0x0
+   100000040:	d65f03c0 	ret
+
+0000000100000044 <call_exit>:
+   100000044:	aa0003e1 	mov	x1, x0
+   100000048:	d2800020 	mov	x0, #0x1                   	// #1
+   10000004c:	d2800002 	mov	x2, #0x0                   	// #0
+   100000050:	d2800003 	mov	x3, #0x0                   	// #0
+   100000054:	d2800048 	mov	x8, #0x2                   	// #2
+
+0000000100000058 <exit_svc>:
+   100000058:	d4000001 	svc	#0x0
+   10000005c:	d65f03c0 	ret
+
+0000000100000060 <deliberate_fault>:
+   100000060:	f100081f 	cmp	x0, #0x2
+   100000064:	54000081 	b.ne	100000074 <loop_start>  // b.any
+   100000068:	10fffcc9 	adr	x9, 100000000 <native_start>
+
+000000010000006c <fault>:
+   10000006c:	f900013f 	str	xzr, [x9]
+   100000070:	14000000 	b	100000070 <fault+0x4>
+
+0000000100000074 <loop_start>:
+   100000074:	14000000 	b	100000074 <loop_start>
+
+0000000100000078 <_RNvCs9uWZzlOFw7j_11native_apps6finish>:
+   100000078:	f81f0ffe 	str	x30, [sp, #-16]!
+   10000007c:	97fffff2 	bl	100000044 <call_exit>
+   100000080:	d5033fdf 	isb
+   100000084:	17ffffff 	b	100000080 <_RNvCs9uWZzlOFw7j_11native_apps6finish+0x8>
+
+0000000100000088 <app_main>:
+   100000088:	f81f0ffe 	str	x30, [sp, #-16]!
+   10000008c:	d2a00208 	mov	x8, #0x100000              	// #1048576
+   100000090:	f1000c3f 	cmp	x1, #0x3
+   100000094:	f2c00028 	movk	x8, #0x1, lsl #32
+   100000098:	fa480000 	ccmp	x0, x8, #0x0, eq	// eq = none
+   10000009c:	54000401 	b.ne	10000011c <app_main+0x94>  // b.any
+   1000000a0:	d288a90a 	mov	x10, #0x4548                	// #17736
+   1000000a4:	f9400109 	ldr	x9, [x8]
+   1000000a8:	f2a829aa 	movk	x10, #0x414d, lsl #16
+   1000000ac:	f2c92a8a 	movk	x10, #0x4954, lsl #32
+   1000000b0:	f2e8aa8a 	movk	x10, #0x4554, lsl #48
+   1000000b4:	eb0a013f 	cmp	x9, x10
+   1000000b8:	54000321 	b.ne	10000011c <app_main+0x94>  // b.any
+   1000000bc:	b9400909 	ldr	w9, [x8, #8]
+   1000000c0:	7100053f 	cmp	w9, #0x1
+   1000000c4:	540002c1 	b.ne	10000011c <app_main+0x94>  // b.any
+   1000000c8:	b9400d09 	ldr	w9, [x8, #12]
+   1000000cc:	7101013f 	cmp	w9, #0x40
+   1000000d0:	54000261 	b.ne	10000011c <app_main+0x94>  // b.any
+   1000000d4:	a941250a 	ldp	x10, x9, [x8, #16]
+   1000000d8:	d360fd2b 	lsr	x11, x9, #32
+   1000000dc:	f100017f 	cmp	x11, #0x0
+   1000000e0:	7a411920 	ccmp	w9, #0x1, #0x0, ne	// ne = any
+   1000000e4:	fa410940 	ccmp	x10, #0x1, #0x0, eq	// eq = none
+   1000000e8:	540001a1 	b.ne	10000011c <app_main+0x94>  // b.any
+   1000000ec:	a942a50a 	ldp	x10, x9, [x8, #40]
+   1000000f0:	f940110b 	ldr	x11, [x8, #32]
+   1000000f4:	f101013f 	cmp	x9, #0x40
+   1000000f8:	52820009 	mov	w9, #0x1000                	// #4096
+   1000000fc:	fa490140 	ccmp	x10, x9, #0x0, eq	// eq = none
+   100000100:	52802009 	mov	w9, #0x100                 	// #256
+   100000104:	fa490160 	ccmp	x11, x9, #0x0, eq	// eq = none
+   100000108:	540000a1 	b.ne	10000011c <app_main+0x94>  // b.any
+   10000010c:	f9401d08 	ldr	x8, [x8, #56]
+   100000110:	b5000068 	cbnz	x8, 10000011c <app_main+0x94>
+   100000114:	52800060 	mov	w0, #0x3                   	// #3
+   100000118:	97ffffd2 	bl	100000060 <deliberate_fault>
+   10000011c:	52801920 	mov	w0, #0xc9                  	// #201
+   100000120:	97ffffd6 	bl	100000078 <_RNvCs9uWZzlOFw7j_11native_apps6finish>

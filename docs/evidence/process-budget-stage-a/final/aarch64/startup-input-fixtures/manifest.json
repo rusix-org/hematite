@@ -1,0 +1,437 @@
+{
+  "version": 1,
+  "probes": {
+    "absent": {
+      "entry": 4294967296,
+      "pages": 3,
+      "symbols": {
+        "newline": 4294971392,
+        "native_start": 4294967296,
+        "write_svc": 4294967328,
+        "newline_svc": 4294967356,
+        "exit_svc": 4294967384,
+        "loop_start": 4294967448,
+        "fault_write": 4294967432,
+        "branch_payload": 4294967444,
+        "loop_end": 4294967452
+      },
+      "segments": [
+        {
+          "flags": 5,
+          "offset": 4096,
+          "va": 4294967296,
+          "filesz": 604,
+          "memsz": 604,
+          "align": 4096,
+          "start": 4294967296,
+          "end": 4294971392
+        },
+        {
+          "flags": 4,
+          "offset": 8192,
+          "va": 4294971392,
+          "filesz": 1,
+          "memsz": 1,
+          "align": 4096,
+          "start": 4294971392,
+          "end": 4294975488
+        },
+        {
+          "flags": 6,
+          "offset": 12288,
+          "va": 4294975488,
+          "filesz": 1,
+          "memsz": 1,
+          "align": 4096,
+          "start": 4294975488,
+          "end": 4294979584
+        }
+      ],
+      "file": "absent.elf",
+      "path": "bin/absent",
+      "sha256": "1df05f57b89fd66b23a6261dcc2538ca4b55a8603289f2be3d1f247f1e1e037a",
+      "input": {
+        "present": false,
+        "hex": ""
+      }
+    },
+    "empty": {
+      "entry": 4294967296,
+      "pages": 3,
+      "symbols": {
+        "newline": 4294971392,
+        "native_start": 4294967296,
+        "write_svc": 4294967328,
+        "newline_svc": 4294967356,
+        "exit_svc": 4294967384,
+        "loop_start": 4294967448,
+        "fault_write": 4294967432,
+        "branch_payload": 4294967444,
+        "loop_end": 4294967452
+      },
+      "segments": [
+        {
+          "flags": 5,
+          "offset": 4096,
+          "va": 4294967296,
+          "filesz": 608,
+          "memsz": 608,
+          "align": 4096,
+          "start": 4294967296,
+          "end": 4294971392
+        },
+        {
+          "flags": 4,
+          "offset": 8192,
+          "va": 4294971392,
+          "filesz": 1,
+          "memsz": 1,
+          "align": 4096,
+          "start": 4294971392,
+          "end": 4294975488
+        },
+        {
+          "flags": 6,
+          "offset": 12288,
+          "va": 4294975488,
+          "filesz": 1,
+          "memsz": 1,
+          "align": 4096,
+          "start": 4294975488,
+          "end": 4294979584
+        }
+      ],
+      "file": "empty.elf",
+      "path": "bin/empty",
+      "sha256": "e9afaf1727eeaaa01ee6885359630bd200727808cc98580539cd1217da00a61b",
+      "input": {
+        "present": true,
+        "hex": ""
+      }
+    },
+    "one": {
+      "entry": 4294967296,
+      "pages": 3,
+      "symbols": {
+        "newline": 4294971392,
+        "native_start": 4294967296,
+        "write_svc": 4294967328,
+        "newline_svc": 4294967356,
+        "exit_svc": 4294967384,
+        "loop_start": 4294967448,
+        "fault_write": 4294967432,
+        "branch_payload": 4294967444,
+        "loop_end": 4294967452
+      },
+      "segments": [
+        {
+          "flags": 5,
+          "offset": 4096,
+          "va": 4294967296,
+          "filesz": 628,
+          "memsz": 628,
+          "align": 4096,
+          "start": 4294967296,
+          "end": 4294971392
+        },
+        {
+          "flags": 4,
+          "offset": 8192,
+          "va": 4294971392,
+          "filesz": 1,
+          "memsz": 1,
+          "align": 4096,
+          "start": 4294971392,
+          "end": 4294975488
+        },
+        {
+          "flags": 6,
+          "offset": 12288,
+          "va": 4294975488,
+          "filesz": 1,
+          "memsz": 1,
+          "align": 4096,
+          "start": 4294975488,
+          "end": 4294979584
+        }
+      ],
+      "file": "one.elf",
+      "path": "bin/one",
+      "sha256": "e46f49a5a3b05efaed2d894147a42a29a8e1566f55607b9691b4414b49d7fbf4",
+      "input": {
+        "present": true,
+        "hex": "41"
+      }
+    },
+    "bytes255": {
+      "entry": 4294967296,
+      "pages": 3,
+      "symbols": {
+        "newline": 4294971392,
+        "native_start": 4294967296,
+        "write_svc": 4294967328,
+        "newline_svc": 4294967356,
+        "exit_svc": 4294967384,
+        "loop_start": 4294967448,
+        "fault_write": 4294967432,
+        "branch_payload": 4294967444,
+        "loop_end": 4294967452
+      },
+      "segments": [
+        {
+          "flags": 5,
+          "offset": 4096,
+          "va": 4294967296,
+          "filesz": 696,
+          "memsz": 696,
+          "align": 4096,
+          "start": 4294967296,
+          "end": 4294971392
+        },
+        {
+          "flags": 4,
+          "offset": 8192,
+          "va": 4294971392,
+          "filesz": 1,
+          "memsz": 1,
+          "align": 4096,
+          "start": 4294971392,
+          "end": 4294975488
+        },
+        {
+          "flags": 6,
+          "offset": 12288,
+          "va": 4294975488,
+          "filesz": 1,
+          "memsz": 1,
+          "align": 4096,
+          "start": 4294975488,
+          "end": 4294979584
+        }
+      ],
+      "file": "bytes255.elf",
+      "path": "bin/bytes255",
+      "sha256": "5a7bad3294105c6e3cd6bf3af6445149155852e32d35c8b4f4645c3652a528e0",
+      "input": {
+        "present": true,
+        "hex": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f404142434445464748494a4b4c4d4e4f505152535455565758595a5b5c5d5e5f606162636465666768696a6b6c6d6e6f707172737475767778797a7b7c7d7e7f808182838485868788898a8b8c8d8e8f909192939495969798999a9b9c9d9e9fa0a1a2a3a4a5a6a7a8a9aaabacadaeafb0b1b2b3b4b5b6b7b8b9babbbcbdbebfc0c1c2c3c4c5c6c7c8c9cacbcccdcecfd0d1d2d3d4d5d6d7d8d9dadbdcdddedfe0e1e2e3e4e5e6e7e8e9eaebecedeeeff0f1f2f3f4f5f6f7f8f9fafbfcfdfe"
+      }
+    },
+    "binary256": {
+      "entry": 4294967296,
+      "pages": 3,
+      "symbols": {
+        "newline": 4294971392,
+        "native_start": 4294967296,
+        "write_svc": 4294967328,
+        "newline_svc": 4294967356,
+        "exit_svc": 4294967384,
+        "loop_start": 4294967448,
+        "fault_write": 4294967432,
+        "branch_payload": 4294967444,
+        "loop_end": 4294967452
+      },
+      "segments": [
+        {
+          "flags": 5,
+          "offset": 4096,
+          "va": 4294967296,
+          "filesz": 696,
+          "memsz": 696,
+          "align": 4096,
+          "start": 4294967296,
+          "end": 4294971392
+        },
+        {
+          "flags": 4,
+          "offset": 8192,
+          "va": 4294971392,
+          "filesz": 1,
+          "memsz": 1,
+          "align": 4096,
+          "start": 4294971392,
+          "end": 4294975488
+        },
+        {
+          "flags": 6,
+          "offset": 12288,
+          "va": 4294975488,
+          "filesz": 1,
+          "memsz": 1,
+          "align": 4096,
+          "start": 4294975488,
+          "end": 4294979584
+        }
+      ],
+      "file": "binary256.elf",
+      "path": "bin/binary256",
+      "sha256": "92dbf27ff37cc0355795cb037c6b82fc68020bc35adca205f113e0d4d43c6cc3",
+      "input": {
+        "present": true,
+        "hex": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f404142434445464748494a4b4c4d4e4f505152535455565758595a5b5c5d5e5f606162636465666768696a6b6c6d6e6f707172737475767778797a7b7c7d7e7f808182838485868788898a8b8c8d8e8f909192939495969798999a9b9c9d9e9fa0a1a2a3a4a5a6a7a8a9aaabacadaeafb0b1b2b3b4b5b6b7b8b9babbbcbdbebfc0c1c2c3c4c5c6c7c8c9cacbcccdcecfd0d1d2d3d4d5d6d7d8d9dadbdcdddedfe0e1e2e3e4e5e6e7e8e9eaebecedeeeff0f1f2f3f4f5f6f7f8f9fafbfcfdfeff"
+      }
+    },
+    "payload_write": {
+      "entry": 4294967296,
+      "pages": 3,
+      "symbols": {
+        "newline": 4294971392,
+        "native_start": 4294967296,
+        "write_svc": 4294967328,
+        "newline_svc": 4294967356,
+        "exit_svc": 4294967384,
+        "loop_start": 4294967448,
+        "fault_write": 4294967432,
+        "branch_payload": 4294967444,
+        "loop_end": 4294967452
+      },
+      "segments": [
+        {
+          "flags": 5,
+          "offset": 4096,
+          "va": 4294967296,
+          "filesz": 548,
+          "memsz": 548,
+          "align": 4096,
+          "start": 4294967296,
+          "end": 4294971392
+        },
+        {
+          "flags": 4,
+          "offset": 8192,
+          "va": 4294971392,
+          "filesz": 1,
+          "memsz": 1,
+          "align": 4096,
+          "start": 4294971392,
+          "end": 4294975488
+        },
+        {
+          "flags": 6,
+          "offset": 12288,
+          "va": 4294975488,
+          "filesz": 1,
+          "memsz": 1,
+          "align": 4096,
+          "start": 4294975488,
+          "end": 4294979584
+        }
+      ],
+      "file": "payload_write.elf",
+      "path": "bin/payload_write",
+      "sha256": "0e65688c4d83dfd6d0362b7a0c6785a4f3730d47b0b811ff93a856b87cd66a5b",
+      "input": {
+        "present": true,
+        "hex": "57"
+      }
+    },
+    "payload_execute": {
+      "entry": 4294967296,
+      "pages": 3,
+      "symbols": {
+        "newline": 4294971392,
+        "native_start": 4294967296,
+        "write_svc": 4294967328,
+        "newline_svc": 4294967356,
+        "exit_svc": 4294967384,
+        "loop_start": 4294967448,
+        "fault_write": 4294967432,
+        "branch_payload": 4294967444,
+        "loop_end": 4294967452
+      },
+      "segments": [
+        {
+          "flags": 5,
+          "offset": 4096,
+          "va": 4294967296,
+          "filesz": 584,
+          "memsz": 584,
+          "align": 4096,
+          "start": 4294967296,
+          "end": 4294971392
+        },
+        {
+          "flags": 4,
+          "offset": 8192,
+          "va": 4294971392,
+          "filesz": 1,
+          "memsz": 1,
+          "align": 4096,
+          "start": 4294971392,
+          "end": 4294975488
+        },
+        {
+          "flags": 6,
+          "offset": 12288,
+          "va": 4294975488,
+          "filesz": 1,
+          "memsz": 1,
+          "align": 4096,
+          "start": 4294975488,
+          "end": 4294979584
+        }
+      ],
+      "file": "payload_execute.elf",
+      "path": "bin/payload_execute",
+      "sha256": "283ee9704ada762af60c594dff6987e24375fae9a29e9df50a0f24c9f9c49627",
+      "input": {
+        "present": true,
+        "hex": "c0035fd6"
+      }
+    },
+    "input_loop": {
+      "entry": 4294967296,
+      "pages": 3,
+      "symbols": {
+        "newline": 4294971392,
+        "native_start": 4294967296,
+        "write_svc": 4294967328,
+        "newline_svc": 4294967356,
+        "exit_svc": 4294967384,
+        "loop_start": 4294967448,
+        "fault_write": 4294967432,
+        "branch_payload": 4294967444,
+        "loop_end": 4294967452
+      },
+      "segments": [
+        {
+          "flags": 5,
+          "offset": 4096,
+          "va": 4294967296,
+          "filesz": 548,
+          "memsz": 548,
+          "align": 4096,
+          "start": 4294967296,
+          "end": 4294971392
+        },
+        {
+          "flags": 4,
+          "offset": 8192,
+          "va": 4294971392,
+          "filesz": 1,
+          "memsz": 1,
+          "align": 4096,
+          "start": 4294971392,
+          "end": 4294975488
+        },
+        {
+          "flags": 6,
+          "offset": 12288,
+          "va": 4294975488,
+          "filesz": 1,
+          "memsz": 1,
+          "align": 4096,
+          "start": 4294975488,
+          "end": 4294979584
+        }
+      ],
+      "file": "input_loop.elf",
+      "path": "bin/input_loop",
+      "sha256": "908cc22d18a917a16367381921f842f49ee680203f1bcb9bbe5c3e9e09dc9215",
+      "input": {
+        "present": true,
+        "hex": "4c"
+      }
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "argv": [
+    "cpio",
+    "--create",
+    "--format=newc",
+    "--reproducible",
+    "--owner=0:0",
+    "--null",
+    "--quiet"
+  ],
+  "cwd": "/workspace/target/evidence/20261026T205938-739216496-aarch64/process-archive/gnu-input",
+  "stdin_sha256": "548b1276312c3d85b27c1babcd17419deeffa9030646cecd222cd36dec951b81",
+  "stdout": "/workspace/target/evidence/20261026T205938-739216496-aarch64/process-archive/gnu-reference.cpio",
+  "env": {
+    "LC_ALL": "C",
+    "TZ": "UTC"
+  },
+  "timeout_seconds": 20
+}

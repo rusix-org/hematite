@@ -1,0 +1,77 @@
+{
+  "passed": true,
+  "probes": {
+    "owned_source_independence": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "move_encode_drop_then_decode": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "view_copy_and_payload_borrow": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "constants_absent_and_errors": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "forge_input": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0451"
+    },
+    "forge_view": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0451"
+    },
+    "clone_input": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0599"
+    },
+    "copy_input": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0382"
+    },
+    "input_bytes_escape_owner": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0515"
+    },
+    "view_escape_extension": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0515"
+    },
+    "view_bytes_escape_extension": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0515"
+    },
+    "mutate_input_while_borrowed": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0506"
+    },
+    "mutate_extension_while_view_live": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0506"
+    },
+    "mutate_view_payload": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0594"
+    }
+  },
+  "target": "x86_64-unknown-none",
+  "scope": "actual owned startup input and immutable extension view lifetimes; no runtime integration"
+}

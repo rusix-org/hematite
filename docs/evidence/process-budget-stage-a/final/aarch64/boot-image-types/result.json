@@ -1,0 +1,37 @@
+{
+  "passed": true,
+  "probes": {
+    "valid_image": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "temporary_path": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "image_after_local_plan": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "escape_input": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0515"
+    },
+    "mutate_live_input": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0506"
+    },
+    "forge_image": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0451"
+    }
+  },
+  "target": "aarch64-unknown-none",
+  "scope": "actual safe boot image borrowed-input encapsulation; no execution"
+}

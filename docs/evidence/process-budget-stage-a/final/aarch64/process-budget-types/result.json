@@ -1,0 +1,57 @@
+{
+  "passed": true,
+  "probes": {
+    "move_begin_finish_stop": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "snapshot_mutation_is_detached": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "copied_errors_and_snapshots": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "forge_budget": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0451"
+    },
+    "clone_budget": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0599"
+    },
+    "copy_budget": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0382"
+    },
+    "no_reset_method": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0599"
+    },
+    "no_production_test_seam": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0425"
+    },
+    "snapshot_cannot_restore_owner": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0308"
+    },
+    "shared_budget_cannot_begin": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0596"
+    }
+  },
+  "target": "aarch64-unknown-none",
+  "scope": "actual affine budget ownership and detached snapshots; no resumable runtime"
+}

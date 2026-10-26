@@ -1,0 +1,31 @@
+{
+  "library": "/workspace/target/aarch64/boot-test/aarch64-unknown-none/release/libhm_kernel.rlib",
+  "sha256": "77a137a99db9824743e5150b9dea133527df9e74556107ca92f293010bd69bd5",
+  "target": "aarch64-unknown-none",
+  "expected_probes": [
+    "valid_load",
+    "valid_release_input",
+    "valid_forget",
+    "valid_copied_inspection",
+    "private_constructor",
+    "private_frames",
+    "private_tables",
+    "space_clone",
+    "factory_clone",
+    "space_send",
+    "space_sync",
+    "factory_send",
+    "factory_sync",
+    "space_use_after_drop",
+    "space_outlive_pool",
+    "forge_factory"
+  ],
+  "sources": {
+    "frames": "209641c0a9b5c8eccb91fe5be19a34387c31b5af455f444d359982b35c9f035c",
+    "cpu_local": "d8669c95b4c4411d2fbf098bebf71a967e8c536d7393d094d1bf6840c91296db",
+    "threads": "5c4fdbca0121770cec6a2de7b837d5c16d73b7265b65f4f427b0701a43d2474f",
+    "preempt": "4e6715b51a78cd4a12c656175745c5ccaf595d75f03838c013e1f19bea8ef78b",
+    "secondary": "f3ed41f81214d901b7b582192fb25f5e1ac3a5c113fa7aee959cd162da750249",
+    "user_space": "cf84a80e8b11bd18544c971651b7c1bdaaaa2d0befafecfa51eeb59da04c704b"
+  }
+}

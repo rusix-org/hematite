@@ -1,0 +1,165 @@
+{
+  "passed": true,
+  "checks": {
+    "launched": true,
+    "no_foreign_report": true,
+    "strict_serial_records": true,
+    "no_normal_report": true,
+    "no_allocation_report": true,
+    "expected_termination": true,
+    "per_cpu_irq_trace": true,
+    "admitted_without_peer_shutdown": true,
+    "negative_inventory": true,
+    "peer_guard_fault": true,
+    "coordinator_not_faulting": true,
+    "terminal_peer_exit": true,
+    "artifacts_present_and_bounded": true,
+    "symbols_extracted": true
+  },
+  "errors": [],
+  "observed_records": [
+    "HMSCHED EXPECT PEER-OVERFLOW"
+  ],
+  "trace": {
+    "passed": true,
+    "errors": [],
+    "counts": [
+      {
+        "irq": 0,
+        "vector": 0,
+        "ack": 0,
+        "eoi": 0
+      },
+      {
+        "irq": 0,
+        "vector": 0,
+        "ack": 0,
+        "eoi": 0
+      }
+    ],
+    "events": [
+      {
+        "kind": 11,
+        "name": "Hypervisor Call",
+        "cpu": 0
+      },
+      {
+        "kind": 11,
+        "name": "Hypervisor Call",
+        "cpu": 0
+      },
+      {
+        "kind": 11,
+        "name": "Hypervisor Call",
+        "cpu": 0
+      },
+      {
+        "kind": 11,
+        "name": "Hypervisor Call",
+        "cpu": 0
+      },
+      {
+        "kind": 11,
+        "name": "Hypervisor Call",
+        "cpu": 0
+      },
+      {
+        "kind": 11,
+        "name": "Hypervisor Call",
+        "cpu": 0
+      },
+      {
+        "kind": 4,
+        "name": "Data Abort",
+        "cpu": 1
+      },
+      {
+        "kind": 16,
+        "name": "Semihosting call",
+        "cpu": 1
+      }
+    ],
+    "unfinished_cpu_phases": [
+      null,
+      null
+    ],
+    "expected_interrupts": null
+  },
+  "hvc_counts": [
+    6,
+    0
+  ],
+  "peer_fault": {
+    "passed": true,
+    "errors": [],
+    "peer_fault_addresses": [
+      1076424608
+    ],
+    "peer_events": [
+      [
+        4,
+        "Data Abort"
+      ],
+      [
+        16,
+        "Semihosting call"
+      ]
+    ],
+    "fault_pcs": [
+      1075874804
+    ],
+    "probe_range": [
+      1075874784,
+      1075874912
+    ]
+  },
+  "scope": "bounded negative SMP ownership profile",
+  "started_utc": "2026-10-26T21:02:02.203833+00:00",
+  "timeout_seconds": 10,
+  "returncode": 5,
+  "timed_out": false,
+  "launch_error": null,
+  "elapsed_seconds": 0.06443070410750806,
+  "artifacts": {
+    "serial": {
+      "exists": true,
+      "bytes": 206,
+      "sha256": "30487be237b8ffd1b4544b4e9477521e4c05f15fae96aa00aafcfe298bc7eb67",
+      "within_size_limit": true
+    },
+    "exceptions": {
+      "exists": true,
+      "bytes": 1625,
+      "sha256": "85dbdd6ac7f736f335e3ae4ab6adad3768a240c73dab0d8f52323bde01aa932b",
+      "within_size_limit": true
+    }
+  },
+  "symbols": {
+    "arm_vectors": 1075841024,
+    "arm_secondary_vectors": 1075853312,
+    "arm_preempt_start": 1075848056,
+    "arm_secondary_root": 1075896320,
+    "__secondary_stack_guard": 1076330496,
+    "__secondary_stack_top": 1076400128,
+    "__thread0_guard": 1076051968,
+    "__thread0_top": 1076121600,
+    "__thread1_guard": 1076121600,
+    "__thread1_top": 1076191232,
+    "__thread2_guard": 1076191232,
+    "__thread2_top": 1076260864,
+    "__thread3_guard": 1076260864,
+    "__thread3_top": 1076330496,
+    "__secondary_thread0_guard": 1076420608,
+    "__secondary_thread0_top": 1076490240,
+    "__secondary_thread1_guard": 1076490240,
+    "__secondary_thread1_top": 1076559872,
+    "__secondary_thread2_guard": 1076559872,
+    "__secondary_thread2_top": 1076629504,
+    "__secondary_thread3_guard": 1076629504,
+    "__secondary_thread3_top": 1076699136,
+    "arm_smp_large_frame_range": [
+      1075874784,
+      1075874912
+    ]
+  }
+}

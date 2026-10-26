@@ -1,0 +1,30 @@
+{
+  "cwd": "/workspace",
+  "expected_cases": [
+    "absent_canonical",
+    "all_input_lengths",
+    "deterministic_mutations",
+    "exact_decode_extent",
+    "legacy_prefix_unchanged",
+    "malformed_header",
+    "malformed_lengths",
+    "malformed_tail",
+    "maximum_and_over_limit",
+    "opaque_round_trip",
+    "owns_input_copy",
+    "present_empty_distinct",
+    "reencoding_clears_stale_bytes",
+    "wrong_destination_size_unchanged"
+  ],
+  "sources": {
+    "rust-toolchain.toml": "da55df283f88667ec7a31b7392d493f574a36c88467b955d467c3a3cbe2e9fb1",
+    "Cargo.lock": "383e08e95bee956a6cc81d5ee51e1b4dca8355d92c80473228e2c1413b7b177b",
+    "Cargo.toml": "b5ce112343302244db423f588b44e1c4da81b030bf2a3b2d66c7552a94bec1d8",
+    "crates/hm-kernel/Cargo.toml": "5b738f47733eb9c7ff18b1a4a635da1f747595796e3f68ba812379f03c694b9c",
+    "crates/hm-kernel/src/lib.rs": "caf4b62483df5eddc7412591ca17a4be60752f4526abe0c4c27a18df7d5cd0b5",
+    "crates/hm-kernel/src/startup_input.rs": "78f6593de5ff4dcdaab66b58bc807e04dcf78008955b6295e98479cb8bbce059",
+    "crates/hm-kernel/tests/startup_input.rs": "c36d6a28480ac3bdc813cbd81f068c9c119f7bfe6a6694032292939522f39547",
+    "tools/check_startup_input.py": "076a3c473aff4cf879edebd73b09ac798856e0008a9ec3856af44b605e0f7081",
+    "docs/design/0027-native-startup-input.md": "e11134bb52a5a05b2ef82f7fc57593423d845eeeac126046adace84b9a204f9c"
+  }
+}

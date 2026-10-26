@@ -1,0 +1,1593 @@
+gic_cpu_write cpu 0 iface write at 0x00000000 0x00000000
+gic_cpu_write cpu 0 iface write at 0x00000004 0x000000ff
+gic_cpu_write cpu 0 iface write at 0x00000008 0x00000000
+gic_cpu_write cpu 0 iface write at 0x00000000 0x00000001
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40202560
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x402025bc
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40202560
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40236a24
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40202560
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40236a24
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40202560
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40236a24
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x402025bc
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40236ab8
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40236a24
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40236ac4
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40236a24
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40236ac4
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40236a24
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40236b44
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40236ab8
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40236b44
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40236ac4
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40236b44
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40236ac4
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40236be4
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40236b44
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40236be4
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40236b44
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40236be0
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40236b44
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40236c7c
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40236be4
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40236c7c
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40236be4
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40236c7c
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40236be0
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40236d18
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40236c7c
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40236d34
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40236c7c
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40236d40
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40236c7c
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40236db8
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40236d18
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40236db4
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40236d34
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40236dc4
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40236d40
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40236e50
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40236db8
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40236e50
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40236db4
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40236e50
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40236dc4
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x402026a4
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40236e50
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40236e50
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40236e50
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x402026a4
+gic_cpu_write cpu 0 iface write at 0x00000000 0x00000000
+gic_cpu_write cpu 0 iface write at 0x00000000 0x00000000
+gic_cpu_write cpu 0 iface write at 0x00000004 0x000000ff
+gic_cpu_write cpu 0 iface write at 0x00000008 0x00000000
+gic_cpu_write cpu 0 iface write at 0x00000000 0x00000001
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40202560
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x402025bc
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40202560
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40236a24
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40202560
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40236a24
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40202560
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40236a24
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x402025bc
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40236aa8
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40236a24
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40236aa8
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40236a24
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40236aa8
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40236a24
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40236b44
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40236aa8
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40236b54
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40236aa8
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40236b44
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40236aa8
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40236be0
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40236b44
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40236be0
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40236b54
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40236bf0
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40236b44
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40236c7c
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40236be0
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40236c7c
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40236be0
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40236c7c
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40236bf0
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40236d28
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40236c7c
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40236d28
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40236c7c
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40236d40
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40236c7c
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40236db4
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40236d28
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40236dc4
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40236d28
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40236dc4
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40236d40
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40236e50
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40236db4
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40236e50
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40236dc4
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40236e50
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40236dc4
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x402026a4
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40236e50
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40236e50
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40236e50
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x402026a4
+gic_cpu_write cpu 0 iface write at 0x00000000 0x00000000
+gic_cpu_write cpu 0 iface write at 0x00000000 0x00000000
+gic_cpu_write cpu 0 iface write at 0x00000004 0x000000ff
+gic_cpu_write cpu 0 iface write at 0x00000008 0x00000000
+gic_cpu_write cpu 0 iface write at 0x00000000 0x00000001
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40202560
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x402025bc
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40202560
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40236a28
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40202560
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40236a28
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40202560
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40236a24
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x402025bc
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40236ab8
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40236a28
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40236ac4
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40236a28
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40236aac
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40236a24
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40236b44
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40236ab8
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40236b44
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40236ac4
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40236b60
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40236aac
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40236be0
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40236b44
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40236be0
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40236b44
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40236be0
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40236b60
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40236c7c
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40236be0
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40236c7c
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40236be0
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40236c7c
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40236be0
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40236d18
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40236c7c
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40236d18
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40236c7c
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40236d40
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40236c7c
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40236db4
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40236d18
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40236db4
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40236d18
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40236dc4
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40236d40
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40236e50
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40236db4
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40236e50
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40236db4
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40236e50
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40236dc4
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x4020233c
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40236e50
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40236e50
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40236e50
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x402026a4
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x4020233c
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x402026a4
+gic_cpu_write cpu 0 iface write at 0x00000000 0x00000000
+gic_cpu_write cpu 0 iface write at 0x00000000 0x00000000
+gic_cpu_write cpu 0 iface write at 0x00000004 0x000000ff
+gic_cpu_write cpu 0 iface write at 0x00000008 0x00000000
+gic_cpu_write cpu 0 iface write at 0x00000000 0x00000001
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40202560
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x402025bc
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x402025bc
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x4020233c
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x4020233c
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x402026a4
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x402026a4
+gic_cpu_write cpu 0 iface write at 0x00000000 0x00000000
+gic_cpu_write cpu 0 iface write at 0x00000000 0x00000000
+gic_cpu_write cpu 0 iface write at 0x00000004 0x000000ff
+gic_cpu_write cpu 0 iface write at 0x00000008 0x00000000
+gic_cpu_write cpu 0 iface write at 0x00000000 0x00000001
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40202560
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x402025bc
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x402025bc
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x402026a4
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x402026a4
+gic_cpu_write cpu 0 iface write at 0x00000000 0x00000000
+gic_cpu_write cpu 0 iface write at 0x00000000 0x00000000
+gic_cpu_write cpu 0 iface write at 0x00000004 0x000000ff
+gic_cpu_write cpu 0 iface write at 0x00000008 0x00000000
+gic_cpu_write cpu 0 iface write at 0x00000000 0x00000001
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40202560
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x402025bc
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x402025bc
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40202468
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40202468
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x402026a4
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x402026a4
+gic_cpu_write cpu 0 iface write at 0x00000000 0x00000000
+gic_cpu_write cpu 0 iface write at 0x00000000 0x00000000
+gic_cpu_write cpu 0 iface write at 0x00000004 0x000000ff
+gic_cpu_write cpu 0 iface write at 0x00000008 0x00000000
+gic_cpu_write cpu 0 iface write at 0x00000000 0x00000001
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40202560
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x402025bc
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40202560
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40202468
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40202560
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40202560
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x4020233c
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x402025bc
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40202468
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x4020233c
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x402026a4
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x402026a4
+gic_cpu_write cpu 0 iface write at 0x00000000 0x00000000
+gic_cpu_write cpu 0 iface write at 0x00000000 0x00000000
+gic_cpu_write cpu 0 iface write at 0x00000004 0x000000ff
+gic_cpu_write cpu 0 iface write at 0x00000008 0x00000000
+gic_cpu_write cpu 0 iface write at 0x00000000 0x00000001
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40202560
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x402025bc
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40202560
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40202468
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x402025bc
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40202468
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40232d80
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x4020233c
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40232d80
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x4020233c
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40232d80
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40232d80
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40232d80
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40232d80
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40232d80
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40232d80
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x402026a4
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x402026a4
+gic_cpu_write cpu 0 iface write at 0x00000000 0x00000000
+gic_cpu_write cpu 0 iface write at 0x00000000 0x00000000
+gic_cpu_write cpu 0 iface write at 0x00000004 0x000000ff
+gic_cpu_write cpu 0 iface write at 0x00000008 0x00000000
+gic_cpu_write cpu 0 iface write at 0x00000000 0x00000001
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40202560
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x402025bc
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40202560
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40202468
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40202560
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40202560
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x4020233c
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x402025bc
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40202468
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x4020233c
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x402026a4
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x402026a4
+gic_cpu_write cpu 0 iface write at 0x00000000 0x00000000
+gic_cpu_write cpu 0 iface write at 0x00000000 0x00000000
+gic_cpu_write cpu 0 iface write at 0x00000004 0x000000ff
+gic_cpu_write cpu 0 iface write at 0x00000008 0x00000000
+gic_cpu_write cpu 0 iface write at 0x00000000 0x00000001
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40202560
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x402025bc
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40202560
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40202468
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x402025bc
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40202468
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40232d84
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x4020233c
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40232d84
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x4020233c
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40232d80
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40232d80
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40232d80
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40232d80
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40232d84
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40232d84
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x402026a4
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x402026a4
+gic_cpu_write cpu 0 iface write at 0x00000000 0x00000000
+gic_cpu_write cpu 0 iface write at 0x00000000 0x00000000
+gic_cpu_write cpu 0 iface write at 0x00000004 0x000000ff
+gic_cpu_write cpu 0 iface write at 0x00000008 0x00000000
+gic_cpu_write cpu 0 iface write at 0x00000000 0x00000001
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40202560
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x402025bc
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40202560
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x4022bee4
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40202560
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x4022bee4
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40202560
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x4022bee4
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x402025bc
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x4022be90
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x4022bee4
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x4020233c
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x4022bee4
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x4022bee4
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x4022be90
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x402026a4
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x4020233c
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x402026a4
+gic_cpu_write cpu 0 iface write at 0x00000000 0x00000000
+gic_cpu_write cpu 0 iface write at 0x00000000 0x00000000
+gic_cpu_write cpu 0 iface write at 0x00000004 0x000000ff
+gic_cpu_write cpu 0 iface write at 0x00000008 0x00000000
+gic_cpu_write cpu 0 iface write at 0x00000000 0x00000001
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40202560
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x402025bc
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40202560
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x4022bee4
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40202560
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x4022bee4
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40202560
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x4022bee4
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x402025bc
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x4022be94
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x4022bee4
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x4020233c
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x4022bee4
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x4022bee4
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x4022be94
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x402026a4
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x4020233c
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x402026a4
+gic_cpu_write cpu 0 iface write at 0x00000000 0x00000000
+gic_cpu_write cpu 0 iface write at 0x00000000 0x00000000
+gic_cpu_write cpu 0 iface write at 0x00000004 0x000000ff
+gic_cpu_write cpu 0 iface write at 0x00000008 0x00000000
+gic_cpu_write cpu 0 iface write at 0x00000000 0x00000001
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40202560
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x402025bc
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40202560
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40202ddc
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40202560
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40202ddc
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40202560
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40202ddc
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x402025bc
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40202ddc
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40202ddc
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40202ddc
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40202ddc
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40202ddc
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40202ddc
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40202ddc
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40202ddc
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40202ddc
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40202ddc
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40203198
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40202ddc
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40203198
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40202ddc
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40203198
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40202ddc
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40203198
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40203198
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40203198
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40203198
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40203198
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40203198
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40203198
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40203198
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40203198
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40203198
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x402026a4
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40203198
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40203198
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40203198
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40203198
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x40203198
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x402026a4
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40203198
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40203198
+gic_cpu_write cpu 0 iface write at 0x00000000 0x00000000
+gic_cpu_write cpu 0 iface write at 0x00000000 0x00000000
+gic_cpu_write cpu 0 iface write at 0x00000004 0x000000ff
+gic_cpu_write cpu 0 iface write at 0x00000008 0x00000000
+gic_cpu_write cpu 0 iface write at 0x00000000 0x00000001
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x402018d0
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x402018d0
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x402018d0
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x402018d0
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x402018d0
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x402018d0
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x402018d0
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x402018d0
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x402018d0
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x402018d0
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x402018d0
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x402018d0
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x402018d0
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x402018d0
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x402018d0
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x402018d0
+gic_cpu_write cpu 0 iface write at 0x00000000 0x00000000
+gic_cpu_write cpu 0 iface write at 0x00000000 0x00000000
+gic_cpu_write cpu 0 iface write at 0x00000004 0x000000ff
+gic_cpu_write cpu 0 iface write at 0x00000008 0x00000000
+gic_cpu_write cpu 0 iface write at 0x00000000 0x00000001
+gic_cpu_write cpu 0 iface write at 0x00000000 0x00000000
+gic_cpu_write cpu 0 iface write at 0x00000000 0x00000000
+gic_cpu_write cpu 0 iface write at 0x00000004 0x000000ff
+gic_cpu_write cpu 0 iface write at 0x00000008 0x00000000
+gic_cpu_write cpu 0 iface write at 0x00000000 0x00000001
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x402018d0
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x402018d0
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x402018d0
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x402018d0
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x402018d0
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x402018d0
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x402018d0
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x402018d0
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x402018d0
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x402018d0
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x402018d0
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x402018d0
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x402018d0
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x402018d0
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x0
+...with ELR 0x402018d0
+...to EL1 PC 0x40200a80 PSTATE 0x4003c5
+gic_acknowledge_irq cpu 0 acknowledged irq 30
+gic_cpu_write cpu 0 iface write at 0x00000010 0x0000001e
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x402018d0
+gic_cpu_write cpu 0 iface write at 0x00000000 0x00000000
+gic_cpu_write cpu 0 iface write at 0x00000000 0x00000000
+gic_cpu_write cpu 0 iface write at 0x00000004 0x000000ff
+gic_cpu_write cpu 0 iface write at 0x00000008 0x00000000
+gic_cpu_write cpu 0 iface write at 0x00000000 0x00000001
+gic_cpu_write cpu 0 iface write at 0x00000000 0x00000000
+Taking exception 4 [Data Abort] on CPU 0
+...from EL1 to EL1
+...with ESR 0x25/0x96000006
+...with FAR 0x0
+...with ELR 0x40201138
+...to EL1 PC 0x40200a00 PSTATE 0x4003c5
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40201144
+Taking exception 4 [Data Abort] on CPU 0
+...from EL1 to EL1
+...with ESR 0x25/0x96000007
+...with FAR 0x4025b000
+...with ELR 0x40201150
+...to EL1 PC 0x40200a00 PSTATE 0x4003c5
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x4020115c
+Taking exception 4 [Data Abort] on CPU 0
+...from EL1 to EL1
+...with ESR 0x25/0x96000007
+...with FAR 0x4026c000
+...with ELR 0x40201168
+...to EL1 PC 0x40200a00 PSTATE 0x4003c5
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40201174
+Taking exception 4 [Data Abort] on CPU 0
+...from EL1 to EL1
+...with ESR 0x25/0x9600004f
+...with FAR 0x402460fc
+...with ELR 0x40201184
+...to EL1 PC 0x40200a00 PSTATE 0x4003c5
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40201190
+Taking exception 3 [Prefetch Abort] on CPU 0
+...from EL1 to EL1
+...with ESR 0x21/0x8600000f
+...with FAR 0x40246100
+...with ELR 0x40246100
+...to EL1 PC 0x40200a00 PSTATE 0x4003c5
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x402011b8
+Taking exception 4 [Data Abort] on CPU 0
+...from EL1 to EL1
+...with ESR 0x25/0x96000006
+...with FAR 0x0
+...with ELR 0x4020139c
+...to EL1 PC 0x40200a00 PSTATE 0x4003c5
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x402013a4
+Taking exception 4 [Data Abort] on CPU 0
+...from EL1 to EL1
+...with ESR 0x25/0x96000006
+...with FAR 0x0
+...with ELR 0x40201138
+...to EL1 PC 0x40200a00 PSTATE 0x4003c5
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40201144
+Taking exception 4 [Data Abort] on CPU 0
+...from EL1 to EL1
+...with ESR 0x25/0x96000007
+...with FAR 0x4025b000
+...with ELR 0x40201150
+...to EL1 PC 0x40200a00 PSTATE 0x4003c5
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x4020115c
+Taking exception 4 [Data Abort] on CPU 0
+...from EL1 to EL1
+...with ESR 0x25/0x96000007
+...with FAR 0x4026c000
+...with ELR 0x40201168
+...to EL1 PC 0x40200a00 PSTATE 0x4003c5
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40201174
+Taking exception 4 [Data Abort] on CPU 0
+...from EL1 to EL1
+...with ESR 0x25/0x9600004f
+...with FAR 0x402460fc
+...with ELR 0x40201184
+...to EL1 PC 0x40200a00 PSTATE 0x4003c5
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40201190
+Taking exception 3 [Prefetch Abort] on CPU 0
+...from EL1 to EL1
+...with ESR 0x21/0x8600000f
+...with FAR 0x40246100
+...with ELR 0x40246100
+...to EL1 PC 0x40200a00 PSTATE 0x4003c5
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x402011b8
+Taking exception 4 [Data Abort] on CPU 0
+...from EL1 to EL1
+...with ESR 0x25/0x96000006
+...with FAR 0x0
+...with ELR 0x4020139c
+...to EL1 PC 0x40200a00 PSTATE 0x4003c5
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x402013a4
+Taking exception 4 [Data Abort] on CPU 0
+...from EL1 to EL1
+...with ESR 0x25/0x96000006
+...with FAR 0x0
+...with ELR 0x40201138
+...to EL1 PC 0x40200a00 PSTATE 0x4003c5
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40201144
+Taking exception 4 [Data Abort] on CPU 0
+...from EL1 to EL1
+...with ESR 0x25/0x96000007
+...with FAR 0x4025b000
+...with ELR 0x40201150
+...to EL1 PC 0x40200a00 PSTATE 0x4003c5
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x4020115c
+Taking exception 4 [Data Abort] on CPU 0
+...from EL1 to EL1
+...with ESR 0x25/0x96000007
+...with FAR 0x4026c000
+...with ELR 0x40201168
+...to EL1 PC 0x40200a00 PSTATE 0x4003c5
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40201174
+Taking exception 4 [Data Abort] on CPU 0
+...from EL1 to EL1
+...with ESR 0x25/0x9600004f
+...with FAR 0x402460fc
+...with ELR 0x40201184
+...to EL1 PC 0x40200a00 PSTATE 0x4003c5
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40201190
+Taking exception 3 [Prefetch Abort] on CPU 0
+...from EL1 to EL1
+...with ESR 0x21/0x8600000f
+...with FAR 0x40246100
+...with ELR 0x40246100
+...to EL1 PC 0x40200a00 PSTATE 0x4003c5
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x402011b8
+Taking exception 4 [Data Abort] on CPU 0
+...from EL1 to EL1
+...with ESR 0x25/0x96000006
+...with FAR 0x0
+...with ELR 0x4020139c
+...to EL1 PC 0x40200a00 PSTATE 0x4003c5
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x402013a4
+Taking exception 4 [Data Abort] on CPU 0
+...from EL1 to EL1
+...with ESR 0x25/0x96000006
+...with FAR 0x0
+...with ELR 0x40201138
+...to EL1 PC 0x40200a00 PSTATE 0x4003c5
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40201144
+Taking exception 4 [Data Abort] on CPU 0
+...from EL1 to EL1
+...with ESR 0x25/0x96000007
+...with FAR 0x4025b000
+...with ELR 0x40201150
+...to EL1 PC 0x40200a00 PSTATE 0x4003c5
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x4020115c
+Taking exception 4 [Data Abort] on CPU 0
+...from EL1 to EL1
+...with ESR 0x25/0x96000007
+...with FAR 0x4026c000
+...with ELR 0x40201168
+...to EL1 PC 0x40200a00 PSTATE 0x4003c5
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40201174
+Taking exception 4 [Data Abort] on CPU 0
+...from EL1 to EL1
+...with ESR 0x25/0x9600004f
+...with FAR 0x402460fc
+...with ELR 0x40201184
+...to EL1 PC 0x40200a00 PSTATE 0x4003c5
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x40201190
+Taking exception 3 [Prefetch Abort] on CPU 0
+...from EL1 to EL1
+...with ESR 0x21/0x8600000f
+...with FAR 0x40246100
+...with ELR 0x40246100
+...to EL1 PC 0x40200a00 PSTATE 0x4003c5
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x402011b8
+Taking exception 4 [Data Abort] on CPU 0
+...from EL1 to EL1
+...with ESR 0x25/0x96000006
+...with FAR 0x0
+...with ELR 0x4020139c
+...to EL1 PC 0x40200a00 PSTATE 0x4003c5
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x402013a4
+gic_cpu_write cpu 0 iface write at 0x00000000 0x00000000
+gic_cpu_write cpu 0 iface write at 0x00000004 0x000000ff
+gic_cpu_write cpu 0 iface write at 0x00000008 0x00000000
+gic_cpu_write cpu 0 iface write at 0x00000000 0x00000001
+gic_cpu_write cpu 0 iface write at 0x00000000 0x00000000
+gic_cpu_write cpu 0 iface write at 0x00000000 0x00000000
+gic_cpu_write cpu 0 iface write at 0x00000004 0x000000ff
+gic_cpu_write cpu 0 iface write at 0x00000008 0x00000000
+gic_cpu_write cpu 0 iface write at 0x00000000 0x00000001
+gic_cpu_write cpu 0 iface write at 0x00000000 0x00000000
+Taking exception 16 [Semihosting call] on CPU 0
+...from EL1 to EL1
+...handling as semihosting call 0x20

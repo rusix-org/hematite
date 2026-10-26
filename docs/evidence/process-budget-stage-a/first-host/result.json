@@ -1,0 +1,71 @@
+{
+  "passed": true,
+  "checks": {
+    "exit_success": true,
+    "within_deadline": true,
+    "launched": true,
+    "complete_report": true,
+    "bounded_logs": true
+  },
+  "execution": {
+    "started_utc": "2026-10-26T20:55:23.609685+00:00",
+    "timeout_seconds": 60,
+    "returncode": 0,
+    "timed_out": false,
+    "launch_error": null,
+    "elapsed_seconds": 1.8697330770082772
+  },
+  "artifacts": {
+    "stdout": {
+      "bytes": 580,
+      "within_limit": true,
+      "sha256": "cbba7641918f674336bc6529bfbc040b026309770214ec5b8ee1039bf6bf0dfa"
+    },
+    "stderr": {
+      "bytes": 267,
+      "within_limit": true,
+      "sha256": "69931add2a5537c87ef95eecbf45bab4214f633251f95c31ad4fbb48c27920e3"
+    }
+  },
+  "report": {
+    "passed": true,
+    "errors": [],
+    "expected_cases": [
+      "backward_begin",
+      "backward_finish",
+      "configuration_bounds",
+      "deadline_overflow",
+      "equal_timestamps",
+      "exact_exhaustion",
+      "invalid_transitions",
+      "overrun_saturation",
+      "parked_time_uncharged",
+      "quantum_clamping",
+      "repeated_turns",
+      "stop_ready_and_exhausted",
+      "terminal_no_revival",
+      "turn_counter_overflow",
+      "zero_and_one_elapsed"
+    ],
+    "observed_lines": [
+      "running 15 tests",
+      "test backward_begin ... ok",
+      "test backward_finish ... ok",
+      "test configuration_bounds ... ok",
+      "test deadline_overflow ... ok",
+      "test equal_timestamps ... ok",
+      "test exact_exhaustion ... ok",
+      "test invalid_transitions ... ok",
+      "test overrun_saturation ... ok",
+      "test parked_time_uncharged ... ok",
+      "test quantum_clamping ... ok",
+      "test repeated_turns ... ok",
+      "test stop_ready_and_exhausted ... ok",
+      "test terminal_no_revival ... ok",
+      "test turn_counter_overflow ... ok",
+      "test zero_and_one_elapsed ... ok",
+      "test result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s"
+    ]
+  },
+  "scope": "actual safe persistent turn accounting and ownership; no resumable execution"
+}

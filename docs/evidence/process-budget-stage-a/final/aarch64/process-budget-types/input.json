@@ -1,0 +1,21 @@
+{
+  "library": "/workspace/target/aarch64/boot-test/aarch64-unknown-none/release/libhm_kernel.rlib",
+  "library_sha256": "77a137a99db9824743e5150b9dea133527df9e74556107ca92f293010bd69bd5",
+  "target": "aarch64-unknown-none",
+  "sources": {
+    "crates/hm-kernel/src/process_budget.rs": "65924ff72c47255db0906b670e938e94dc031fd19bba2c827eb78c0d42a8737b",
+    "tools/check_process_budget_types.py": "8e038da89816109dadc36da6253c9d2627a11ab72a3b2c91c3dd7a01bd374c08"
+  },
+  "expected_probes": [
+    "move_begin_finish_stop",
+    "snapshot_mutation_is_detached",
+    "copied_errors_and_snapshots",
+    "forge_budget",
+    "clone_budget",
+    "copy_budget",
+    "no_reset_method",
+    "no_production_test_seam",
+    "snapshot_cannot_restore_owner",
+    "shared_budget_cannot_begin"
+  ]
+}

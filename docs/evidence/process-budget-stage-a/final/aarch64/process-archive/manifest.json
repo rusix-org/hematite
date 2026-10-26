@@ -1,0 +1,261 @@
+{
+  "version": 1,
+  "archive": "process-initramfs.cpio",
+  "sha256": "f02b5d17cadcc700adcdddd879ce51c4aba68121e198a484018c932f5524c75f",
+  "bytes": 1326592,
+  "entries": [
+    {
+      "path": "bin",
+      "kind": "directory",
+      "mode": 16877,
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "bin/hello",
+      "kind": "file",
+      "mode": 33261,
+      "size": 19816,
+      "sha256": "ff2e501c58a3aacf376045d496d3313d6f8872e763e27e8bb04451e33b2b4e52"
+    },
+    {
+      "path": "bin/badptr_null",
+      "kind": "file",
+      "mode": 33261,
+      "size": 19816,
+      "sha256": "7d84cb530393098b9e9e9cd33da71d0a47d5328ef1e7c43ef5ba7ac3334d615e"
+    },
+    {
+      "path": "bin/badptr_overflow",
+      "kind": "file",
+      "mode": 33261,
+      "size": 19816,
+      "sha256": "4cb1e531647b2032e48f6c92571954aa2506007f261e28cb857c04a86a1cf6fc"
+    },
+    {
+      "path": "bin/badptr_crossing",
+      "kind": "file",
+      "mode": 33261,
+      "size": 19816,
+      "sha256": "0c7a33ba3e4fffab87fe79e2ca533bfe73febcda3fc2ff6c02cfc63d17eebfef"
+    },
+    {
+      "path": "bin/oversize",
+      "kind": "file",
+      "mode": 33261,
+      "size": 19816,
+      "sha256": "2d967785b9293305004f84b5cc2364e0ad21d6d369c9f59bb2fe11ab7451682c"
+    },
+    {
+      "path": "bin/badhandle",
+      "kind": "file",
+      "mode": 33261,
+      "size": 19816,
+      "sha256": "5cfa2998a5e3df67d4df73574c6eebd605e9c2c2c71d80647eaffa5bc5116811"
+    },
+    {
+      "path": "bin/badversion",
+      "kind": "file",
+      "mode": 33261,
+      "size": 19816,
+      "sha256": "09f4efc6fa592c7e4f67fd06361917a2a642b5a899b9b4cf84df324edb9bf4d7"
+    },
+    {
+      "path": "bin/badopcode",
+      "kind": "file",
+      "mode": 33261,
+      "size": 19816,
+      "sha256": "5bf0ab1db58c3d46804c160a26005aa56fddc41cc9614a01693942fa3caf9b03"
+    },
+    {
+      "path": "bin/rxwrite",
+      "kind": "file",
+      "mode": 33261,
+      "size": 19848,
+      "sha256": "8a2df0565ee02731388043c783573ee72ec39620d9683440d64693afc2dd1f95"
+    },
+    {
+      "path": "bin/rwexecute",
+      "kind": "file",
+      "mode": 33261,
+      "size": 19848,
+      "sha256": "a362a32e779297aae4ac6c580c1db72009c35ce4d499177e00522c3223e8b2d9"
+    },
+    {
+      "path": "bin/stackexecute",
+      "kind": "file",
+      "mode": 33261,
+      "size": 19848,
+      "sha256": "8e578203122988ce341b6cf6a4370009e8a648b3870982ec96be9ce0037946bf"
+    },
+    {
+      "path": "bin/kernelread",
+      "kind": "file",
+      "mode": 33261,
+      "size": 19848,
+      "sha256": "f36490c661fb8e74b74e21dcc55610691627a4f0607fcb4f9a493fdbab17c12a"
+    },
+    {
+      "path": "bin/kernelwrite",
+      "kind": "file",
+      "mode": 33261,
+      "size": 19848,
+      "sha256": "6d23f9ae64a6a21865768baae14c352fd00b82c603dc5ce9dcaee3e591bf93a7"
+    },
+    {
+      "path": "bin/uartread",
+      "kind": "file",
+      "mode": 33261,
+      "size": 19848,
+      "sha256": "0292305849e7d599ff68a26e5c32752a97a6befac642753dbd46e6888c099100"
+    },
+    {
+      "path": "bin/gicread",
+      "kind": "file",
+      "mode": 33261,
+      "size": 19848,
+      "sha256": "ddb9bdaebdc2ea8d9591541390fe1f9ac84baaa587f0c3ecfdfd11feb8ed86a6"
+    },
+    {
+      "path": "bin/cntpdisable",
+      "kind": "file",
+      "mode": 33261,
+      "size": 19848,
+      "sha256": "3e5fd0f16860166a20bcb22d2dae3545cfe96a43bdcae4c97635bee857e4ba12"
+    },
+    {
+      "path": "bin/daifmask",
+      "kind": "file",
+      "mode": 33261,
+      "size": 19848,
+      "sha256": "62e1e04ebfad8f35e28438f2f924bffd923681de90a9fe922236dcb1723c7809"
+    },
+    {
+      "path": "bin/stackguard",
+      "kind": "file",
+      "mode": 33261,
+      "size": 19848,
+      "sha256": "216a8c750c958c6e839799647ad0e2c9412ef4db302c16f5fe87e13772597789"
+    },
+    {
+      "path": "bin/loop",
+      "kind": "file",
+      "mode": 33261,
+      "size": 19816,
+      "sha256": "55abab64f2906088586137d6c27ef2bbb9925f019cedbe8c6f640f306aec84d8"
+    },
+    {
+      "path": "bin/zerowrite",
+      "kind": "file",
+      "mode": 33261,
+      "size": 19816,
+      "sha256": "cea39c2645b1a501a31bb5b092b55d8708ea60259f254529fb2836146eea8ce8"
+    },
+    {
+      "path": "bin/maxwrite",
+      "kind": "file",
+      "mode": 33261,
+      "size": 19816,
+      "sha256": "cec4f2d515f313e37b26133369469ad1f2b68d2b0fb2efaa49c5da6f685f4090"
+    },
+    {
+      "path": "bin/bytebudget",
+      "kind": "file",
+      "mode": 33261,
+      "size": 19816,
+      "sha256": "9009135235b36e114786c6b387f66d3536f0765aeacb8f66b8e793c0d433bebe"
+    },
+    {
+      "path": "bin/calllimit",
+      "kind": "file",
+      "mode": 33261,
+      "size": 19816,
+      "sha256": "a3b74074672e90de8d2e6d46fbb35b98025c2c8fcf5e1519c799850586315c88"
+    },
+    {
+      "path": "bin/invalidstorm",
+      "kind": "file",
+      "mode": 33261,
+      "size": 19816,
+      "sha256": "1971c0cfc5f3026c5d6d3c80706d11a6c9cc92b015ac172ae07e20c26f8ce105"
+    },
+    {
+      "path": "bin/exit64",
+      "kind": "file",
+      "mode": 33261,
+      "size": 19816,
+      "sha256": "8a1d9e47f2838a934c0e5d57390faacf98372c595f8bbd3549d1d4690f48fd27"
+    },
+    {
+      "path": "bin/invalidexit",
+      "kind": "file",
+      "mode": 33261,
+      "size": 19816,
+      "sha256": "2089f9bf414f07269a533bf9c63bc72f33446d226b3843c1a5852b693c26d61c"
+    },
+    {
+      "path": "bin/stalehandle",
+      "kind": "file",
+      "mode": 33261,
+      "size": 687288,
+      "sha256": "fde2fe438403838aac5386cb725e714a9714ef2bfa21633c2fefba4c4f5e581b"
+    },
+    {
+      "path": "bin/nogrant",
+      "kind": "file",
+      "mode": 33261,
+      "size": 19816,
+      "sha256": "83aa54ee86ea0536aca78b5acbbd02f330f2f0f5df9c66d955bce88cbdc7573a"
+    },
+    {
+      "path": "bin/svcimm",
+      "kind": "file",
+      "mode": 33261,
+      "size": 19848,
+      "sha256": "4218481aecdd1ea372cc8e244873a9abffd86a768bbffcb1787cc779e3a1afe4"
+    },
+    {
+      "path": "bin/registers",
+      "kind": "file",
+      "mode": 33261,
+      "size": 19664,
+      "sha256": "957f20482db1155b5cbcbb789404a32adf42242ad6f9bc17cb545981e7ef64c8"
+    },
+    {
+      "path": "bin/badsp",
+      "kind": "file",
+      "mode": 33261,
+      "size": 19816,
+      "sha256": "4013371d7109f0fbba61bc64bffc340b931543031a094f1aec44043095a2dcfd"
+    },
+    {
+      "path": "bin/startupwrite",
+      "kind": "file",
+      "mode": 33261,
+      "size": 19848,
+      "sha256": "b573a3e8c7f81d4e800582231fff7a512744b3eb48189805381711c1da652d8e"
+    },
+    {
+      "path": "bin/semihost",
+      "kind": "file",
+      "mode": 33261,
+      "size": 19848,
+      "sha256": "f94da571416806886dded6600d13ddaf372232a3c9e02c2d3352f802546ad1ae"
+    },
+    {
+      "path": "etc",
+      "kind": "directory",
+      "mode": 16877,
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "etc/banner",
+      "kind": "file",
+      "mode": 33188,
+      "size": 26,
+      "sha256": "338219821d8e952247b53446c5ccb09e7b55164984d63126a875b1a77077e11b"
+    }
+  ],
+  "process_manifest_sha256": "0025011e20e42c5c9f6e2cbf1f903ad97222f934f0ddcc82e36f5dde34e45ea6"
+}

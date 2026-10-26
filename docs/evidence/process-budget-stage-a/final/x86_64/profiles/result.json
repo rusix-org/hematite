@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "scope": "bootstrap CPU rejection and serial monitor; no Linux ABI claims",
+  "profiles": {
+    "missing-nx": true,
+    "missing-smep": true,
+    "missing-smap": true,
+    "monitor": true
+  },
+  "arch": "x86_64"
+}

@@ -1,0 +1,5 @@
+[
+  "aarch64-linux-gnu-objdump",
+  "-d",
+  "/workspace/target/evidence/20261026T205938-739216496-aarch64/process-fixtures/calllimit.elf"
+]

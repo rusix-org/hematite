@@ -1,0 +1,31 @@
+warning: methods `excludes_region` and `exclusion_checks` are never used
+   --> /workspace/crates/hm-core/src/frames.rs:254:19
+    |
+125 | impl Pool {
+    | --------- methods in this implementation
+...
+254 |     pub(super) fn excludes_region(&self, start: u64, end: u64) -> bool {
+    |                   ^^^^^^^^^^^^^^^
+...
+276 |     pub(super) fn exclusion_checks(&self) -> bool {
+    |                   ^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: static `CLAIMED` is never used
+  --> /workspace/crates/hm-core/src/mappings.rs:15:8
+   |
+15 | static CLAIMED: AtomicBool = AtomicBool::new(false);
+   |        ^^^^^^^
+
+warning: associated function `from_boot` is never used
+  --> /workspace/crates/hm-core/src/mappings.rs:49:26
+   |
+36 | impl Mapper {
+   | ----------- associated function in this implementation
+...
+49 |     pub(crate) unsafe fn from_boot() -> Result<Self, ()> {
+   |                          ^^^^^^^^^
+
+warning: 3 warnings emitted
+

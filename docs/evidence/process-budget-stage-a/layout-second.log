@@ -1,0 +1,16 @@
+Traceback (most recent call last):
+  File "/workspace/docs/evidence/process-budget-stage-a/measure-layout-second.py", line 47, in <module>
+    assert len(values)==5,assembly
+           ^^^^^^^^^^^^^^
+AssertionError: 	.file	"sizes.964e42e0c56ab884-cgu.0"
+	.type	_RNvCscU4zwgT8Htw_5sizes6LAYOUT,@object
+	.section	.rodata._RNvCscU4zwgT8Htw_5sizes6LAYOUT,"aR",@progbits
+	.globl	_RNvCscU4zwgT8Htw_5sizes6LAYOUT
+	.p2align	3, 0x0
+_RNvCscU4zwgT8Htw_5sizes6LAYOUT:
+	.asciz	"h&\000\000\000\000\000\000\350\"\000\000\000\000\000\000(\000\000\000\000\000\000\000(\000\000\000\000\000\000\000\003\000\000\000\000\000\000"
+	.size	_RNvCscU4zwgT8Htw_5sizes6LAYOUT, 40
+
+	.ident	"rustc version 1.99.0 (b940084d7 2026-09-28)"
+	.section	".note.GNU-stack","",@progbits
+

@@ -1,0 +1,2 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.07s
+     Running tests/process_budget.rs (target/host-process-budget/x86_64-unknown-linux-gnu/debug/deps/process_budget-effe8dbc535dd311)

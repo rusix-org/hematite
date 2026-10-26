@@ -1,0 +1,28 @@
+{
+  "passed": true,
+  "baseline": "docs/evidence/startup-input-stage-b/third-candidates/inputs.json",
+  "identical_profiles": [
+    "aarch64-boot-test",
+    "aarch64-fault-test",
+    "aarch64-monitor",
+    "aarch64-nested-test",
+    "aarch64-preemption-boundary-test",
+    "aarch64-preemption-no-timer-test",
+    "aarch64-preemption-overflow-test",
+    "aarch64-preemption-test",
+    "aarch64-process-test",
+    "aarch64-secondary-off-return-test",
+    "aarch64-secondary-stale-test",
+    "aarch64-secondary-test",
+    "aarch64-smp-all-blocked-test",
+    "aarch64-smp-no-peer-timer-test",
+    "aarch64-smp-peer-overflow-test",
+    "aarch64-smp-test",
+    "aarch64-space-test",
+    "aarch64-startup-input-test",
+    "aarch64-thread-overflow-test",
+    "aarch64-wait-all-blocked-test",
+    "x86_64-boot-test",
+    "x86_64-monitor"
+  ]
+}

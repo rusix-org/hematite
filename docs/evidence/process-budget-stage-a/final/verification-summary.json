@@ -1,0 +1,20 @@
+{
+  "passed": true,
+  "command": "make test-all",
+  "exit_code": 0,
+  "parent_commit": "06afd3d",
+  "result_counts": {
+    "aarch64": 69,
+    "x86_64": 15
+  },
+  "python_harness_cases_per_target": 169,
+  "process_budget_host_cases": 15,
+  "process_budget_compiler_clients_per_target": 10,
+  "all_22_runtime_elfs_identical_to_verified_startup_delivery": true,
+  "evidence_source_directories": [
+    "target/evidence/20261026T205938-739216496-aarch64",
+    "target/evidence/20261026T210205-802680084-x86_64"
+  ],
+  "scope": "safe persistent turn accounting; resumable/group runtime remains unimplemented",
+  "implementation_commit": "313ba353"
+}

@@ -1,0 +1,17 @@
+[
+  "cargo",
+  "rustc",
+  "--locked",
+  "--offline",
+  "-p",
+  "hm-core",
+  "--release",
+  "--target",
+  "aarch64-unknown-none",
+  "--target-dir",
+  "target/aarch64/secondary-stale-test",
+  "--features",
+  "secondary-stale-generation-test",
+  "--",
+  "--emit=link,asm"
+]

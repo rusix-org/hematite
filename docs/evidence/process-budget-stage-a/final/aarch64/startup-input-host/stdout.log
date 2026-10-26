@@ -1,0 +1,19 @@
+
+running 14 tests
+test absent_canonical ... ok
+test all_input_lengths ... ok
+test deterministic_mutations ... ok
+test exact_decode_extent ... ok
+test legacy_prefix_unchanged ... ok
+test malformed_header ... ok
+test malformed_lengths ... ok
+test malformed_tail ... ok
+test maximum_and_over_limit ... ok
+test opaque_round_trip ... ok
+test owns_input_copy ... ok
+test present_empty_distinct ... ok
+test reencoding_clears_stale_bytes ... ok
+test wrong_destination_size_unchanged ... ok
+
+test result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.27s
+

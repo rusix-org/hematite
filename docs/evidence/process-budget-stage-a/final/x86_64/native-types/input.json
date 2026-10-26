@@ -1,0 +1,20 @@
+{
+  "library": "/workspace/target/x86_64/boot-test/x86_64-unknown-none/release/libhm_kernel.rlib",
+  "library_sha256": "ee9f88152140cb6737b5f3e8b795cd4322f7c70d331e58058f9ff6ceb3143c5b",
+  "target": "x86_64-unknown-none",
+  "source_sha256": "3643ebc632409b0d25d4ddba82b1afe30b08ab2aab04c40f34a11a05a0631e48",
+  "expected_probes": [
+    "valid_issue_startup",
+    "valid_dispatch_host",
+    "valid_move_session",
+    "forge_issuer",
+    "forge_session",
+    "issuer_clone",
+    "session_clone",
+    "change_generation",
+    "change_grant",
+    "change_calls",
+    "change_budget",
+    "revive_session"
+  ]
+}
