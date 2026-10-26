@@ -1,0 +1,8 @@
+{
+  "passed": true,
+  "canonical_sha256": "ffa390d9b71ba1e9d049d84146133ea80663af1bb6603a06f3929f4d62f846c5",
+  "reference_sha256": "a858a5e3f668c2947300362ec74a2a84de3d92e45173e93e063937a0603b6dd7",
+  "reference": "/workspace/docs/evidence/archive-process-seed/gnu-reference.cpio",
+  "entries": 36,
+  "scope": "deterministic fixture, GNU listing and byte-exact stdout extraction; Rust admission tested separately"
+}

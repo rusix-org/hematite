@@ -1,0 +1,8 @@
+{
+  "passed": true,
+  "canonical_sha256": "b912d0090fc5d4315cc721271fb054f1fccd60867fed0b93b94ba8890d898797",
+  "reference_sha256": "dff9f9e015c94a0623a51070cc4609100b6c5f7fcea3271d4d757e04ee875331",
+  "reference": "/workspace/target/evidence/20261026T191736-058497712-aarch64/initramfs-fixture/gnu-reference.cpio",
+  "entries": 4,
+  "scope": "deterministic fixture, GNU listing and byte-exact stdout extraction; Rust admission tested separately"
+}

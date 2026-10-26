@@ -1,0 +1,462 @@
+warning: function `irq_state` is never used
+  --> /workspace/crates/hm-core/src/frames.rs:75:15
+   |
+75 | pub(super) fn irq_state() -> u64 {
+   |               ^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: methods `critical_section_check`, `excludes_region`, and `exclusion_checks` are never used
+   --> /workspace/crates/hm-core/src/frames.rs:240:19
+    |
+125 | impl Pool {
+    | --------- methods in this implementation
+...
+240 |     pub(super) fn critical_section_check(&self) -> bool {
+    |                   ^^^^^^^^^^^^^^^^^^^^^^
+...
+254 |     pub(super) fn excludes_region(&self, start: u64, end: u64) -> bool {
+    |                   ^^^^^^^^^^^^^^^
+...
+276 |     pub(super) fn exclusion_checks(&self) -> bool {
+    |                   ^^^^^^^^^^^^^^^^
+
+warning: constant `CANARY` is never used
+  --> /workspace/crates/hm-core/src/cpu_local.rs:21:18
+   |
+21 | pub(super) const CANARY: u64 = 0xa55a_c33c_9669_f00f;
+   |                  ^^^^^^
+
+warning: function `valid` is never used
+  --> /workspace/crates/hm-core/src/cpu_local.rs:83:4
+   |
+83 | fn valid(pointer: usize, mpidr: u64) -> bool {
+   |    ^^^^^
+
+warning: function `checks` is never used
+   --> /workspace/crates/hm-core/src/cpu_local.rs:110:15
+    |
+110 | pub(super) fn checks() -> bool {
+    |               ^^^^^^
+
+warning: function `prepare_secondary` is never used
+   --> /workspace/crates/hm-core/src/cpu_local.rs:139:22
+    |
+139 | pub(super) unsafe fn prepare_secondary() {
+    |                      ^^^^^^^^^^^^^^^^^
+
+warning: function `restore_secondary` is never used
+   --> /workspace/crates/hm-core/src/cpu_local.rs:156:22
+    |
+156 | pub(super) unsafe fn restore_secondary() {
+    |                      ^^^^^^^^^^^^^^^^^
+
+warning: function `worker_active` is never used
+   --> /workspace/crates/hm-core/src/cpu_local.rs:178:15
+    |
+178 | pub(super) fn worker_active() -> bool {
+    |               ^^^^^^^^^^^^^
+
+warning: constant `RUNNING` is never used
+  --> /workspace/crates/hm-core/src/threads.rs:34:7
+   |
+34 | const RUNNING: u64 = 1;
+   |       ^^^^^^^
+
+warning: constant `DONE` is never used
+  --> /workspace/crates/hm-core/src/threads.rs:35:7
+   |
+35 | const DONE: u64 = 2;
+   |       ^^^^
+
+warning: associated function `zero` is never used
+  --> /workspace/crates/hm-core/src/threads.rs:47:14
+   |
+46 | impl Context {
+   | ------------ associated function in this implementation
+47 |     const fn zero() -> Self {
+   |              ^^^^
+
+warning: struct `Runner` is never constructed
+  --> /workspace/crates/hm-core/src/threads.rs:83:12
+   |
+83 | pub struct Runner {
+   |            ^^^^^^
+
+warning: associated items `from_boot`, `run_preemptive`, `run`, and `checks` are never used
+   --> /workspace/crates/hm-core/src/threads.rs:94:26
+    |
+ 88 | impl Runner {
+    | ----------- associated items in this implementation
+...
+ 94 |     pub(crate) unsafe fn from_boot() -> Self {
+    |                          ^^^^^^^^^
+...
+101 |     pub fn run_preemptive(
+    |            ^^^^^^^^^^^^^^
+...
+111 |     pub fn run(&self, jobs: &[ThreadJob]) -> Result<RunReport, ThreadError> {
+    |            ^^^
+...
+188 |     pub(super) fn checks(&self) -> hm_kernel::ThreadChecks {
+    |                   ^^^^^^
+
+warning: function `empty_job` is never used
+   --> /workspace/crates/hm-core/src/threads.rs:234:4
+    |
+234 | fn empty_job(_: &mut dyn ThreadContext, _: u64) -> u64 {
+    |    ^^^^^^^^^
+
+warning: function `control_state` is never used
+   --> /workspace/crates/hm-core/src/threads.rs:238:4
+    |
+238 | fn control_state() -> (u64, u64) {
+    |    ^^^^^^^^^^^^^
+
+warning: function `clear_stack` is never used
+   --> /workspace/crates/hm-core/src/threads.rs:305:22
+    |
+305 | pub(super) unsafe fn clear_stack(id: usize) {
+    |                      ^^^^^^^^^^^
+
+warning: function `guards_valid` is never used
+   --> /workspace/crates/hm-core/src/threads.rs:376:4
+    |
+376 | fn guards_valid() -> bool {
+    |    ^^^^^^^^^^^^
+
+warning: function `context_job` is never used
+   --> /workspace/crates/hm-core/src/threads.rs:400:4
+    |
+400 | fn context_job(context: &mut dyn ThreadContext, seed: u64) -> u64 {
+    |    ^^^^^^^^^^^
+
+warning: function `stack_pointer` is never used
+   --> /workspace/crates/hm-core/src/threads.rs:417:4
+    |
+417 | fn stack_pointer() -> usize {
+    |    ^^^^^^^^^^^^^
+
+warning: function `nested_job` is never used
+   --> /workspace/crates/hm-core/src/threads.rs:426:4
+    |
+426 | fn nested_job(_: &mut dyn ThreadContext, _: u64) -> u64 {
+    |    ^^^^^^^^^^
+
+warning: function `arm_thread_start` is never used
+  --> /workspace/crates/hm-core/src/threads.rs:24:8
+   |
+24 |     fn arm_thread_start();
+   |        ^^^^^^^^^^^^^^^^
+
+warning: function `arm_thread_context_probe` is never used
+  --> /workspace/crates/hm-core/src/threads.rs:25:8
+   |
+25 |     fn arm_thread_context_probe(bridge: *mut core::ffi::c_void, seed: u64) -> u64;
+   |        ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `run` is never used
+   --> /workspace/crates/hm-core/src/preempt.rs:110:15
+    |
+110 | pub(super) fn run(jobs: &[ThreadJob]) -> Result<PreemptReport, ThreadError> {
+    |               ^^^
+
+warning: function `shared_start` is never used
+   --> /workspace/crates/hm-core/src/preempt.rs:139:22
+    |
+139 | pub(super) unsafe fn shared_start() -> bool {
+    |                      ^^^^^^^^^^^^
+
+warning: function `shared_stop` is never used
+   --> /workspace/crates/hm-core/src/preempt.rs:145:22
+    |
+145 | pub(super) unsafe fn shared_stop() {
+    |                      ^^^^^^^^^^^
+
+warning: function `irq_count` is never used
+   --> /workspace/crates/hm-core/src/preempt.rs:456:15
+    |
+456 | pub(super) fn irq_count() -> u64 {
+    |               ^^^^^^^^^
+
+warning: function `wait_boundary_check` is never used
+   --> /workspace/crates/hm-core/src/preempt.rs:462:15
+    |
+462 | pub(super) fn wait_boundary_check() -> bool {
+    |               ^^^^^^^^^^^^^^^^^^^
+
+warning: function `context_checks` is never used
+   --> /workspace/crates/hm-core/src/preempt.rs:530:15
+    |
+530 | pub(super) fn context_checks(runner: &super::threads::Runner) -> bool {
+    |               ^^^^^^^^^^^^^^
+
+warning: function `control_checks` is never used
+   --> /workspace/crates/hm-core/src/preempt.rs:549:15
+    |
+549 | pub(super) fn control_checks() -> bool {
+    |               ^^^^^^^^^^^^^^
+
+warning: function `gic_checks` is never used
+   --> /workspace/crates/hm-core/src/preempt.rs:588:15
+    |
+588 | pub(super) fn gic_checks() -> bool {
+    |               ^^^^^^^^^^
+
+warning: function `reset_smp_observations` is never used
+   --> /workspace/crates/hm-core/src/preempt.rs:653:22
+    |
+653 | pub(super) unsafe fn reset_smp_observations() {
+    |                      ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `blocked_masks` is never used
+   --> /workspace/crates/hm-core/src/preempt.rs:662:15
+    |
+662 | pub(super) fn blocked_masks() -> [u64; 2] {
+    |               ^^^^^^^^^^^^^
+
+warning: function `arm_wait_race` is never used
+   --> /workspace/crates/hm-core/src/preempt.rs:689:15
+    |
+689 | pub(super) fn arm_wait_race() -> bool {
+    |               ^^^^^^^^^^^^^
+
+warning: function `wait_race_ready` is never used
+   --> /workspace/crates/hm-core/src/preempt.rs:708:15
+    |
+708 | pub(super) fn wait_race_ready() -> bool {
+    |               ^^^^^^^^^^^^^^^
+
+warning: function `finish_wait_race` is never used
+   --> /workspace/crates/hm-core/src/preempt.rs:712:15
+    |
+712 | pub(super) fn finish_wait_race() -> bool {
+    |               ^^^^^^^^^^^^^^^^
+
+warning: function `worker_observation` is never used
+   --> /workspace/crates/hm-core/src/preempt.rs:732:15
+    |
+732 | pub(super) fn worker_observation() -> Option<(u64, u64)> {
+    |               ^^^^^^^^^^^^^^^^^^
+
+warning: function `worker_register_probe` is never used
+   --> /workspace/crates/hm-core/src/preempt.rs:759:15
+    |
+759 | pub(super) fn worker_register_probe(seed: u64) -> u64 {
+    |               ^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `arm_preempt_context_probe` is never used
+  --> /workspace/crates/hm-core/src/preempt.rs:92:8
+   |
+92 |     fn arm_preempt_context_probe(seed: u64) -> u64;
+   |        ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `arm_gic_session_start` is never used
+  --> /workspace/crates/hm-core/src/preempt.rs:93:8
+   |
+93 |     fn arm_gic_session_start() -> u64;
+   |        ^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `arm_gic_session_stop` is never used
+  --> /workspace/crates/hm-core/src/preempt.rs:94:8
+   |
+94 |     fn arm_gic_session_stop() -> u64;
+   |        ^^^^^^^^^^^^^^^^^^^^
+
+warning: function `arm_gic_probe_target` is never used
+  --> /workspace/crates/hm-core/src/preempt.rs:95:8
+   |
+95 |     fn arm_gic_probe_target() -> u64;
+   |        ^^^^^^^^^^^^^^^^^^^^
+
+warning: function `arm_gic_probe_restore_target` is never used
+  --> /workspace/crates/hm-core/src/preempt.rs:96:8
+   |
+96 |     fn arm_gic_probe_restore_target(target: u64) -> u64;
+   |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `arm_gic_probe_seed` is never used
+  --> /workspace/crates/hm-core/src/preempt.rs:97:8
+   |
+97 |     fn arm_gic_probe_seed() -> u64;
+   |        ^^^^^^^^^^^^^^^^^^
+
+warning: function `arm_gic_probe_preserved` is never used
+  --> /workspace/crates/hm-core/src/preempt.rs:98:8
+   |
+98 |     fn arm_gic_probe_preserved() -> u64;
+   |        ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: constant `RETURNED` is never used
+  --> /workspace/crates/hm-core/src/secondary.rs:14:7
+   |
+14 | const RETURNED: u64 = 4;
+   |       ^^^^^^^^
+
+warning: constant `VERSION` is never used
+  --> /workspace/crates/hm-core/src/secondary.rs:15:7
+   |
+15 | const VERSION: u64 = 0x8400_0000;
+   |       ^^^^^^^
+
+warning: constant `FEATURES` is never used
+  --> /workspace/crates/hm-core/src/secondary.rs:16:7
+   |
+16 | const FEATURES: u64 = 0x8400_000a;
+   |       ^^^^^^^^
+
+warning: constant `CPU_ON` is never used
+  --> /workspace/crates/hm-core/src/secondary.rs:17:7
+   |
+17 | const CPU_ON: u64 = 0xc400_0003;
+   |       ^^^^^^
+
+warning: constant `CPU_OFF` is never used
+  --> /workspace/crates/hm-core/src/secondary.rs:18:7
+   |
+18 | const CPU_OFF: u64 = 0x8400_0002;
+   |       ^^^^^^^
+
+warning: constant `AFFINITY_INFO` is never used
+  --> /workspace/crates/hm-core/src/secondary.rs:19:7
+   |
+19 | const AFFINITY_INFO: u64 = 0xc400_0004;
+   |       ^^^^^^^^^^^^^
+
+warning: static `NEXT_GENERATION` is never used
+  --> /workspace/crates/hm-core/src/secondary.rs:78:8
+   |
+78 | static NEXT_GENERATION: AtomicU64 = AtomicU64::new(1);
+   |        ^^^^^^^^^^^^^^^
+
+warning: static `ACTIVE_POOL` is never used
+  --> /workspace/crates/hm-core/src/secondary.rs:81:8
+   |
+81 | static ACTIVE_POOL: AtomicPtr<Pool> = AtomicPtr::new(core::ptr::null_mut());
+   |        ^^^^^^^^^^^
+
+warning: struct `Info` is never constructed
+   --> /workspace/crates/hm-core/src/secondary.rs:114:19
+    |
+114 | pub(super) struct Info {
+    |                   ^^^^
+
+warning: struct `Session` is never constructed
+   --> /workspace/crates/hm-core/src/secondary.rs:121:19
+    |
+121 | pub(super) struct Session {
+    |                   ^^^^^^^
+
+warning: enum `Error` is never used
+   --> /workspace/crates/hm-core/src/secondary.rs:130:17
+    |
+130 | pub(super) enum Error {
+    |                 ^^^^^
+
+warning: struct `SmpReport` is never constructed
+   --> /workspace/crates/hm-core/src/secondary.rs:141:19
+    |
+141 | pub(super) struct SmpReport {
+    |                   ^^^^^^^^^
+
+warning: struct `Runner` is never constructed
+   --> /workspace/crates/hm-core/src/secondary.rs:153:12
+    |
+153 | pub struct Runner {
+    |            ^^^^^^
+
+warning: multiple associated items are never used
+   --> /workspace/crates/hm-core/src/secondary.rs:162:26
+    |
+157 | impl Runner {
+    | ----------- associated items in this implementation
+...
+162 |     pub(crate) unsafe fn from_boot(topology: &Topology) -> Option<Self> {
+    |                          ^^^^^^^^^
+...
+184 |     pub(super) fn info(&self) -> Info {
+    |                   ^^^^
+...
+188 |     pub(super) fn run(&mut self) -> Result<Session, Error> {
+    |                   ^^^
+...
+193 |     pub(super) fn run_smp(
+    |                   ^^^^^^^
+...
+203 |     pub(super) fn run_smp_with_pool(
+    |                   ^^^^^^^^^^^^^^^^^
+...
+212 |     fn run_smp_inner(
+    |        ^^^^^^^^^^^^^
+...
+242 |     fn execute(
+    |        ^^^^^^^
+
+warning: function `with_pool` is never used
+   --> /workspace/crates/hm-core/src/secondary.rs:361:8
+    |
+361 | pub fn with_pool<R>(f: impl for<'a> FnOnce(&'a Pool) -> R) -> Option<R> {
+    |        ^^^^^^^^^
+
+warning: function `admitted` is never used
+   --> /workspace/crates/hm-core/src/secondary.rs:375:15
+    |
+375 | pub(super) fn admitted(topology: &Topology) -> bool {
+    |               ^^^^^^^^
+
+warning: function `authority` is never used
+   --> /workspace/crates/hm-core/src/secondary.rs:378:4
+    |
+378 | fn authority() -> bool {
+    |    ^^^^^^^^^
+
+warning: function `hvc` is never used
+   --> /workspace/crates/hm-core/src/secondary.rs:386:4
+    |
+386 | fn hvc(function: u64, a: u64, b: u64, c: u64) -> u64 {
+    |    ^^^
+
+warning: function `clear_stacks` is never used
+   --> /workspace/crates/hm-core/src/secondary.rs:417:11
+    |
+417 | unsafe fn clear_stacks() {
+    |           ^^^^^^^^^^^^
+
+warning: function `arm_secondary_start` is never used
+   --> /workspace/crates/hm-core/src/secondary.rs:102:8
+    |
+102 |     fn arm_secondary_start();
+    |        ^^^^^^^^^^^^^^^^^^^
+
+warning: associated function `from_boot` is never used
+   --> /workspace/crates/hm-core/src/user_space.rs:103:26
+    |
+ 98 | impl<'pool> Factory<'pool> {
+    | -------------------------- associated function in this implementation
+...
+103 |     pub(crate) unsafe fn from_boot(pool: &'pool Pool, topology: &Topology) -> Result<Self, Error> {
+    |                          ^^^^^^^^^
+
+warning: static `CLAIMED` is never used
+  --> /workspace/crates/hm-core/src/process.rs:15:8
+   |
+15 | static CLAIMED: AtomicBool = AtomicBool::new(false);
+   |        ^^^^^^^
+
+warning: associated function `from_boot` is never used
+   --> /workspace/crates/hm-core/src/process.rs:137:26
+    |
+133 | impl Executor {
+    | ------------- associated function in this implementation
+...
+137 |     pub(crate) unsafe fn from_boot(topology: &Topology) -> Result<Self, Error> {
+    |                          ^^^^^^^^^
+
+warning: function `frequency` is never used
+   --> /workspace/crates/hm-core/src/process.rs:452:4
+    |
+452 | fn frequency() -> u64 {
+    |    ^^^^^^^^^
+
+warning: 68 warnings emitted
+

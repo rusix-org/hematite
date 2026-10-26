@@ -1,0 +1,1 @@
+["readelf", "-sW", "/workspace/target/aarch64/preemption-boundary-test/aarch64-unknown-none/release/hematite"]

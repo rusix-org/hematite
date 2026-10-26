@@ -1,0 +1,3 @@
+   Compiling hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.38s
+     Running tests/boot_image.rs (target/host-boot-image/x86_64-unknown-linux-gnu/debug/deps/boot_image-360a07d3896e99d0)

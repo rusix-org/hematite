@@ -1,0 +1,22 @@
+{
+  "passed": true,
+  "command": "make test-all",
+  "exit_code": 0,
+  "parent_commit": "f355478",
+  "result_counts": {
+    "aarch64": 190,
+    "x86_64": 13
+  },
+  "python_harness_cases_per_target": 131,
+  "boot_image_host_cases": 8,
+  "boot_image_compiler_clients_per_target": 6,
+  "process_cases_per_profile": 66,
+  "process_profiles": 3,
+  "process_elf_sha256": "9742614856107fe6772c0d882a82ae39a6e6f7e1217530a99764463d96af1d3b",
+  "reviewed_process_executable_unchanged": true,
+  "evidence_source_directories": [
+    "target/evidence/20261026T191736-058497712-aarch64",
+    "target/evidence/20261026T191941-024975681-x86_64"
+  ],
+  "implementation_commit": "f3ca143"
+}

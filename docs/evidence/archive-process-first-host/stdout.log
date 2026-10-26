@@ -1,0 +1,13 @@
+
+running 8 tests
+test canonical_native_image ... ok
+test corrupt_suffix_precedes_missing ... ok
+test corrupt_suffix_rejects_existing_image ... ok
+test directory_entry ... ok
+test exact_lookup_only ... ok
+test image_outlives_temporary_path ... ok
+test invalid_elf_entry ... ok
+test missing_entry ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

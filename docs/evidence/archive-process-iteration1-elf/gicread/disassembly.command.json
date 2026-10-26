@@ -1,0 +1,5 @@
+[
+  "aarch64-linux-gnu-objdump",
+  "-d",
+  "/workspace/docs/evidence/archive-process-iteration1-elf/gicread.elf"
+]

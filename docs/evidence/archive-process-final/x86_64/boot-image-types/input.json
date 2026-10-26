@@ -1,0 +1,19 @@
+{
+  "library": "/workspace/target/x86_64/boot-test/x86_64-unknown-none/release/libhm_kernel.rlib",
+  "library_sha256": "500fb6bc002ff62f3be229dcce8b1230f31bb87a7b45edbe19df0d1f96cc1985",
+  "target": "x86_64-unknown-none",
+  "sources": {
+    "crates/hm-kernel/src/boot_image.rs": "0463fb748d4f9b036f0eb9c21e376f1cef6e1c5d0b0536113dd4255f04e9ce07",
+    "crates/hm-kernel/src/initramfs.rs": "4ed94918c48c0ef554b0dd361cbe7f0f95d4a321c87f1f6ffcc5b8f7a56c1773",
+    "crates/hm-kernel/src/elf.rs": "d03ef069e9cce1b1324533207e9dd5cb5e4e1b914e0eeebf47af78241654ed32",
+    "tools/check_boot_image_types.py": "6798cc2cbf0844e01e620d66a7e0088548b779208b6c5ce3876f2bb288dca196"
+  },
+  "expected_probes": [
+    "valid_image",
+    "temporary_path",
+    "image_after_local_plan",
+    "escape_input",
+    "mutate_live_input",
+    "forge_image"
+  ]
+}

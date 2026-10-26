@@ -1,0 +1,5 @@
+[
+  "readelf",
+  "-sW",
+  "/workspace/target/evidence/20261026T191736-058497712-aarch64/process-fixtures/svcimm.elf"
+]

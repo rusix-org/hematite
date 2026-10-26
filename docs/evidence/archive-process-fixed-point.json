@@ -1,0 +1,18 @@
+[
+  {
+    "iteration": 0,
+    "fixture_kernel_data": "0x4038f000",
+    "actual_kernel_data": "0x40393000",
+    "elf_sha256": "29675effe3c874939b1b6d7c4835bcba2c295d0657b221edc63e98ba738a7b10",
+    "asm_sha256": "9cf7fdb8056c078536e36c8b66cf4b7335c730cba028e0b11d14f53e0c61efc5",
+    "stable": false
+  },
+  {
+    "iteration": 1,
+    "fixture_kernel_data": "0x40393000",
+    "actual_kernel_data": "0x40393000",
+    "elf_sha256": "9742614856107fe6772c0d882a82ae39a6e6f7e1217530a99764463d96af1d3b",
+    "asm_sha256": "87ed64560360c361217be3e7abf8e32a8e8389a80c018e0a63a26d3f1de0253f",
+    "stable": true
+  }
+]

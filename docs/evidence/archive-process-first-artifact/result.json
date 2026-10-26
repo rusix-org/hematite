@@ -1,0 +1,9 @@
+{
+  "bytes": 1326592,
+  "sha256": "f02b5d17cadcc700adcdddd879ce51c4aba68121e198a484018c932f5524c75f",
+  "kernel_file_offset": 380896,
+  "entries": 36,
+  "files": 34,
+  "manifest": "/workspace/crates/hm-core/fixtures/process-initramfs.manifest.json",
+  "passed": true
+}

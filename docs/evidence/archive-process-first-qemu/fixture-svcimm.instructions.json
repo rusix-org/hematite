@@ -1,0 +1,9 @@
+{
+  "register_svc_1": "d4000001",
+  "fault": "d4000021",
+  "register_svc_3": "d4000001",
+  "write_svc": "d4000001",
+  "loop_start": "14000000",
+  "register_svc_2": "d4000001",
+  "exit_svc": "d4000001"
+}
