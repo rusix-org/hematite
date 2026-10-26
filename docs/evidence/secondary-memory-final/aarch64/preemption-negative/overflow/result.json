@@ -1,0 +1,42 @@
+{
+  "started_utc": "2026-10-26T14:53:33.736336+00:00",
+  "scope": "preemptible worker guard fault",
+  "timeout_seconds": 10,
+  "timed_out": false,
+  "returncode": 2,
+  "launch_error": null,
+  "elapsed_seconds": 0.06417781102936715,
+  "artifacts": {
+    "serial": {
+      "exists": true,
+      "bytes": 221,
+      "sha256": "21b8e69cdfa56ec3b5401cbffd91548f907b37ada718b7ced53b37055ed61505",
+      "within_size_limit": true
+    },
+    "exceptions": {
+      "exists": true,
+      "bytes": 569,
+      "sha256": "a12d7c998dfef4a51e0e47256309e4020e0ea24f57e04a54b265ffdcb338f3b2",
+      "within_size_limit": true
+    }
+  },
+  "worker_zero_guard": 1076035584,
+  "checks": {
+    "exact_launch_marker": true,
+    "no_partial_marker": true,
+    "no_normal_report": true,
+    "fatal_exit": true,
+    "within_deadline": true,
+    "launched": true,
+    "exact_fatal_marker": true,
+    "no_partial_fatal_marker": true,
+    "single_abort_then_exit": true,
+    "translation_read_abort": true,
+    "worker_zero_guard": true,
+    "fault_not_resumed": true,
+    "terminal_exit": true,
+    "complete_trace": true,
+    "logs_present_and_bounded": true
+  },
+  "passed": true
+}

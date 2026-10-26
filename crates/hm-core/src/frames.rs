@@ -98,6 +98,64 @@ impl Pool {
         }
     }
 
+    /// Observe immutable eligibility, never current allocation state. Reject
+    /// malformed/out-of-window requests rather than vacuously excluding them.
+    #[cfg(target_arch = "aarch64")]
+    pub(super) fn excludes_region(&self, start: u64, end: u64) -> bool {
+        let Some(bytes) = (self.plan.page_count() as u64).checked_mul(PAGE_SIZE as u64) else {
+            return false;
+        };
+        let Some(window_end) = self.plan.base().checked_add(bytes) else {
+            return false;
+        };
+        if start >= end
+            || !start.is_multiple_of(PAGE_SIZE as u64)
+            || !end.is_multiple_of(PAGE_SIZE as u64)
+            || start < self.plan.base()
+            || end > window_end
+        {
+            return false;
+        }
+        // Validated containment bounds both indices by Plan::page_count().
+        let first = ((start - self.plan.base()) / PAGE_SIZE as u64) as usize;
+        let limit = ((end - self.plan.base()) / PAGE_SIZE as u64) as usize;
+        (first..limit).all(|index| !self.plan.eligible(index))
+    }
+
+    #[cfg(target_arch = "aarch64")]
+    pub(super) fn exclusion_checks(&self) -> bool {
+        let Some(index) = (0..self.plan.page_count()).find(|&i| self.plan.eligible(i)) else {
+            return false;
+        };
+        let Some(offset) = (index as u64).checked_mul(PAGE_SIZE as u64) else {
+            return false;
+        };
+        let Some(start) = self.plan.base().checked_add(offset) else {
+            return false;
+        };
+        let Some(end) = start.checked_add(PAGE_SIZE as u64) else {
+            return false;
+        };
+        let Some(unaligned) = start.checked_add(1) else {
+            return false;
+        };
+        let Some(window_bytes) = (self.plan.page_count() as u64).checked_mul(PAGE_SIZE as u64)
+        else {
+            return false;
+        };
+        let Some(window_end) = self.plan.base().checked_add(window_bytes) else {
+            return false;
+        };
+        let Some(outside) = window_end.checked_add(PAGE_SIZE as u64) else {
+            return false;
+        };
+        !self.excludes_region(start, end)
+            && !self.excludes_region(start, start)
+            && !self.excludes_region(unaligned, end)
+            && !self.excludes_region(window_end, outside)
+            && !self.excludes_region(!4095u64, 0)
+    }
+
     /// Diagnostic owns only its newly claimed indices. No active frame is
     /// released, even on a failed check; all ledger claims are cleaned up.
     #[inline(never)]

@@ -1,0 +1,39 @@
+{
+  "started_utc": "2026-10-26T14:53:31.727455+00:00",
+  "scope": "disabled timer blocks nonyielding workers",
+  "timeout_seconds": 2,
+  "timed_out": true,
+  "returncode": -9,
+  "launch_error": null,
+  "elapsed_seconds": 2.005256850970909,
+  "artifacts": {
+    "serial": {
+      "exists": true,
+      "bytes": 203,
+      "sha256": "c6e0d04d452dbc2f789b99d3a01155dbff6c0ed0c83427d9e67146808ade566a",
+      "within_size_limit": true
+    },
+    "exceptions": {
+      "exists": true,
+      "bytes": 291,
+      "sha256": "9875cdc2caa8974c0fceb0e341361a6f1f1b7dbefe53714ffa83905e58773a3d",
+      "within_size_limit": true
+    }
+  },
+  "entry_pc": 1075847824,
+  "checks": {
+    "exact_launch_marker": true,
+    "no_partial_marker": true,
+    "no_normal_report": true,
+    "expected_host_timeout": true,
+    "host_killed_blocked_guest": true,
+    "launched": true,
+    "no_fatal_marker": true,
+    "no_exception_or_exit": true,
+    "entered_first_worker_once": true,
+    "complete_trace": true,
+    "entry_matches_kernel_symbol": true,
+    "logs_present_and_bounded": true
+  },
+  "passed": true
+}

@@ -15,7 +15,7 @@ CASES = (
     "write_protect", "nx", "user_execute_protect", "user_access_protect",
     "wx", "stack_guard", "null_guard",
     "checked_range", "monitor_bounds",
-    "cap_authority", "cap_limits", "cap_lifetime", "cap_generation", "boot_memory_valid", "boot_memory_malformed", "cpu_topology_valid", "cpu_topology_malformed", "cpu_topology_live", "frame_ranges", "frame_boundaries", "frame_contract", "heap_blocks", "heap_values", "event_contract", "mutex_contract", "mutex_lifetime", "mutex_workers", "thread_contract", "thread_limits", "thread_core", "timer_contract", "fault_contract", "mapping_contract", "mapping_limits", "mapping_hardware", "cpu_local_state", "gic_ownership", "cap_orderings",
+    "cap_authority", "cap_limits", "cap_lifetime", "cap_generation", "boot_memory_valid", "boot_memory_malformed", "cpu_topology_valid", "cpu_topology_malformed", "cpu_topology_live", "frame_ranges", "frame_boundaries", "frame_contract", "heap_blocks", "heap_values", "event_contract", "mutex_contract", "mutex_lifetime", "mutex_workers", "thread_contract", "thread_limits", "thread_core", "timer_contract", "fault_contract", "mapping_contract", "mapping_limits", "mapping_hardware", "cpu_local_state", "gic_ownership", "secondary_memory", "cap_orderings",
 )
 SUCCESS_EXITS = {"aarch64": 0, "x86_64": 33}
 TIMEOUT_SECONDS = 20

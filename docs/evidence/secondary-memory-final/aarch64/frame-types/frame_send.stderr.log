@@ -1,0 +1,73 @@
+warning: unused imports: `Block`, `KernelBox`, and `Pool`
+ --> /workspace/target/evidence/20261026T145253-217421617-aarch64/frame-types/frame_send.rs:3:24
+  |
+3 | use hm_frames::{Frame, Pool, Block, KernelBox};
+  |                        ^^^^  ^^^^^  ^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `hm_kernel::frame_api::OwnedFrame`
+ --> /workspace/target/evidence/20261026T145253-217421617-aarch64/frame-types/frame_send.rs:4:5
+  |
+4 | use hm_kernel::frame_api::OwnedFrame;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `hm_kernel::heap_api::OwnedBlock`
+ --> /workspace/target/evidence/20261026T145253-217421617-aarch64/frame-types/frame_send.rs:5:5
+  |
+5 | use hm_kernel::heap_api::OwnedBlock;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0277]: `Cell<[u64; 64]>` cannot be shared between threads safely
+  --> /workspace/target/evidence/20261026T145253-217421617-aarch64/frame-types/frame_send.rs:6:48
+   |
+ 6 | fn send<T: Send>() {} pub fn client() { send::<Frame<'static>>(); }
+   |                                                ^^^^^^^^^^^^^^ `Cell<[u64; 64]>` cannot be shared between threads safely
+   |
+   = help: within `Pool`, the trait `Sync` is not implemented for `Cell<[u64; 64]>`
+   = note: if you want to do aliasing and mutation between multiple threads, use `std::sync::RwLock`
+note: required because it appears within the type `Pool`
+  --> /workspace/crates/hm-core/src/frames.rs:10:12
+   |
+10 | pub struct Pool {
+   |            ^^^^
+   = note: required for `&'static Pool` to implement `Send`
+note: required because it appears within the type `Frame<'static>`
+  --> /workspace/crates/hm-core/src/frames.rs:17:12
+   |
+17 | pub struct Frame<'pool> {
+   |            ^^^^^
+note: required by a bound in `send`
+  --> /workspace/target/evidence/20261026T145253-217421617-aarch64/frame-types/frame_send.rs:6:12
+   |
+ 6 | fn send<T: Send>() {} pub fn client() { send::<Frame<'static>>(); }
+   |            ^^^^ required by this bound in `send`
+
+error[E0277]: `Cell<bool>` cannot be shared between threads safely
+  --> /workspace/target/evidence/20261026T145253-217421617-aarch64/frame-types/frame_send.rs:6:48
+   |
+ 6 | fn send<T: Send>() {} pub fn client() { send::<Frame<'static>>(); }
+   |                                                ^^^^^^^^^^^^^^ `Cell<bool>` cannot be shared between threads safely
+   |
+   = help: within `Pool`, the trait `Sync` is not implemented for `Cell<bool>`
+   = note: if you want to do aliasing and mutation between multiple threads, use `std::sync::RwLock` or `std::sync::atomic::AtomicBool` instead
+note: required because it appears within the type `Pool`
+  --> /workspace/crates/hm-core/src/frames.rs:10:12
+   |
+10 | pub struct Pool {
+   |            ^^^^
+   = note: required for `&'static Pool` to implement `Send`
+note: required because it appears within the type `Frame<'static>`
+  --> /workspace/crates/hm-core/src/frames.rs:17:12
+   |
+17 | pub struct Frame<'pool> {
+   |            ^^^^^
+note: required by a bound in `send`
+  --> /workspace/target/evidence/20261026T145253-217421617-aarch64/frame-types/frame_send.rs:6:12
+   |
+ 6 | fn send<T: Send>() {} pub fn client() { send::<Frame<'static>>(); }
+   |            ^^^^ required by this bound in `send`
+
+error: aborting due to 2 previous errors; 3 warnings emitted
+
+For more information about this error, try `rustc --explain E0277`.

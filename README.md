@@ -13,7 +13,7 @@ make run    # build and open the ARM64 monitor; Ctrl-C exits
 ```
 
 Type `help`, `status`, or `test`. `status` reports the active memory protections;
-`test` runs 38 bootstrap, capability, memory, topology, event, mutex, thread, timer, exception and mapping checks. The ARM boot banner reports discovered RAM and usable frame capacity.
+`test` runs 39 bootstrap, capability, memory, topology, event, mutex, thread, timer, exception and mapping checks. The ARM boot banner reports discovered RAM and usable frame capacity.
 Memory tests exercise real frame, heap and mapping ownership. Three pages are deliberately
 retained once per boot to verify that forgotten owners cannot cause reuse.
 This is a kernel monitor, not a shell.
@@ -76,9 +76,10 @@ exercise both accepted profiles and excess-CPU rejection. This is preparation
 for SMP; the kernel still starts no secondary CPU. Timer and scheduler state
 now live in CPU-local records, with affinity validation and inactive-record
 canary checks. Shared interrupt-controller setup is separate from local timer
-setup and teardown, with preservation checks across local sessions. Separate
-CPU stacks, mappings and lifecycle coordination remain prerequisites for
-secondary startup.
+setup and teardown, with preservation checks across local sessions. Secondary
+CPU stacks and a root excluding the mutable mapping arena are now reserved
+and checked against allocator exclusions. Secondary entry and lifecycle
+coordination remain prerequisites for multicore execution.
 
 The safe capability experiment checks rights attenuation, bounded accounting,
 stale handles, revocation and cancellation/completion lifetimes. It models

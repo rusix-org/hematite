@@ -59,6 +59,14 @@ arm_start:
     ldr x1, =arm_ram_l2
     orr x1, x1, #3
     str x1, [x0, #8]
+    // CPU1's future root shares only immutable device/identity subtrees.
+    ldr x2, =arm_secondary_root
+    ldr x1, =arm_device_l2
+    orr x1, x1, #3
+    str x1, [x2]
+    ldr x1, =arm_ram_l2
+    orr x1, x1, #3
+    str x1, [x2, #8]              // Entry2 remains zero: no owned arena.
     ldr x1, =arm_owned_l2
     orr x1, x1, #3
     str x1, [x0, #16]              // Owned data arena at VA 0x80000000.
@@ -143,6 +151,34 @@ arm_start:
     add x3, x3, #4096
     subs x2, x2, #1
     b.ne 4b
+
+    // Secondary guard edits happen only here, before caches/MMU and DSB SY.
+    ldr x0, =arm_ram_l3
+    mov x2, #0x40000000
+    ldr x1, =__secondary_stack_guard
+    sub x1, x1, x2
+    lsr x1, x1, #12
+    str xzr, [x0, x1, lsl #3]
+    ldr x1, =__secondary_exception_stack_guard
+    sub x1, x1, x2
+    lsr x1, x1, #12
+    str xzr, [x0, x1, lsl #3]
+    ldr x1, =__secondary_thread0_guard
+    sub x1, x1, x2
+    lsr x1, x1, #12
+    str xzr, [x0, x1, lsl #3]
+    ldr x1, =__secondary_thread1_guard
+    sub x1, x1, x2
+    lsr x1, x1, #12
+    str xzr, [x0, x1, lsl #3]
+    ldr x1, =__secondary_thread2_guard
+    sub x1, x1, x2
+    lsr x1, x1, #12
+    str xzr, [x0, x1, lsl #3]
+    ldr x1, =__secondary_thread3_guard
+    sub x1, x1, x2
+    lsr x1, x1, #12
+    str xzr, [x0, x1, lsl #3]
 
     dsb sy
     mov x0, #0xff                  // Attr0 WB; Attr1 Device-nGnRnE=0.
@@ -229,6 +265,8 @@ pan_message: .asciz "HMBOOT REJECT PAN\n"
 .global arm_root, arm_device_l2, arm_device_l3, arm_ram_l2, arm_ram_l3
 .global arm_owned_l2, arm_owned_l3
 arm_root: .skip 4096
+.global arm_secondary_root
+arm_secondary_root: .skip 4096
 arm_device_l2: .skip 4096
 arm_device_l3: .skip 4096
 .global arm_gic_l3
