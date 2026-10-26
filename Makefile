@@ -37,6 +37,7 @@ test: image
 		python3 tools/test_test_elf.py; \
 		python3 tools/test_test_space.py; \
 		python3 tools/test_test_native.py; \
+		python3 tools/test_test_startup_input.py; \
 		python3 tools/test_test_process.py; \
 		python3 tools/test_test_initramfs.py; \
 		python3 tools/test_test_boot_image.py; \
@@ -71,6 +72,9 @@ test: image
 		python3 tools/check_native_types.py \
 			--library target/$(ARCH)/boot-test/$(TARGET)/release/libhm_kernel.rlib \
 			--target $(TARGET) --output "$$evidence_dir/native-types"; \
+		python3 tools/check_startup_input_types.py \
+			--library target/$(ARCH)/boot-test/$(TARGET)/release/libhm_kernel.rlib \
+			--target $(TARGET) --output "$$evidence_dir/startup-input-types"; \
 		python3 tools/check_boot_image_types.py \
 			--library target/$(ARCH)/boot-test/$(TARGET)/release/libhm_kernel.rlib \
 			--target $(TARGET) --output "$$evidence_dir/boot-image-types"; \
@@ -87,6 +91,8 @@ test: image
 		if [ "$(ARCH)" = aarch64 ]; then \
 			cargo build --locked --offline -p hm-kernel --release --target x86_64-unknown-linux-gnu --target-dir target/host-mutex; \
 			python3 tools/check_native.py --output "$$evidence_dir/native-host"; \
+			cargo clippy -p hm-kernel --test startup_input --locked --offline --target x86_64-unknown-linux-gnu --target-dir target/host-startup-input -- -D warnings; \
+			python3 tools/check_startup_input.py --output "$$evidence_dir/startup-input-host"; \
 			python3 tools/build_apps.py --output "$$evidence_dir/apps-fixtures"; \
 			python3 tools/build_initramfs.py --output "$$evidence_dir/initramfs-fixture"; \
 			python3 tools/build_initramfs.py --process --output "$$evidence_dir/process-archive"; \

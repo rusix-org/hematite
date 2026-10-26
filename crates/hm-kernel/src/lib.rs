@@ -25,6 +25,7 @@ mod mutex_tests;
 pub mod native;
 pub mod native_launch;
 mod preemption_tests;
+pub mod startup_input;
 pub mod thread_api;
 mod thread_tests;
 pub mod wait_api;

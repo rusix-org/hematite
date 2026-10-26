@@ -20,7 +20,7 @@ from strict Linux parity to native OS design with selective compatibility.
   regression port. Commands `help`, `status`, `test`, `apps`, `run <path>`; Ctrl-C exits.
   Native launch is supported on one ARM CPU at 64/128 MiB.
 - `make test-all`: formatting, Clippy and safety checks for both targets,
-  142 host harness tests, ten native-policy host tests, sixteen initramfs and eight boot-image host cases, 41 guest tests per architecture, ARM no-PAN rejection,
+  147 host harness tests, ten native-policy host tests, sixteen initramfs and eight boot-image host cases, 41 guest tests per architecture, ARM no-PAN rejection,
   x86 missing-NX/SMEP/SMAP rejection, and live monitor recovery tests on both.
   ARM discovery matches both 128 MiB and 64 MiB guest configurations.
   Separate ARM images run five scheduling/wait cases at both memory sizes, then
@@ -453,11 +453,19 @@ matrix passes at all three configurations. Exact embedded bytes, kernel address
 bindings, compiled stacks and raw traces were independently checked. See
 [execution evidence](docs/evidence/archive-process-execution.md).
 
+The safe startup-input codec is implemented separately from runtime delivery.
+Fourteen host cases and fourteen compiler clients per target verify bounded
+owned copies, immutable decoded views and canonical versioned extension bytes.
+All 21 runtime kernels remain byte-identical to the verified launcher milestone.
+See [codec evidence](docs/evidence/native-startup-input.md); no new monitor input
+or EL0 input-delivery claim follows from these host tests.
+
 ## Next actions
 
-1. Design the next bounded native service experiment: explicit startup inputs,
-   capability-scoped spawn and owned completion/cancellation. Establish the
-   hypothesis, ownership contract and independent review before core changes;
+1. Complete independently reviewed Stage B of [startup input design](docs/design/0027-native-startup-input.md):
+   opt-in owned startup copying, echo utility, actual maximum-size input and
+   read-only/nonexecutable mapping tests. Review all affected compiled stacks
+   before guests. Then define capability-scoped spawn/completion/cancellation;
    concurrent userspace and a real service workload remain future gates.
 2. Use these experiments to refine the native wire contract; select compatibility
    workloads and pin a Linux oracle when the adapter exists.
@@ -696,3 +704,12 @@ bindings, compiled stacks and raw traces were independently checked. See
   Local ARM/x86 regressions pass 142 Python cases per target and 21 process
   compiler clients; the existing 198-run process matrix remains intact.
   See [evidence](docs/evidence/native-launcher.md). No new remote CI or push.
+
+- 2026-10-26: Implemented Stage A of the owned startup-input design: a safe
+  256-byte owner and versioned canonical extension codec, preserving the native
+  v1 header and legacy runtime. Fourteen host cases, fourteen compiler clients
+  on each target and five harness mutation cases pass with all ARM/x86 regressions.
+  All 21 runtime ELFs remain byte-identical to the previous verified milestone.
+  Retained and corrected a test-only Clippy finding using lexical ownership
+  scope. [Evidence](docs/evidence/native-startup-input.md) distinguishes codec
+  guarantees from still-unimplemented runtime delivery and service lifecycle.
