@@ -12,7 +12,7 @@ fi
 case "$kernel_arch" in
     aarch64)
         qemu_command=(qemu-system-aarch64
-            -machine virt,virtualization=off,secure=off
+            -machine virt,virtualization=off,secure=off,gic-version=2
             -semihosting-config enable=on,target=native)
         ;;
     x86_64)

@@ -15,7 +15,7 @@ CASES = (
     "write_protect", "nx", "user_execute_protect", "user_access_protect",
     "wx", "stack_guard", "null_guard",
     "checked_range", "monitor_bounds",
-    "cap_authority", "cap_limits", "cap_lifetime", "cap_generation", "boot_memory_valid", "boot_memory_malformed", "frame_ranges", "frame_boundaries", "frame_contract", "heap_blocks", "heap_values", "fault_contract", "mapping_contract", "mapping_limits", "mapping_hardware", "cap_orderings",
+    "cap_authority", "cap_limits", "cap_lifetime", "cap_generation", "boot_memory_valid", "boot_memory_malformed", "frame_ranges", "frame_boundaries", "frame_contract", "heap_blocks", "heap_values", "timer_contract", "fault_contract", "mapping_contract", "mapping_limits", "mapping_hardware", "cap_orderings",
 )
 SUCCESS_EXITS = {"aarch64": 0, "x86_64": 33}
 TIMEOUT_SECONDS = 20
@@ -79,7 +79,7 @@ def qemu_command(kernel, accel, arch="aarch64"):
         if accel != "tcg":
             raise ValueError("The aarch64 bootstrap profile currently requires TCG")
         return [
-            "qemu-system-aarch64", "-machine", "virt,virtualization=off,secure=off",
+            "qemu-system-aarch64", "-machine", "virt,virtualization=off,secure=off,gic-version=2",
             "-cpu", "max", "-accel", "tcg", "-m", "128M", "-smp", "1",
             "-nodefaults", "-no-user-config", "-display", "none",
             "-monitor", "none", "-serial", "stdio", "-no-reboot",
@@ -148,7 +148,9 @@ def main():
     }, indent=2) + "\n")
     command = qemu_command(kernel, args.accel, args.arch)
     if args.arch == "aarch64":
-        command += ["-d", "int", "-D", str(output / "exceptions.log")]
+        command += ["-d", "int", "-D", str(output / "exceptions.log"),
+                    "-trace", "enable=gic_acknowledge_irq",
+                    "-trace", "enable=gic_cpu_write"]
     result = run_qemu(command, output, args.arch)
     print(json.dumps(result, indent=2))
     return 0 if result["passed"] else 1

@@ -26,7 +26,9 @@ impl Pool {
     /// The plan excludes all boot storage and reservations. Identity mappings
     /// never change. Only the consuming owned-mapping protocol (design 0008)
     /// may create matching-attribute aliases, without identity byte access until
-    /// invalidation completes. Single CPU, interrupts masked.
+    /// invalidation completes. One CPU; Rust executes with interrupts masked.
+    /// Scoped timer IRQs (design 0009) touch only private assembly/GIC state,
+    /// never this pool, frames, mappings or borrowed Rust memory.
     /// If already claimed, no physical precondition applies: the method returns
     /// AlreadyInitialized before using the supplied plan.
     // SAFETY: Caller establishes the documented physical ownership contract

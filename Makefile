@@ -27,6 +27,7 @@ test: image
 		cargo fmt --all -- --check; \
 		cargo clippy --workspace --all-features --locked --offline --target $(TARGET) --target-dir target/$(ARCH)/clippy -- -D warnings; \
 		python3 tools/test_test_kernel.py; \
+		python3 tools/test_timer_trace.py; \
 		python3 tools/check_repository.py; \
 		python3 tools/check_safety.py; \
 		cargo build --locked --offline -p hm-core --release --features boot-tests --target $(TARGET) --target-dir target/$(ARCH)/boot-test; \
@@ -55,7 +56,15 @@ test: image
 			--monitor-kernel target/$(ARCH)/monitor/$(TARGET)/release/hematite \
 			--fault-kernel target/$(ARCH)/fault-test/$(TARGET)/release/hematite \
 			--nested-kernel target/$(ARCH)/nested-test/$(TARGET)/release/hematite \
-			--output "$$evidence_dir/profiles" --arch $(ARCH)'
+			--output "$$evidence_dir/profiles" --arch $(ARCH); \
+		if [ "$(ARCH)" = aarch64 ]; then \
+			python3 tools/check_timer_trace.py --trace "$$evidence_dir/boot/exceptions.log" \
+				--expected 16 --output "$$evidence_dir/boot/timer-trace.json"; \
+			python3 tools/check_timer_trace.py --trace "$$evidence_dir/profiles/monitor/exceptions.log" \
+				--expected 32 --output "$$evidence_dir/profiles/monitor/timer-trace.json"; \
+			python3 tools/check_timer_trace.py --trace "$$evidence_dir/profiles/memory-64m/exceptions.log" \
+				--expected 32 --output "$$evidence_dir/profiles/memory-64m/timer-trace.json"; \
+		fi'
 
 test-all:
 	$(MAKE) test ARCH=aarch64

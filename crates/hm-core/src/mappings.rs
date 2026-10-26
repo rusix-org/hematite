@@ -36,6 +36,8 @@ impl Mapper {
     /// Caller proves the permanent arena hierarchy is installed, all leaves
     /// invalid, and one CPU at EL1 with asynchronous exceptions masked owns
     /// all table writes. Pool identity mappings cannot change. No DMA exists.
+    /// Later scoped timer IRQs touch only private assembly/GIC state; all Rust
+    /// and mapping operations remain masked (design 0009).
     // SAFETY: Successful construction transfers sole arena update authority;
     // the permanent latch prevents reconstruction even after forgotten owners.
     pub(crate) unsafe fn from_boot() -> Result<Self, ()> {

@@ -6,6 +6,8 @@ agent, not human approval or a soundness certification. Extends [boot-memory dis
 and the ownership constraints in [ADR 0004](../adr/0004-core-architecture.md).
 This increment allocates actual ARM RAM within existing mappings. It does not
 add a heap, new mappings, userspace access, devices, preemption or SMP.
+The later [scoped timer contract](0009-arm-timer-irq.md) permits an assembly-only
+IRQ window while owners exist; all Rust allocator operations remain masked.
 
 ## Selection and authority
 

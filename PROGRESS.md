@@ -1,6 +1,6 @@
 # Progress
 
-Current phase: **Phase 1 underway: ARM64 owned data-page mappings verified**.
+Current phase: **Phase 1 underway: ARM64 scoped timer IRQ delivery verified**.
 Aaron approved scratch implementation and then changed the primary objective
 from strict Linux parity to native OS design with selective compatibility.
 [ADR 0005](docs/adr/0005-native-first-design.md) records the native direction;
@@ -19,17 +19,17 @@ from strict Linux parity to native OS design with selective compatibility.
 - Serial monitor: `make run` defaults to ARM64; `ARCH=x86_64` selects the
   regression port. Commands `help`, `status`, `test`; Ctrl-C exits.
 - `make test-all`: formatting, Clippy and safety checks for both targets,
-  13 host harness tests, 25 guest tests per architecture, ARM no-PAN rejection,
+  22 host harness tests, 26 guest tests per architecture, ARM no-PAN rejection,
   x86 missing-NX/SMEP/SMAP rejection, and live monitor recovery tests on both.
   ARM discovery matches both 128 MiB and 64 MiB guest configurations.
   All passed locally. `make test` tests ARM64 alone by default.
 - Pinned Rust base and Debian package snapshot, QEMU 7.2.22. One CPU/128 MiB
   guest by default; ARM discovery also tests 64 MiB; no attached disks or networking. Both targets use TCG.
 
-Latest evidence: [owned mapping verification](docs/evidence/owned-mappings.md),
-[ARM guest results](docs/evidence/owned-mappings-final/aarch64/boot/result.json),
-[ARM profiles](docs/evidence/owned-mappings-final/aarch64/profiles/result.json),
-and matching x86 results under `docs/evidence/owned-mappings-final/x86_64/`.
+Latest evidence: [timer verification](docs/evidence/arm-timer.md),
+[ARM guest results](docs/evidence/timer-final/aarch64/boot/result.json),
+[ARM profiles](docs/evidence/timer-final/aarch64/profiles/result.json),
+and matching x86 results under `docs/evidence/timer-final/x86_64/`.
 Earlier [bootstrap verification](docs/evidence/hematite-bootstrap.md) is retained.
 The earlier [Asterinas baseline](docs/evidence/asterinas-evaluation.md) remains
 an evaluation only; it is not this kernel's implementation.
@@ -127,6 +127,28 @@ See [design](docs/design/0008-arm-owned-mappings.md),
 [evidence](docs/evidence/owned-mappings.md). Dynamic table allocation, address
 spaces, executable mappings and SMP shootdowns remain unimplemented.
 
+## ARM scoped timer IRQ delivery verified locally
+
+The pinned GICv2 profile delivers eight physical timer interrupts per scoped
+assembly probe. The handler preserves GPRs on the emergency stack, rearms the
+timer and acknowledges/completes interrupt 30. It never calls Rust or touches
+allocator/mapping metadata. Rust still runs with asynchronous exceptions masked.
+This establishes interrupt delivery, not thread preemption or general handlers.
+
+Runtime checks cover x4–x30, all 32 Q registers, NZCV, FPCR/FPSR and both stack
+pointers. Polling scratch x0–x3 preservation is source-reviewed, not a sentinel
+test. A second probe withholds PPI enable, requires a bounded counter timeout
+and zero delivered interrupts, then checks shutdown. Both probes verify timer,
+controller, pending/active and DAIF state before returning. Repeated monitor
+tests preserve allocation/mapping counts and continue to pass fault recovery.
+
+Strict host traces require 16 complete IRQ/vector/ack/EOI/return transactions
+for boot and 32 for each repeated 64/128 MiB monitor. Nine trace-validator tests
+reject missing, malformed, duplicate and reordered records. See
+[design](docs/design/0009-arm-timer-irq.md),
+[review](docs/reviews/0009-arm-timer-irq.md) and
+[evidence](docs/evidence/arm-timer.md).
+
 ## Limits and gates
 
 No userspace, syscall ABI, general interrupt/exception handling, SMP, storage,
@@ -143,15 +165,15 @@ labels are trusted inputs and completion is a simulated backend acknowledgment.
 See [model verification](docs/evidence/capability-model.md).
 
 Published bootstrap CI passed at `b1b824c` ([run 40276324135](https://github.com/rusix-org/hematite/actions/runs/40276324135)).
-The capability, memory, heap, exception and owned mapping changes passed locally; remote CI has not
+The capability, memory, heap, exception, mapping and timer changes passed locally; remote CI has not
 run these changes. Aaron authorized public repository creation
 and push in [ADR 0007](docs/adr/0007-public-repository.md). License selection
 remains pending (ADR 0002); preliminary naming findings remain in ADR 0003.
 
 ## Next actions
 
-1. Design/review ARM timer/interrupt delivery and scheduling, including how
-   existing single-CPU ownership remains protected. Extend recovery to fault-aware user operations only with
+1. Design/review kernel thread contexts and scheduling, including how existing
+   single-CPU ownership remains protected before preemption. Extend recovery to fault-aware user operations only with
    address-space and lifetime proofs. Add interrupt/SMP-safe ownership before concurrency;
    implement measured small-object allocation before service workloads.
 2. Define the native userspace wire contract from those experiments; select
@@ -221,3 +243,9 @@ remains pending (ADR 0002); preliminary naming findings remain in ADR 0003.
   cases and 13 host tests; final 21 mapping compiler probes pass. Preserved raw
   results and source identities. The bounded arena uses permanent table storage;
   no general address-space teardown or concurrency support is claimed.
+
+- 2026-10-26: Implemented reviewed scoped ARM timer IRQs, bounded disabled-PPI
+  timeout and context/quiescence checks. Made GICv2 explicit and captured its
+  DTB. Review prompted explicit Group0 configuration. Final dual suite passes
+  26 guest and 22 host cases; independent trace checks pass exact 16/32 IRQ
+  transactions. No preemption, SMP or IRQ-enabled Rust execution is claimed.

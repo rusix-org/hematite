@@ -35,6 +35,9 @@ pub struct BootChecks {
 
 /// The core retains all hardware authority; policy only exchanges owned values.
 pub trait Platform {
+    fn timer_checks(&self) -> Option<TimerChecks> {
+        None
+    }
     type Mapping<'a>: mapping_api::OwnedMapping<Frame = Self::Frame<'a>>
     where
         Self: 'a;
@@ -97,6 +100,57 @@ pub struct FaultChecks {
     pub read_only: bool,
     pub no_execute: bool,
     pub context: bool,
+}
+
+/// Scoped ARM IRQ observations; no scheduler or interrupt callback authority.
+pub struct TimerChecks {
+    pub delivery: bool,
+    pub context: bool,
+    pub quiescent: bool,
+    pub timeout: bool,
+}
+
+fn timer_contract(platform: &impl Platform) -> bool {
+    use frame_api::OwnedFrame;
+    use mapping_api::OwnedMapping;
+    if cfg!(target_arch = "x86_64") {
+        return platform.timer_checks().is_none();
+    }
+    let Ok(mut frame) = platform.allocate_frame() else {
+        return false;
+    };
+    frame.bytes_mut().fill(0x93);
+    let Ok(mut mapped) = platform.map_frame(frame) else {
+        return false;
+    };
+    let frames = platform.frame_stats();
+    let mappings = platform.mapping_stats();
+    // A live exclusive borrow crosses the scoped interrupt operation. The
+    // handler must never access this storage or its ownership metadata.
+    let bytes = mapped.bytes_mut();
+    for _ in 0..2 {
+        let Some(checks) = platform.timer_checks() else {
+            return false;
+        };
+        if !checks.delivery
+            || !checks.context
+            || !checks.quiescent
+            || !checks.timeout
+            || bytes.iter().any(|b| *b != 0x93)
+            || platform.frame_stats() != frames
+            || platform.mapping_stats() != mappings
+        {
+            return false;
+        }
+    }
+    let c = platform.checks();
+    c.write_protect
+        && c.nx
+        && c.wx
+        && c.stack_guard
+        && c.null_guard
+        && c.user_access_protect
+        && c.user_execute_protect
 }
 
 fn fault_contract(platform: &mut impl Platform) -> bool {
@@ -317,6 +371,7 @@ pub fn run_tests(platform: &mut impl Platform) -> bool {
         ("frame_contract", frame_api::contract(platform)),
         ("heap_blocks", heap_tests::blocks(platform)),
         ("heap_values", heap_tests::values(platform)),
+        ("timer_contract", timer_contract(platform)),
         ("fault_contract", fault_contract(platform)),
         ("mapping_contract", mapping_tests::contract(platform)),
         ("mapping_limits", mapping_tests::limits(platform)),
@@ -326,7 +381,7 @@ pub fn run_tests(platform: &mut impl Platform) -> bool {
             capability_tests::orderings(|message| platform.write(message)),
         ),
     ];
-    platform.write("HMTEST BEGIN 25\n");
+    platform.write("HMTEST BEGIN 26\n");
     let mut passed = true;
     for (name, success) in cases {
         platform.write(if success {
@@ -338,7 +393,7 @@ pub fn run_tests(platform: &mut impl Platform) -> bool {
         platform.write("\n");
         passed &= success;
     }
-    platform.write("HMTEST END 25\n");
+    platform.write("HMTEST END 26\n");
     passed
 }
 

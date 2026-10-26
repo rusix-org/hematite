@@ -1,0 +1,9 @@
+Generated device tree with the pinned project container (exit 0):
+
+bash tools/dev.sh qemu-system-aarch64 -machine virt,virtualization=off,secure=off,gic-version=2,dumpdtb=target/arm-gicv2.dtb -cpu max -accel tcg -m 128M -smp 1 -nodefaults -no-user-config -display none -monitor none -serial none -kernel target/aarch64/monitor/aarch64-unknown-none/release/hematite
+
+QEMU output: qemu-system-aarch64: info: dtb dumped to target/arm-gicv2.dtb. Exiting.
+
+Archived full DTB as virt-gicv2.dtb.gz; gicv2-layout.json records SHA256 of uncompressed DTB and exact hex values of relevant nodes.
+Observed GICD register range: 0x08000000 + 0x10000. GICC: 0x08010000 + 0x10000.
+Timer interrupt triples: [1,13,0x104], [1,14,0x104], [1,11,0x104], [1,10,0x104].

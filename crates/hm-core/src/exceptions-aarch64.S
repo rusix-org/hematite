@@ -15,7 +15,7 @@ arm_vectors:
     .space 124
     b arm_sync_exception
     .space 124
-    b arm_exception_fatal
+    b arm_timer_irq
     .space 124
     b arm_exception_fatal
     .space 124
@@ -37,6 +37,7 @@ arm_vectors:
     .space 124
     b arm_exception_fatal
     .space 124
+
 
 // Select the separately owned emergency stack before any memory access. A
 // fault after this switch uses the SP0 vector, whose path never touches a stack.
@@ -113,6 +114,7 @@ arm_sync_exception:
 arm_nested_fatal:
     ldr x0, =arm_nested_message
     b .Lfatal_print
+.global arm_exception_fatal
 arm_exception_fatal:
     ldr x0, =arm_exception_message
 .Lfatal_print:

@@ -9,6 +9,8 @@ Implement actual kernel data-page mappings whose lifetime retains their backing
 frames. This is a bounded first kernel mapping arena, not a complete address-space
 manager: dynamically allocated table pages, EL0, executable mappings, permission
 changes, SMP and shootdowns remain later work.
+The later [scoped timer contract](0009-arm-timer-irq.md) permits an assembly-only
+IRQ window while owners exist; all Rust mapping operations remain masked.
 
 ## Arena and authority
 

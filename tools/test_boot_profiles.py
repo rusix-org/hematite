@@ -30,7 +30,9 @@ def prepare(output, kernel, cpu, arch="aarch64", ram_mb=128):
     command[command.index("-cpu") + 1] = cpu
     command[command.index("-m") + 1] = f"{ram_mb}M"
     if arch == "aarch64":
-        command += ["-d", "int", "-D", str(output / "exceptions.log")]
+        command += ["-d", "int", "-D", str(output / "exceptions.log"),
+                    "-trace", "enable=gic_acknowledge_irq",
+                    "-trace", "enable=gic_cpu_write"]
     write_json(output / "command.json", command)
     write_json(output / "input.json", {
         "kernel": str(kernel),
@@ -148,6 +150,7 @@ def monitor_steps():
          b"x" * 64 + b"\nRejected: use at most 64 printable ASCII bytes.\n"),
         ("unknown_command", b"unknown\n", b"unknown\nUnknown command; type help.\n"),
         ("help_after_rejection", b"help\n", b"help\n" + help_body),
+        ("repeated_tests", b"test\n", b"test\n" + test_body),
     )
 
 
@@ -258,7 +261,7 @@ def run_monitor(output, kernel, arch="aarch64", ram_mb=128):
     expected_records = [f"HMTEST BEGIN {len(CASES)}".encode("ascii")]
     expected_records += [f"HMTEST PASS {name}".encode("ascii") for name in CASES]
     expected_records += [f"HMTEST END {len(CASES)}".encode("ascii")]
-    result["checks"]["complete_test_inventory"] = records == expected_records
+    result["checks"]["complete_test_inventory"] = records == expected_records * 2
     expected_checks = {"initial_prompt_and_banner", "monitor_still_running"}
     if arch == "aarch64":
         expected_checks.add("discovered_ram_matches_vm")

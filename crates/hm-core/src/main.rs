@@ -11,6 +11,8 @@ mod exceptions;
 mod frames;
 #[cfg(target_arch = "aarch64")]
 mod mappings;
+#[cfg(target_arch = "aarch64")]
+mod timer;
 
 #[cfg(target_arch = "x86_64")]
 #[path = "x86_64.rs"]

@@ -11,7 +11,7 @@ It does not implement userspace, allocation, DMA, scheduling or SMP.
 
 ## Pinned entry profile
 
-Use the project's pinned QEMU with `virt,virtualization=off,secure=off`, CPU
+Use the project's pinned QEMU with `virt,virtualization=off,secure=off,gic-version=2`, CPU
 `max`, one CPU and 128 MiB RAM. Record the exact emulator version and command;
 `max` is not a portable hardware baseline. Direct-load an AArch64 ELF linked
 at physical/virtual `0x40200000` (originally `0x40080000`;

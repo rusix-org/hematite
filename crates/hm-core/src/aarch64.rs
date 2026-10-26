@@ -12,6 +12,7 @@ unsafe extern "C" {
     static mut arm_root: [u64; 512];
     static mut arm_device_l2: [u64; 512];
     static mut arm_device_l3: [u64; 512];
+    static mut arm_gic_l3: [u64; 512];
     static mut arm_ram_l2: [u64; 512];
     static mut arm_ram_l3: [u64; 4096];
     static mut arm_owned_l2: [u64; 512];
@@ -40,6 +41,9 @@ pub(super) struct BootPlatform {
 pub(super) const BANNER: &str = "hematite: ARM64 Rust kernel entered at EL1\n";
 
 impl Platform for BootPlatform {
+    fn timer_checks(&self) -> Option<hm_kernel::TimerChecks> {
+        Some(super::timer::checks())
+    }
     type Mapping<'a> = super::mappings::MappedPage<'a, 'a>;
 
     fn map_frame<'a>(
@@ -164,6 +168,7 @@ impl Platform for BootPlatform {
         let root = core::ptr::addr_of!(arm_root) as u64;
         let dev_l2 = core::ptr::addr_of!(arm_device_l2) as u64;
         let dev_l3 = core::ptr::addr_of!(arm_device_l3) as u64;
+        let gic_l3 = core::ptr::addr_of!(arm_gic_l3) as u64;
         let ram_l2 = core::ptr::addr_of!(arm_ram_l2) as u64;
         let ram_l3 = core::ptr::addr_of!(arm_ram_l3) as u64;
         let owned_l2 = core::ptr::addr_of!(arm_owned_l2) as u64;
@@ -193,7 +198,11 @@ impl Platform for BootPlatform {
                     .add(index)
                     .read_volatile()
                     == root_expected;
-                let dev_expected = if index == 72 { dev_l3 | 3 } else { 0 };
+                let dev_expected = match index {
+                    64 => gic_l3 | 3,
+                    72 => dev_l3 | 3,
+                    _ => 0,
+                };
                 mappings &= core::ptr::addr_of!(arm_device_l2)
                     .cast::<u64>()
                     .add(index)
@@ -205,6 +214,16 @@ impl Platform for BootPlatform {
                     .add(index)
                     .read_volatile()
                     == uart_expected;
+                let gic_expected = match index {
+                    0 => 0x0060_0000_0800_0407,
+                    16 => 0x0060_0000_0801_0407,
+                    _ => 0,
+                };
+                mappings &= core::ptr::addr_of!(arm_gic_l3)
+                    .cast::<u64>()
+                    .add(index)
+                    .read_volatile()
+                    == gic_expected;
                 let ram_expected = if index < 8 {
                     (ram_l3 + index as u64 * 4096) | 3
                 } else {
@@ -247,7 +266,7 @@ impl Platform for BootPlatform {
                 && leaf((guard - RAM) / 4096) == 0
                 && leaf((exception_guard - RAM) / 4096) == 0
                 && exception_sp == core::ptr::addr_of!(__exception_stack_top) as u64,
-            // Root[0] has only the UART page. Full mapping check proves no
+            // Root[0] has only UART and GIC pages. Full mapping check proves no
             // translation for virtual address zero or any alias of that page.
             null_guard: mmu && mappings,
         }

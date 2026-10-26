@@ -53,6 +53,14 @@ arm_start:
     orr x1, x1, #3
     str x1, [x0]                  // Leaves remain invalid until owned map.
     ldr x0, =arm_device_l2
+    ldr x1, =arm_gic_l3
+    orr x1, x1, #3
+    str x1, [x0, #512]             // GIC MMIO lies in 0x08000000 / 2 MiB ==64.
+    ldr x2, =arm_gic_l3
+    ldr x1, =0x0060000008000407    // GICD first4KiB, Device EL1 RW PXN/UXN.
+    str x1, [x2]
+    ldr x1, =0x0060000008010407    // GICC first4KiB; no virtualization page.
+    str x1, [x2, #128]
     ldr x1, =arm_device_l3
     orr x1, x1, #3
     str x1, [x0, #576]             // 0x09000000 / 2 MiB == 72.
@@ -197,6 +205,8 @@ pan_message: .asciz "HMBOOT REJECT PAN\n"
 arm_root: .skip 4096
 arm_device_l2: .skip 4096
 arm_device_l3: .skip 4096
+.global arm_gic_l3
+arm_gic_l3: .skip 4096
 arm_ram_l2: .skip 4096
 arm_ram_l3: .skip 32768
 arm_owned_l2: .skip 4096
