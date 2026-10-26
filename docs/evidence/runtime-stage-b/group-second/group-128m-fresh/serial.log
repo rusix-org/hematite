@@ -1,0 +1,37 @@
+hematite: ARM64 Rust kernel entered at EL1
+Boot RAM bytes: 0x0000000008000000 (discovered RAM)
+Frame pool pages: 0x0000000000000c32 (4 KiB each; boot reservations excluded)
+Hematite bootstrap monitor (local working name)
+Commands: help, status, test, apps, run <path> [text], run-group <path1> <path2>. This is not a Linux shell.
+hm> status
+write protection: OK
+NX: OK
+user execution protection: OK
+user access protection: OK
+W^X mappings: OK
+stack guard: OK
+null guard: OK
+No storage or networking.
+Native launcher: not initialized
+Native launches: 0
+Last prepared generation: none
+Free frames: 3122
+hm> run-group bin/echo bin/echo
+worker-aworker-b
+
+bin/echo: exited (status 0).
+bin/echo: exited (status 0).
+hm> status
+write protection: OK
+NX: OK
+user execution protection: OK
+user access protection: OK
+W^X mappings: OK
+stack guard: OK
+null guard: OK
+No storage or networking.
+Native launcher: ready
+Native launches: 2
+Last prepared generation: 2
+Free frames: 3122
+hm> 

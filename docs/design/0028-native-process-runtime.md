@@ -1,6 +1,6 @@
 # 0028: bounded native process runtime
 
-Status: **Stage A implemented and verified locally; Stage B design and hardware protocol approved; Stage C draft and unapproved**.
+Status: **Stage A implemented and verified locally; Stage B implemented and verified locally with independent review; matching remote CI unverified; Stage C draft and unapproved**.
 See the [independent review](../reviews/0028-native-process-runtime.md) and
 [accounting evidence](../evidence/native-process-budget.md). No
 runtime implementation or execution verification is implied. This specifies real resumable

@@ -1,0 +1,13 @@
+{
+  "passed": true,
+  "fields": {
+    "process_bytes": 9832,
+    "space_bytes": 8936,
+    "box_bytes": 40,
+    "optional_box_bytes": 40,
+    "box_backing_pages": 3
+  },
+  "assembly_sha256": "99b22b523f71c73244dd93305a55f5832c529c755196933949694f093f3573b9",
+  "bytes_sha256": "2399bf0eece8c368d23e5f8a135b05604836424448b839cc3e8c2bd09255e966",
+  "scope": "current ARM compiler layout constants only; not stack usage or runtime allocation proof"
+}

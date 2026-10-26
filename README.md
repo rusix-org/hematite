@@ -21,6 +21,8 @@ run bin/info
 run bin/echo hello from ARM
 run demo/fault
 run demo/loop
+run-group bin/echo bin/echo
+run-group demo/loop bin/hello
 status
 ```
 
@@ -35,6 +37,12 @@ supports one ARM CPU at 64/128 MiB; the x86 monitor reports it as unsupported.
 Programs can receive up to 256 opaque startup bytes through the typed native
 interface. Interactive commands retain the 64-byte line limit. Console reads,
 argument vectors and process spawning remain unimplemented.
+
+`run-group` admits two programs before running either and schedules them in
+turns. The echo pair receives `worker-a` and `worker-b`; their text and newline
+writes can interleave. In the loop/hello pair, hello finishes while the loop is
+preempted, then the loop exhausts its budget. These demos and the broader cancellation, exhaustion and reclamation suite
+pass locally, including the full ARM64 and x86_64 regression run.
 
 Type `help` for commands;
 `test` runs 41 bootstrap, capability, memory, topology, event, mutex, thread, timer, exception and mapping checks. The ARM boot banner reports discovered RAM and usable frame capacity.

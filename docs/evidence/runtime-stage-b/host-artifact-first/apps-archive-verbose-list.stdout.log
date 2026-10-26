@@ -1,0 +1,12 @@
+drwxr-xr-x   2 0        0               0 Jan  1  1970 bin
+-rwxr-xr-x   1 0        0           19200 Jan  1  1970 bin/context_svc_a
+-rwxr-xr-x   1 0        0           19200 Jan  1  1970 bin/context_svc_b
+-rwxr-xr-x   1 0        0           19096 Jan  1  1970 bin/context_irq_a
+-rwxr-xr-x   1 0        0           19096 Jan  1  1970 bin/context_irq_b
+-rwxr-xr-x   1 0        0           19248 Jan  1  1970 bin/loop
+-rwxr-xr-x   1 0        0           19344 Jan  1  1970 bin/hello
+-rwxr-xr-x   1 0        0           23352 Jan  1  1970 bin/byte_budget
+-rwxr-xr-x   1 0        0           19160 Jan  1  1970 bin/call_limit
+-rwxr-xr-x   1 0        0           19248 Jan  1  1970 bin/fault
+-rwxr-xr-x   1 0        0           19344 Jan  1  1970 bin/yield
+-rwxr-xr-x   1 0        0           26632 Jan  1  1970 bin/grant

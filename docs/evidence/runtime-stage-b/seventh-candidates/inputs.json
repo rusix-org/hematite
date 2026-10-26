@@ -1,0 +1,26 @@
+{
+  "aarch64-runtime-test": {
+    "command": [
+      "cargo",
+      "rustc",
+      "--locked",
+      "--offline",
+      "-p",
+      "hm-core",
+      "--release",
+      "--target",
+      "aarch64-unknown-none",
+      "--target-dir",
+      "target/group-stage-b/seventh-candidates/aarch64-runtime-test",
+      "--features",
+      "runtime-tests",
+      "--",
+      "--emit=link,asm"
+    ],
+    "returncode": 0,
+    "elf": "target/group-stage-b/seventh-candidates/aarch64-runtime-test/aarch64-unknown-none/release/hematite",
+    "elf_sha256": "e52ad25713b8cbc051915a22027c653323d0656f2d85f714b94b1ebde5358e00",
+    "asm": "target/group-stage-b/seventh-candidates/aarch64-runtime-test/aarch64-unknown-none/release/deps/hematite-7f65bd2b18df27c6.s",
+    "asm_sha256": "a770257812664d87aad126b57276cccbe08f6eb85a81a1f7231a6cbd3c128ba6"
+  }
+}

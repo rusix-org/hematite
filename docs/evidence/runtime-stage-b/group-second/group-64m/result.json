@@ -1,0 +1,67 @@
+{
+  "passed": true,
+  "errors": [],
+  "execution": {
+    "returncode": 0,
+    "timed_out": false,
+    "launch_error": null,
+    "host_terminated": true,
+    "host_killed": false,
+    "alive_after_last_prompt": true,
+    "elapsed_seconds": 1.7381523499498144
+  },
+  "serial": {
+    "commands": 11,
+    "completed": 5,
+    "generation": 6,
+    "echo_hex": "776f726b65722d61776f726b65722d620a0a",
+    "free_frames": 3119
+  },
+  "trace": {
+    "echo": {
+      "slices": 8,
+      "calls": [
+        3,
+        3
+      ],
+      "irqs": [
+        1,
+        1
+      ],
+      "output_hex": "776f726b65722d61776f726b65722d620a0a"
+    },
+    "busy_peer": {
+      "slices": 83,
+      "calls": [
+        0,
+        2
+      ],
+      "irqs": [
+        80,
+        1
+      ],
+      "output_hex": ""
+    },
+    "scope": "exact saved-PC resumption and bounded interleaving; private-root identity covered by runtime profile"
+  },
+  "artifacts": {
+    "serial.log": {
+      "exists": true,
+      "bytes": 4468,
+      "sha256": "46ae1ec83de8ecf046647e192d487f14cc6efaba5d56b55a3a56313c0d43f168",
+      "within_size_limit": true
+    },
+    "exceptions.log": {
+      "exists": true,
+      "bytes": 92651,
+      "sha256": "15f8c68d9a84a9142c529bbd5eee709efe0d35863d7ac86ef3bb02587af267d2",
+      "within_size_limit": true
+    },
+    "stderr.log": {
+      "exists": true,
+      "bytes": 67,
+      "sha256": "de8394b3389168c7af886c5bdadf9b5b8118eed7df620db315d594d613bdec14",
+      "within_size_limit": true
+    }
+  }
+}

@@ -1,0 +1,1295 @@
+hematite: ARM64 Rust kernel entered at EL1
+Boot RAM bytes: 0x0000000008000000 (discovered RAM)
+Frame pool pages: 0x0000000000000ca9 (4 KiB each; boot reservations excluded)
+HMRT PREFLIGHT checks=15 irqs=8
+HMRT BEGIN 24
+HMRT INFO wire=1 cpus=1 frequency=62500000 total_ticks=6250000 quantum_ticks=62500 box_bytes=9832 box_frames=3
+HMRT CASE index=0 pass=0 name=svc_context before=3241
+HMRT GROUP group=1 limit=512 before=3241
+HMRT ADMIT group=1 slot=0 generation=1 console_generation=1 fixture=context_svc_a entry=4294967296 root=1077243904 process_frames=33 box_frames=3 before=3241 after=3205
+HMRT ADMIT group=1 slot=1 generation=1 console_generation=2 fixture=context_svc_b entry=4294967296 root=1077391360 process_frames=33 box_frames=3 before=3205 after=3169
+HMRT STEP group=1 turn=1 slot=0 generation=1 state=live calls=0 written=0 irqs=0 remaining=6250000 charged=0 turns=0 before=3169
+HMRT CLOCK group=1 turn=1 begin=11370811 remaining=6250000 comparator=11433311 whole_end=17620811
+HMRT ENTER group=1 turn=1 pc=4294967296 root=1077243904
+HMRT TRAP group=1 turn=1 kind=irq esr=0 far=0 elr=4294967296 spsr=4195136
+HMRT CHARGE group=1 turn=1 end=12183101 accounted=1 remaining=5437710 charged=812290 turns=1
+HMRT RETURN group=1 turn=1 event=timer terminal=none entered=1 code=0 calls=0 written=0 irqs=1 elr=4294967296 remaining=5437710 charged=812290 turns=1 root=1076436992 vbar=1075841024 controls=1 before=3169 after=3169
+HMRT STEP group=1 turn=1 slot=1 generation=1 state=live calls=0 written=0 irqs=0 remaining=6250000 charged=0 turns=0 before=3169
+HMRT CLOCK group=1 turn=1 begin=12408144 remaining=6250000 comparator=12470644 whole_end=18658144
+HMRT ENTER group=1 turn=1 pc=4294967296 root=1077391360
+HMRT TRAP group=1 turn=1 kind=irq esr=0 far=0 elr=4294967296 spsr=4195136
+HMRT CHARGE group=1 turn=1 end=13086098 accounted=1 remaining=5572046 charged=677954 turns=1
+HMRT RETURN group=1 turn=1 event=timer terminal=none entered=1 code=0 calls=0 written=0 irqs=1 elr=4294967296 remaining=5572046 charged=677954 turns=1 root=1076436992 vbar=1075841024 controls=1 before=3169 after=3169
+HMRT STEP group=1 turn=2 slot=0 generation=1 state=live calls=0 written=0 irqs=1 remaining=5437710 charged=812290 turns=1 before=3169
+HMRT CLOCK group=1 turn=2 begin=13198119 remaining=5437710 comparator=13260619 whole_end=18635829
+HMRT ENTER group=1 turn=2 pc=4294967296 root=1077243904
+HMRT TRAP group=1 turn=2 kind=irq esr=0 far=0 elr=4295035220 spsr=1614807872
+HMRT CHARGE group=1 turn=2 end=13295950 accounted=1 remaining=5339879 charged=910121 turns=2
+HMRT RETURN group=1 turn=2 event=timer terminal=none entered=1 code=0 calls=0 written=0 irqs=2 elr=4295035220 remaining=5339879 charged=910121 turns=2 root=1076436992 vbar=1075841024 controls=1 before=3169 after=3169
+HMRT STEP group=1 turn=2 slot=1 generation=1 state=live calls=0 written=0 irqs=1 remaining=5572046 charged=677954 turns=1 before=3169
+HMRT CLOCK group=1 turn=2 begin=13401577 remaining=5572046 comparator=13464077 whole_end=18973623
+HMRT ENTER group=1 turn=2 pc=4294967296 root=1077391360
+HMRT TRAP group=1 turn=2 kind=irq esr=0 far=0 elr=4295035220 spsr=1614807872
+HMRT CHARGE group=1 turn=2 end=13494013 accounted=1 remaining=5479610 charged=770390 turns=2
+HMRT RETURN group=1 turn=2 event=timer terminal=none entered=1 code=0 calls=0 written=0 irqs=2 elr=4295035220 remaining=5479610 charged=770390 turns=2 root=1076436992 vbar=1075841024 controls=1 before=3169 after=3169
+HMRT STEP group=1 turn=3 slot=0 generation=1 state=live calls=0 written=0 irqs=2 remaining=5339879 charged=910121 turns=2 before=3169
+HMRT CLOCK group=1 turn=3 begin=13597732 remaining=5339879 comparator=13660232 whole_end=18937611
+HMRT ENTER group=1 turn=3 pc=4295035220 root=1077243904
+HMRT TRAP group=1 turn=3 kind=svc esr=1442840576 far=0 elr=4295034568 spsr=2705331008
+HMRT CALL group=1 turn=3 ordinal=1 pc=4295034568 version=1 operation=1 arg1=4294967297 arg2=18446744073709551615 arg3=0
+HMRT RESULT group=1 turn=3 ordinal=1 status=0 bytes=0
+HMRT CHARGE group=1 turn=3 end=13750244 accounted=1 remaining=5187367 charged=1062633 turns=3
+HMRT RETURN group=1 turn=3 event=svc terminal=none entered=1 code=0 calls=1 written=0 irqs=2 elr=4295034568 remaining=5187367 charged=1062633 turns=3 root=1076436992 vbar=1075841024 controls=1 before=3169 after=3169
+HMRT STEP group=1 turn=3 slot=1 generation=1 state=live calls=0 written=0 irqs=2 remaining=5479610 charged=770390 turns=2 before=3169
+HMRT CLOCK group=1 turn=3 begin=13857002 remaining=5479610 comparator=13919502 whole_end=19336612
+HMRT ENTER group=1 turn=3 pc=4295035220 root=1077391360
+HMRT TRAP group=1 turn=3 kind=svc esr=1442840576 far=0 elr=4295034568 spsr=1363153728
+HMRT CALL group=1 turn=3 ordinal=1 pc=4295034568 version=1 operation=1 arg1=8589934593 arg2=18446744073709551615 arg3=0
+HMRT RESULT group=1 turn=3 ordinal=1 status=0 bytes=0
+HMRT CHARGE group=1 turn=3 end=13990609 accounted=1 remaining=5346003 charged=903997 turns=3
+HMRT RETURN group=1 turn=3 event=svc terminal=none entered=1 code=0 calls=1 written=0 irqs=2 elr=4295034568 remaining=5346003 charged=903997 turns=3 root=1076436992 vbar=1075841024 controls=1 before=3169 after=3169
+HMRT STEP group=1 turn=4 slot=0 generation=1 state=live calls=1 written=0 irqs=2 remaining=5187367 charged=1062633 turns=3 before=3169
+HMRT CLOCK group=1 turn=4 begin=14096035 remaining=5187367 comparator=14158535 whole_end=19283402
+HMRT ENTER group=1 turn=4 pc=4295034568 root=1077243904
+HMRT TRAP group=1 turn=4 kind=svc esr=1442840576 far=0 elr=4295032856 spsr=1614807872
+HMRT CALL group=1 turn=4 ordinal=2 pc=4295032856 version=1 operation=1 arg1=4294967297 arg2=4297063424 arg3=256
+HMRT OUTPUT group=1 turn=4 ordinal=2 length=256 hex=00000000000000000000000000000000ffffffffffffffff00000000000000000401000000001111050100000000111106010000000011110701000000001111010000000000000009010000000011110a010000000011110b010000000011110c010000000011110d010000000011110e010000000011110f0100000000111110010000000011111101000000001111120100000000111113010000000011111401000000001111150100000000111116010000000011111701000000001111180100000000111119010000000011111a010000000011111b010000000011111c010000000011111d010000000011111e0100000000111100fc1f0001000000
+HMRT RESULT group=1 turn=4 ordinal=2 status=0 bytes=256
+HMRT CHARGE group=1 turn=4 end=14386704 accounted=1 remaining=4896698 charged=1353302 turns=4
+HMRT RETURN group=1 turn=4 event=svc terminal=none entered=1 code=0 calls=2 written=256 irqs=2 elr=4295032856 remaining=4896698 charged=1353302 turns=4 root=1076436992 vbar=1075841024 controls=1 before=3169 after=3169
+HMRT STEP group=1 turn=4 slot=1 generation=1 state=live calls=1 written=0 irqs=2 remaining=5346003 charged=903997 turns=3 before=3169
+HMRT CLOCK group=1 turn=4 begin=14492217 remaining=5346003 comparator=14554717 whole_end=19838220
+HMRT ENTER group=1 turn=4 pc=4295034568 root=1077391360
+HMRT TRAP group=1 turn=4 kind=svc esr=1442840576 far=0 elr=4295032856 spsr=1614807872
+HMRT CALL group=1 turn=4 ordinal=2 pc=4295032856 version=1 operation=1 arg1=8589934593 arg2=4297063424 arg3=256
+HMRT OUTPUT group=1 turn=4 ordinal=2 length=256 hex=00000000000000000000000000000000ffffffffffffffff00000000000000000402000000001111050200000000111106020000000011110702000000001111010000000000000009020000000011110a020000000011110b020000000011110c020000000011110d020000000011110e020000000011110f0200000000111110020000000011111102000000001111120200000000111113020000000011111402000000001111150200000000111116020000000011111702000000001111180200000000111119020000000011111a020000000011111b020000000011111c020000000011111d020000000011111e0200000000111100fc1f0001000000
+HMRT RESULT group=1 turn=4 ordinal=2 status=0 bytes=256
+HMRT CHARGE group=1 turn=4 end=14744088 accounted=1 remaining=5094132 charged=1155868 turns=4
+HMRT RETURN group=1 turn=4 event=svc terminal=none entered=1 code=0 calls=2 written=256 irqs=2 elr=4295032856 remaining=5094132 charged=1155868 turns=4 root=1076436992 vbar=1075841024 controls=1 before=3169 after=3169
+HMRT STEP group=1 turn=5 slot=0 generation=1 state=live calls=2 written=256 irqs=2 remaining=4896698 charged=1353302 turns=4 before=3169
+HMRT CLOCK group=1 turn=5 begin=14847480 remaining=4896698 comparator=14909980 whole_end=19744178
+HMRT ENTER group=1 turn=5 pc=4295032856 root=1077243904
+HMRT TRAP group=1 turn=5 kind=svc esr=1442840576 far=0 elr=4295032856 spsr=1614807872
+HMRT CALL group=1 turn=5 ordinal=3 pc=4295032856 version=1 operation=1 arg1=4294967297 arg2=4297063680 arg3=256
+HMRT OUTPUT group=1 turn=5 ordinal=3 length=256 hex=000000a000000000000100000000222200010000000033330101000000002222010100000000333302010000000022220201000000003333030100000000222203010000000033330401000000002222040100000000333305010000000022220501000000003333060100000000222206010000000033330701000000002222070100000000333308010000000022220801000000003333090100000000222209010000000033330a010000000022220a010000000033330b010000000022220b010000000033330c010000000022220c010000000033330d010000000022220d010000000033330e010000000022220e010000000033330f01000000002222
+HMRT RESULT group=1 turn=5 ordinal=3 status=0 bytes=256
+HMRT CHARGE group=1 turn=5 end=15079424 accounted=1 remaining=4664754 charged=1585246 turns=5
+HMRT RETURN group=1 turn=5 event=svc terminal=none entered=1 code=0 calls=3 written=512 irqs=2 elr=4295032856 remaining=4664754 charged=1585246 turns=5 root=1076436992 vbar=1075841024 controls=1 before=3169 after=3169
+HMRT STEP group=1 turn=5 slot=1 generation=1 state=live calls=2 written=256 irqs=2 remaining=5094132 charged=1155868 turns=4 before=3169
+HMRT CLOCK group=1 turn=5 begin=15184095 remaining=5094132 comparator=15246595 whole_end=20278227
+HMRT ENTER group=1 turn=5 pc=4295032856 root=1077391360
+HMRT TRAP group=1 turn=5 kind=svc esr=1442840576 far=0 elr=4295032856 spsr=1614807872
+HMRT CALL group=1 turn=5 ordinal=3 pc=4295032856 version=1 operation=1 arg1=8589934593 arg2=4297063680 arg3=256
+HMRT OUTPUT group=1 turn=5 ordinal=3 length=256 hex=0000005000000000000200000000222200020000000033330102000000002222010200000000333302020000000022220202000000003333030200000000222203020000000033330402000000002222040200000000333305020000000022220502000000003333060200000000222206020000000033330702000000002222070200000000333308020000000022220802000000003333090200000000222209020000000033330a020000000022220a020000000033330b020000000022220b020000000033330c020000000022220c020000000033330d020000000022220d020000000033330e020000000022220e020000000033330f02000000002222
+HMRT RESULT group=1 turn=5 ordinal=3 status=0 bytes=256
+HMRT CHARGE group=1 turn=5 end=15416345 accounted=1 remaining=4861882 charged=1388118 turns=5
+HMRT RETURN group=1 turn=5 event=svc terminal=none entered=1 code=0 calls=3 written=512 irqs=2 elr=4295032856 remaining=4861882 charged=1388118 turns=5 root=1076436992 vbar=1075841024 controls=1 before=3169 after=3169
+HMRT STEP group=1 turn=6 slot=0 generation=1 state=live calls=3 written=512 irqs=2 remaining=4664754 charged=1585246 turns=5 before=3169
+HMRT CLOCK group=1 turn=6 begin=15519624 remaining=4664754 comparator=15582124 whole_end=20184378
+HMRT ENTER group=1 turn=6 pc=4295032856 root=1077243904
+HMRT TRAP group=1 turn=6 kind=svc esr=1442840576 far=0 elr=4295032856 spsr=1614807872
+HMRT CALL group=1 turn=6 ordinal=4 pc=4295032856 version=1 operation=1 arg1=4294967297 arg2=4297063936 arg3=256
+HMRT OUTPUT group=1 turn=6 ordinal=4 length=256 hex=0f01000000003333100100000000222210010000000033331101000000002222110100000000333312010000000022221201000000003333130100000000222213010000000033331401000000002222140100000000333315010000000022221501000000003333160100000000222216010000000033331701000000002222170100000000333318010000000022221801000000003333190100000000222219010000000033331a010000000022221a010000000033331b010000000022221b010000000033331c010000000022221c010000000033331d010000000022221d010000000033331e010000000022221e010000000033331f01000000002222
+HMRT RESULT group=1 turn=6 ordinal=4 status=0 bytes=256
+HMRT CHARGE group=1 turn=6 end=15752581 accounted=1 remaining=4431797 charged=1818203 turns=6
+HMRT RETURN group=1 turn=6 event=svc terminal=none entered=1 code=0 calls=4 written=768 irqs=2 elr=4295032856 remaining=4431797 charged=1818203 turns=6 root=1076436992 vbar=1075841024 controls=1 before=3169 after=3169
+HMRT STEP group=1 turn=6 slot=1 generation=1 state=live calls=3 written=512 irqs=2 remaining=4861882 charged=1388118 turns=5 before=3169
+HMRT CLOCK group=1 turn=6 begin=15855938 remaining=4861882 comparator=15918438 whole_end=20717820
+HMRT ENTER group=1 turn=6 pc=4295032856 root=1077391360
+HMRT TRAP group=1 turn=6 kind=svc esr=1442840576 far=0 elr=4295032856 spsr=1614807872
+HMRT CALL group=1 turn=6 ordinal=4 pc=4295032856 version=1 operation=1 arg1=8589934593 arg2=4297063936 arg3=256
+HMRT OUTPUT group=1 turn=6 ordinal=4 length=256 hex=0f02000000003333100200000000222210020000000033331102000000002222110200000000333312020000000022221202000000003333130200000000222213020000000033331402000000002222140200000000333315020000000022221502000000003333160200000000222216020000000033331702000000002222170200000000333318020000000022221802000000003333190200000000222219020000000033331a020000000022221a020000000033331b020000000022221b020000000033331c020000000022221c020000000033331d020000000022221d020000000033331e020000000022221e020000000033331f02000000002222
+HMRT RESULT group=1 turn=6 ordinal=4 status=0 bytes=256
+HMRT CHARGE group=1 turn=6 end=16090576 accounted=1 remaining=4627244 charged=1622756 turns=6
+HMRT RETURN group=1 turn=6 event=svc terminal=none entered=1 code=0 calls=4 written=768 irqs=2 elr=4295032856 remaining=4627244 charged=1622756 turns=6 root=1076436992 vbar=1075841024 controls=1 before=3169 after=3169
+HMRT STEP group=1 turn=7 slot=0 generation=1 state=live calls=4 written=768 irqs=2 remaining=4431797 charged=1818203 turns=6 before=3169
+HMRT CLOCK group=1 turn=7 begin=16193627 remaining=4431797 comparator=16256127 whole_end=20625424
+HMRT ENTER group=1 turn=7 pc=4295032856 root=1077243904
+HMRT TRAP group=1 turn=7 kind=svc esr=1442840576 far=0 elr=4295032856 spsr=1614807872
+HMRT CALL group=1 turn=7 ordinal=5 pc=4295032856 version=1 operation=1 arg1=4294967297 arg2=4297064192 arg3=64
+HMRT OUTPUT group=1 turn=7 ordinal=5 length=64 hex=1f010000000033330000400000000000010000080000000001000000000044440000000000000000000000000000000000000000000000000000000000000000
+HMRT RESULT group=1 turn=7 ordinal=5 status=0 bytes=64
+HMRT CHARGE group=1 turn=7 end=16341923 accounted=1 remaining=4283501 charged=1966499 turns=7
+HMRT RETURN group=1 turn=7 event=svc terminal=none entered=1 code=0 calls=5 written=832 irqs=2 elr=4295032856 remaining=4283501 charged=1966499 turns=7 root=1076436992 vbar=1075841024 controls=1 before=3169 after=3169
+HMRT STEP group=1 turn=7 slot=1 generation=1 state=live calls=4 written=768 irqs=2 remaining=4627244 charged=1622756 turns=6 before=3169
+HMRT CLOCK group=1 turn=7 begin=16446188 remaining=4627244 comparator=16508688 whole_end=21073432
+HMRT ENTER group=1 turn=7 pc=4295032856 root=1077391360
+HMRT TRAP group=1 turn=7 kind=svc esr=1442840576 far=0 elr=4295032856 spsr=1614807872
+HMRT CALL group=1 turn=7 ordinal=5 pc=4295032856 version=1 operation=1 arg1=8589934593 arg2=4297064192 arg3=64
+HMRT OUTPUT group=1 turn=7 ordinal=5 length=64 hex=1f020000000033330000800000000000020000080000000002000000000044440000000000000000000000000000000000000000000000000000000000000000
+HMRT RESULT group=1 turn=7 ordinal=5 status=0 bytes=64
+HMRT CHARGE group=1 turn=7 end=16585374 accounted=1 remaining=4488058 charged=1761942 turns=7
+HMRT RETURN group=1 turn=7 event=svc terminal=none entered=1 code=0 calls=5 written=832 irqs=2 elr=4295032856 remaining=4488058 charged=1761942 turns=7 root=1076436992 vbar=1075841024 controls=1 before=3169 after=3169
+HMRT STEP group=1 turn=8 slot=0 generation=1 state=live calls=5 written=832 irqs=2 remaining=4283501 charged=1966499 turns=7 before=3169
+HMRT CLOCK group=1 turn=8 begin=16686003 remaining=4283501 comparator=16748503 whole_end=20969504
+HMRT ENTER group=1 turn=8 pc=4295032856 root=1077243904
+HMRT TRAP group=1 turn=8 kind=svc esr=1442840576 far=0 elr=4295032884 spsr=1614807872
+HMRT CALL group=1 turn=8 ordinal=6 pc=4295032884 version=1 operation=2 arg1=0 arg2=0 arg3=0
+HMRT CHARGE group=1 turn=8 end=16777386 accounted=1 remaining=4192118 charged=2057882 turns=8
+HMRT RETURN group=1 turn=8 event=svc terminal=exit entered=1 code=0 calls=6 written=832 irqs=2 elr=4295032884 remaining=4192118 charged=2057882 turns=8 root=1076436992 vbar=1075841024 controls=1 before=3169 after=3205
+HMRT STEP group=1 turn=8 slot=1 generation=1 state=live calls=5 written=832 irqs=2 remaining=4488058 charged=1761942 turns=7 before=3205
+HMRT CLOCK group=1 turn=8 begin=16912940 remaining=4488058 comparator=16975440 whole_end=21400998
+HMRT ENTER group=1 turn=8 pc=4295032856 root=1077391360
+HMRT TRAP group=1 turn=8 kind=svc esr=1442840576 far=0 elr=4295032884 spsr=1614807872
+HMRT CALL group=1 turn=8 ordinal=6 pc=4295032884 version=1 operation=2 arg1=0 arg2=0 arg3=0
+HMRT CHARGE group=1 turn=8 end=17000173 accounted=1 remaining=4400825 charged=1849175 turns=8
+HMRT RETURN group=1 turn=8 event=svc terminal=exit entered=1 code=0 calls=6 written=832 irqs=2 elr=4295032884 remaining=4400825 charged=1849175 turns=8 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3241
+HMRT IDLE group=1 before=3241 after=3241
+HMRT ACTION group=1 id_group=1 op=reap slot=0 generation=1 result=ok before=3241 after=3241
+HMRT ACTION group=1 id_group=1 op=reap slot=1 generation=1 result=ok before=3241 after=3241
+HMRT DROP group=1 before=3241 after=3241
+HMRT PASS index=0 pass=0 name=svc_context before=3241 after=3241
+HMRT CASE index=1 pass=0 name=irq_context before=3241
+HMRT GROUP group=2 limit=512 before=3241
+HMRT ADMIT group=2 slot=0 generation=1 console_generation=3 fixture=context_irq_a entry=4294967296 root=1077243904 process_frames=33 box_frames=3 before=3241 after=3205
+HMRT ADMIT group=2 slot=1 generation=1 console_generation=4 fixture=context_irq_b entry=4294967296 root=1077391360 process_frames=33 box_frames=3 before=3205 after=3169
+HMRT ADMIT group=2 slot=2 generation=1 console_generation=5 fixture=context_irq_a entry=4294967296 root=1077538816 process_frames=33 box_frames=3 before=3169 after=3133
+HMRT WORD group=2 id_group=2 slot=2 generation=1 value=0
+HMRT ACTION group=2 id_group=2 op=release slot=2 generation=1 result=release_denied before=3133 after=3133
+HMRT WORD group=2 id_group=2 slot=2 generation=1 value=0
+HMRT ACTION group=2 id_group=2 op=cancel slot=2 generation=1 result=ok before=3133 after=3133
+HMRT STEP group=2 turn=1 slot=0 generation=1 state=live calls=0 written=0 irqs=0 remaining=6250000 charged=0 turns=0 before=3133
+HMRT CLOCK group=2 turn=1 begin=21787667 remaining=6250000 comparator=21850167 whole_end=28037667
+HMRT ENTER group=2 turn=1 pc=4294967296 root=1077243904
+HMRT TRAP group=2 turn=1 kind=irq esr=0 far=0 elr=4294967296 spsr=4195136
+HMRT CHARGE group=2 turn=1 end=22434580 accounted=1 remaining=5603087 charged=646913 turns=1
+HMRT RETURN group=2 turn=1 event=timer terminal=none entered=1 code=0 calls=0 written=0 irqs=1 elr=4294967296 remaining=5603087 charged=646913 turns=1 root=1076436992 vbar=1075841024 controls=1 before=3133 after=3133
+HMRT STEP group=2 turn=1 slot=1 generation=1 state=live calls=0 written=0 irqs=0 remaining=6250000 charged=0 turns=0 before=3133
+HMRT CLOCK group=2 turn=1 begin=22544123 remaining=6250000 comparator=22606623 whole_end=28794123
+HMRT ENTER group=2 turn=1 pc=4294967296 root=1077391360
+HMRT TRAP group=2 turn=1 kind=irq esr=0 far=0 elr=4294967296 spsr=4195136
+HMRT CHARGE group=2 turn=1 end=23203411 accounted=1 remaining=5590712 charged=659288 turns=1
+HMRT RETURN group=2 turn=1 event=timer terminal=none entered=1 code=0 calls=0 written=0 irqs=1 elr=4294967296 remaining=5590712 charged=659288 turns=1 root=1076436992 vbar=1075841024 controls=1 before=3133 after=3133
+HMRT STEP group=2 turn=1 slot=2 generation=1 state=cancel_pending calls=0 written=0 irqs=0 remaining=6250000 charged=0 turns=0 before=3133
+HMRT RETURN group=2 turn=1 event=none terminal=cancelled entered=0 code=0 calls=0 written=0 irqs=0 elr=4294967296 remaining=6250000 charged=0 turns=0 root=1076436992 vbar=1075841024 controls=1 before=3133 after=3169
+HMRT STEP group=2 turn=2 slot=0 generation=1 state=live calls=0 written=0 irqs=1 remaining=5603087 charged=646913 turns=1 before=3169
+HMRT CLOCK group=2 turn=2 begin=23409322 remaining=5603087 comparator=23471822 whole_end=29012409
+HMRT ENTER group=2 turn=2 pc=4294967296 root=1077243904
+HMRT TRAP group=2 turn=2 kind=irq esr=0 far=0 elr=4295035112 spsr=1614807872
+HMRT CHARGE group=2 turn=2 end=23503006 accounted=1 remaining=5509403 charged=740597 turns=2
+HMRT RETURN group=2 turn=2 event=timer terminal=none entered=1 code=0 calls=0 written=0 irqs=2 elr=4295035112 remaining=5509403 charged=740597 turns=2 root=1076436992 vbar=1075841024 controls=1 before=3169 after=3169
+HMRT STEP group=2 turn=2 slot=1 generation=1 state=live calls=0 written=0 irqs=1 remaining=5590712 charged=659288 turns=1 before=3169
+HMRT CLOCK group=2 turn=2 begin=23606878 remaining=5590712 comparator=23669378 whole_end=29197590
+HMRT ENTER group=2 turn=2 pc=4294967296 root=1077391360
+HMRT TRAP group=2 turn=2 kind=irq esr=0 far=0 elr=4295035264 spsr=1614807872
+HMRT CHARGE group=2 turn=2 end=23700348 accounted=1 remaining=5497242 charged=752758 turns=2
+HMRT RETURN group=2 turn=2 event=timer terminal=none entered=1 code=0 calls=0 written=0 irqs=2 elr=4295035264 remaining=5497242 charged=752758 turns=2 root=1076436992 vbar=1075841024 controls=1 before=3169 after=3169
+HMRT STEP group=2 turn=3 slot=0 generation=1 state=live calls=0 written=0 irqs=2 remaining=5509403 charged=740597 turns=2 before=3169
+HMRT CLOCK group=2 turn=3 begin=23805739 remaining=5509403 comparator=23868239 whole_end=29315142
+HMRT ENTER group=2 turn=3 pc=4295035112 root=1077243904
+HMRT TRAP group=2 turn=3 kind=irq esr=0 far=0 elr=4294967552 spsr=2705331008
+HMRT CHARGE group=2 turn=3 end=23897350 accounted=1 remaining=5417792 charged=832208 turns=3
+HMRT RETURN group=2 turn=3 event=timer terminal=none entered=1 code=0 calls=0 written=0 irqs=3 elr=4294967552 remaining=5417792 charged=832208 turns=3 root=1076436992 vbar=1075841024 controls=1 before=3169 after=3169
+HMRT STEP group=2 turn=3 slot=1 generation=1 state=live calls=0 written=0 irqs=2 remaining=5497242 charged=752758 turns=2 before=3169
+HMRT CLOCK group=2 turn=3 begin=24007970 remaining=5497242 comparator=24070470 whole_end=29505212
+HMRT ENTER group=2 turn=3 pc=4295035264 root=1077391360
+HMRT TRAP group=2 turn=3 kind=irq esr=0 far=0 elr=4294967552 spsr=1363153728
+HMRT CHARGE group=2 turn=3 end=24104147 accounted=1 remaining=5401065 charged=848935 turns=3
+HMRT RETURN group=2 turn=3 event=timer terminal=none entered=1 code=0 calls=0 written=0 irqs=3 elr=4294967552 remaining=5401065 charged=848935 turns=3 root=1076436992 vbar=1075841024 controls=1 before=3169 after=3169
+HMRT STEP group=2 turn=4 slot=0 generation=1 state=live calls=0 written=0 irqs=3 remaining=5417792 charged=832208 turns=3 before=3169
+HMRT CLOCK group=2 turn=4 begin=24213323 remaining=5417792 comparator=24275823 whole_end=29631115
+HMRT ENTER group=2 turn=4 pc=4294967552 root=1077243904
+HMRT TRAP group=2 turn=4 kind=irq esr=0 far=0 elr=4294967552 spsr=2688549696
+HMRT CHARGE group=2 turn=4 end=24304719 accounted=1 remaining=5326396 charged=923604 turns=4
+HMRT RETURN group=2 turn=4 event=timer terminal=none entered=1 code=0 calls=0 written=0 irqs=4 elr=4294967552 remaining=5326396 charged=923604 turns=4 root=1076436992 vbar=1075841024 controls=1 before=3169 after=3169
+HMRT WORD group=2 id_group=2 slot=0 generation=1 value=0
+HMRT ACTION group=2 id_group=2 op=release slot=0 generation=1 result=ok before=3169 after=3169
+HMRT WORD group=2 id_group=2 slot=0 generation=1 value=1
+HMRT WORD group=2 id_group=2 slot=0 generation=1 value=1
+HMRT ACTION group=2 id_group=2 op=release slot=0 generation=1 result=release_denied before=3169 after=3169
+HMRT WORD group=2 id_group=2 slot=0 generation=1 value=1
+HMRT STEP group=2 turn=4 slot=1 generation=1 state=live calls=0 written=0 irqs=3 remaining=5401065 charged=848935 turns=3 before=3169
+HMRT CLOCK group=2 turn=4 begin=24576067 remaining=5401065 comparator=24638567 whole_end=29977132
+HMRT ENTER group=2 turn=4 pc=4294967552 root=1077391360
+HMRT TRAP group=2 turn=4 kind=irq esr=0 far=0 elr=4294967552 spsr=1346372416
+HMRT CHARGE group=2 turn=4 end=24664941 accounted=1 remaining=5312191 charged=937809 turns=4
+HMRT RETURN group=2 turn=4 event=timer terminal=none entered=1 code=0 calls=0 written=0 irqs=4 elr=4294967552 remaining=5312191 charged=937809 turns=4 root=1076436992 vbar=1075841024 controls=1 before=3169 after=3169
+HMRT WORD group=2 id_group=2 slot=1 generation=1 value=0
+HMRT ACTION group=2 id_group=2 op=release slot=1 generation=1 result=ok before=3169 after=3169
+HMRT WORD group=2 id_group=2 slot=1 generation=1 value=1
+HMRT WORD group=2 id_group=2 slot=1 generation=1 value=1
+HMRT ACTION group=2 id_group=2 op=release slot=1 generation=1 result=release_denied before=3169 after=3169
+HMRT WORD group=2 id_group=2 slot=1 generation=1 value=1
+HMRT STEP group=2 turn=5 slot=0 generation=1 state=live calls=0 written=0 irqs=4 remaining=5326396 charged=923604 turns=4 before=3169
+HMRT CLOCK group=2 turn=5 begin=24883332 remaining=5326396 comparator=24945832 whole_end=30209728
+HMRT ENTER group=2 turn=5 pc=4294967552 root=1077243904
+HMRT TRAP group=2 turn=5 kind=svc esr=1442840576 far=0 elr=4295032856 spsr=1614807872
+HMRT CALL group=2 turn=5 ordinal=1 pc=4295032856 version=1 operation=1 arg1=12884901889 arg2=4297063424 arg3=256
+HMRT OUTPUT group=2 turn=5 ordinal=1 length=256 hex=00010000000011110101000000001111020100000000111103010000000011110401000000001111050100000000111106010000000011110701000000001111080100000000111109010000000011110a010000000011110b010000000011110c010000000011110d010000000011110e010000000011110f0100000000111110010000000011110100000000000000002000000100000013010000000011111401000000001111150100000000111116010000000011111701000000001111180100000000111119010000000011111a010000000011111b010000000011111c010000000011111d010000000011111e0100000000111100fc1f0001000000
+HMRT RESULT group=2 turn=5 ordinal=1 status=0 bytes=256
+HMRT CHARGE group=2 turn=5 end=25140236 accounted=1 remaining=5069492 charged=1180508 turns=5
+HMRT RETURN group=2 turn=5 event=svc terminal=none entered=1 code=0 calls=1 written=256 irqs=4 elr=4295032856 remaining=5069492 charged=1180508 turns=5 root=1076436992 vbar=1075841024 controls=1 before=3169 after=3169
+HMRT STEP group=2 turn=5 slot=1 generation=1 state=live calls=0 written=0 irqs=4 remaining=5312191 charged=937809 turns=4 before=3169
+HMRT CLOCK group=2 turn=5 begin=25244296 remaining=5312191 comparator=25306796 whole_end=30556487
+HMRT ENTER group=2 turn=5 pc=4294967552 root=1077391360
+HMRT TRAP group=2 turn=5 kind=svc esr=1442840576 far=0 elr=4295032856 spsr=1614807872
+HMRT CALL group=2 turn=5 ordinal=1 pc=4295032856 version=1 operation=1 arg1=17179869185 arg2=4297063424 arg3=256
+HMRT OUTPUT group=2 turn=5 ordinal=1 length=256 hex=00020000000011110102000000001111020200000000111103020000000011110402000000001111050200000000111106020000000011110702000000001111080200000000111109020000000011110a020000000011110b020000000011110c020000000011110d020000000011110e020000000011110f0200000000111110020000000011110020000001000000010000000000000013020000000011111402000000001111150200000000111116020000000011111702000000001111180200000000111119020000000011111a020000000011111b020000000011111c020000000011111d020000000011111e0200000000111100fc1f0001000000
+HMRT RESULT group=2 turn=5 ordinal=1 status=0 bytes=256
+HMRT CHARGE group=2 turn=5 end=25499572 accounted=1 remaining=5056915 charged=1193085 turns=5
+HMRT RETURN group=2 turn=5 event=svc terminal=none entered=1 code=0 calls=1 written=256 irqs=4 elr=4295032856 remaining=5056915 charged=1193085 turns=5 root=1076436992 vbar=1075841024 controls=1 before=3169 after=3169
+HMRT STEP group=2 turn=6 slot=0 generation=1 state=live calls=1 written=256 irqs=4 remaining=5069492 charged=1180508 turns=5 before=3169
+HMRT CLOCK group=2 turn=6 begin=25604177 remaining=5069492 comparator=25666677 whole_end=30673669
+HMRT ENTER group=2 turn=6 pc=4295032856 root=1077243904
+HMRT TRAP group=2 turn=6 kind=svc esr=1442840576 far=0 elr=4295032856 spsr=1614807872
+HMRT CALL group=2 turn=6 ordinal=2 pc=4295032856 version=1 operation=1 arg1=12884901889 arg2=4297063680 arg3=256
+HMRT OUTPUT group=2 turn=6 ordinal=2 length=256 hex=000000a000000000000100000000222200010000000033330101000000002222010100000000333302010000000022220201000000003333030100000000222203010000000033330401000000002222040100000000333305010000000022220501000000003333060100000000222206010000000033330701000000002222070100000000333308010000000022220801000000003333090100000000222209010000000033330a010000000022220a010000000033330b010000000022220b010000000033330c010000000022220c010000000033330d010000000022220d010000000033330e010000000022220e010000000033330f01000000002222
+HMRT RESULT group=2 turn=6 ordinal=2 status=0 bytes=256
+HMRT CHARGE group=2 turn=6 end=25841285 accounted=1 remaining=4832384 charged=1417616 turns=6
+HMRT RETURN group=2 turn=6 event=svc terminal=none entered=1 code=0 calls=2 written=512 irqs=4 elr=4295032856 remaining=4832384 charged=1417616 turns=6 root=1076436992 vbar=1075841024 controls=1 before=3169 after=3169
+HMRT STEP group=2 turn=6 slot=1 generation=1 state=live calls=1 written=256 irqs=4 remaining=5056915 charged=1193085 turns=5 before=3169
+HMRT CLOCK group=2 turn=6 begin=25945201 remaining=5056915 comparator=26007701 whole_end=31002116
+HMRT ENTER group=2 turn=6 pc=4295032856 root=1077391360
+HMRT TRAP group=2 turn=6 kind=svc esr=1442840576 far=0 elr=4295032856 spsr=1614807872
+HMRT CALL group=2 turn=6 ordinal=2 pc=4295032856 version=1 operation=1 arg1=17179869185 arg2=4297063680 arg3=256
+HMRT OUTPUT group=2 turn=6 ordinal=2 length=256 hex=0000005000000000000200000000222200020000000033330102000000002222010200000000333302020000000022220202000000003333030200000000222203020000000033330402000000002222040200000000333305020000000022220502000000003333060200000000222206020000000033330702000000002222070200000000333308020000000022220802000000003333090200000000222209020000000033330a020000000022220a020000000033330b020000000022220b020000000033330c020000000022220c020000000033330d020000000022220d020000000033330e020000000022220e020000000033330f02000000002222
+HMRT RESULT group=2 turn=6 ordinal=2 status=0 bytes=256
+HMRT CHARGE group=2 turn=6 end=26182895 accounted=1 remaining=4819221 charged=1430779 turns=6
+HMRT RETURN group=2 turn=6 event=svc terminal=none entered=1 code=0 calls=2 written=512 irqs=4 elr=4295032856 remaining=4819221 charged=1430779 turns=6 root=1076436992 vbar=1075841024 controls=1 before=3169 after=3169
+HMRT STEP group=2 turn=7 slot=0 generation=1 state=live calls=2 written=512 irqs=4 remaining=4832384 charged=1417616 turns=6 before=3169
+HMRT CLOCK group=2 turn=7 begin=26287613 remaining=4832384 comparator=26350113 whole_end=31119997
+HMRT ENTER group=2 turn=7 pc=4295032856 root=1077243904
+HMRT TRAP group=2 turn=7 kind=svc esr=1442840576 far=0 elr=4295032856 spsr=1614807872
+HMRT CALL group=2 turn=7 ordinal=3 pc=4295032856 version=1 operation=1 arg1=12884901889 arg2=4297063936 arg3=256
+HMRT OUTPUT group=2 turn=7 ordinal=3 length=256 hex=0f01000000003333100100000000222210010000000033331101000000002222110100000000333312010000000022221201000000003333130100000000222213010000000033331401000000002222140100000000333315010000000022221501000000003333160100000000222216010000000033331701000000002222170100000000333318010000000022221801000000003333190100000000222219010000000033331a010000000022221a010000000033331b010000000022221b010000000033331c010000000022221c010000000033331d010000000022221d010000000033331e010000000022221e010000000033331f01000000002222
+HMRT RESULT group=2 turn=7 ordinal=3 status=0 bytes=256
+HMRT CHARGE group=2 turn=7 end=26527385 accounted=1 remaining=4592612 charged=1657388 turns=7
+HMRT RETURN group=2 turn=7 event=svc terminal=none entered=1 code=0 calls=3 written=768 irqs=4 elr=4295032856 remaining=4592612 charged=1657388 turns=7 root=1076436992 vbar=1075841024 controls=1 before=3169 after=3169
+HMRT STEP group=2 turn=7 slot=1 generation=1 state=live calls=2 written=512 irqs=4 remaining=4819221 charged=1430779 turns=6 before=3169
+HMRT CLOCK group=2 turn=7 begin=26634513 remaining=4819221 comparator=26697013 whole_end=31453734
+HMRT ENTER group=2 turn=7 pc=4295032856 root=1077391360
+HMRT TRAP group=2 turn=7 kind=svc esr=1442840576 far=0 elr=4295032856 spsr=1614807872
+HMRT CALL group=2 turn=7 ordinal=3 pc=4295032856 version=1 operation=1 arg1=17179869185 arg2=4297063936 arg3=256
+HMRT OUTPUT group=2 turn=7 ordinal=3 length=256 hex=0f02000000003333100200000000222210020000000033331102000000002222110200000000333312020000000022221202000000003333130200000000222213020000000033331402000000002222140200000000333315020000000022221502000000003333160200000000222216020000000033331702000000002222170200000000333318020000000022221802000000003333190200000000222219020000000033331a020000000022221a020000000033331b020000000022221b020000000033331c020000000022221c020000000033331d020000000022221d020000000033331e020000000022221e020000000033331f02000000002222
+HMRT RESULT group=2 turn=7 ordinal=3 status=0 bytes=256
+HMRT CHARGE group=2 turn=7 end=26879950 accounted=1 remaining=4573784 charged=1676216 turns=7
+HMRT RETURN group=2 turn=7 event=svc terminal=none entered=1 code=0 calls=3 written=768 irqs=4 elr=4295032856 remaining=4573784 charged=1676216 turns=7 root=1076436992 vbar=1075841024 controls=1 before=3169 after=3169
+HMRT STEP group=2 turn=8 slot=0 generation=1 state=live calls=3 written=768 irqs=4 remaining=4592612 charged=1657388 turns=7 before=3169
+HMRT CLOCK group=2 turn=8 begin=26996690 remaining=4592612 comparator=27059190 whole_end=31589302
+HMRT ENTER group=2 turn=8 pc=4295032856 root=1077243904
+HMRT TRAP group=2 turn=8 kind=svc esr=1442840576 far=0 elr=4295032856 spsr=1614807872
+HMRT CALL group=2 turn=8 ordinal=4 pc=4295032856 version=1 operation=1 arg1=12884901889 arg2=4297064192 arg3=64
+HMRT OUTPUT group=2 turn=8 ordinal=4 length=64 hex=1f010000000033330000400000000000010000080000000001000000000044440000000000000000000000000000000000000000000000000000000000000000
+HMRT RESULT group=2 turn=8 ordinal=4 status=0 bytes=64
+HMRT CHARGE group=2 turn=8 end=27158042 accounted=1 remaining=4431260 charged=1818740 turns=8
+HMRT RETURN group=2 turn=8 event=svc terminal=none entered=1 code=0 calls=4 written=832 irqs=4 elr=4295032856 remaining=4431260 charged=1818740 turns=8 root=1076436992 vbar=1075841024 controls=1 before=3169 after=3169
+HMRT STEP group=2 turn=8 slot=1 generation=1 state=live calls=3 written=768 irqs=4 remaining=4573784 charged=1676216 turns=7 before=3169
+HMRT CLOCK group=2 turn=8 begin=27268501 remaining=4573784 comparator=27331001 whole_end=31842285
+HMRT ENTER group=2 turn=8 pc=4295032856 root=1077391360
+HMRT TRAP group=2 turn=8 kind=svc esr=1442840576 far=0 elr=4295032856 spsr=1614807872
+HMRT CALL group=2 turn=8 ordinal=4 pc=4295032856 version=1 operation=1 arg1=17179869185 arg2=4297064192 arg3=64
+HMRT OUTPUT group=2 turn=8 ordinal=4 length=64 hex=1f020000000033330000800000000000020000080000000002000000000044440000000000000000000000000000000000000000000000000000000000000000
+HMRT RESULT group=2 turn=8 ordinal=4 status=0 bytes=64
+HMRT CHARGE group=2 turn=8 end=27424489 accounted=1 remaining=4417796 charged=1832204 turns=8
+HMRT RETURN group=2 turn=8 event=svc terminal=none entered=1 code=0 calls=4 written=832 irqs=4 elr=4295032856 remaining=4417796 charged=1832204 turns=8 root=1076436992 vbar=1075841024 controls=1 before=3169 after=3169
+HMRT STEP group=2 turn=9 slot=0 generation=1 state=live calls=4 written=832 irqs=4 remaining=4431260 charged=1818740 turns=8 before=3169
+HMRT CLOCK group=2 turn=9 begin=27536227 remaining=4431260 comparator=27598727 whole_end=31967487
+HMRT ENTER group=2 turn=9 pc=4295032856 root=1077243904
+HMRT TRAP group=2 turn=9 kind=svc esr=1442840576 far=0 elr=4295032884 spsr=1614807872
+HMRT CALL group=2 turn=9 ordinal=5 pc=4295032884 version=1 operation=2 arg1=0 arg2=0 arg3=0
+HMRT CHARGE group=2 turn=9 end=27632298 accounted=1 remaining=4335189 charged=1914811 turns=9
+HMRT RETURN group=2 turn=9 event=svc terminal=exit entered=1 code=0 calls=5 written=832 irqs=4 elr=4295032884 remaining=4335189 charged=1914811 turns=9 root=1076436992 vbar=1075841024 controls=1 before=3169 after=3205
+HMRT WORD group=2 id_group=2 slot=1 generation=1 value=1
+HMRT ACTION group=2 id_group=2 op=release slot=0 generation=1 result=release_denied before=3205 after=3205
+HMRT WORD group=2 id_group=2 slot=1 generation=1 value=1
+HMRT STEP group=2 turn=9 slot=1 generation=1 state=live calls=4 written=832 irqs=4 remaining=4417796 charged=1832204 turns=8 before=3205
+HMRT CLOCK group=2 turn=9 begin=27812503 remaining=4417796 comparator=27875003 whole_end=32230299
+HMRT ENTER group=2 turn=9 pc=4295032856 root=1077391360
+HMRT TRAP group=2 turn=9 kind=svc esr=1442840576 far=0 elr=4295032884 spsr=1614807872
+HMRT CALL group=2 turn=9 ordinal=5 pc=4295032884 version=1 operation=2 arg1=0 arg2=0 arg3=0
+HMRT CHARGE group=2 turn=9 end=27913603 accounted=1 remaining=4316696 charged=1933304 turns=9
+HMRT RETURN group=2 turn=9 event=svc terminal=exit entered=1 code=0 calls=5 written=832 irqs=4 elr=4295032884 remaining=4316696 charged=1933304 turns=9 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3241
+HMRT IDLE group=2 before=3241 after=3241
+HMRT ACTION group=2 id_group=2 op=reap slot=0 generation=1 result=ok before=3241 after=3241
+HMRT ACTION group=2 id_group=2 op=reap slot=1 generation=1 result=ok before=3241 after=3241
+HMRT ACTION group=2 id_group=2 op=reap slot=2 generation=1 result=ok before=3241 after=3241
+HMRT DROP group=2 before=3241 after=3241
+HMRT PASS index=1 pass=0 name=irq_context before=3241 after=3241
+HMRT CASE index=2 pass=0 name=busy_peer before=3241
+HMRT GROUP group=3 limit=512 before=3241
+HMRT ADMIT group=3 slot=0 generation=1 console_generation=6 fixture=loop entry=4294967296 root=1077243904 process_frames=33 box_frames=3 before=3241 after=3205
+HMRT ADMIT group=3 slot=1 generation=1 console_generation=7 fixture=hello entry=4294967296 root=1077391360 process_frames=33 box_frames=3 before=3205 after=3169
+HMRT STEP group=3 turn=1 slot=0 generation=1 state=live calls=0 written=0 irqs=0 remaining=6250000 charged=0 turns=0 before=3169
+HMRT CLOCK group=3 turn=1 begin=30826170 remaining=6250000 comparator=30888670 whole_end=37076170
+HMRT ENTER group=3 turn=1 pc=4294967296 root=1077243904
+HMRT TRAP group=3 turn=1 kind=irq esr=0 far=0 elr=4294967296 spsr=4195136
+HMRT CHARGE group=3 turn=1 end=31500823 accounted=1 remaining=5575347 charged=674653 turns=1
+HMRT RETURN group=3 turn=1 event=timer terminal=none entered=1 code=0 calls=0 written=0 irqs=1 elr=4294967296 remaining=5575347 charged=674653 turns=1 root=1076436992 vbar=1075841024 controls=1 before=3169 after=3169
+HMRT STEP group=3 turn=1 slot=1 generation=1 state=live calls=0 written=0 irqs=0 remaining=6250000 charged=0 turns=0 before=3169
+HMRT CLOCK group=3 turn=1 begin=31606075 remaining=6250000 comparator=31668575 whole_end=37856075
+HMRT ENTER group=3 turn=1 pc=4294967296 root=1077391360
+HMRT TRAP group=3 turn=1 kind=irq esr=0 far=0 elr=4294967296 spsr=4195136
+HMRT CHARGE group=3 turn=1 end=32277084 accounted=1 remaining=5578991 charged=671009 turns=1
+HMRT RETURN group=3 turn=1 event=timer terminal=none entered=1 code=0 calls=0 written=0 irqs=1 elr=4294967296 remaining=5578991 charged=671009 turns=1 root=1076436992 vbar=1075841024 controls=1 before=3169 after=3169
+HMRT STEP group=3 turn=2 slot=0 generation=1 state=live calls=0 written=0 irqs=1 remaining=5575347 charged=674653 turns=1 before=3169
+HMRT CLOCK group=3 turn=2 begin=32386299 remaining=5575347 comparator=32448799 whole_end=37961646
+HMRT ENTER group=3 turn=2 pc=4294967296 root=1077243904
+HMRT TRAP group=3 turn=2 kind=irq esr=0 far=0 elr=4295032916 spsr=4195136
+HMRT CHARGE group=3 turn=2 end=32476604 accounted=1 remaining=5485042 charged=764958 turns=2
+HMRT RETURN group=3 turn=2 event=timer terminal=none entered=1 code=0 calls=0 written=0 irqs=2 elr=4295032916 remaining=5485042 charged=764958 turns=2 root=1076436992 vbar=1075841024 controls=1 before=3169 after=3169
+HMRT STEP group=3 turn=2 slot=1 generation=1 state=live calls=0 written=0 irqs=1 remaining=5578991 charged=671009 turns=1 before=3169
+HMRT CLOCK group=3 turn=2 begin=32584724 remaining=5578991 comparator=32647224 whole_end=38163715
+HMRT ENTER group=3 turn=2 pc=4294967296 root=1077391360
+HMRT TRAP group=3 turn=2 kind=svc esr=1442840576 far=0 elr=4295032856 spsr=1614807872
+HMRT CALL group=3 turn=2 ordinal=1 pc=4295032856 version=1 operation=1 arg1=30064771073 arg2=4295036940 arg3=15
+HMRT OUTPUT group=3 turn=2 ordinal=1 length=15 hex=68656c6c6f2066726f6d20454c300a
+HMRT RESULT group=3 turn=2 ordinal=1 status=0 bytes=15
+HMRT CHARGE group=3 turn=2 end=32730466 accounted=1 remaining=5433249 charged=816751 turns=2
+HMRT RETURN group=3 turn=2 event=svc terminal=none entered=1 code=0 calls=1 written=15 irqs=1 elr=4295032856 remaining=5433249 charged=816751 turns=2 root=1076436992 vbar=1075841024 controls=1 before=3169 after=3169
+HMRT STEP group=3 turn=3 slot=0 generation=1 state=live calls=0 written=0 irqs=2 remaining=5485042 charged=764958 turns=2 before=3169
+HMRT CLOCK group=3 turn=3 begin=32838738 remaining=5485042 comparator=32901238 whole_end=38323780
+HMRT ENTER group=3 turn=3 pc=4295032916 root=1077243904
+HMRT TRAP group=3 turn=3 kind=irq esr=0 far=0 elr=4295032916 spsr=4195136
+HMRT CHARGE group=3 turn=3 end=32931008 accounted=1 remaining=5392772 charged=857228 turns=3
+HMRT RETURN group=3 turn=3 event=timer terminal=none entered=1 code=0 calls=0 written=0 irqs=3 elr=4295032916 remaining=5392772 charged=857228 turns=3 root=1076436992 vbar=1075841024 controls=1 before=3169 after=3169
+HMRT STEP group=3 turn=3 slot=1 generation=1 state=live calls=1 written=15 irqs=1 remaining=5433249 charged=816751 turns=2 before=3169
+HMRT CLOCK group=3 turn=3 begin=33036224 remaining=5433249 comparator=33098724 whole_end=38469473
+HMRT ENTER group=3 turn=3 pc=4295032856 root=1077391360
+HMRT TRAP group=3 turn=3 kind=svc esr=1442840576 far=0 elr=4295032884 spsr=1614807872
+HMRT CALL group=3 turn=3 ordinal=2 pc=4295032884 version=1 operation=2 arg1=0 arg2=0 arg3=0
+HMRT CHARGE group=3 turn=3 end=33131894 accounted=1 remaining=5337579 charged=912421 turns=3
+HMRT RETURN group=3 turn=3 event=svc terminal=exit entered=1 code=0 calls=2 written=15 irqs=1 elr=4295032884 remaining=5337579 charged=912421 turns=3 root=1076436992 vbar=1075841024 controls=1 before=3169 after=3205
+HMRT STEP group=3 turn=4 slot=0 generation=1 state=live calls=0 written=0 irqs=3 remaining=5392772 charged=857228 turns=3 before=3205
+HMRT CLOCK group=3 turn=4 begin=33244484 remaining=5392772 comparator=33306984 whole_end=38637256
+HMRT ENTER group=3 turn=4 pc=4295032916 root=1077243904
+HMRT TRAP group=3 turn=4 kind=irq esr=0 far=0 elr=4295032916 spsr=4195136
+HMRT CHARGE group=3 turn=4 end=33335793 accounted=1 remaining=5301463 charged=948537 turns=4
+HMRT RETURN group=3 turn=4 event=timer terminal=none entered=1 code=0 calls=0 written=0 irqs=4 elr=4295032916 remaining=5301463 charged=948537 turns=4 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=3 turn=5 slot=0 generation=1 state=live calls=0 written=0 irqs=4 remaining=5301463 charged=948537 turns=4 before=3205
+HMRT CLOCK group=3 turn=5 begin=33454716 remaining=5301463 comparator=33517216 whole_end=38756179
+HMRT ENTER group=3 turn=5 pc=4295032916 root=1077243904
+HMRT TRAP group=3 turn=5 kind=irq esr=0 far=0 elr=4295032916 spsr=4195136
+HMRT CHARGE group=3 turn=5 end=33544930 accounted=1 remaining=5211249 charged=1038751 turns=5
+HMRT RETURN group=3 turn=5 event=timer terminal=none entered=1 code=0 calls=0 written=0 irqs=5 elr=4295032916 remaining=5211249 charged=1038751 turns=5 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=3 turn=6 slot=0 generation=1 state=live calls=0 written=0 irqs=5 remaining=5211249 charged=1038751 turns=5 before=3205
+HMRT CLOCK group=3 turn=6 begin=33651766 remaining=5211249 comparator=33714266 whole_end=38863015
+HMRT ENTER group=3 turn=6 pc=4295032916 root=1077243904
+HMRT TRAP group=3 turn=6 kind=irq esr=0 far=0 elr=4295032916 spsr=4195136
+HMRT CHARGE group=3 turn=6 end=33742721 accounted=1 remaining=5120294 charged=1129706 turns=6
+HMRT RETURN group=3 turn=6 event=timer terminal=none entered=1 code=0 calls=0 written=0 irqs=6 elr=4295032916 remaining=5120294 charged=1129706 turns=6 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=3 turn=7 slot=0 generation=1 state=live calls=0 written=0 irqs=6 remaining=5120294 charged=1129706 turns=6 before=3205
+HMRT CLOCK group=3 turn=7 begin=33848318 remaining=5120294 comparator=33910818 whole_end=38968612
+HMRT ENTER group=3 turn=7 pc=4295032916 root=1077243904
+HMRT TRAP group=3 turn=7 kind=irq esr=0 far=0 elr=4295032916 spsr=4195136
+HMRT CHARGE group=3 turn=7 end=33939706 accounted=1 remaining=5028906 charged=1221094 turns=7
+HMRT RETURN group=3 turn=7 event=timer terminal=none entered=1 code=0 calls=0 written=0 irqs=7 elr=4295032916 remaining=5028906 charged=1221094 turns=7 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=3 turn=8 slot=0 generation=1 state=live calls=0 written=0 irqs=7 remaining=5028906 charged=1221094 turns=7 before=3205
+HMRT CLOCK group=3 turn=8 begin=34044573 remaining=5028906 comparator=34107073 whole_end=39073479
+HMRT ENTER group=3 turn=8 pc=4295032916 root=1077243904
+HMRT TRAP group=3 turn=8 kind=irq esr=0 far=0 elr=4295032916 spsr=4195136
+HMRT CHARGE group=3 turn=8 end=34135974 accounted=1 remaining=4937505 charged=1312495 turns=8
+HMRT RETURN group=3 turn=8 event=timer terminal=none entered=1 code=0 calls=0 written=0 irqs=8 elr=4295032916 remaining=4937505 charged=1312495 turns=8 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=3 turn=9 slot=0 generation=1 state=live calls=0 written=0 irqs=8 remaining=4937505 charged=1312495 turns=8 before=3205
+HMRT CLOCK group=3 turn=9 begin=34241178 remaining=4937505 comparator=34303678 whole_end=39178683
+HMRT ENTER group=3 turn=9 pc=4295032916 root=1077243904
+HMRT TRAP group=3 turn=9 kind=irq esr=0 far=0 elr=4295032916 spsr=4195136
+HMRT CHARGE group=3 turn=9 end=34332640 accounted=1 remaining=4846043 charged=1403957 turns=9
+HMRT RETURN group=3 turn=9 event=timer terminal=none entered=1 code=0 calls=0 written=0 irqs=9 elr=4295032916 remaining=4846043 charged=1403957 turns=9 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=3 turn=10 slot=0 generation=1 state=live calls=0 written=0 irqs=9 remaining=4846043 charged=1403957 turns=9 before=3205
+HMRT CLOCK group=3 turn=10 begin=34438939 remaining=4846043 comparator=34501439 whole_end=39284982
+HMRT ENTER group=3 turn=10 pc=4295032916 root=1077243904
+HMRT TRAP group=3 turn=10 kind=irq esr=0 far=0 elr=4295032916 spsr=4195136
+HMRT CHARGE group=3 turn=10 end=34530043 accounted=1 remaining=4754939 charged=1495061 turns=10
+HMRT RETURN group=3 turn=10 event=timer terminal=none entered=1 code=0 calls=0 written=0 irqs=10 elr=4295032916 remaining=4754939 charged=1495061 turns=10 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=3 turn=11 slot=0 generation=1 state=live calls=0 written=0 irqs=10 remaining=4754939 charged=1495061 turns=10 before=3205
+HMRT CLOCK group=3 turn=11 begin=34638062 remaining=4754939 comparator=34700562 whole_end=39393001
+HMRT ENTER group=3 turn=11 pc=4295032916 root=1077243904
+HMRT TRAP group=3 turn=11 kind=irq esr=0 far=0 elr=4295032916 spsr=4195136
+HMRT CHARGE group=3 turn=11 end=34728551 accounted=1 remaining=4664450 charged=1585550 turns=11
+HMRT RETURN group=3 turn=11 event=timer terminal=none entered=1 code=0 calls=0 written=0 irqs=11 elr=4295032916 remaining=4664450 charged=1585550 turns=11 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=3 turn=12 slot=0 generation=1 state=live calls=0 written=0 irqs=11 remaining=4664450 charged=1585550 turns=11 before=3205
+HMRT CLOCK group=3 turn=12 begin=34839250 remaining=4664450 comparator=34901750 whole_end=39503700
+HMRT ENTER group=3 turn=12 pc=4295032916 root=1077243904
+HMRT TRAP group=3 turn=12 kind=irq esr=0 far=0 elr=4295032916 spsr=4195136
+HMRT CHARGE group=3 turn=12 end=34931978 accounted=1 remaining=4571722 charged=1678278 turns=12
+HMRT RETURN group=3 turn=12 event=timer terminal=none entered=1 code=0 calls=0 written=0 irqs=12 elr=4295032916 remaining=4571722 charged=1678278 turns=12 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=3 turn=13 slot=0 generation=1 state=live calls=0 written=0 irqs=12 remaining=4571722 charged=1678278 turns=12 before=3205
+HMRT CLOCK group=3 turn=13 begin=35039918 remaining=4571722 comparator=35102418 whole_end=39611640
+HMRT ENTER group=3 turn=13 pc=4295032916 root=1077243904
+HMRT TRAP group=3 turn=13 kind=irq esr=0 far=0 elr=4295032916 spsr=4195136
+HMRT CHARGE group=3 turn=13 end=35132184 accounted=1 remaining=4479456 charged=1770544 turns=13
+HMRT RETURN group=3 turn=13 event=timer terminal=none entered=1 code=0 calls=0 written=0 irqs=13 elr=4295032916 remaining=4479456 charged=1770544 turns=13 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=3 turn=14 slot=0 generation=1 state=live calls=0 written=0 irqs=13 remaining=4479456 charged=1770544 turns=13 before=3205
+HMRT CLOCK group=3 turn=14 begin=35241351 remaining=4479456 comparator=35303851 whole_end=39720807
+HMRT ENTER group=3 turn=14 pc=4295032916 root=1077243904
+HMRT TRAP group=3 turn=14 kind=irq esr=0 far=0 elr=4295032916 spsr=4195136
+HMRT CHARGE group=3 turn=14 end=35331468 accounted=1 remaining=4389339 charged=1860661 turns=14
+HMRT RETURN group=3 turn=14 event=timer terminal=none entered=1 code=0 calls=0 written=0 irqs=14 elr=4295032916 remaining=4389339 charged=1860661 turns=14 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=3 turn=15 slot=0 generation=1 state=live calls=0 written=0 irqs=14 remaining=4389339 charged=1860661 turns=14 before=3205
+HMRT CLOCK group=3 turn=15 begin=35440181 remaining=4389339 comparator=35502681 whole_end=39829520
+HMRT ENTER group=3 turn=15 pc=4295032916 root=1077243904
+HMRT TRAP group=3 turn=15 kind=irq esr=0 far=0 elr=4295032916 spsr=4195136
+HMRT CHARGE group=3 turn=15 end=35536310 accounted=1 remaining=4293210 charged=1956790 turns=15
+HMRT RETURN group=3 turn=15 event=timer terminal=none entered=1 code=0 calls=0 written=0 irqs=15 elr=4295032916 remaining=4293210 charged=1956790 turns=15 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=3 turn=16 slot=0 generation=1 state=live calls=0 written=0 irqs=15 remaining=4293210 charged=1956790 turns=15 before=3205
+HMRT CLOCK group=3 turn=16 begin=35647502 remaining=4293210 comparator=35710002 whole_end=39940712
+HMRT ENTER group=3 turn=16 pc=4295032916 root=1077243904
+HMRT TRAP group=3 turn=16 kind=irq esr=0 far=0 elr=4295032916 spsr=4195136
+HMRT CHARGE group=3 turn=16 end=35736734 accounted=1 remaining=4203978 charged=2046022 turns=16
+HMRT RETURN group=3 turn=16 event=timer terminal=none entered=1 code=0 calls=0 written=0 irqs=16 elr=4295032916 remaining=4203978 charged=2046022 turns=16 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=3 turn=17 slot=0 generation=1 state=live calls=0 written=0 irqs=16 remaining=4203978 charged=2046022 turns=16 before=3205
+HMRT CLOCK group=3 turn=17 begin=35844255 remaining=4203978 comparator=35906755 whole_end=40048233
+HMRT ENTER group=3 turn=17 pc=4295032916 root=1077243904
+HMRT TRAP group=3 turn=17 kind=irq esr=0 far=0 elr=4295032916 spsr=4195136
+HMRT CHARGE group=3 turn=17 end=35935329 accounted=1 remaining=4112904 charged=2137096 turns=17
+HMRT RETURN group=3 turn=17 event=timer terminal=none entered=1 code=0 calls=0 written=0 irqs=17 elr=4295032916 remaining=4112904 charged=2137096 turns=17 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=3 turn=18 slot=0 generation=1 state=live calls=0 written=0 irqs=17 remaining=4112904 charged=2137096 turns=17 before=3205
+HMRT CLOCK group=3 turn=18 begin=36041811 remaining=4112904 comparator=36104311 whole_end=40154715
+HMRT ENTER group=3 turn=18 pc=4295032916 root=1077243904
+HMRT TRAP group=3 turn=18 kind=irq esr=0 far=0 elr=4295032916 spsr=4195136
+HMRT CHARGE group=3 turn=18 end=36134251 accounted=1 remaining=4020464 charged=2229536 turns=18
+HMRT RETURN group=3 turn=18 event=timer terminal=none entered=1 code=0 calls=0 written=0 irqs=18 elr=4295032916 remaining=4020464 charged=2229536 turns=18 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=3 turn=19 slot=0 generation=1 state=live calls=0 written=0 irqs=18 remaining=4020464 charged=2229536 turns=18 before=3205
+HMRT CLOCK group=3 turn=19 begin=36240825 remaining=4020464 comparator=36303325 whole_end=40261289
+HMRT ENTER group=3 turn=19 pc=4295032916 root=1077243904
+HMRT TRAP group=3 turn=19 kind=irq esr=0 far=0 elr=4295032916 spsr=4195136
+HMRT CHARGE group=3 turn=19 end=36330253 accounted=1 remaining=3931036 charged=2318964 turns=19
+HMRT RETURN group=3 turn=19 event=timer terminal=none entered=1 code=0 calls=0 written=0 irqs=19 elr=4295032916 remaining=3931036 charged=2318964 turns=19 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=3 turn=20 slot=0 generation=1 state=live calls=0 written=0 irqs=19 remaining=3931036 charged=2318964 turns=19 before=3205
+HMRT CLOCK group=3 turn=20 begin=36437203 remaining=3931036 comparator=36499703 whole_end=40368239
+HMRT ENTER group=3 turn=20 pc=4295032916 root=1077243904
+HMRT TRAP group=3 turn=20 kind=irq esr=0 far=0 elr=4295032916 spsr=4195136
+HMRT CHARGE group=3 turn=20 end=36529010 accounted=1 remaining=3839229 charged=2410771 turns=20
+HMRT RETURN group=3 turn=20 event=timer terminal=none entered=1 code=0 calls=0 written=0 irqs=20 elr=4295032916 remaining=3839229 charged=2410771 turns=20 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=3 turn=21 slot=0 generation=1 state=live calls=0 written=0 irqs=20 remaining=3839229 charged=2410771 turns=20 before=3205
+HMRT CLOCK group=3 turn=21 begin=36636614 remaining=3839229 comparator=36699114 whole_end=40475843
+HMRT ENTER group=3 turn=21 pc=4295032916 root=1077243904
+HMRT TRAP group=3 turn=21 kind=irq esr=0 far=0 elr=4295032916 spsr=4195136
+HMRT CHARGE group=3 turn=21 end=36727814 accounted=1 remaining=3748029 charged=2501971 turns=21
+HMRT RETURN group=3 turn=21 event=timer terminal=none entered=1 code=0 calls=0 written=0 irqs=21 elr=4295032916 remaining=3748029 charged=2501971 turns=21 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=3 turn=22 slot=0 generation=1 state=live calls=0 written=0 irqs=21 remaining=3748029 charged=2501971 turns=21 before=3205
+HMRT CLOCK group=3 turn=22 begin=36834977 remaining=3748029 comparator=36897477 whole_end=40583006
+HMRT ENTER group=3 turn=22 pc=4295032916 root=1077243904
+HMRT TRAP group=3 turn=22 kind=irq esr=0 far=0 elr=4295032916 spsr=4195136
+HMRT CHARGE group=3 turn=22 end=36926706 accounted=1 remaining=3656300 charged=2593700 turns=22
+HMRT RETURN group=3 turn=22 event=timer terminal=none entered=1 code=0 calls=0 written=0 irqs=22 elr=4295032916 remaining=3656300 charged=2593700 turns=22 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=3 turn=23 slot=0 generation=1 state=live calls=0 written=0 irqs=22 remaining=3656300 charged=2593700 turns=22 before=3205
+HMRT CLOCK group=3 turn=23 begin=37032084 remaining=3656300 comparator=37094584 whole_end=40688384
+HMRT ENTER group=3 turn=23 pc=4295032916 root=1077243904
+HMRT TRAP group=3 turn=23 kind=irq esr=0 far=0 elr=4295032916 spsr=4195136
+HMRT CHARGE group=3 turn=23 end=37123546 accounted=1 remaining=3564838 charged=2685162 turns=23
+HMRT RETURN group=3 turn=23 event=timer terminal=none entered=1 code=0 calls=0 written=0 irqs=23 elr=4295032916 remaining=3564838 charged=2685162 turns=23 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=3 turn=24 slot=0 generation=1 state=live calls=0 written=0 irqs=23 remaining=3564838 charged=2685162 turns=23 before=3205
+HMRT CLOCK group=3 turn=24 begin=37227855 remaining=3564838 comparator=37290355 whole_end=40792693
+HMRT ENTER group=3 turn=24 pc=4295032916 root=1077243904
+HMRT TRAP group=3 turn=24 kind=irq esr=0 far=0 elr=4295032916 spsr=4195136
+HMRT CHARGE group=3 turn=24 end=37319168 accounted=1 remaining=3473525 charged=2776475 turns=24
+HMRT RETURN group=3 turn=24 event=timer terminal=none entered=1 code=0 calls=0 written=0 irqs=24 elr=4295032916 remaining=3473525 charged=2776475 turns=24 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=3 turn=25 slot=0 generation=1 state=live calls=0 written=0 irqs=24 remaining=3473525 charged=2776475 turns=24 before=3205
+HMRT CLOCK group=3 turn=25 begin=37423770 remaining=3473525 comparator=37486270 whole_end=40897295
+HMRT ENTER group=3 turn=25 pc=4295032916 root=1077243904
+HMRT TRAP group=3 turn=25 kind=irq esr=0 far=0 elr=4295032916 spsr=4195136
+HMRT CHARGE group=3 turn=25 end=37513826 accounted=1 remaining=3383469 charged=2866531 turns=25
+HMRT RETURN group=3 turn=25 event=timer terminal=none entered=1 code=0 calls=0 written=0 irqs=25 elr=4295032916 remaining=3383469 charged=2866531 turns=25 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=3 turn=26 slot=0 generation=1 state=live calls=0 written=0 irqs=25 remaining=3383469 charged=2866531 turns=25 before=3205
+HMRT CLOCK group=3 turn=26 begin=37620553 remaining=3383469 comparator=37683053 whole_end=41004022
+HMRT ENTER group=3 turn=26 pc=4295032916 root=1077243904
+HMRT TRAP group=3 turn=26 kind=irq esr=0 far=0 elr=4295032916 spsr=4195136
+HMRT CHARGE group=3 turn=26 end=37713735 accounted=1 remaining=3290287 charged=2959713 turns=26
+HMRT RETURN group=3 turn=26 event=timer terminal=none entered=1 code=0 calls=0 written=0 irqs=26 elr=4295032916 remaining=3290287 charged=2959713 turns=26 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=3 turn=27 slot=0 generation=1 state=live calls=0 written=0 irqs=26 remaining=3290287 charged=2959713 turns=26 before=3205
+HMRT CLOCK group=3 turn=27 begin=37820309 remaining=3290287 comparator=37882809 whole_end=41110596
+HMRT ENTER group=3 turn=27 pc=4295032916 root=1077243904
+HMRT TRAP group=3 turn=27 kind=irq esr=0 far=0 elr=4295032916 spsr=4195136
+HMRT CHARGE group=3 turn=27 end=37910003 accounted=1 remaining=3200593 charged=3049407 turns=27
+HMRT RETURN group=3 turn=27 event=timer terminal=none entered=1 code=0 calls=0 written=0 irqs=27 elr=4295032916 remaining=3200593 charged=3049407 turns=27 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=3 turn=28 slot=0 generation=1 state=live calls=0 written=0 irqs=27 remaining=3200593 charged=3049407 turns=27 before=3205
+HMRT CLOCK group=3 turn=28 begin=38016224 remaining=3200593 comparator=38078724 whole_end=41216817
+HMRT ENTER group=3 turn=28 pc=4295032916 root=1077243904
+HMRT TRAP group=3 turn=28 kind=irq esr=0 far=0 elr=4295032916 spsr=4195136
+HMRT CHARGE group=3 turn=28 end=38106756 accounted=1 remaining=3110061 charged=3139939 turns=28
+HMRT RETURN group=3 turn=28 event=timer terminal=none entered=1 code=0 calls=0 written=0 irqs=28 elr=4295032916 remaining=3110061 charged=3139939 turns=28 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=3 turn=29 slot=0 generation=1 state=live calls=0 written=0 irqs=28 remaining=3110061 charged=3139939 turns=28 before=3205
+HMRT CLOCK group=3 turn=29 begin=38212257 remaining=3110061 comparator=38274757 whole_end=41322318
+HMRT ENTER group=3 turn=29 pc=4295032916 root=1077243904
+HMRT TRAP group=3 turn=29 kind=irq esr=0 far=0 elr=4295032916 spsr=4195136
+HMRT CHARGE group=3 turn=29 end=38303601 accounted=1 remaining=3018717 charged=3231283 turns=29
+HMRT RETURN group=3 turn=29 event=timer terminal=none entered=1 code=0 calls=0 written=0 irqs=29 elr=4295032916 remaining=3018717 charged=3231283 turns=29 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=3 turn=30 slot=0 generation=1 state=live calls=0 written=0 irqs=29 remaining=3018717 charged=3231283 turns=29 before=3205
+HMRT CLOCK group=3 turn=30 begin=38408560 remaining=3018717 comparator=38471060 whole_end=41427277
+HMRT ENTER group=3 turn=30 pc=4295032916 root=1077243904
+HMRT TRAP group=3 turn=30 kind=irq esr=0 far=0 elr=4295032916 spsr=4195136
+HMRT CHARGE group=3 turn=30 end=38497935 accounted=1 remaining=2929342 charged=3320658 turns=30
+HMRT RETURN group=3 turn=30 event=timer terminal=none entered=1 code=0 calls=0 written=0 irqs=30 elr=4295032916 remaining=2929342 charged=3320658 turns=30 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=3 turn=31 slot=0 generation=1 state=live calls=0 written=0 irqs=30 remaining=2929342 charged=3320658 turns=30 before=3205
+HMRT CLOCK group=3 turn=31 begin=38602065 remaining=2929342 comparator=38664565 whole_end=41531407
+HMRT ENTER group=3 turn=31 pc=4295032916 root=1077243904
+HMRT TRAP group=3 turn=31 kind=irq esr=0 far=0 elr=4295032916 spsr=4195136
+HMRT CHARGE group=3 turn=31 end=38691087 accounted=1 remaining=2840320 charged=3409680 turns=31
+HMRT RETURN group=3 turn=31 event=timer terminal=none entered=1 code=0 calls=0 written=0 irqs=31 elr=4295032916 remaining=2840320 charged=3409680 turns=31 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=3 turn=32 slot=0 generation=1 state=live calls=0 written=0 irqs=31 remaining=2840320 charged=3409680 turns=31 before=3205
+HMRT CLOCK group=3 turn=32 begin=38795116 remaining=2840320 comparator=38857616 whole_end=41635436
+HMRT ENTER group=3 turn=32 pc=4295032916 root=1077243904
+HMRT TRAP group=3 turn=32 kind=irq esr=0 far=0 elr=4295032916 spsr=4195136
+HMRT CHARGE group=3 turn=32 end=38887534 accounted=1 remaining=2747902 charged=3502098 turns=32
+HMRT RETURN group=3 turn=32 event=timer terminal=none entered=1 code=0 calls=0 written=0 irqs=32 elr=4295032916 remaining=2747902 charged=3502098 turns=32 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=3 turn=33 slot=0 generation=1 state=live calls=0 written=0 irqs=32 remaining=2747902 charged=3502098 turns=32 before=3205
+HMRT CLOCK group=3 turn=33 begin=38992454 remaining=2747902 comparator=39054954 whole_end=41740356
+HMRT ENTER group=3 turn=33 pc=4295032916 root=1077243904
+HMRT TRAP group=3 turn=33 kind=irq esr=0 far=0 elr=4295032916 spsr=4195136
+HMRT CHARGE group=3 turn=33 end=39082341 accounted=1 remaining=2658015 charged=3591985 turns=33
+HMRT RETURN group=3 turn=33 event=timer terminal=none entered=1 code=0 calls=0 written=0 irqs=33 elr=4295032916 remaining=2658015 charged=3591985 turns=33 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=3 turn=34 slot=0 generation=1 state=live calls=0 written=0 irqs=33 remaining=2658015 charged=3591985 turns=33 before=3205
+HMRT CLOCK group=3 turn=34 begin=39188430 remaining=2658015 comparator=39250930 whole_end=41846445
+HMRT ENTER group=3 turn=34 pc=4295032916 root=1077243904
+HMRT TRAP group=3 turn=34 kind=irq esr=0 far=0 elr=4295032916 spsr=4195136
+HMRT CHARGE group=3 turn=34 end=39278945 accounted=1 remaining=2567500 charged=3682500 turns=34
+HMRT RETURN group=3 turn=34 event=timer terminal=none entered=1 code=0 calls=0 written=0 irqs=34 elr=4295032916 remaining=2567500 charged=3682500 turns=34 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=3 turn=35 slot=0 generation=1 state=live calls=0 written=0 irqs=34 remaining=2567500 charged=3682500 turns=34 before=3205
+HMRT CLOCK group=3 turn=35 begin=39384314 remaining=2567500 comparator=39446814 whole_end=41951814
+HMRT ENTER group=3 turn=35 pc=4295032916 root=1077243904
+HMRT TRAP group=3 turn=35 kind=irq esr=0 far=0 elr=4295032916 spsr=4195136
+HMRT CHARGE group=3 turn=35 end=39472922 accounted=1 remaining=2478892 charged=3771108 turns=35
+HMRT RETURN group=3 turn=35 event=timer terminal=none entered=1 code=0 calls=0 written=0 irqs=35 elr=4295032916 remaining=2478892 charged=3771108 turns=35 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=3 turn=36 slot=0 generation=1 state=live calls=0 written=0 irqs=35 remaining=2478892 charged=3771108 turns=35 before=3205
+HMRT CLOCK group=3 turn=36 begin=39578173 remaining=2478892 comparator=39640673 whole_end=42057065
+HMRT ENTER group=3 turn=36 pc=4295032916 root=1077243904
+HMRT TRAP group=3 turn=36 kind=irq esr=0 far=0 elr=4295032916 spsr=4195136
+HMRT CHARGE group=3 turn=36 end=39666475 accounted=1 remaining=2390590 charged=3859410 turns=36
+HMRT RETURN group=3 turn=36 event=timer terminal=none entered=1 code=0 calls=0 written=0 irqs=36 elr=4295032916 remaining=2390590 charged=3859410 turns=36 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=3 turn=37 slot=0 generation=1 state=live calls=0 written=0 irqs=36 remaining=2390590 charged=3859410 turns=36 before=3205
+HMRT CLOCK group=3 turn=37 begin=39772704 remaining=2390590 comparator=39835204 whole_end=42163294
+HMRT ENTER group=3 turn=37 pc=4295032916 root=1077243904
+HMRT TRAP group=3 turn=37 kind=irq esr=0 far=0 elr=4295032916 spsr=4195136
+HMRT CHARGE group=3 turn=37 end=39864568 accounted=1 remaining=2298726 charged=3951274 turns=37
+HMRT RETURN group=3 turn=37 event=timer terminal=none entered=1 code=0 calls=0 written=0 irqs=37 elr=4295032916 remaining=2298726 charged=3951274 turns=37 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=3 turn=38 slot=0 generation=1 state=live calls=0 written=0 irqs=37 remaining=2298726 charged=3951274 turns=37 before=3205
+HMRT CLOCK group=3 turn=38 begin=39969872 remaining=2298726 comparator=40032372 whole_end=42268598
+HMRT ENTER group=3 turn=38 pc=4295032916 root=1077243904
+HMRT TRAP group=3 turn=38 kind=irq esr=0 far=0 elr=4295032916 spsr=4195136
+HMRT CHARGE group=3 turn=38 end=40060784 accounted=1 remaining=2207814 charged=4042186 turns=38
+HMRT RETURN group=3 turn=38 event=timer terminal=none entered=1 code=0 calls=0 written=0 irqs=38 elr=4295032916 remaining=2207814 charged=4042186 turns=38 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=3 turn=39 slot=0 generation=1 state=live calls=0 written=0 irqs=38 remaining=2207814 charged=4042186 turns=38 before=3205
+HMRT CLOCK group=3 turn=39 begin=40164879 remaining=2207814 comparator=40227379 whole_end=42372693
+HMRT ENTER group=3 turn=39 pc=4295032916 root=1077243904
+HMRT TRAP group=3 turn=39 kind=irq esr=0 far=0 elr=4295032916 spsr=4195136
+HMRT CHARGE group=3 turn=39 end=40256275 accounted=1 remaining=2116418 charged=4133582 turns=39
+HMRT RETURN group=3 turn=39 event=timer terminal=none entered=1 code=0 calls=0 written=0 irqs=39 elr=4295032916 remaining=2116418 charged=4133582 turns=39 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=3 turn=40 slot=0 generation=1 state=live calls=0 written=0 irqs=39 remaining=2116418 charged=4133582 turns=39 before=3205
+HMRT CLOCK group=3 turn=40 begin=40360427 remaining=2116418 comparator=40422927 whole_end=42476845
+HMRT ENTER group=3 turn=40 pc=4295032916 root=1077243904
+HMRT TRAP group=3 turn=40 kind=irq esr=0 far=0 elr=4295032916 spsr=4195136
+HMRT CHARGE group=3 turn=40 end=40450641 accounted=1 remaining=2026204 charged=4223796 turns=40
+HMRT RETURN group=3 turn=40 event=timer terminal=none entered=1 code=0 calls=0 written=0 irqs=40 elr=4295032916 remaining=2026204 charged=4223796 turns=40 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=3 turn=41 slot=0 generation=1 state=live calls=0 written=0 irqs=40 remaining=2026204 charged=4223796 turns=40 before=3205
+HMRT CLOCK group=3 turn=41 begin=40555421 remaining=2026204 comparator=40617921 whole_end=42581625
+HMRT ENTER group=3 turn=41 pc=4295032916 root=1077243904
+HMRT TRAP group=3 turn=41 kind=irq esr=0 far=0 elr=4295032916 spsr=4195136
+HMRT CHARGE group=3 turn=41 end=40644194 accounted=1 remaining=1937431 charged=4312569 turns=41
+HMRT RETURN group=3 turn=41 event=timer terminal=none entered=1 code=0 calls=0 written=0 irqs=41 elr=4295032916 remaining=1937431 charged=4312569 turns=41 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=3 turn=42 slot=0 generation=1 state=live calls=0 written=0 irqs=41 remaining=1937431 charged=4312569 turns=41 before=3205
+HMRT CLOCK group=3 turn=42 begin=40748681 remaining=1937431 comparator=40811181 whole_end=42686112
+HMRT ENTER group=3 turn=42 pc=4295032916 root=1077243904
+HMRT TRAP group=3 turn=42 kind=irq esr=0 far=0 elr=4295032916 spsr=4195136
+HMRT CHARGE group=3 turn=42 end=40839166 accounted=1 remaining=1846946 charged=4403054 turns=42
+HMRT RETURN group=3 turn=42 event=timer terminal=none entered=1 code=0 calls=0 written=0 irqs=42 elr=4295032916 remaining=1846946 charged=4403054 turns=42 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=3 turn=43 slot=0 generation=1 state=live calls=0 written=0 irqs=42 remaining=1846946 charged=4403054 turns=42 before=3205
+HMRT CLOCK group=3 turn=43 begin=40947342 remaining=1846946 comparator=41009842 whole_end=42794288
+HMRT ENTER group=3 turn=43 pc=4295032916 root=1077243904
+HMRT TRAP group=3 turn=43 kind=irq esr=0 far=0 elr=4295032916 spsr=4195136
+HMRT CHARGE group=3 turn=43 end=41038411 accounted=1 remaining=1755877 charged=4494123 turns=43
+HMRT RETURN group=3 turn=43 event=timer terminal=none entered=1 code=0 calls=0 written=0 irqs=43 elr=4295032916 remaining=1755877 charged=4494123 turns=43 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=3 turn=44 slot=0 generation=1 state=live calls=0 written=0 irqs=43 remaining=1755877 charged=4494123 turns=43 before=3205
+HMRT CLOCK group=3 turn=44 begin=41143200 remaining=1755877 comparator=41205700 whole_end=42899077
+HMRT ENTER group=3 turn=44 pc=4295032916 root=1077243904
+HMRT TRAP group=3 turn=44 kind=irq esr=0 far=0 elr=4295032916 spsr=4195136
+HMRT CHARGE group=3 turn=44 end=41233169 accounted=1 remaining=1665908 charged=4584092 turns=44
+HMRT RETURN group=3 turn=44 event=timer terminal=none entered=1 code=0 calls=0 written=0 irqs=44 elr=4295032916 remaining=1665908 charged=4584092 turns=44 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=3 turn=45 slot=0 generation=1 state=live calls=0 written=0 irqs=44 remaining=1665908 charged=4584092 turns=44 before=3205
+HMRT CLOCK group=3 turn=45 begin=41337421 remaining=1665908 comparator=41399921 whole_end=43003329
+HMRT ENTER group=3 turn=45 pc=4295032916 root=1077243904
+HMRT TRAP group=3 turn=45 kind=irq esr=0 far=0 elr=4295032916 spsr=4195136
+HMRT CHARGE group=3 turn=45 end=41428124 accounted=1 remaining=1575205 charged=4674795 turns=45
+HMRT RETURN group=3 turn=45 event=timer terminal=none entered=1 code=0 calls=0 written=0 irqs=45 elr=4295032916 remaining=1575205 charged=4674795 turns=45 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=3 turn=46 slot=0 generation=1 state=live calls=0 written=0 irqs=45 remaining=1575205 charged=4674795 turns=45 before=3205
+HMRT CLOCK group=3 turn=46 begin=41531162 remaining=1575205 comparator=41593662 whole_end=43106367
+HMRT ENTER group=3 turn=46 pc=4295032916 root=1077243904
+HMRT TRAP group=3 turn=46 kind=irq esr=0 far=0 elr=4295032916 spsr=4195136
+HMRT CHARGE group=3 turn=46 end=41623122 accounted=1 remaining=1483245 charged=4766755 turns=46
+HMRT RETURN group=3 turn=46 event=timer terminal=none entered=1 code=0 calls=0 written=0 irqs=46 elr=4295032916 remaining=1483245 charged=4766755 turns=46 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=3 turn=47 slot=0 generation=1 state=live calls=0 written=0 irqs=46 remaining=1483245 charged=4766755 turns=46 before=3205
+HMRT CLOCK group=3 turn=47 begin=41726806 remaining=1483245 comparator=41789306 whole_end=43210051
+HMRT ENTER group=3 turn=47 pc=4295032916 root=1077243904
+HMRT TRAP group=3 turn=47 kind=irq esr=0 far=0 elr=4295032916 spsr=4195136
+HMRT CHARGE group=3 turn=47 end=41817766 accounted=1 remaining=1392285 charged=4857715 turns=47
+HMRT RETURN group=3 turn=47 event=timer terminal=none entered=1 code=0 calls=0 written=0 irqs=47 elr=4295032916 remaining=1392285 charged=4857715 turns=47 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=3 turn=48 slot=0 generation=1 state=live calls=0 written=0 irqs=47 remaining=1392285 charged=4857715 turns=47 before=3205
+HMRT CLOCK group=3 turn=48 begin=41921708 remaining=1392285 comparator=41984208 whole_end=43313993
+HMRT ENTER group=3 turn=48 pc=4295032916 root=1077243904
+HMRT TRAP group=3 turn=48 kind=irq esr=0 far=0 elr=4295032916 spsr=4195136
+HMRT CHARGE group=3 turn=48 end=42011630 accounted=1 remaining=1302363 charged=4947637 turns=48
+HMRT RETURN group=3 turn=48 event=timer terminal=none entered=1 code=0 calls=0 written=0 irqs=48 elr=4295032916 remaining=1302363 charged=4947637 turns=48 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=3 turn=49 slot=0 generation=1 state=live calls=0 written=0 irqs=48 remaining=1302363 charged=4947637 turns=48 before=3205
+HMRT CLOCK group=3 turn=49 begin=42119858 remaining=1302363 comparator=42182358 whole_end=43422221
+HMRT ENTER group=3 turn=49 pc=4295032916 root=1077243904
+HMRT TRAP group=3 turn=49 kind=irq esr=0 far=0 elr=4295032916 spsr=4195136
+HMRT CHARGE group=3 turn=49 end=42208142 accounted=1 remaining=1214079 charged=5035921 turns=49
+HMRT RETURN group=3 turn=49 event=timer terminal=none entered=1 code=0 calls=0 written=0 irqs=49 elr=4295032916 remaining=1214079 charged=5035921 turns=49 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=3 turn=50 slot=0 generation=1 state=live calls=0 written=0 irqs=49 remaining=1214079 charged=5035921 turns=49 before=3205
+HMRT CLOCK group=3 turn=50 begin=42312595 remaining=1214079 comparator=42375095 whole_end=43526674
+HMRT ENTER group=3 turn=50 pc=4295032916 root=1077243904
+HMRT TRAP group=3 turn=50 kind=irq esr=0 far=0 elr=4295032916 spsr=4195136
+HMRT CHARGE group=3 turn=50 end=42400993 accounted=1 remaining=1125681 charged=5124319 turns=50
+HMRT RETURN group=3 turn=50 event=timer terminal=none entered=1 code=0 calls=0 written=0 irqs=50 elr=4295032916 remaining=1125681 charged=5124319 turns=50 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=3 turn=51 slot=0 generation=1 state=live calls=0 written=0 irqs=50 remaining=1125681 charged=5124319 turns=50 before=3205
+HMRT CLOCK group=3 turn=51 begin=42505450 remaining=1125681 comparator=42567950 whole_end=43631131
+HMRT ENTER group=3 turn=51 pc=4295032916 root=1077243904
+HMRT TRAP group=3 turn=51 kind=irq esr=0 far=0 elr=4295032916 spsr=4195136
+HMRT CHARGE group=3 turn=51 end=42592984 accounted=1 remaining=1038147 charged=5211853 turns=51
+HMRT RETURN group=3 turn=51 event=timer terminal=none entered=1 code=0 calls=0 written=0 irqs=51 elr=4295032916 remaining=1038147 charged=5211853 turns=51 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=3 turn=52 slot=0 generation=1 state=live calls=0 written=0 irqs=51 remaining=1038147 charged=5211853 turns=51 before=3205
+HMRT CLOCK group=3 turn=52 begin=42698986 remaining=1038147 comparator=42761486 whole_end=43737133
+HMRT ENTER group=3 turn=52 pc=4295032916 root=1077243904
+HMRT TRAP group=3 turn=52 kind=irq esr=0 far=0 elr=4295032916 spsr=4195136
+HMRT CHARGE group=3 turn=52 end=42786598 accounted=1 remaining=950535 charged=5299465 turns=52
+HMRT RETURN group=3 turn=52 event=timer terminal=none entered=1 code=0 calls=0 written=0 irqs=52 elr=4295032916 remaining=950535 charged=5299465 turns=52 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=3 turn=53 slot=0 generation=1 state=live calls=0 written=0 irqs=52 remaining=950535 charged=5299465 turns=52 before=3205
+HMRT CLOCK group=3 turn=53 begin=42892151 remaining=950535 comparator=42954651 whole_end=43842686
+HMRT ENTER group=3 turn=53 pc=4295032916 root=1077243904
+HMRT TRAP group=3 turn=53 kind=irq esr=0 far=0 elr=4295032916 spsr=4195136
+HMRT CHARGE group=3 turn=53 end=42979235 accounted=1 remaining=863451 charged=5386549 turns=53
+HMRT RETURN group=3 turn=53 event=timer terminal=none entered=1 code=0 calls=0 written=0 irqs=53 elr=4295032916 remaining=863451 charged=5386549 turns=53 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=3 turn=54 slot=0 generation=1 state=live calls=0 written=0 irqs=53 remaining=863451 charged=5386549 turns=53 before=3205
+HMRT CLOCK group=3 turn=54 begin=43083975 remaining=863451 comparator=43146475 whole_end=43947426
+HMRT ENTER group=3 turn=54 pc=4295032916 root=1077243904
+HMRT TRAP group=3 turn=54 kind=irq esr=0 far=0 elr=4295032916 spsr=4195136
+HMRT CHARGE group=3 turn=54 end=43171579 accounted=1 remaining=775847 charged=5474153 turns=54
+HMRT RETURN group=3 turn=54 event=timer terminal=none entered=1 code=0 calls=0 written=0 irqs=54 elr=4295032916 remaining=775847 charged=5474153 turns=54 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=3 turn=55 slot=0 generation=1 state=live calls=0 written=0 irqs=54 remaining=775847 charged=5474153 turns=54 before=3205
+HMRT CLOCK group=3 turn=55 begin=43277127 remaining=775847 comparator=43339627 whole_end=44052974
+HMRT ENTER group=3 turn=55 pc=4295032916 root=1077243904
+HMRT TRAP group=3 turn=55 kind=irq esr=0 far=0 elr=4295032916 spsr=4195136
+HMRT CHARGE group=3 turn=55 end=43366708 accounted=1 remaining=686266 charged=5563734 turns=55
+HMRT RETURN group=3 turn=55 event=timer terminal=none entered=1 code=0 calls=0 written=0 irqs=55 elr=4295032916 remaining=686266 charged=5563734 turns=55 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=3 turn=56 slot=0 generation=1 state=live calls=0 written=0 irqs=55 remaining=686266 charged=5563734 turns=55 before=3205
+HMRT CLOCK group=3 turn=56 begin=43470981 remaining=686266 comparator=43533481 whole_end=44157247
+HMRT ENTER group=3 turn=56 pc=4295032916 root=1077243904
+HMRT TRAP group=3 turn=56 kind=irq esr=0 far=0 elr=4295032916 spsr=4195136
+HMRT CHARGE group=3 turn=56 end=43559196 accounted=1 remaining=598051 charged=5651949 turns=56
+HMRT RETURN group=3 turn=56 event=timer terminal=none entered=1 code=0 calls=0 written=0 irqs=56 elr=4295032916 remaining=598051 charged=5651949 turns=56 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=3 turn=57 slot=0 generation=1 state=live calls=0 written=0 irqs=56 remaining=598051 charged=5651949 turns=56 before=3205
+HMRT CLOCK group=3 turn=57 begin=43663020 remaining=598051 comparator=43725520 whole_end=44261071
+HMRT ENTER group=3 turn=57 pc=4295032916 root=1077243904
+HMRT TRAP group=3 turn=57 kind=irq esr=0 far=0 elr=4295032916 spsr=4195136
+HMRT CHARGE group=3 turn=57 end=43752540 accounted=1 remaining=508531 charged=5741469 turns=57
+HMRT RETURN group=3 turn=57 event=timer terminal=none entered=1 code=0 calls=0 written=0 irqs=57 elr=4295032916 remaining=508531 charged=5741469 turns=57 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=3 turn=58 slot=0 generation=1 state=live calls=0 written=0 irqs=57 remaining=508531 charged=5741469 turns=57 before=3205
+HMRT CLOCK group=3 turn=58 begin=43857145 remaining=508531 comparator=43919645 whole_end=44365676
+HMRT ENTER group=3 turn=58 pc=4295032916 root=1077243904
+HMRT TRAP group=3 turn=58 kind=irq esr=0 far=0 elr=4295032916 spsr=4195136
+HMRT CHARGE group=3 turn=58 end=43945587 accounted=1 remaining=420089 charged=5829911 turns=58
+HMRT RETURN group=3 turn=58 event=timer terminal=none entered=1 code=0 calls=0 written=0 irqs=58 elr=4295032916 remaining=420089 charged=5829911 turns=58 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=3 turn=59 slot=0 generation=1 state=live calls=0 written=0 irqs=58 remaining=420089 charged=5829911 turns=58 before=3205
+HMRT CLOCK group=3 turn=59 begin=44050162 remaining=420089 comparator=44112662 whole_end=44470251
+HMRT ENTER group=3 turn=59 pc=4295032916 root=1077243904
+HMRT TRAP group=3 turn=59 kind=irq esr=0 far=0 elr=4295032916 spsr=4195136
+HMRT CHARGE group=3 turn=59 end=44148215 accounted=1 remaining=322036 charged=5927964 turns=59
+HMRT RETURN group=3 turn=59 event=timer terminal=none entered=1 code=0 calls=0 written=0 irqs=59 elr=4295032916 remaining=322036 charged=5927964 turns=59 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=3 turn=60 slot=0 generation=1 state=live calls=0 written=0 irqs=59 remaining=322036 charged=5927964 turns=59 before=3205
+HMRT CLOCK group=3 turn=60 begin=44260643 remaining=322036 comparator=44323143 whole_end=44582679
+HMRT ENTER group=3 turn=60 pc=4295032916 root=1077243904
+HMRT TRAP group=3 turn=60 kind=irq esr=0 far=0 elr=4295032916 spsr=4195136
+HMRT CHARGE group=3 turn=60 end=44349887 accounted=1 remaining=232792 charged=6017208 turns=60
+HMRT RETURN group=3 turn=60 event=timer terminal=none entered=1 code=0 calls=0 written=0 irqs=60 elr=4295032916 remaining=232792 charged=6017208 turns=60 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=3 turn=61 slot=0 generation=1 state=live calls=0 written=0 irqs=60 remaining=232792 charged=6017208 turns=60 before=3205
+HMRT CLOCK group=3 turn=61 begin=44462743 remaining=232792 comparator=44525243 whole_end=44695535
+HMRT ENTER group=3 turn=61 pc=4295032916 root=1077243904
+HMRT TRAP group=3 turn=61 kind=irq esr=0 far=0 elr=4295032916 spsr=4195136
+HMRT CHARGE group=3 turn=61 end=44552594 accounted=1 remaining=142941 charged=6107059 turns=61
+HMRT RETURN group=3 turn=61 event=timer terminal=none entered=1 code=0 calls=0 written=0 irqs=61 elr=4295032916 remaining=142941 charged=6107059 turns=61 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=3 turn=62 slot=0 generation=1 state=live calls=0 written=0 irqs=61 remaining=142941 charged=6107059 turns=61 before=3205
+HMRT CLOCK group=3 turn=62 begin=44660565 remaining=142941 comparator=44723065 whole_end=44803506
+HMRT ENTER group=3 turn=62 pc=4295032916 root=1077243904
+HMRT TRAP group=3 turn=62 kind=irq esr=0 far=0 elr=4295032916 spsr=4195136
+HMRT CHARGE group=3 turn=62 end=44750356 accounted=1 remaining=53150 charged=6196850 turns=62
+HMRT RETURN group=3 turn=62 event=timer terminal=none entered=1 code=0 calls=0 written=0 irqs=62 elr=4295032916 remaining=53150 charged=6196850 turns=62 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=3 turn=63 slot=0 generation=1 state=live calls=0 written=0 irqs=62 remaining=53150 charged=6196850 turns=62 before=3205
+HMRT CLOCK group=3 turn=63 begin=44859287 remaining=53150 comparator=44912437 whole_end=44912437
+HMRT ENTER group=3 turn=63 pc=4295032916 root=1077243904
+HMRT TRAP group=3 turn=63 kind=irq esr=0 far=0 elr=4295032916 spsr=4195136
+HMRT CHARGE group=3 turn=63 end=44939662 accounted=1 remaining=0 charged=6250000 turns=63
+HMRT RETURN group=3 turn=63 event=timer terminal=budget entered=1 code=0 calls=0 written=0 irqs=63 elr=4295032916 remaining=0 charged=6250000 turns=63 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3241
+HMRT IDLE group=3 before=3241 after=3241
+HMRT ACTION group=3 id_group=3 op=reap slot=0 generation=1 result=ok before=3241 after=3241
+HMRT ACTION group=3 id_group=3 op=reap slot=1 generation=1 result=ok before=3241 after=3241
+HMRT DROP group=3 before=3241 after=3241
+HMRT PASS index=2 pass=0 name=busy_peer before=3241 after=3241
+HMRT CASE index=3 pass=0 name=byte_budget before=3241
+HMRT GROUP group=4 limit=512 before=3241
+HMRT ADMIT group=4 slot=0 generation=1 console_generation=8 fixture=byte_budget entry=4294967296 root=1077243904 process_frames=34 box_frames=3 before=3241 after=3204
+HMRT ADMIT group=4 slot=1 generation=1 console_generation=9 fixture=grant entry=4294967296 root=1077395456 process_frames=34 box_frames=3 before=3204 after=3167
+HMRT STEP group=4 turn=1 slot=0 generation=1 state=live calls=0 written=0 irqs=0 remaining=6250000 charged=0 turns=0 before=3167
+HMRT CLOCK group=4 turn=1 begin=47833065 remaining=6250000 comparator=47895565 whole_end=54083065
+HMRT ENTER group=4 turn=1 pc=4294967296 root=1077243904
+HMRT TRAP group=4 turn=1 kind=irq esr=0 far=0 elr=4294967296 spsr=4195136
+HMRT CHARGE group=4 turn=1 end=48501835 accounted=1 remaining=5581230 charged=668770 turns=1
+HMRT RETURN group=4 turn=1 event=timer terminal=none entered=1 code=0 calls=0 written=0 irqs=1 elr=4294967296 remaining=5581230 charged=668770 turns=1 root=1076436992 vbar=1075841024 controls=1 before=3167 after=3167
+HMRT STEP group=4 turn=1 slot=1 generation=1 state=live calls=0 written=0 irqs=0 remaining=6250000 charged=0 turns=0 before=3167
+HMRT CLOCK group=4 turn=1 begin=48614022 remaining=6250000 comparator=48676522 whole_end=54864022
+HMRT ENTER group=4 turn=1 pc=4294967296 root=1077395456
+HMRT TRAP group=4 turn=1 kind=irq esr=0 far=0 elr=4294967296 spsr=4195136
+HMRT CHARGE group=4 turn=1 end=49280627 accounted=1 remaining=5583395 charged=666605 turns=1
+HMRT RETURN group=4 turn=1 event=timer terminal=none entered=1 code=0 calls=0 written=0 irqs=1 elr=4294967296 remaining=5583395 charged=666605 turns=1 root=1076436992 vbar=1075841024 controls=1 before=3167 after=3167
+HMRT STEP group=4 turn=2 slot=0 generation=1 state=live calls=0 written=0 irqs=1 remaining=5581230 charged=668770 turns=1 before=3167
+HMRT CLOCK group=4 turn=2 begin=49389183 remaining=5581230 comparator=49451683 whole_end=54970413
+HMRT ENTER group=4 turn=2 pc=4294967296 root=1077243904
+HMRT TRAP group=4 turn=2 kind=svc esr=1442840576 far=0 elr=4295032856 spsr=1614807872
+HMRT CALL group=4 turn=2 ordinal=1 pc=4295032856 version=1 operation=1 arg1=34359738369 arg2=4295041051 arg3=256
+HMRT OUTPUT group=4 turn=2 ordinal=1 length=256 hex=000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f404142434445464748494a4b4c4d4e4f505152535455565758595a5b5c5d5e5f606162636465666768696a6b6c6d6e6f707172737475767778797a7b7c7d7e7f808182838485868788898a8b8c8d8e8f909192939495969798999a9b9c9d9e9fa0a1a2a3a4a5a6a7a8a9aaabacadaeafb0b1b2b3b4b5b6b7b8b9babbbcbdbebfc0c1c2c3c4c5c6c7c8c9cacbcccdcecfd0d1d2d3d4d5d6d7d8d9dadbdcdddedfe0e1e2e3e4e5e6e7e8e9eaebecedeeeff0f1f2f3f4f5f6f7f8f9fafbfcfdfeff
+HMRT RESULT group=4 turn=2 ordinal=1 status=0 bytes=256
+HMRT CHARGE group=4 turn=2 end=49642411 accounted=1 remaining=5328002 charged=921998 turns=2
+HMRT RETURN group=4 turn=2 event=svc terminal=none entered=1 code=0 calls=1 written=256 irqs=1 elr=4295032856 remaining=5328002 charged=921998 turns=2 root=1076436992 vbar=1075841024 controls=1 before=3167 after=3167
+HMRT STEP group=4 turn=2 slot=1 generation=1 state=live calls=0 written=0 irqs=1 remaining=5583395 charged=666605 turns=1 before=3167
+HMRT CLOCK group=4 turn=2 begin=49748593 remaining=5583395 comparator=49811093 whole_end=55331988
+HMRT ENTER group=4 turn=2 pc=4294967296 root=1077395456
+HMRT TRAP group=4 turn=2 kind=svc esr=1442840576 far=0 elr=4295032856 spsr=2151678784
+HMRT CALL group=4 turn=2 ordinal=1 pc=4295032856 version=1 operation=1 arg1=34359738369 arg2=18446744073709551615 arg3=0
+HMRT RESULT group=4 turn=2 ordinal=1 status=3 bytes=0
+HMRT CHARGE group=4 turn=2 end=49879668 accounted=1 remaining=5452320 charged=797680 turns=2
+HMRT RETURN group=4 turn=2 event=svc terminal=none entered=1 code=0 calls=1 written=0 irqs=1 elr=4295032856 remaining=5452320 charged=797680 turns=2 root=1076436992 vbar=1075841024 controls=1 before=3167 after=3167
+HMRT STEP group=4 turn=3 slot=0 generation=1 state=live calls=1 written=256 irqs=1 remaining=5328002 charged=921998 turns=2 before=3167
+HMRT CLOCK group=4 turn=3 begin=49984095 remaining=5328002 comparator=50046595 whole_end=55312097
+HMRT ENTER group=4 turn=3 pc=4295032856 root=1077243904
+HMRT TRAP group=4 turn=3 kind=svc esr=1442840576 far=0 elr=4295032856 spsr=1614807872
+HMRT CALL group=4 turn=3 ordinal=2 pc=4295032856 version=1 operation=1 arg1=34359738369 arg2=4295041051 arg3=256
+HMRT OUTPUT group=4 turn=3 ordinal=2 length=256 hex=000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f404142434445464748494a4b4c4d4e4f505152535455565758595a5b5c5d5e5f606162636465666768696a6b6c6d6e6f707172737475767778797a7b7c7d7e7f808182838485868788898a8b8c8d8e8f909192939495969798999a9b9c9d9e9fa0a1a2a3a4a5a6a7a8a9aaabacadaeafb0b1b2b3b4b5b6b7b8b9babbbcbdbebfc0c1c2c3c4c5c6c7c8c9cacbcccdcecfd0d1d2d3d4d5d6d7d8d9dadbdcdddedfe0e1e2e3e4e5e6e7e8e9eaebecedeeeff0f1f2f3f4f5f6f7f8f9fafbfcfdfeff
+HMRT RESULT group=4 turn=3 ordinal=2 status=0 bytes=256
+HMRT CHARGE group=4 turn=3 end=50221574 accounted=1 remaining=5090523 charged=1159477 turns=3
+HMRT RETURN group=4 turn=3 event=svc terminal=none entered=1 code=0 calls=2 written=512 irqs=1 elr=4295032856 remaining=5090523 charged=1159477 turns=3 root=1076436992 vbar=1075841024 controls=1 before=3167 after=3167
+HMRT STEP group=4 turn=3 slot=1 generation=1 state=live calls=1 written=0 irqs=1 remaining=5452320 charged=797680 turns=2 before=3167
+HMRT CLOCK group=4 turn=3 begin=50327214 remaining=5452320 comparator=50389714 whole_end=55779534
+HMRT ENTER group=4 turn=3 pc=4295032856 root=1077395456
+HMRT TRAP group=4 turn=3 kind=svc esr=1442840576 far=0 elr=4295032856 spsr=1614807872
+HMRT CALL group=4 turn=3 ordinal=2 pc=4295032856 version=1 operation=1 arg1=38654705665 arg2=4295041024 arg3=12
+HMRT OUTPUT group=4 turn=3 ordinal=2 length=12 hex=6772616e74206f776e65640a
+HMRT RESULT group=4 turn=3 ordinal=2 status=0 bytes=12
+HMRT CHARGE group=4 turn=3 end=50455814 accounted=1 remaining=5323720 charged=926280 turns=3
+HMRT RETURN group=4 turn=3 event=svc terminal=none entered=1 code=0 calls=2 written=12 irqs=1 elr=4295032856 remaining=5323720 charged=926280 turns=3 root=1076436992 vbar=1075841024 controls=1 before=3167 after=3167
+HMRT STEP group=4 turn=4 slot=0 generation=1 state=live calls=2 written=512 irqs=1 remaining=5090523 charged=1159477 turns=3 before=3167
+HMRT CLOCK group=4 turn=4 begin=50561149 remaining=5090523 comparator=50623649 whole_end=55651672
+HMRT ENTER group=4 turn=4 pc=4295032856 root=1077243904
+HMRT TRAP group=4 turn=4 kind=svc esr=1442840576 far=0 elr=4295032856 spsr=1614807872
+HMRT CALL group=4 turn=4 ordinal=3 pc=4295032856 version=1 operation=1 arg1=34359738369 arg2=4295041051 arg3=256
+HMRT OUTPUT group=4 turn=4 ordinal=3 length=256 hex=000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f404142434445464748494a4b4c4d4e4f505152535455565758595a5b5c5d5e5f606162636465666768696a6b6c6d6e6f707172737475767778797a7b7c7d7e7f808182838485868788898a8b8c8d8e8f909192939495969798999a9b9c9d9e9fa0a1a2a3a4a5a6a7a8a9aaabacadaeafb0b1b2b3b4b5b6b7b8b9babbbcbdbebfc0c1c2c3c4c5c6c7c8c9cacbcccdcecfd0d1d2d3d4d5d6d7d8d9dadbdcdddedfe0e1e2e3e4e5e6e7e8e9eaebecedeeeff0f1f2f3f4f5f6f7f8f9fafbfcfdfeff
+HMRT RESULT group=4 turn=4 ordinal=3 status=0 bytes=256
+HMRT CHARGE group=4 turn=4 end=50802993 accounted=1 remaining=4848679 charged=1401321 turns=4
+HMRT RETURN group=4 turn=4 event=svc terminal=none entered=1 code=0 calls=3 written=768 irqs=1 elr=4295032856 remaining=4848679 charged=1401321 turns=4 root=1076436992 vbar=1075841024 controls=1 before=3167 after=3167
+HMRT STEP group=4 turn=4 slot=1 generation=1 state=live calls=2 written=12 irqs=1 remaining=5323720 charged=926280 turns=3 before=3167
+HMRT CLOCK group=4 turn=4 begin=50908371 remaining=5323720 comparator=50970871 whole_end=56232091
+HMRT ENTER group=4 turn=4 pc=4295032856 root=1077395456
+HMRT TRAP group=4 turn=4 kind=svc esr=1442840576 far=0 elr=4295032884 spsr=1614807872
+HMRT CALL group=4 turn=4 ordinal=3 pc=4295032884 version=1 operation=2 arg1=0 arg2=0 arg3=0
+HMRT CHARGE group=4 turn=4 end=51003849 accounted=1 remaining=5228242 charged=1021758 turns=4
+HMRT RETURN group=4 turn=4 event=svc terminal=exit entered=1 code=0 calls=3 written=12 irqs=1 elr=4295032884 remaining=5228242 charged=1021758 turns=4 root=1076436992 vbar=1075841024 controls=1 before=3167 after=3204
+HMRT STEP group=4 turn=5 slot=0 generation=1 state=live calls=3 written=768 irqs=1 remaining=4848679 charged=1401321 turns=4 before=3204
+HMRT CLOCK group=4 turn=5 begin=51108573 remaining=4848679 comparator=51171073 whole_end=55957252
+HMRT ENTER group=4 turn=5 pc=4295032856 root=1077243904
+HMRT TRAP group=4 turn=5 kind=svc esr=1442840576 far=0 elr=4295032856 spsr=1614807872
+HMRT CALL group=4 turn=5 ordinal=4 pc=4295032856 version=1 operation=1 arg1=34359738369 arg2=4295041051 arg3=256
+HMRT OUTPUT group=4 turn=5 ordinal=4 length=256 hex=000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f404142434445464748494a4b4c4d4e4f505152535455565758595a5b5c5d5e5f606162636465666768696a6b6c6d6e6f707172737475767778797a7b7c7d7e7f808182838485868788898a8b8c8d8e8f909192939495969798999a9b9c9d9e9fa0a1a2a3a4a5a6a7a8a9aaabacadaeafb0b1b2b3b4b5b6b7b8b9babbbcbdbebfc0c1c2c3c4c5c6c7c8c9cacbcccdcecfd0d1d2d3d4d5d6d7d8d9dadbdcdddedfe0e1e2e3e4e5e6e7e8e9eaebecedeeeff0f1f2f3f4f5f6f7f8f9fafbfcfdfeff
+HMRT RESULT group=4 turn=5 ordinal=4 status=0 bytes=256
+HMRT CHARGE group=4 turn=5 end=51344708 accounted=1 remaining=4612544 charged=1637456 turns=5
+HMRT RETURN group=4 turn=5 event=svc terminal=none entered=1 code=0 calls=4 written=1024 irqs=1 elr=4295032856 remaining=4612544 charged=1637456 turns=5 root=1076436992 vbar=1075841024 controls=1 before=3204 after=3204
+HMRT STEP group=4 turn=6 slot=0 generation=1 state=live calls=4 written=1024 irqs=1 remaining=4612544 charged=1637456 turns=5 before=3204
+HMRT CLOCK group=4 turn=6 begin=51452556 remaining=4612544 comparator=51515056 whole_end=56065100
+HMRT ENTER group=4 turn=6 pc=4295032856 root=1077243904
+HMRT TRAP group=4 turn=6 kind=svc esr=1442840576 far=0 elr=4295032856 spsr=1614807872
+HMRT CALL group=4 turn=6 ordinal=5 pc=4295032856 version=1 operation=1 arg1=34359738369 arg2=4295041051 arg3=256
+HMRT OUTPUT group=4 turn=6 ordinal=5 length=256 hex=000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f404142434445464748494a4b4c4d4e4f505152535455565758595a5b5c5d5e5f606162636465666768696a6b6c6d6e6f707172737475767778797a7b7c7d7e7f808182838485868788898a8b8c8d8e8f909192939495969798999a9b9c9d9e9fa0a1a2a3a4a5a6a7a8a9aaabacadaeafb0b1b2b3b4b5b6b7b8b9babbbcbdbebfc0c1c2c3c4c5c6c7c8c9cacbcccdcecfd0d1d2d3d4d5d6d7d8d9dadbdcdddedfe0e1e2e3e4e5e6e7e8e9eaebecedeeeff0f1f2f3f4f5f6f7f8f9fafbfcfdfeff
+HMRT RESULT group=4 turn=6 ordinal=5 status=0 bytes=256
+HMRT CHARGE group=4 turn=6 end=51687657 accounted=1 remaining=4377443 charged=1872557 turns=6
+HMRT RETURN group=4 turn=6 event=svc terminal=none entered=1 code=0 calls=5 written=1280 irqs=1 elr=4295032856 remaining=4377443 charged=1872557 turns=6 root=1076436992 vbar=1075841024 controls=1 before=3204 after=3204
+HMRT STEP group=4 turn=7 slot=0 generation=1 state=live calls=5 written=1280 irqs=1 remaining=4377443 charged=1872557 turns=6 before=3204
+HMRT CLOCK group=4 turn=7 begin=51791712 remaining=4377443 comparator=51854212 whole_end=56169155
+HMRT ENTER group=4 turn=7 pc=4295032856 root=1077243904
+HMRT TRAP group=4 turn=7 kind=svc esr=1442840576 far=0 elr=4295032856 spsr=1614807872
+HMRT CALL group=4 turn=7 ordinal=6 pc=4295032856 version=1 operation=1 arg1=34359738369 arg2=4295041051 arg3=256
+HMRT OUTPUT group=4 turn=7 ordinal=6 length=256 hex=000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f404142434445464748494a4b4c4d4e4f505152535455565758595a5b5c5d5e5f606162636465666768696a6b6c6d6e6f707172737475767778797a7b7c7d7e7f808182838485868788898a8b8c8d8e8f909192939495969798999a9b9c9d9e9fa0a1a2a3a4a5a6a7a8a9aaabacadaeafb0b1b2b3b4b5b6b7b8b9babbbcbdbebfc0c1c2c3c4c5c6c7c8c9cacbcccdcecfd0d1d2d3d4d5d6d7d8d9dadbdcdddedfe0e1e2e3e4e5e6e7e8e9eaebecedeeeff0f1f2f3f4f5f6f7f8f9fafbfcfdfeff
+HMRT RESULT group=4 turn=7 ordinal=6 status=0 bytes=256
+HMRT CHARGE group=4 turn=7 end=52022875 accounted=1 remaining=4146280 charged=2103720 turns=7
+HMRT RETURN group=4 turn=7 event=svc terminal=none entered=1 code=0 calls=6 written=1536 irqs=1 elr=4295032856 remaining=4146280 charged=2103720 turns=7 root=1076436992 vbar=1075841024 controls=1 before=3204 after=3204
+HMRT STEP group=4 turn=8 slot=0 generation=1 state=live calls=6 written=1536 irqs=1 remaining=4146280 charged=2103720 turns=7 before=3204
+HMRT CLOCK group=4 turn=8 begin=52126878 remaining=4146280 comparator=52189378 whole_end=56273158
+HMRT ENTER group=4 turn=8 pc=4295032856 root=1077243904
+HMRT TRAP group=4 turn=8 kind=svc esr=1442840576 far=0 elr=4295032856 spsr=1614807872
+HMRT CALL group=4 turn=8 ordinal=7 pc=4295032856 version=1 operation=1 arg1=34359738369 arg2=4295041051 arg3=256
+HMRT OUTPUT group=4 turn=8 ordinal=7 length=256 hex=000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f404142434445464748494a4b4c4d4e4f505152535455565758595a5b5c5d5e5f606162636465666768696a6b6c6d6e6f707172737475767778797a7b7c7d7e7f808182838485868788898a8b8c8d8e8f909192939495969798999a9b9c9d9e9fa0a1a2a3a4a5a6a7a8a9aaabacadaeafb0b1b2b3b4b5b6b7b8b9babbbcbdbebfc0c1c2c3c4c5c6c7c8c9cacbcccdcecfd0d1d2d3d4d5d6d7d8d9dadbdcdddedfe0e1e2e3e4e5e6e7e8e9eaebecedeeeff0f1f2f3f4f5f6f7f8f9fafbfcfdfeff
+HMRT RESULT group=4 turn=8 ordinal=7 status=0 bytes=256
+HMRT CHARGE group=4 turn=8 end=52358325 accounted=1 remaining=3914833 charged=2335167 turns=8
+HMRT RETURN group=4 turn=8 event=svc terminal=none entered=1 code=0 calls=7 written=1792 irqs=1 elr=4295032856 remaining=3914833 charged=2335167 turns=8 root=1076436992 vbar=1075841024 controls=1 before=3204 after=3204
+HMRT STEP group=4 turn=9 slot=0 generation=1 state=live calls=7 written=1792 irqs=1 remaining=3914833 charged=2335167 turns=8 before=3204
+HMRT CLOCK group=4 turn=9 begin=52463712 remaining=3914833 comparator=52526212 whole_end=56378545
+HMRT ENTER group=4 turn=9 pc=4295032856 root=1077243904
+HMRT TRAP group=4 turn=9 kind=svc esr=1442840576 far=0 elr=4295032856 spsr=1614807872
+HMRT CALL group=4 turn=9 ordinal=8 pc=4295032856 version=1 operation=1 arg1=34359738369 arg2=4295041051 arg3=256
+HMRT OUTPUT group=4 turn=9 ordinal=8 length=256 hex=000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f404142434445464748494a4b4c4d4e4f505152535455565758595a5b5c5d5e5f606162636465666768696a6b6c6d6e6f707172737475767778797a7b7c7d7e7f808182838485868788898a8b8c8d8e8f909192939495969798999a9b9c9d9e9fa0a1a2a3a4a5a6a7a8a9aaabacadaeafb0b1b2b3b4b5b6b7b8b9babbbcbdbebfc0c1c2c3c4c5c6c7c8c9cacbcccdcecfd0d1d2d3d4d5d6d7d8d9dadbdcdddedfe0e1e2e3e4e5e6e7e8e9eaebecedeeeff0f1f2f3f4f5f6f7f8f9fafbfcfdfeff
+HMRT RESULT group=4 turn=9 ordinal=8 status=0 bytes=256
+HMRT CHARGE group=4 turn=9 end=52695124 accounted=1 remaining=3683421 charged=2566579 turns=9
+HMRT RETURN group=4 turn=9 event=svc terminal=none entered=1 code=0 calls=8 written=2048 irqs=1 elr=4295032856 remaining=3683421 charged=2566579 turns=9 root=1076436992 vbar=1075841024 controls=1 before=3204 after=3204
+HMRT STEP group=4 turn=10 slot=0 generation=1 state=live calls=8 written=2048 irqs=1 remaining=3683421 charged=2566579 turns=9 before=3204
+HMRT CLOCK group=4 turn=10 begin=52803867 remaining=3683421 comparator=52866367 whole_end=56487288
+HMRT ENTER group=4 turn=10 pc=4295032856 root=1077243904
+HMRT TRAP group=4 turn=10 kind=svc esr=1442840576 far=0 elr=4295032856 spsr=1614807872
+HMRT CALL group=4 turn=10 ordinal=9 pc=4295032856 version=1 operation=1 arg1=34359738369 arg2=4295041051 arg3=256
+HMRT OUTPUT group=4 turn=10 ordinal=9 length=256 hex=000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f404142434445464748494a4b4c4d4e4f505152535455565758595a5b5c5d5e5f606162636465666768696a6b6c6d6e6f707172737475767778797a7b7c7d7e7f808182838485868788898a8b8c8d8e8f909192939495969798999a9b9c9d9e9fa0a1a2a3a4a5a6a7a8a9aaabacadaeafb0b1b2b3b4b5b6b7b8b9babbbcbdbebfc0c1c2c3c4c5c6c7c8c9cacbcccdcecfd0d1d2d3d4d5d6d7d8d9dadbdcdddedfe0e1e2e3e4e5e6e7e8e9eaebecedeeeff0f1f2f3f4f5f6f7f8f9fafbfcfdfeff
+HMRT RESULT group=4 turn=10 ordinal=9 status=0 bytes=256
+HMRT CHARGE group=4 turn=10 end=53038671 accounted=1 remaining=3448617 charged=2801383 turns=10
+HMRT RETURN group=4 turn=10 event=svc terminal=none entered=1 code=0 calls=9 written=2304 irqs=1 elr=4295032856 remaining=3448617 charged=2801383 turns=10 root=1076436992 vbar=1075841024 controls=1 before=3204 after=3204
+HMRT STEP group=4 turn=11 slot=0 generation=1 state=live calls=9 written=2304 irqs=1 remaining=3448617 charged=2801383 turns=10 before=3204
+HMRT CLOCK group=4 turn=11 begin=53153290 remaining=3448617 comparator=53215790 whole_end=56601907
+HMRT ENTER group=4 turn=11 pc=4295032856 root=1077243904
+HMRT TRAP group=4 turn=11 kind=svc esr=1442840576 far=0 elr=4295032856 spsr=1614807872
+HMRT CALL group=4 turn=11 ordinal=10 pc=4295032856 version=1 operation=1 arg1=34359738369 arg2=4295041051 arg3=256
+HMRT OUTPUT group=4 turn=11 ordinal=10 length=256 hex=000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f404142434445464748494a4b4c4d4e4f505152535455565758595a5b5c5d5e5f606162636465666768696a6b6c6d6e6f707172737475767778797a7b7c7d7e7f808182838485868788898a8b8c8d8e8f909192939495969798999a9b9c9d9e9fa0a1a2a3a4a5a6a7a8a9aaabacadaeafb0b1b2b3b4b5b6b7b8b9babbbcbdbebfc0c1c2c3c4c5c6c7c8c9cacbcccdcecfd0d1d2d3d4d5d6d7d8d9dadbdcdddedfe0e1e2e3e4e5e6e7e8e9eaebecedeeeff0f1f2f3f4f5f6f7f8f9fafbfcfdfeff
+HMRT RESULT group=4 turn=11 ordinal=10 status=0 bytes=256
+HMRT CHARGE group=4 turn=11 end=53403904 accounted=1 remaining=3198003 charged=3051997 turns=11
+HMRT RETURN group=4 turn=11 event=svc terminal=none entered=1 code=0 calls=10 written=2560 irqs=1 elr=4295032856 remaining=3198003 charged=3051997 turns=11 root=1076436992 vbar=1075841024 controls=1 before=3204 after=3204
+HMRT STEP group=4 turn=12 slot=0 generation=1 state=live calls=10 written=2560 irqs=1 remaining=3198003 charged=3051997 turns=11 before=3204
+HMRT CLOCK group=4 turn=12 begin=53515799 remaining=3198003 comparator=53578299 whole_end=56713802
+HMRT ENTER group=4 turn=12 pc=4295032856 root=1077243904
+HMRT TRAP group=4 turn=12 kind=svc esr=1442840576 far=0 elr=4295032856 spsr=1614807872
+HMRT CALL group=4 turn=12 ordinal=11 pc=4295032856 version=1 operation=1 arg1=34359738369 arg2=4295041051 arg3=256
+HMRT OUTPUT group=4 turn=12 ordinal=11 length=256 hex=000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f404142434445464748494a4b4c4d4e4f505152535455565758595a5b5c5d5e5f606162636465666768696a6b6c6d6e6f707172737475767778797a7b7c7d7e7f808182838485868788898a8b8c8d8e8f909192939495969798999a9b9c9d9e9fa0a1a2a3a4a5a6a7a8a9aaabacadaeafb0b1b2b3b4b5b6b7b8b9babbbcbdbebfc0c1c2c3c4c5c6c7c8c9cacbcccdcecfd0d1d2d3d4d5d6d7d8d9dadbdcdddedfe0e1e2e3e4e5e6e7e8e9eaebecedeeeff0f1f2f3f4f5f6f7f8f9fafbfcfdfeff
+HMRT RESULT group=4 turn=12 ordinal=11 status=0 bytes=256
+HMRT CHARGE group=4 turn=12 end=53763410 accounted=1 remaining=2950392 charged=3299608 turns=12
+HMRT RETURN group=4 turn=12 event=svc terminal=none entered=1 code=0 calls=11 written=2816 irqs=1 elr=4295032856 remaining=2950392 charged=3299608 turns=12 root=1076436992 vbar=1075841024 controls=1 before=3204 after=3204
+HMRT STEP group=4 turn=13 slot=0 generation=1 state=live calls=11 written=2816 irqs=1 remaining=2950392 charged=3299608 turns=12 before=3204
+HMRT CLOCK group=4 turn=13 begin=53878605 remaining=2950392 comparator=53941105 whole_end=56828997
+HMRT ENTER group=4 turn=13 pc=4295032856 root=1077243904
+HMRT TRAP group=4 turn=13 kind=svc esr=1442840576 far=0 elr=4295032856 spsr=1614807872
+HMRT CALL group=4 turn=13 ordinal=12 pc=4295032856 version=1 operation=1 arg1=34359738369 arg2=4295041051 arg3=256
+HMRT OUTPUT group=4 turn=13 ordinal=12 length=256 hex=000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f404142434445464748494a4b4c4d4e4f505152535455565758595a5b5c5d5e5f606162636465666768696a6b6c6d6e6f707172737475767778797a7b7c7d7e7f808182838485868788898a8b8c8d8e8f909192939495969798999a9b9c9d9e9fa0a1a2a3a4a5a6a7a8a9aaabacadaeafb0b1b2b3b4b5b6b7b8b9babbbcbdbebfc0c1c2c3c4c5c6c7c8c9cacbcccdcecfd0d1d2d3d4d5d6d7d8d9dadbdcdddedfe0e1e2e3e4e5e6e7e8e9eaebecedeeeff0f1f2f3f4f5f6f7f8f9fafbfcfdfeff
+HMRT RESULT group=4 turn=13 ordinal=12 status=0 bytes=256
+HMRT CHARGE group=4 turn=13 end=54133698 accounted=1 remaining=2695299 charged=3554701 turns=13
+HMRT RETURN group=4 turn=13 event=svc terminal=none entered=1 code=0 calls=12 written=3072 irqs=1 elr=4295032856 remaining=2695299 charged=3554701 turns=13 root=1076436992 vbar=1075841024 controls=1 before=3204 after=3204
+HMRT STEP group=4 turn=14 slot=0 generation=1 state=live calls=12 written=3072 irqs=1 remaining=2695299 charged=3554701 turns=13 before=3204
+HMRT CLOCK group=4 turn=14 begin=54249535 remaining=2695299 comparator=54312035 whole_end=56944834
+HMRT ENTER group=4 turn=14 pc=4295032856 root=1077243904
+HMRT TRAP group=4 turn=14 kind=svc esr=1442840576 far=0 elr=4295032856 spsr=1614807872
+HMRT CALL group=4 turn=14 ordinal=13 pc=4295032856 version=1 operation=1 arg1=34359738369 arg2=4295041051 arg3=256
+HMRT OUTPUT group=4 turn=14 ordinal=13 length=256 hex=000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f404142434445464748494a4b4c4d4e4f505152535455565758595a5b5c5d5e5f606162636465666768696a6b6c6d6e6f707172737475767778797a7b7c7d7e7f808182838485868788898a8b8c8d8e8f909192939495969798999a9b9c9d9e9fa0a1a2a3a4a5a6a7a8a9aaabacadaeafb0b1b2b3b4b5b6b7b8b9babbbcbdbebfc0c1c2c3c4c5c6c7c8c9cacbcccdcecfd0d1d2d3d4d5d6d7d8d9dadbdcdddedfe0e1e2e3e4e5e6e7e8e9eaebecedeeeff0f1f2f3f4f5f6f7f8f9fafbfcfdfeff
+HMRT RESULT group=4 turn=14 ordinal=13 status=0 bytes=256
+HMRT CHARGE group=4 turn=14 end=54506544 accounted=1 remaining=2438290 charged=3811710 turns=14
+HMRT RETURN group=4 turn=14 event=svc terminal=none entered=1 code=0 calls=13 written=3328 irqs=1 elr=4295032856 remaining=2438290 charged=3811710 turns=14 root=1076436992 vbar=1075841024 controls=1 before=3204 after=3204
+HMRT STEP group=4 turn=15 slot=0 generation=1 state=live calls=13 written=3328 irqs=1 remaining=2438290 charged=3811710 turns=14 before=3204
+HMRT CLOCK group=4 turn=15 begin=54623371 remaining=2438290 comparator=54685871 whole_end=57061661
+HMRT ENTER group=4 turn=15 pc=4295032856 root=1077243904
+HMRT TRAP group=4 turn=15 kind=svc esr=1442840576 far=0 elr=4295032856 spsr=1614807872
+HMRT CALL group=4 turn=15 ordinal=14 pc=4295032856 version=1 operation=1 arg1=34359738369 arg2=4295041051 arg3=256
+HMRT OUTPUT group=4 turn=15 ordinal=14 length=256 hex=000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f404142434445464748494a4b4c4d4e4f505152535455565758595a5b5c5d5e5f606162636465666768696a6b6c6d6e6f707172737475767778797a7b7c7d7e7f808182838485868788898a8b8c8d8e8f909192939495969798999a9b9c9d9e9fa0a1a2a3a4a5a6a7a8a9aaabacadaeafb0b1b2b3b4b5b6b7b8b9babbbcbdbebfc0c1c2c3c4c5c6c7c8c9cacbcccdcecfd0d1d2d3d4d5d6d7d8d9dadbdcdddedfe0e1e2e3e4e5e6e7e8e9eaebecedeeeff0f1f2f3f4f5f6f7f8f9fafbfcfdfeff
+HMRT RESULT group=4 turn=15 ordinal=14 status=0 bytes=256
+HMRT CHARGE group=4 turn=15 end=54883331 accounted=1 remaining=2178330 charged=4071670 turns=15
+HMRT RETURN group=4 turn=15 event=svc terminal=none entered=1 code=0 calls=14 written=3584 irqs=1 elr=4295032856 remaining=2178330 charged=4071670 turns=15 root=1076436992 vbar=1075841024 controls=1 before=3204 after=3204
+HMRT STEP group=4 turn=16 slot=0 generation=1 state=live calls=14 written=3584 irqs=1 remaining=2178330 charged=4071670 turns=15 before=3204
+HMRT CLOCK group=4 turn=16 begin=55002215 remaining=2178330 comparator=55064715 whole_end=57180545
+HMRT ENTER group=4 turn=16 pc=4295032856 root=1077243904
+HMRT TRAP group=4 turn=16 kind=svc esr=1442840576 far=0 elr=4295032856 spsr=1614807872
+HMRT CALL group=4 turn=16 ordinal=15 pc=4295032856 version=1 operation=1 arg1=34359738369 arg2=4295041051 arg3=256
+HMRT OUTPUT group=4 turn=16 ordinal=15 length=256 hex=000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f404142434445464748494a4b4c4d4e4f505152535455565758595a5b5c5d5e5f606162636465666768696a6b6c6d6e6f707172737475767778797a7b7c7d7e7f808182838485868788898a8b8c8d8e8f909192939495969798999a9b9c9d9e9fa0a1a2a3a4a5a6a7a8a9aaabacadaeafb0b1b2b3b4b5b6b7b8b9babbbcbdbebfc0c1c2c3c4c5c6c7c8c9cacbcccdcecfd0d1d2d3d4d5d6d7d8d9dadbdcdddedfe0e1e2e3e4e5e6e7e8e9eaebecedeeeff0f1f2f3f4f5f6f7f8f9fafbfcfdfeff
+HMRT RESULT group=4 turn=16 ordinal=15 status=0 bytes=256
+HMRT CHARGE group=4 turn=16 end=55262048 accounted=1 remaining=1918497 charged=4331503 turns=16
+HMRT RETURN group=4 turn=16 event=svc terminal=none entered=1 code=0 calls=15 written=3840 irqs=1 elr=4295032856 remaining=1918497 charged=4331503 turns=16 root=1076436992 vbar=1075841024 controls=1 before=3204 after=3204
+HMRT STEP group=4 turn=17 slot=0 generation=1 state=live calls=15 written=3840 irqs=1 remaining=1918497 charged=4331503 turns=16 before=3204
+HMRT CLOCK group=4 turn=17 begin=55380028 remaining=1918497 comparator=55442528 whole_end=57298525
+HMRT ENTER group=4 turn=17 pc=4295032856 root=1077243904
+HMRT TRAP group=4 turn=17 kind=svc esr=1442840576 far=0 elr=4295032856 spsr=1614807872
+HMRT CALL group=4 turn=17 ordinal=16 pc=4295032856 version=1 operation=1 arg1=34359738369 arg2=4295041051 arg3=256
+HMRT OUTPUT group=4 turn=17 ordinal=16 length=256 hex=000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f404142434445464748494a4b4c4d4e4f505152535455565758595a5b5c5d5e5f606162636465666768696a6b6c6d6e6f707172737475767778797a7b7c7d7e7f808182838485868788898a8b8c8d8e8f909192939495969798999a9b9c9d9e9fa0a1a2a3a4a5a6a7a8a9aaabacadaeafb0b1b2b3b4b5b6b7b8b9babbbcbdbebfc0c1c2c3c4c5c6c7c8c9cacbcccdcecfd0d1d2d3d4d5d6d7d8d9dadbdcdddedfe0e1e2e3e4e5e6e7e8e9eaebecedeeeff0f1f2f3f4f5f6f7f8f9fafbfcfdfeff
+HMRT RESULT group=4 turn=17 ordinal=16 status=0 bytes=256
+HMRT CHARGE group=4 turn=17 end=55643331 accounted=1 remaining=1655194 charged=4594806 turns=17
+HMRT RETURN group=4 turn=17 event=svc terminal=none entered=1 code=0 calls=16 written=4096 irqs=1 elr=4295032856 remaining=1655194 charged=4594806 turns=17 root=1076436992 vbar=1075841024 controls=1 before=3204 after=3204
+HMRT STEP group=4 turn=18 slot=0 generation=1 state=live calls=16 written=4096 irqs=1 remaining=1655194 charged=4594806 turns=17 before=3204
+HMRT CLOCK group=4 turn=18 begin=55765611 remaining=1655194 comparator=55828111 whole_end=57420805
+HMRT ENTER group=4 turn=18 pc=4295032856 root=1077243904
+HMRT TRAP group=4 turn=18 kind=svc esr=1442840576 far=0 elr=4295032856 spsr=1614807872
+HMRT CALL group=4 turn=18 ordinal=17 pc=4295032856 version=1 operation=1 arg1=34359738369 arg2=4295041051 arg3=1
+HMRT RESULT group=4 turn=18 ordinal=17 status=6 bytes=0
+HMRT CHARGE group=4 turn=18 end=55889113 accounted=1 remaining=1531692 charged=4718308 turns=18
+HMRT RETURN group=4 turn=18 event=svc terminal=none entered=1 code=0 calls=17 written=4096 irqs=1 elr=4295032856 remaining=1531692 charged=4718308 turns=18 root=1076436992 vbar=1075841024 controls=1 before=3204 after=3204
+HMRT STEP group=4 turn=19 slot=0 generation=1 state=live calls=17 written=4096 irqs=1 remaining=1531692 charged=4718308 turns=18 before=3204
+HMRT CLOCK group=4 turn=19 begin=56008041 remaining=1531692 comparator=56070541 whole_end=57539733
+HMRT ENTER group=4 turn=19 pc=4295032856 root=1077243904
+HMRT TRAP group=4 turn=19 kind=svc esr=1442840576 far=0 elr=4295032856 spsr=1614807872
+HMRT CALL group=4 turn=19 ordinal=18 pc=4295032856 version=1 operation=1 arg1=34359738369 arg2=18446744073709551615 arg3=0
+HMRT RESULT group=4 turn=19 ordinal=18 status=0 bytes=0
+HMRT CHARGE group=4 turn=19 end=56132442 accounted=1 remaining=1407291 charged=4842709 turns=19
+HMRT RETURN group=4 turn=19 event=svc terminal=none entered=1 code=0 calls=18 written=4096 irqs=1 elr=4295032856 remaining=1407291 charged=4842709 turns=19 root=1076436992 vbar=1075841024 controls=1 before=3204 after=3204
+HMRT STEP group=4 turn=20 slot=0 generation=1 state=live calls=18 written=4096 irqs=1 remaining=1407291 charged=4842709 turns=19 before=3204
+HMRT CLOCK group=4 turn=20 begin=56251378 remaining=1407291 comparator=56313878 whole_end=57658669
+HMRT ENTER group=4 turn=20 pc=4295032856 root=1077243904
+HMRT TRAP group=4 turn=20 kind=svc esr=1442840576 far=0 elr=4295032884 spsr=1614807872
+HMRT CALL group=4 turn=20 ordinal=19 pc=4295032884 version=1 operation=2 arg1=0 arg2=0 arg3=0
+HMRT CHARGE group=4 turn=20 end=56353382 accounted=1 remaining=1305287 charged=4944713 turns=20
+HMRT RETURN group=4 turn=20 event=svc terminal=exit entered=1 code=0 calls=19 written=4096 irqs=1 elr=4295032884 remaining=1305287 charged=4944713 turns=20 root=1076436992 vbar=1075841024 controls=1 before=3204 after=3241
+HMRT IDLE group=4 before=3241 after=3241
+HMRT ACTION group=4 id_group=4 op=reap slot=0 generation=1 result=ok before=3241 after=3241
+HMRT ACTION group=4 id_group=4 op=reap slot=1 generation=1 result=ok before=3241 after=3241
+HMRT DROP group=4 before=3241 after=3241
+HMRT PASS index=3 pass=0 name=byte_budget before=3241 after=3241
+HMRT CASE index=4 pass=0 name=call_limit before=3241
+HMRT GROUP group=5 limit=512 before=3241
+HMRT ADMIT group=5 slot=0 generation=1 console_generation=10 fixture=call_limit entry=4294967296 root=1077243904 process_frames=33 box_frames=3 before=3241 after=3205
+HMRT ADMIT group=5 slot=1 generation=1 console_generation=11 fixture=hello entry=4294967296 root=1077391360 process_frames=33 box_frames=3 before=3205 after=3169
+HMRT STEP group=5 turn=1 slot=0 generation=1 state=live calls=0 written=0 irqs=0 remaining=6250000 charged=0 turns=0 before=3169
+HMRT CLOCK group=5 turn=1 begin=59614000 remaining=6250000 comparator=59676500 whole_end=65864000
+HMRT ENTER group=5 turn=1 pc=4294967296 root=1077243904
+HMRT TRAP group=5 turn=1 kind=irq esr=0 far=0 elr=4294967296 spsr=4195136
+HMRT CHARGE group=5 turn=1 end=60388405 accounted=1 remaining=5475595 charged=774405 turns=1
+HMRT RETURN group=5 turn=1 event=timer terminal=none entered=1 code=0 calls=0 written=0 irqs=1 elr=4294967296 remaining=5475595 charged=774405 turns=1 root=1076436992 vbar=1075841024 controls=1 before=3169 after=3169
+HMRT STEP group=5 turn=1 slot=1 generation=1 state=live calls=0 written=0 irqs=0 remaining=6250000 charged=0 turns=0 before=3169
+HMRT CLOCK group=5 turn=1 begin=60508904 remaining=6250000 comparator=60571404 whole_end=66758904
+HMRT ENTER group=5 turn=1 pc=4294967296 root=1077391360
+HMRT TRAP group=5 turn=1 kind=irq esr=0 far=0 elr=4294967296 spsr=4195136
+HMRT CHARGE group=5 turn=1 end=61294405 accounted=1 remaining=5464499 charged=785501 turns=1
+HMRT RETURN group=5 turn=1 event=timer terminal=none entered=1 code=0 calls=0 written=0 irqs=1 elr=4294967296 remaining=5464499 charged=785501 turns=1 root=1076436992 vbar=1075841024 controls=1 before=3169 after=3169
+HMRT STEP group=5 turn=2 slot=0 generation=1 state=live calls=0 written=0 irqs=1 remaining=5475595 charged=774405 turns=1 before=3169
+HMRT CLOCK group=5 turn=2 begin=61421766 remaining=5475595 comparator=61484266 whole_end=66897361
+HMRT ENTER group=5 turn=2 pc=4294967296 root=1077243904
+HMRT TRAP group=5 turn=2 kind=svc esr=1442840576 far=0 elr=4295032856 spsr=1614807872
+HMRT CALL group=5 turn=2 ordinal=1 pc=4295032856 version=1 operation=1 arg1=42949672961 arg2=18446744073709551615 arg3=0
+HMRT RESULT group=5 turn=2 ordinal=1 status=0 bytes=0
+HMRT CHARGE group=5 turn=2 end=61568683 accounted=1 remaining=5328678 charged=921322 turns=2
+HMRT RETURN group=5 turn=2 event=svc terminal=none entered=1 code=0 calls=1 written=0 irqs=1 elr=4295032856 remaining=5328678 charged=921322 turns=2 root=1076436992 vbar=1075841024 controls=1 before=3169 after=3169
+HMRT STEP group=5 turn=2 slot=1 generation=1 state=live calls=0 written=0 irqs=1 remaining=5464499 charged=785501 turns=1 before=3169
+HMRT CLOCK group=5 turn=2 begin=61692372 remaining=5464499 comparator=61754872 whole_end=67156871
+HMRT ENTER group=5 turn=2 pc=4294967296 root=1077391360
+HMRT TRAP group=5 turn=2 kind=svc esr=1442840576 far=0 elr=4295032856 spsr=1614807872
+HMRT CALL group=5 turn=2 ordinal=1 pc=4295032856 version=1 operation=1 arg1=47244640257 arg2=4295036940 arg3=15
+HMRT OUTPUT group=5 turn=2 ordinal=1 length=15 hex=68656c6c6f2066726f6d20454c300a
+HMRT RESULT group=5 turn=2 ordinal=1 status=0 bytes=15
+HMRT CHARGE group=5 turn=2 end=61854549 accounted=1 remaining=5302322 charged=947678 turns=2
+HMRT RETURN group=5 turn=2 event=svc terminal=none entered=1 code=0 calls=1 written=15 irqs=1 elr=4295032856 remaining=5302322 charged=947678 turns=2 root=1076436992 vbar=1075841024 controls=1 before=3169 after=3169
+HMRT STEP group=5 turn=3 slot=0 generation=1 state=live calls=1 written=0 irqs=1 remaining=5328678 charged=921322 turns=2 before=3169
+HMRT CLOCK group=5 turn=3 begin=61976440 remaining=5328678 comparator=62038940 whole_end=67305118
+HMRT ENTER group=5 turn=3 pc=4295032856 root=1077243904
+HMRT TRAP group=5 turn=3 kind=svc esr=1442840576 far=0 elr=4295032856 spsr=541066048
+HMRT CALL group=5 turn=3 ordinal=2 pc=4295032856 version=1 operation=1 arg1=42949672961 arg2=18446744073709551615 arg3=0
+HMRT RESULT group=5 turn=3 ordinal=2 status=0 bytes=0
+HMRT CHARGE group=5 turn=3 end=62108057 accounted=1 remaining=5197061 charged=1052939 turns=3
+HMRT RETURN group=5 turn=3 event=svc terminal=none entered=1 code=0 calls=2 written=0 irqs=1 elr=4295032856 remaining=5197061 charged=1052939 turns=3 root=1076436992 vbar=1075841024 controls=1 before=3169 after=3169
+HMRT STEP group=5 turn=3 slot=1 generation=1 state=live calls=1 written=15 irqs=1 remaining=5302322 charged=947678 turns=2 before=3169
+HMRT CLOCK group=5 turn=3 begin=62236095 remaining=5302322 comparator=62298595 whole_end=67538417
+HMRT ENTER group=5 turn=3 pc=4295032856 root=1077391360
+HMRT TRAP group=5 turn=3 kind=svc esr=1442840576 far=0 elr=4295032884 spsr=1614807872
+HMRT CALL group=5 turn=3 ordinal=2 pc=4295032884 version=1 operation=2 arg1=0 arg2=0 arg3=0
+HMRT CHARGE group=5 turn=3 end=62350412 accounted=1 remaining=5188005 charged=1061995 turns=3
+HMRT RETURN group=5 turn=3 event=svc terminal=exit entered=1 code=0 calls=2 written=15 irqs=1 elr=4295032884 remaining=5188005 charged=1061995 turns=3 root=1076436992 vbar=1075841024 controls=1 before=3169 after=3205
+HMRT STEP group=5 turn=4 slot=0 generation=1 state=live calls=2 written=0 irqs=1 remaining=5197061 charged=1052939 turns=3 before=3205
+HMRT CLOCK group=5 turn=4 begin=62474814 remaining=5197061 comparator=62537314 whole_end=67671875
+HMRT ENTER group=5 turn=4 pc=4295032856 root=1077243904
+HMRT TRAP group=5 turn=4 kind=svc esr=1442840576 far=0 elr=4295032856 spsr=541066048
+HMRT CALL group=5 turn=4 ordinal=3 pc=4295032856 version=1 operation=1 arg1=42949672961 arg2=18446744073709551615 arg3=0
+HMRT RESULT group=5 turn=4 ordinal=3 status=0 bytes=0
+HMRT CHARGE group=5 turn=4 end=62602607 accounted=1 remaining=5069268 charged=1180732 turns=4
+HMRT RETURN group=5 turn=4 event=svc terminal=none entered=1 code=0 calls=3 written=0 irqs=1 elr=4295032856 remaining=5069268 charged=1180732 turns=4 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=5 turn=5 slot=0 generation=1 state=live calls=3 written=0 irqs=1 remaining=5069268 charged=1180732 turns=4 before=3205
+HMRT CLOCK group=5 turn=5 begin=62728435 remaining=5069268 comparator=62790935 whole_end=67797703
+HMRT ENTER group=5 turn=5 pc=4295032856 root=1077243904
+HMRT TRAP group=5 turn=5 kind=svc esr=1442840576 far=0 elr=4295032856 spsr=541066048
+HMRT CALL group=5 turn=5 ordinal=4 pc=4295032856 version=1 operation=1 arg1=42949672961 arg2=18446744073709551615 arg3=0
+HMRT RESULT group=5 turn=5 ordinal=4 status=0 bytes=0
+HMRT CHARGE group=5 turn=5 end=62860554 accounted=1 remaining=4937149 charged=1312851 turns=5
+HMRT RETURN group=5 turn=5 event=svc terminal=none entered=1 code=0 calls=4 written=0 irqs=1 elr=4295032856 remaining=4937149 charged=1312851 turns=5 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=5 turn=6 slot=0 generation=1 state=live calls=4 written=0 irqs=1 remaining=4937149 charged=1312851 turns=5 before=3205
+HMRT CLOCK group=5 turn=6 begin=62984370 remaining=4937149 comparator=63046870 whole_end=67921519
+HMRT ENTER group=5 turn=6 pc=4295032856 root=1077243904
+HMRT TRAP group=5 turn=6 kind=svc esr=1442840576 far=0 elr=4295032856 spsr=541066048
+HMRT CALL group=5 turn=6 ordinal=5 pc=4295032856 version=1 operation=1 arg1=42949672961 arg2=18446744073709551615 arg3=0
+HMRT RESULT group=5 turn=6 ordinal=5 status=0 bytes=0
+HMRT CHARGE group=5 turn=6 end=63112285 accounted=1 remaining=4809234 charged=1440766 turns=6
+HMRT RETURN group=5 turn=6 event=svc terminal=none entered=1 code=0 calls=5 written=0 irqs=1 elr=4295032856 remaining=4809234 charged=1440766 turns=6 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=5 turn=7 slot=0 generation=1 state=live calls=5 written=0 irqs=1 remaining=4809234 charged=1440766 turns=6 before=3205
+HMRT CLOCK group=5 turn=7 begin=63237468 remaining=4809234 comparator=63299968 whole_end=68046702
+HMRT ENTER group=5 turn=7 pc=4295032856 root=1077243904
+HMRT TRAP group=5 turn=7 kind=svc esr=1442840576 far=0 elr=4295032856 spsr=541066048
+HMRT CALL group=5 turn=7 ordinal=6 pc=4295032856 version=1 operation=1 arg1=42949672961 arg2=18446744073709551615 arg3=0
+HMRT RESULT group=5 turn=7 ordinal=6 status=0 bytes=0
+HMRT CHARGE group=5 turn=7 end=63376318 accounted=1 remaining=4670384 charged=1579616 turns=7
+HMRT RETURN group=5 turn=7 event=svc terminal=none entered=1 code=0 calls=6 written=0 irqs=1 elr=4295032856 remaining=4670384 charged=1579616 turns=7 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=5 turn=8 slot=0 generation=1 state=live calls=6 written=0 irqs=1 remaining=4670384 charged=1579616 turns=7 before=3205
+HMRT CLOCK group=5 turn=8 begin=63518385 remaining=4670384 comparator=63580885 whole_end=68188769
+HMRT ENTER group=5 turn=8 pc=4295032856 root=1077243904
+HMRT TRAP group=5 turn=8 kind=svc esr=1442840576 far=0 elr=4295032856 spsr=541066048
+HMRT CALL group=5 turn=8 ordinal=7 pc=4295032856 version=1 operation=1 arg1=42949672961 arg2=18446744073709551615 arg3=0
+HMRT RESULT group=5 turn=8 ordinal=7 status=0 bytes=0
+HMRT CHARGE group=5 turn=8 end=63653607 accounted=1 remaining=4535162 charged=1714838 turns=8
+HMRT RETURN group=5 turn=8 event=svc terminal=none entered=1 code=0 calls=7 written=0 irqs=1 elr=4295032856 remaining=4535162 charged=1714838 turns=8 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=5 turn=9 slot=0 generation=1 state=live calls=7 written=0 irqs=1 remaining=4535162 charged=1714838 turns=8 before=3205
+HMRT CLOCK group=5 turn=9 begin=63780448 remaining=4535162 comparator=63842948 whole_end=68315610
+HMRT ENTER group=5 turn=9 pc=4295032856 root=1077243904
+HMRT TRAP group=5 turn=9 kind=svc esr=1442840576 far=0 elr=4295032856 spsr=541066048
+HMRT CALL group=5 turn=9 ordinal=8 pc=4295032856 version=1 operation=1 arg1=42949672961 arg2=18446744073709551615 arg3=0
+HMRT RESULT group=5 turn=9 ordinal=8 status=0 bytes=0
+HMRT CHARGE group=5 turn=9 end=63904954 accounted=1 remaining=4410656 charged=1839344 turns=9
+HMRT RETURN group=5 turn=9 event=svc terminal=none entered=1 code=0 calls=8 written=0 irqs=1 elr=4295032856 remaining=4410656 charged=1839344 turns=9 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=5 turn=10 slot=0 generation=1 state=live calls=8 written=0 irqs=1 remaining=4410656 charged=1839344 turns=9 before=3205
+HMRT CLOCK group=5 turn=10 begin=64031529 remaining=4410656 comparator=64094029 whole_end=68442185
+HMRT ENTER group=5 turn=10 pc=4295032856 root=1077243904
+HMRT TRAP group=5 turn=10 kind=svc esr=1442840576 far=0 elr=4295032856 spsr=541066048
+HMRT CALL group=5 turn=10 ordinal=9 pc=4295032856 version=1 operation=1 arg1=42949672961 arg2=18446744073709551615 arg3=0
+HMRT RESULT group=5 turn=10 ordinal=9 status=0 bytes=0
+HMRT CHARGE group=5 turn=10 end=64159458 accounted=1 remaining=4282727 charged=1967273 turns=10
+HMRT RETURN group=5 turn=10 event=svc terminal=none entered=1 code=0 calls=9 written=0 irqs=1 elr=4295032856 remaining=4282727 charged=1967273 turns=10 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=5 turn=11 slot=0 generation=1 state=live calls=9 written=0 irqs=1 remaining=4282727 charged=1967273 turns=10 before=3205
+HMRT CLOCK group=5 turn=11 begin=64282078 remaining=4282727 comparator=64344578 whole_end=68564805
+HMRT ENTER group=5 turn=11 pc=4295032856 root=1077243904
+HMRT TRAP group=5 turn=11 kind=svc esr=1442840576 far=0 elr=4295032856 spsr=541066048
+HMRT CALL group=5 turn=11 ordinal=10 pc=4295032856 version=1 operation=1 arg1=42949672961 arg2=18446744073709551615 arg3=0
+HMRT RESULT group=5 turn=11 ordinal=10 status=0 bytes=0
+HMRT CHARGE group=5 turn=11 end=64406287 accounted=1 remaining=4158518 charged=2091482 turns=11
+HMRT RETURN group=5 turn=11 event=svc terminal=none entered=1 code=0 calls=10 written=0 irqs=1 elr=4295032856 remaining=4158518 charged=2091482 turns=11 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=5 turn=12 slot=0 generation=1 state=live calls=10 written=0 irqs=1 remaining=4158518 charged=2091482 turns=11 before=3205
+HMRT CLOCK group=5 turn=12 begin=64532570 remaining=4158518 comparator=64595070 whole_end=68691088
+HMRT ENTER group=5 turn=12 pc=4295032856 root=1077243904
+HMRT TRAP group=5 turn=12 kind=svc esr=1442840576 far=0 elr=4295032856 spsr=541066048
+HMRT CALL group=5 turn=12 ordinal=11 pc=4295032856 version=1 operation=1 arg1=42949672961 arg2=18446744073709551615 arg3=0
+HMRT RESULT group=5 turn=12 ordinal=11 status=0 bytes=0
+HMRT CHARGE group=5 turn=12 end=64661742 accounted=1 remaining=4029346 charged=2220654 turns=12
+HMRT RETURN group=5 turn=12 event=svc terminal=none entered=1 code=0 calls=11 written=0 irqs=1 elr=4295032856 remaining=4029346 charged=2220654 turns=12 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=5 turn=13 slot=0 generation=1 state=live calls=11 written=0 irqs=1 remaining=4029346 charged=2220654 turns=12 before=3205
+HMRT CLOCK group=5 turn=13 begin=64787496 remaining=4029346 comparator=64849996 whole_end=68816842
+HMRT ENTER group=5 turn=13 pc=4295032856 root=1077243904
+HMRT TRAP group=5 turn=13 kind=svc esr=1442840576 far=0 elr=4295032856 spsr=541066048
+HMRT CALL group=5 turn=13 ordinal=12 pc=4295032856 version=1 operation=1 arg1=42949672961 arg2=18446744073709551615 arg3=0
+HMRT RESULT group=5 turn=13 ordinal=12 status=0 bytes=0
+HMRT CHARGE group=5 turn=13 end=64917367 accounted=1 remaining=3899475 charged=2350525 turns=13
+HMRT RETURN group=5 turn=13 event=svc terminal=none entered=1 code=0 calls=12 written=0 irqs=1 elr=4295032856 remaining=3899475 charged=2350525 turns=13 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=5 turn=14 slot=0 generation=1 state=live calls=12 written=0 irqs=1 remaining=3899475 charged=2350525 turns=13 before=3205
+HMRT CLOCK group=5 turn=14 begin=65044352 remaining=3899475 comparator=65106852 whole_end=68943827
+HMRT ENTER group=5 turn=14 pc=4295032856 root=1077243904
+HMRT TRAP group=5 turn=14 kind=svc esr=1442840576 far=0 elr=4295032856 spsr=541066048
+HMRT CALL group=5 turn=14 ordinal=13 pc=4295032856 version=1 operation=1 arg1=42949672961 arg2=18446744073709551615 arg3=0
+HMRT RESULT group=5 turn=14 ordinal=13 status=0 bytes=0
+HMRT CHARGE group=5 turn=14 end=65170539 accounted=1 remaining=3773288 charged=2476712 turns=14
+HMRT RETURN group=5 turn=14 event=svc terminal=none entered=1 code=0 calls=13 written=0 irqs=1 elr=4295032856 remaining=3773288 charged=2476712 turns=14 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=5 turn=15 slot=0 generation=1 state=live calls=13 written=0 irqs=1 remaining=3773288 charged=2476712 turns=14 before=3205
+HMRT CLOCK group=5 turn=15 begin=65296560 remaining=3773288 comparator=65359060 whole_end=69069848
+HMRT ENTER group=5 turn=15 pc=4295032856 root=1077243904
+HMRT TRAP group=5 turn=15 kind=svc esr=1442840576 far=0 elr=4295032856 spsr=541066048
+HMRT CALL group=5 turn=15 ordinal=14 pc=4295032856 version=1 operation=1 arg1=42949672961 arg2=18446744073709551615 arg3=0
+HMRT RESULT group=5 turn=15 ordinal=14 status=0 bytes=0
+HMRT CHARGE group=5 turn=15 end=65424689 accounted=1 remaining=3645159 charged=2604841 turns=15
+HMRT RETURN group=5 turn=15 event=svc terminal=none entered=1 code=0 calls=14 written=0 irqs=1 elr=4295032856 remaining=3645159 charged=2604841 turns=15 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=5 turn=16 slot=0 generation=1 state=live calls=14 written=0 irqs=1 remaining=3645159 charged=2604841 turns=15 before=3205
+HMRT CLOCK group=5 turn=16 begin=65556506 remaining=3645159 comparator=65619006 whole_end=69201665
+HMRT ENTER group=5 turn=16 pc=4295032856 root=1077243904
+HMRT TRAP group=5 turn=16 kind=svc esr=1442840576 far=0 elr=4295032856 spsr=541066048
+HMRT CALL group=5 turn=16 ordinal=15 pc=4295032856 version=1 operation=1 arg1=42949672961 arg2=18446744073709551615 arg3=0
+HMRT RESULT group=5 turn=16 ordinal=15 status=0 bytes=0
+HMRT CHARGE group=5 turn=16 end=65685534 accounted=1 remaining=3516131 charged=2733869 turns=16
+HMRT RETURN group=5 turn=16 event=svc terminal=none entered=1 code=0 calls=15 written=0 irqs=1 elr=4295032856 remaining=3516131 charged=2733869 turns=16 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=5 turn=17 slot=0 generation=1 state=live calls=15 written=0 irqs=1 remaining=3516131 charged=2733869 turns=16 before=3205
+HMRT CLOCK group=5 turn=17 begin=65811516 remaining=3516131 comparator=65874016 whole_end=69327647
+HMRT ENTER group=5 turn=17 pc=4295032856 root=1077243904
+HMRT TRAP group=5 turn=17 kind=svc esr=1442840576 far=0 elr=4295032856 spsr=541066048
+HMRT CALL group=5 turn=17 ordinal=16 pc=4295032856 version=1 operation=1 arg1=42949672961 arg2=18446744073709551615 arg3=0
+HMRT RESULT group=5 turn=17 ordinal=16 status=0 bytes=0
+HMRT CHARGE group=5 turn=17 end=65940129 accounted=1 remaining=3387518 charged=2862482 turns=17
+HMRT RETURN group=5 turn=17 event=svc terminal=none entered=1 code=0 calls=16 written=0 irqs=1 elr=4295032856 remaining=3387518 charged=2862482 turns=17 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=5 turn=18 slot=0 generation=1 state=live calls=16 written=0 irqs=1 remaining=3387518 charged=2862482 turns=17 before=3205
+HMRT CLOCK group=5 turn=18 begin=66063466 remaining=3387518 comparator=66125966 whole_end=69450984
+HMRT ENTER group=5 turn=18 pc=4295032856 root=1077243904
+HMRT TRAP group=5 turn=18 kind=svc esr=1442840576 far=0 elr=4295032856 spsr=541066048
+HMRT CALL group=5 turn=18 ordinal=17 pc=4295032856 version=1 operation=1 arg1=42949672961 arg2=18446744073709551615 arg3=0
+HMRT RESULT group=5 turn=18 ordinal=17 status=0 bytes=0
+HMRT CHARGE group=5 turn=18 end=66193829 accounted=1 remaining=3257155 charged=2992845 turns=18
+HMRT RETURN group=5 turn=18 event=svc terminal=none entered=1 code=0 calls=17 written=0 irqs=1 elr=4295032856 remaining=3257155 charged=2992845 turns=18 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=5 turn=19 slot=0 generation=1 state=live calls=17 written=0 irqs=1 remaining=3257155 charged=2992845 turns=18 before=3205
+HMRT CLOCK group=5 turn=19 begin=66317685 remaining=3257155 comparator=66380185 whole_end=69574840
+HMRT ENTER group=5 turn=19 pc=4295032856 root=1077243904
+HMRT TRAP group=5 turn=19 kind=svc esr=1442840576 far=0 elr=4295032856 spsr=541066048
+HMRT CALL group=5 turn=19 ordinal=18 pc=4295032856 version=1 operation=1 arg1=42949672961 arg2=18446744073709551615 arg3=0
+HMRT RESULT group=5 turn=19 ordinal=18 status=0 bytes=0
+HMRT CHARGE group=5 turn=19 end=66452475 accounted=1 remaining=3122365 charged=3127635 turns=19
+HMRT RETURN group=5 turn=19 event=svc terminal=none entered=1 code=0 calls=18 written=0 irqs=1 elr=4295032856 remaining=3122365 charged=3127635 turns=19 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=5 turn=20 slot=0 generation=1 state=live calls=18 written=0 irqs=1 remaining=3122365 charged=3127635 turns=19 before=3205
+HMRT CLOCK group=5 turn=20 begin=66581124 remaining=3122365 comparator=66643624 whole_end=69703489
+HMRT ENTER group=5 turn=20 pc=4295032856 root=1077243904
+HMRT TRAP group=5 turn=20 kind=svc esr=1442840576 far=0 elr=4295032856 spsr=541066048
+HMRT CALL group=5 turn=20 ordinal=19 pc=4295032856 version=1 operation=1 arg1=42949672961 arg2=18446744073709551615 arg3=0
+HMRT RESULT group=5 turn=20 ordinal=19 status=0 bytes=0
+HMRT CHARGE group=5 turn=20 end=66712701 accounted=1 remaining=2990788 charged=3259212 turns=20
+HMRT RETURN group=5 turn=20 event=svc terminal=none entered=1 code=0 calls=19 written=0 irqs=1 elr=4295032856 remaining=2990788 charged=3259212 turns=20 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=5 turn=21 slot=0 generation=1 state=live calls=19 written=0 irqs=1 remaining=2990788 charged=3259212 turns=20 before=3205
+HMRT CLOCK group=5 turn=21 begin=66845304 remaining=2990788 comparator=66907804 whole_end=69836092
+HMRT ENTER group=5 turn=21 pc=4295032856 root=1077243904
+HMRT TRAP group=5 turn=21 kind=svc esr=1442840576 far=0 elr=4295032856 spsr=541066048
+HMRT CALL group=5 turn=21 ordinal=20 pc=4295032856 version=1 operation=1 arg1=42949672961 arg2=18446744073709551615 arg3=0
+HMRT RESULT group=5 turn=21 ordinal=20 status=0 bytes=0
+HMRT CHARGE group=5 turn=21 end=66990898 accounted=1 remaining=2845194 charged=3404806 turns=21
+HMRT RETURN group=5 turn=21 event=svc terminal=none entered=1 code=0 calls=20 written=0 irqs=1 elr=4295032856 remaining=2845194 charged=3404806 turns=21 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=5 turn=22 slot=0 generation=1 state=live calls=20 written=0 irqs=1 remaining=2845194 charged=3404806 turns=21 before=3205
+HMRT CLOCK group=5 turn=22 begin=67126356 remaining=2845194 comparator=67188856 whole_end=69971550
+HMRT ENTER group=5 turn=22 pc=4295032856 root=1077243904
+HMRT TRAP group=5 turn=22 kind=svc esr=1442840576 far=0 elr=4295032856 spsr=541066048
+HMRT CALL group=5 turn=22 ordinal=21 pc=4295032856 version=1 operation=1 arg1=42949672961 arg2=18446744073709551615 arg3=0
+HMRT RESULT group=5 turn=22 ordinal=21 status=0 bytes=0
+HMRT CHARGE group=5 turn=22 end=67258899 accounted=1 remaining=2712651 charged=3537349 turns=22
+HMRT RETURN group=5 turn=22 event=svc terminal=none entered=1 code=0 calls=21 written=0 irqs=1 elr=4295032856 remaining=2712651 charged=3537349 turns=22 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=5 turn=23 slot=0 generation=1 state=live calls=21 written=0 irqs=1 remaining=2712651 charged=3537349 turns=22 before=3205
+HMRT CLOCK group=5 turn=23 begin=67393095 remaining=2712651 comparator=67455595 whole_end=70105746
+HMRT ENTER group=5 turn=23 pc=4295032856 root=1077243904
+HMRT TRAP group=5 turn=23 kind=svc esr=1442840576 far=0 elr=4295032856 spsr=541066048
+HMRT CALL group=5 turn=23 ordinal=22 pc=4295032856 version=1 operation=1 arg1=42949672961 arg2=18446744073709551615 arg3=0
+HMRT RESULT group=5 turn=23 ordinal=22 status=0 bytes=0
+HMRT CHARGE group=5 turn=23 end=67525096 accounted=1 remaining=2580650 charged=3669350 turns=23
+HMRT RETURN group=5 turn=23 event=svc terminal=none entered=1 code=0 calls=22 written=0 irqs=1 elr=4295032856 remaining=2580650 charged=3669350 turns=23 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=5 turn=24 slot=0 generation=1 state=live calls=22 written=0 irqs=1 remaining=2580650 charged=3669350 turns=23 before=3205
+HMRT CLOCK group=5 turn=24 begin=67659380 remaining=2580650 comparator=67721880 whole_end=70240030
+HMRT ENTER group=5 turn=24 pc=4295032856 root=1077243904
+HMRT TRAP group=5 turn=24 kind=svc esr=1442840576 far=0 elr=4295032856 spsr=541066048
+HMRT CALL group=5 turn=24 ordinal=23 pc=4295032856 version=1 operation=1 arg1=42949672961 arg2=18446744073709551615 arg3=0
+HMRT RESULT group=5 turn=24 ordinal=23 status=0 bytes=0
+HMRT CHARGE group=5 turn=24 end=67795257 accounted=1 remaining=2444773 charged=3805227 turns=24
+HMRT RETURN group=5 turn=24 event=svc terminal=none entered=1 code=0 calls=23 written=0 irqs=1 elr=4295032856 remaining=2444773 charged=3805227 turns=24 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=5 turn=25 slot=0 generation=1 state=live calls=23 written=0 irqs=1 remaining=2444773 charged=3805227 turns=24 before=3205
+HMRT CLOCK group=5 turn=25 begin=67927013 remaining=2444773 comparator=67989513 whole_end=70371786
+HMRT ENTER group=5 turn=25 pc=4295032856 root=1077243904
+HMRT TRAP group=5 turn=25 kind=svc esr=1442840576 far=0 elr=4295032856 spsr=541066048
+HMRT CALL group=5 turn=25 ordinal=24 pc=4295032856 version=1 operation=1 arg1=42949672961 arg2=18446744073709551615 arg3=0
+HMRT RESULT group=5 turn=25 ordinal=24 status=0 bytes=0
+HMRT CHARGE group=5 turn=25 end=68059761 accounted=1 remaining=2312025 charged=3937975 turns=25
+HMRT RETURN group=5 turn=25 event=svc terminal=none entered=1 code=0 calls=24 written=0 irqs=1 elr=4295032856 remaining=2312025 charged=3937975 turns=25 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=5 turn=26 slot=0 generation=1 state=live calls=24 written=0 irqs=1 remaining=2312025 charged=3937975 turns=25 before=3205
+HMRT CLOCK group=5 turn=26 begin=68195371 remaining=2312025 comparator=68257871 whole_end=70507396
+HMRT ENTER group=5 turn=26 pc=4295032856 root=1077243904
+HMRT TRAP group=5 turn=26 kind=svc esr=1442840576 far=0 elr=4295032856 spsr=541066048
+HMRT CALL group=5 turn=26 ordinal=25 pc=4295032856 version=1 operation=1 arg1=42949672961 arg2=18446744073709551615 arg3=0
+HMRT RESULT group=5 turn=26 ordinal=25 status=0 bytes=0
+HMRT CHARGE group=5 turn=26 end=68328320 accounted=1 remaining=2179076 charged=4070924 turns=26
+HMRT RETURN group=5 turn=26 event=svc terminal=none entered=1 code=0 calls=25 written=0 irqs=1 elr=4295032856 remaining=2179076 charged=4070924 turns=26 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=5 turn=27 slot=0 generation=1 state=live calls=25 written=0 irqs=1 remaining=2179076 charged=4070924 turns=26 before=3205
+HMRT CLOCK group=5 turn=27 begin=68462285 remaining=2179076 comparator=68524785 whole_end=70641361
+HMRT ENTER group=5 turn=27 pc=4295032856 root=1077243904
+HMRT TRAP group=5 turn=27 kind=svc esr=1442840576 far=0 elr=4295032856 spsr=541066048
+HMRT CALL group=5 turn=27 ordinal=26 pc=4295032856 version=1 operation=1 arg1=42949672961 arg2=18446744073709551615 arg3=0
+HMRT RESULT group=5 turn=27 ordinal=26 status=0 bytes=0
+HMRT CHARGE group=5 turn=27 end=68591047 accounted=1 remaining=2050314 charged=4199686 turns=27
+HMRT RETURN group=5 turn=27 event=svc terminal=none entered=1 code=0 calls=26 written=0 irqs=1 elr=4295032856 remaining=2050314 charged=4199686 turns=27 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=5 turn=28 slot=0 generation=1 state=live calls=26 written=0 irqs=1 remaining=2050314 charged=4199686 turns=27 before=3205
+HMRT CLOCK group=5 turn=28 begin=68724527 remaining=2050314 comparator=68787027 whole_end=70774841
+HMRT ENTER group=5 turn=28 pc=4295032856 root=1077243904
+HMRT TRAP group=5 turn=28 kind=svc esr=1442840576 far=0 elr=4295032856 spsr=541066048
+HMRT CALL group=5 turn=28 ordinal=27 pc=4295032856 version=1 operation=1 arg1=42949672961 arg2=18446744073709551615 arg3=0
+HMRT RESULT group=5 turn=28 ordinal=27 status=0 bytes=0
+HMRT CHARGE group=5 turn=28 end=68860016 accounted=1 remaining=1914825 charged=4335175 turns=28
+HMRT RETURN group=5 turn=28 event=svc terminal=none entered=1 code=0 calls=27 written=0 irqs=1 elr=4295032856 remaining=1914825 charged=4335175 turns=28 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=5 turn=29 slot=0 generation=1 state=live calls=27 written=0 irqs=1 remaining=1914825 charged=4335175 turns=28 before=3205
+HMRT CLOCK group=5 turn=29 begin=68997443 remaining=1914825 comparator=69059943 whole_end=70912268
+HMRT ENTER group=5 turn=29 pc=4295032856 root=1077243904
+HMRT TRAP group=5 turn=29 kind=svc esr=1442840576 far=0 elr=4295032856 spsr=541066048
+HMRT CALL group=5 turn=29 ordinal=28 pc=4295032856 version=1 operation=1 arg1=42949672961 arg2=18446744073709551615 arg3=0
+HMRT RESULT group=5 turn=29 ordinal=28 status=0 bytes=0
+HMRT CHARGE group=5 turn=29 end=69137074 accounted=1 remaining=1775194 charged=4474806 turns=29
+HMRT RETURN group=5 turn=29 event=svc terminal=none entered=1 code=0 calls=28 written=0 irqs=1 elr=4295032856 remaining=1775194 charged=4474806 turns=29 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=5 turn=30 slot=0 generation=1 state=live calls=28 written=0 irqs=1 remaining=1775194 charged=4474806 turns=29 before=3205
+HMRT CLOCK group=5 turn=30 begin=69277277 remaining=1775194 comparator=69339777 whole_end=71052471
+HMRT ENTER group=5 turn=30 pc=4295032856 root=1077243904
+HMRT TRAP group=5 turn=30 kind=svc esr=1442840576 far=0 elr=4295032856 spsr=541066048
+HMRT CALL group=5 turn=30 ordinal=29 pc=4295032856 version=1 operation=1 arg1=42949672961 arg2=18446744073709551615 arg3=0
+HMRT RESULT group=5 turn=30 ordinal=29 status=0 bytes=0
+HMRT CHARGE group=5 turn=30 end=69420749 accounted=1 remaining=1631722 charged=4618278 turns=30
+HMRT RETURN group=5 turn=30 event=svc terminal=none entered=1 code=0 calls=29 written=0 irqs=1 elr=4295032856 remaining=1631722 charged=4618278 turns=30 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=5 turn=31 slot=0 generation=1 state=live calls=29 written=0 irqs=1 remaining=1631722 charged=4618278 turns=30 before=3205
+HMRT CLOCK group=5 turn=31 begin=69557106 remaining=1631722 comparator=69619606 whole_end=71188828
+HMRT ENTER group=5 turn=31 pc=4295032856 root=1077243904
+HMRT TRAP group=5 turn=31 kind=svc esr=1442840576 far=0 elr=4295032856 spsr=541066048
+HMRT CALL group=5 turn=31 ordinal=30 pc=4295032856 version=1 operation=1 arg1=42949672961 arg2=18446744073709551615 arg3=0
+HMRT RESULT group=5 turn=31 ordinal=30 status=0 bytes=0
+HMRT CHARGE group=5 turn=31 end=69699658 accounted=1 remaining=1489170 charged=4760830 turns=31
+HMRT RETURN group=5 turn=31 event=svc terminal=none entered=1 code=0 calls=30 written=0 irqs=1 elr=4295032856 remaining=1489170 charged=4760830 turns=31 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=5 turn=32 slot=0 generation=1 state=live calls=30 written=0 irqs=1 remaining=1489170 charged=4760830 turns=31 before=3205
+HMRT CLOCK group=5 turn=32 begin=69851227 remaining=1489170 comparator=69913727 whole_end=71340397
+HMRT ENTER group=5 turn=32 pc=4295032856 root=1077243904
+HMRT TRAP group=5 turn=32 kind=svc esr=1442840576 far=0 elr=4295032856 spsr=541066048
+HMRT CALL group=5 turn=32 ordinal=31 pc=4295032856 version=1 operation=1 arg1=42949672961 arg2=18446744073709551615 arg3=0
+HMRT RESULT group=5 turn=32 ordinal=31 status=0 bytes=0
+HMRT CHARGE group=5 turn=32 end=69998559 accounted=1 remaining=1341838 charged=4908162 turns=32
+HMRT RETURN group=5 turn=32 event=svc terminal=none entered=1 code=0 calls=31 written=0 irqs=1 elr=4295032856 remaining=1341838 charged=4908162 turns=32 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=5 turn=33 slot=0 generation=1 state=live calls=31 written=0 irqs=1 remaining=1341838 charged=4908162 turns=32 before=3205
+HMRT CLOCK group=5 turn=33 begin=70136644 remaining=1341838 comparator=70199144 whole_end=71478482
+HMRT ENTER group=5 turn=33 pc=4295032856 root=1077243904
+HMRT TRAP group=5 turn=33 kind=svc esr=1442840576 far=0 elr=4295032856 spsr=541066048
+HMRT CALL group=5 turn=33 ordinal=32 pc=4295032856 version=1 operation=1 arg1=42949672961 arg2=18446744073709551615 arg3=0
+HMRT RESULT group=5 turn=33 ordinal=32 status=0 bytes=0
+HMRT CHARGE group=5 turn=33 end=70272552 accounted=1 remaining=1205930 charged=5044070 turns=33
+HMRT RETURN group=5 turn=33 event=svc terminal=none entered=1 code=0 calls=32 written=0 irqs=1 elr=4295032856 remaining=1205930 charged=5044070 turns=33 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=5 turn=34 slot=0 generation=1 state=live calls=32 written=0 irqs=1 remaining=1205930 charged=5044070 turns=33 before=3205
+HMRT CLOCK group=5 turn=34 begin=70405688 remaining=1205930 comparator=70468188 whole_end=71611618
+HMRT ENTER group=5 turn=34 pc=4295032856 root=1077243904
+HMRT TRAP group=5 turn=34 kind=svc esr=1442840576 far=0 elr=4295032856 spsr=541066048
+HMRT CALL group=5 turn=34 ordinal=33 pc=4295032856 version=1 operation=1 arg1=42949672961 arg2=18446744073709551615 arg3=0
+HMRT RESULT group=5 turn=34 ordinal=33 status=0 bytes=0
+HMRT CHARGE group=5 turn=34 end=70539365 accounted=1 remaining=1072253 charged=5177747 turns=34
+HMRT RETURN group=5 turn=34 event=svc terminal=none entered=1 code=0 calls=33 written=0 irqs=1 elr=4295032856 remaining=1072253 charged=5177747 turns=34 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=5 turn=35 slot=0 generation=1 state=live calls=33 written=0 irqs=1 remaining=1072253 charged=5177747 turns=34 before=3205
+HMRT CLOCK group=5 turn=35 begin=70668171 remaining=1072253 comparator=70730671 whole_end=71740424
+HMRT ENTER group=5 turn=35 pc=4295032856 root=1077243904
+HMRT TRAP group=5 turn=35 kind=svc esr=1442840576 far=0 elr=4295032856 spsr=541066048
+HMRT CALL group=5 turn=35 ordinal=34 pc=4295032856 version=1 operation=1 arg1=42949672961 arg2=18446744073709551615 arg3=0
+HMRT RESULT group=5 turn=35 ordinal=34 status=0 bytes=0
+HMRT CHARGE group=5 turn=35 end=70796950 accounted=1 remaining=943474 charged=5306526 turns=35
+HMRT RETURN group=5 turn=35 event=svc terminal=none entered=1 code=0 calls=34 written=0 irqs=1 elr=4295032856 remaining=943474 charged=5306526 turns=35 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=5 turn=36 slot=0 generation=1 state=live calls=34 written=0 irqs=1 remaining=943474 charged=5306526 turns=35 before=3205
+HMRT CLOCK group=5 turn=36 begin=70924228 remaining=943474 comparator=70986728 whole_end=71867702
+HMRT ENTER group=5 turn=36 pc=4295032856 root=1077243904
+HMRT TRAP group=5 turn=36 kind=svc esr=1442840576 far=0 elr=4295032856 spsr=541066048
+HMRT CALL group=5 turn=36 ordinal=35 pc=4295032856 version=1 operation=1 arg1=42949672961 arg2=18446744073709551615 arg3=0
+HMRT RESULT group=5 turn=36 ordinal=35 status=0 bytes=0
+HMRT CHARGE group=5 turn=36 end=71061580 accounted=1 remaining=806122 charged=5443878 turns=36
+HMRT RETURN group=5 turn=36 event=svc terminal=none entered=1 code=0 calls=35 written=0 irqs=1 elr=4295032856 remaining=806122 charged=5443878 turns=36 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=5 turn=37 slot=0 generation=1 state=live calls=35 written=0 irqs=1 remaining=806122 charged=5443878 turns=36 before=3205
+HMRT CLOCK group=5 turn=37 begin=71185205 remaining=806122 comparator=71247705 whole_end=71991327
+HMRT ENTER group=5 turn=37 pc=4295032856 root=1077243904
+HMRT TRAP group=5 turn=37 kind=svc esr=1442840576 far=0 elr=4295032856 spsr=541066048
+HMRT CALL group=5 turn=37 ordinal=36 pc=4295032856 version=1 operation=1 arg1=42949672961 arg2=18446744073709551615 arg3=0
+HMRT RESULT group=5 turn=37 ordinal=36 status=0 bytes=0
+HMRT CHARGE group=5 turn=37 end=71314783 accounted=1 remaining=676544 charged=5573456 turns=37
+HMRT RETURN group=5 turn=37 event=svc terminal=none entered=1 code=0 calls=36 written=0 irqs=1 elr=4295032856 remaining=676544 charged=5573456 turns=37 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=5 turn=38 slot=0 generation=1 state=live calls=36 written=0 irqs=1 remaining=676544 charged=5573456 turns=37 before=3205
+HMRT CLOCK group=5 turn=38 begin=71435500 remaining=676544 comparator=71498000 whole_end=72112044
+HMRT ENTER group=5 turn=38 pc=4295032856 root=1077243904
+HMRT TRAP group=5 turn=38 kind=svc esr=1442840576 far=0 elr=4295032856 spsr=541066048
+HMRT CALL group=5 turn=38 ordinal=37 pc=4295032856 version=1 operation=1 arg1=42949672961 arg2=18446744073709551615 arg3=0
+HMRT RESULT group=5 turn=38 ordinal=37 status=0 bytes=0
+HMRT CHARGE group=5 turn=38 end=71557845 accounted=1 remaining=554199 charged=5695801 turns=38
+HMRT RETURN group=5 turn=38 event=svc terminal=none entered=1 code=0 calls=37 written=0 irqs=1 elr=4295032856 remaining=554199 charged=5695801 turns=38 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=5 turn=39 slot=0 generation=1 state=live calls=37 written=0 irqs=1 remaining=554199 charged=5695801 turns=38 before=3205
+HMRT CLOCK group=5 turn=39 begin=71676781 remaining=554199 comparator=71739281 whole_end=72230980
+HMRT ENTER group=5 turn=39 pc=4295032856 root=1077243904
+HMRT TRAP group=5 turn=39 kind=svc esr=1442840576 far=0 elr=4295032856 spsr=541066048
+HMRT CALL group=5 turn=39 ordinal=38 pc=4295032856 version=1 operation=1 arg1=42949672961 arg2=18446744073709551615 arg3=0
+HMRT RESULT group=5 turn=39 ordinal=38 status=0 bytes=0
+HMRT CHARGE group=5 turn=39 end=71797573 accounted=1 remaining=433407 charged=5816593 turns=39
+HMRT RETURN group=5 turn=39 event=svc terminal=none entered=1 code=0 calls=38 written=0 irqs=1 elr=4295032856 remaining=433407 charged=5816593 turns=39 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=5 turn=40 slot=0 generation=1 state=live calls=38 written=0 irqs=1 remaining=433407 charged=5816593 turns=39 before=3205
+HMRT CLOCK group=5 turn=40 begin=71919765 remaining=433407 comparator=71982265 whole_end=72353172
+HMRT ENTER group=5 turn=40 pc=4295032856 root=1077243904
+HMRT TRAP group=5 turn=40 kind=svc esr=1442840576 far=0 elr=4295032856 spsr=541066048
+HMRT CALL group=5 turn=40 ordinal=39 pc=4295032856 version=1 operation=1 arg1=42949672961 arg2=18446744073709551615 arg3=0
+HMRT RESULT group=5 turn=40 ordinal=39 status=0 bytes=0
+HMRT CHARGE group=5 turn=40 end=72041857 accounted=1 remaining=311315 charged=5938685 turns=40
+HMRT RETURN group=5 turn=40 event=svc terminal=none entered=1 code=0 calls=39 written=0 irqs=1 elr=4295032856 remaining=311315 charged=5938685 turns=40 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=5 turn=41 slot=0 generation=1 state=live calls=39 written=0 irqs=1 remaining=311315 charged=5938685 turns=40 before=3205
+HMRT CLOCK group=5 turn=41 begin=72161596 remaining=311315 comparator=72224096 whole_end=72472911
+HMRT ENTER group=5 turn=41 pc=4295032856 root=1077243904
+HMRT TRAP group=5 turn=41 kind=svc esr=1442840576 far=0 elr=4295032856 spsr=541066048
+HMRT CALL group=5 turn=41 ordinal=40 pc=4295032856 version=1 operation=1 arg1=42949672961 arg2=18446744073709551615 arg3=0
+HMRT RESULT group=5 turn=41 ordinal=40 status=0 bytes=0
+HMRT CHARGE group=5 turn=41 end=72281104 accounted=1 remaining=191807 charged=6058193 turns=41
+HMRT RETURN group=5 turn=41 event=svc terminal=none entered=1 code=0 calls=40 written=0 irqs=1 elr=4295032856 remaining=191807 charged=6058193 turns=41 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=5 turn=42 slot=0 generation=1 state=live calls=40 written=0 irqs=1 remaining=191807 charged=6058193 turns=41 before=3205
+HMRT CLOCK group=5 turn=42 begin=72400102 remaining=191807 comparator=72462602 whole_end=72591909
+HMRT ENTER group=5 turn=42 pc=4295032856 root=1077243904
+HMRT TRAP group=5 turn=42 kind=svc esr=1442840576 far=0 elr=4295032856 spsr=541066048
+HMRT CALL group=5 turn=42 ordinal=41 pc=4295032856 version=1 operation=1 arg1=42949672961 arg2=18446744073709551615 arg3=0
+HMRT RESULT group=5 turn=42 ordinal=41 status=0 bytes=0
+HMRT CHARGE group=5 turn=42 end=72525734 accounted=1 remaining=66175 charged=6183825 turns=42
+HMRT RETURN group=5 turn=42 event=svc terminal=none entered=1 code=0 calls=41 written=0 irqs=1 elr=4295032856 remaining=66175 charged=6183825 turns=42 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3205
+HMRT STEP group=5 turn=43 slot=0 generation=1 state=live calls=41 written=0 irqs=1 remaining=66175 charged=6183825 turns=42 before=3205
+HMRT CLOCK group=5 turn=43 begin=72642784 remaining=66175 comparator=72705284 whole_end=72708959
+HMRT ENTER group=5 turn=43 pc=4295032856 root=1077243904
+HMRT TRAP group=5 turn=43 kind=svc esr=1442840576 far=0 elr=4295032856 spsr=541066048
+HMRT CHARGE group=5 turn=43 end=72719990 accounted=1 remaining=0 charged=6250000 turns=43
+HMRT RETURN group=5 turn=43 event=svc terminal=budget entered=1 code=0 calls=41 written=0 irqs=1 elr=4295032856 remaining=0 charged=6250000 turns=43 root=1076436992 vbar=1075841024 controls=1 before=3205 after=3241
+HMRT IDLE group=5 before=3241 after=3241

@@ -1,0 +1,24 @@
+{
+  "aarch64-monitor": {
+    "command": [
+      "cargo",
+      "rustc",
+      "--locked",
+      "--offline",
+      "-p",
+      "hm-core",
+      "--release",
+      "--target",
+      "aarch64-unknown-none",
+      "--target-dir",
+      "target/group-stage-b/first-candidates/aarch64-monitor",
+      "--",
+      "--emit=link,asm"
+    ],
+    "returncode": 0,
+    "elf": "target/group-stage-b/first-candidates/aarch64-monitor/aarch64-unknown-none/release/hematite",
+    "elf_sha256": "e00dc108e480ad228cbae86cfc83c395b6e01fe3886f27614aeda83838a86e72",
+    "asm": "target/group-stage-b/first-candidates/aarch64-monitor/aarch64-unknown-none/release/deps/hematite-0aefa6e86bca8961.s",
+    "asm_sha256": "96d2ae1b1ea05c026d965b8586f53c94a78acaa785ecf1668324b52819b61b36"
+  }
+}

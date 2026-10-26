@@ -1,0 +1,27 @@
+{
+  "argv": [
+    "rustc",
+    "--edition=2024",
+    "--target",
+    "aarch64-unknown-none",
+    "-C",
+    "panic=abort",
+    "--extern",
+    "hm_kernel=/workspace/target/group-stage-b/first-candidates/aarch64-monitor/aarch64-unknown-none/release/libhm_kernel.rlib",
+    "-L",
+    "dependency=/workspace/target/group-stage-b/first-candidates/aarch64-monitor/aarch64-unknown-none/release/deps",
+    "--crate-type=rlib",
+    "--crate-name=hm_layout",
+    "/workspace/target/evidence/runtime-stage-b/layout-current/hm_layout.rs",
+    "-o",
+    "/workspace/target/evidence/runtime-stage-b/layout-current/libhm_layout.rlib"
+  ],
+  "cwd": "/workspace",
+  "stdin_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout": "/workspace/target/evidence/runtime-stage-b/layout-current/library.stdout.log",
+  "env": {
+    "LC_ALL": "C",
+    "TZ": "UTC"
+  },
+  "timeout_seconds": 20
+}

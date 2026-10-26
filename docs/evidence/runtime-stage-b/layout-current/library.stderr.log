@@ -1,0 +1,71 @@
+error[E0425]: cannot find function `prepare_secondary` in module `super::cpu_local`
+   --> /workspace/crates/hm-core/src/secondary.rs:290:31
+    |
+290 |             super::cpu_local::prepare_secondary();
+    |                               ^^^^^^^^^^^^^^^^^ not found in `super::cpu_local`
+    |
+note: found an item that was configured out
+   --> /workspace/crates/hm-core/src/cpu_local.rs:139:22
+    |
+136 | #[cfg(feature = "secondary-tests")]
+    |       --------------------------- the item is gated behind the `secondary-tests` feature
+...
+139 | pub(super) unsafe fn prepare_secondary() {
+    |                      ^^^^^^^^^^^^^^^^^
+
+error[E0425]: cannot find function `restore_secondary` in module `super::cpu_local`
+   --> /workspace/crates/hm-core/src/secondary.rs:335:31
+    |
+335 |             super::cpu_local::restore_secondary();
+    |                               ^^^^^^^^^^^^^^^^^ not found in `super::cpu_local`
+    |
+note: found an item that was configured out
+   --> /workspace/crates/hm-core/src/cpu_local.rs:156:22
+    |
+153 | #[cfg(feature = "secondary-tests")]
+    |       --------------------------- the item is gated behind the `secondary-tests` feature
+...
+156 | pub(super) unsafe fn restore_secondary() {
+    |                      ^^^^^^^^^^^^^^^^^
+
+error[E0425]: cannot find function `secondary_identity` in module `super::cpu_local`
+   --> /workspace/crates/hm-core/src/secondary.rs:520:26
+    |
+520 |     if super::cpu_local::secondary_identity() {
+    |                          ^^^^^^^^^^^^^^^^^^ not found in `super::cpu_local`
+    |
+note: found an item that was configured out
+   --> /workspace/crates/hm-core/src/cpu_local.rs:166:15
+    |
+165 | #[cfg(feature = "secondary-tests")]
+    |       --------------------------- the item is gated behind the `secondary-tests` feature
+166 | pub(super) fn secondary_identity() -> bool {
+    |               ^^^^^^^^^^^^^^^^^^
+
+error[E0425]: cannot find function `local_control_checks` in module `super::preempt`
+   --> /workspace/crates/hm-core/src/secondary.rs:575:25
+    |
+575 |     if !super::preempt::local_control_checks(cpu) {
+    |                         ^^^^^^^^^^^^^^^^^^^^
+    |
+   ::: /workspace/crates/hm-core/src/preempt.rs:549:1
+    |
+549 | pub(super) fn control_checks() -> bool {
+    | -------------------------------------- similarly named function `control_checks` defined here
+    |
+note: found an item that was configured out
+   --> /workspace/crates/hm-core/src/preempt.rs:553:15
+    |
+552 | #[cfg(feature = "secondary-tests")]
+    |       --------------------------- the item is gated behind the `secondary-tests` feature
+553 | pub(super) fn local_control_checks(cpu_id: usize) -> bool {
+    |               ^^^^^^^^^^^^^^^^^^^^
+help: a function with a similar name exists
+    |
+575 -     if !super::preempt::local_control_checks(cpu) {
+575 +     if !super::preempt::control_checks(cpu) {
+    |
+
+error: aborting due to 4 previous errors
+
+For more information about this error, try `rustc --explain E0425`.

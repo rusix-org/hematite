@@ -8,12 +8,31 @@ from strict Linux parity to native OS design with selective compatibility.
 
 ## Implementation and verification
 
-- Stage B group runtime is in design review. Safe monitor groundwork recognizes
+- Stage B group runtime design and hardware protocol passed independent review.
+  Core resumable turns, owned groups and ordinary launcher integration are
+  **verified locally for the ordinary three-profile demo**: two echo processes,
+  busy-loop preemption with peer progress, failed-second-admission rollback,
+  exact reclamation and subsequent legacy launch. Independent raw trace review
+  passed. See [scoped evidence](docs/evidence/native-process-runtime.md).
+  All 41 actual-library ownership compiler clients pass. All 23 profiles compile;
+  oversized candidates were rejected before boot and corrected. Stage B local
+  runtime verification is complete. Reviewed deferred diagnostics fixed the
+  active-budget failure;
+  the corrected test driver now produces complete, independently accepted raw
+  traces at both RAM sizes (24 runtime cases and 41 bootstrap checks each).
+  The explicit trace-review gate is enabled. Prior failed logs remain preserved.
+  The ordinary three-profile demo passes again against the sixth candidate;
+  detailed traces use the reviewed seventh runtime candidate. Full local
+  `make test-all` passes (263.7 seconds); matching remote CI remains pending.
+  Raw evidence and exact input hashes are archived in
+  [the full-suite record](docs/evidence/runtime-stage-b/full-first/result.json).
+  Safe monitor groundwork recognizes
   `run-group <path1> <path2>` and renders copied results in completion order;
-  the platform still returns Unsupported until the real core is connected.
+  the ARM adapter now calls the new group runtime; x86 remains Unsupported.
   Twelve monitor policy cases pass, including four group cases, with strict
   [host evidence](docs/evidence/group-monitor-policy/group-cases/result.json).
-  Safe-crate Clippy passes on ARM/x86; no new guest/runtime claim is made.
+  All-feature Clippy passes on ARM/x86; runtime claims are limited to the
+  independently reviewed profiles and local full-suite evidence above.
 
 - Stable Rust 1.99.0 workspace, no external kernel crates, locked dependencies.
 - Original ARM64 direct-ELF entry at EL1, 4 KiB translation tables,
@@ -749,3 +768,12 @@ does not claim resumable execution or process-group support.
   169 Python cases per target; all 22 runtime binaries remain unchanged.
   [Evidence](docs/evidence/native-process-budget.md). Actual resumable groups,
   cancellation and scoped userspace creation remain next; no new remote CI.
+
+- 2026-10-26: Implemented and independently reviewed resumable ARM process
+  groups, cancellation, held completions, bounded admission and exact teardown.
+  Ordinary `run-group` demos and 24 detailed cases at each RAM size pass;
+  full `make test-all` passes with 200 Python cases per architecture. Preserved
+  rejected stack candidates, diagnostic-budget failures and duplicate-IDLE
+  failures alongside corrected raw traces. Implementation checkpoint `f6fee1ff`
+  matches every tested source hash. Userspace task creation is the next design;
+  remote CI and service workloads remain open.

@@ -1,0 +1,12 @@
+bin
+bin/context_svc_a
+bin/context_svc_b
+bin/context_irq_a
+bin/context_irq_b
+bin/loop
+bin/hello
+bin/byte_budget
+bin/call_limit
+bin/fault
+bin/yield
+bin/grant

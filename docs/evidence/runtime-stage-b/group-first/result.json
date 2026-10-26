@@ -1,0 +1,10 @@
+{
+  "passed": true,
+  "profiles": {
+    "group-64m": true,
+    "group-128m": true,
+    "group-128m-fresh": true
+  },
+  "error": null,
+  "scope": "ordinary ARM groups; no userspace spawn or Linux claim"
+}

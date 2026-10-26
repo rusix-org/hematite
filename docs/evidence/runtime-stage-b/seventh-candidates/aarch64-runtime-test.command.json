@@ -1,0 +1,17 @@
+[
+  "cargo",
+  "rustc",
+  "--locked",
+  "--offline",
+  "-p",
+  "hm-core",
+  "--release",
+  "--target",
+  "aarch64-unknown-none",
+  "--target-dir",
+  "target/group-stage-b/seventh-candidates/aarch64-runtime-test",
+  "--features",
+  "runtime-tests",
+  "--",
+  "--emit=link,asm"
+]

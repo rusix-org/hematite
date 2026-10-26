@@ -1,0 +1,15 @@
+[
+  "cargo",
+  "rustc",
+  "--locked",
+  "--offline",
+  "-p",
+  "hm-core",
+  "--release",
+  "--target",
+  "aarch64-unknown-none",
+  "--target-dir",
+  "target/group-stage-b/sixth-candidates/aarch64-monitor",
+  "--",
+  "--emit=link,asm"
+]

@@ -1,0 +1,836 @@
+{
+  "layout": {
+    "result": {
+      "passed": true,
+      "fields": {
+        "process_bytes": 9832,
+        "space_bytes": 8936,
+        "box_bytes": 40,
+        "optional_box_bytes": 40,
+        "box_backing_pages": 3
+      },
+      "assembly_sha256": "99b22b523f71c73244dd93305a55f5832c529c755196933949694f093f3573b9",
+      "bytes_sha256": "2399bf0eece8c368d23e5f8a135b05604836424448b839cc3e8c2bd09255e966",
+      "scope": "current ARM compiler layout constants only; not stack usage or runtime allocation proof"
+    },
+    "sources": {
+      "crates/hm-core/src/frames.rs": "209641c0a9b5c8eccb91fe5be19a34387c31b5af455f444d359982b35c9f035c",
+      "crates/hm-core/src/cpu_local.rs": "d8669c95b4c4411d2fbf098bebf71a967e8c536d7393d094d1bf6840c91296db",
+      "crates/hm-core/src/threads.rs": "5c4fdbca0121770cec6a2de7b837d5c16d73b7265b65f4f427b0701a43d2474f",
+      "crates/hm-core/src/preempt.rs": "4e6715b51a78cd4a12c656175745c5ccaf595d75f03838c013e1f19bea8ef78b",
+      "crates/hm-core/src/secondary.rs": "f3ed41f81214d901b7b582192fb25f5e1ac3a5c113fa7aee959cd162da750249",
+      "crates/hm-core/src/user_space.rs": "12ec07e43e52f074c7258b34c808db15e505b139ff0d003676167a5f4289e378",
+      "crates/hm-core/src/process.rs": "9fb86075973ce0a088736d4867dad325779a5af2c0f99a2fd84a172a260b0717",
+      "crates/hm-core/src/process_group.rs": "d7cb1d93fdad7d4fa579954a432c2adc5ca95f317b885ece243982193e1d271d",
+      "crates/hm-core/src/process_layout.rs": "cc2fbc9cf8a8cfaf6b51e5dd2d11b8cefb6ec750ed0f7165986ca5ce6cd4ff6e",
+      "crates/hm-core/src/process-aarch64.S": "edcd946e889b68299fdaf7b6477885e54ad123212ae38977c92445ccc4d50d6a",
+      "crates/hm-core/src/user-space-aarch64.S": "f051cd04e4d5b482a6a809cc8de1e0d952797a250462a2170c217520d80a0195",
+      "crates/hm-core/src/threads-aarch64.S": "2d299229f9402dc2176533501d38954d2030d2f80148cdd500459e22841414d6",
+      "crates/hm-core/src/preempt-aarch64.S": "88b49387216e91c5589d9934997fbadb4b290339fc92440e0143e1a94120ce32",
+      "crates/hm-core/src/preempt-probe-aarch64.S": "9ecab24b7573864bc974b387807da442f4e67ae729b66e4cbda99bb1c72caa0d",
+      "crates/hm-core/src/secondary-aarch64.S": "e65246ffe521f5e1901a6a8a7a3203a2129d9ab10165285b7be1953cc576291b",
+      "target/evidence/runtime-stage-b/layout-second/hm_layout.rs": "1ffc86305016059e2884d998c97f9abb43f6823e286b3b4f2021a01ec6b1e4dc",
+      "target/evidence/runtime-stage-b/layout-second/sizes.rs": "50f8f2523df8ee8133daf9c0e12be5c40c5ee194d6d605d196b16ccec818a3d6",
+      "target/group-stage-b/first-candidates/aarch64-monitor/aarch64-unknown-none/release/libhm_kernel.rlib": "2bd8fc68c5db451cfd37fbc9883220b655a92849d56be7594251cd5e2e93f4a7",
+      "rust-toolchain.toml": "da55df283f88667ec7a31b7392d493f574a36c88467b955d467c3a3cbe2e9fb1",
+      "Cargo.lock": "383e08e95bee956a6cc81d5ee51e1b4dca8355d92c80473228e2c1413b7b177b",
+      "tools/check_runtime_layout.py": "0e6457ba535e12c1fe0fe3c21fe427aa1021381cc02e9eb45625d34455773601"
+    },
+    "input_sha256": "4ec0eb6b29e142ca4fd5dada37e74935c92aa23a0bc29f3d91a7495d57cac846"
+  },
+  "layout_sha256": "165f98cf7a494447ba42dd94ffe4b5e96fe7f5d5d4f71ce5304fbd1e78667852",
+  "kernel_sha256": "b8855e7decc7bbe16eab6662899b58a3ea1aec2c2247b16187cc9b2fba44ed75",
+  "fixtures": {
+    "context_svc_a": {
+      "entry": 4294967296,
+      "pages": 4,
+      "symbols": {
+        "context_captured": 4295034572,
+        "grant_message": 4295036928,
+        "message": 4295036940,
+        "pattern": 4295036955,
+        "native_start": 4294967296,
+        "poll_start": 4294967552,
+        "poll_end": 4294967560,
+        "release": 4294975488,
+        "private_data": 4294975496,
+        "capture": 4297063424,
+        "write_svc": 4295032852,
+        "exit_svc": 4295032880,
+        "fault": 4295032904,
+        "loop_start": 4295032916,
+        "loop_end": 4295032920,
+        "context_set_dit": 4295034272,
+        "context_set_ssbs": 4295034280,
+        "context_svc": 4295034564
+      },
+      "segments": [
+        {
+          "flags": 5,
+          "offset": 4096,
+          "va": 4294967296,
+          "filesz": 268,
+          "memsz": 268,
+          "align": 4096,
+          "start": 4294967296,
+          "end": 4294971392
+        },
+        {
+          "flags": 6,
+          "offset": 8192,
+          "va": 4294975488,
+          "filesz": 16,
+          "memsz": 16,
+          "align": 4096,
+          "start": 4294975488,
+          "end": 4294979584
+        },
+        {
+          "flags": 5,
+          "offset": 12288,
+          "va": 4295032832,
+          "filesz": 3540,
+          "memsz": 3540,
+          "align": 4096,
+          "start": 4295032832,
+          "end": 4295036928
+        },
+        {
+          "flags": 4,
+          "offset": 16384,
+          "va": 4295036928,
+          "filesz": 360,
+          "memsz": 360,
+          "align": 4096,
+          "start": 4295036928,
+          "end": 4295041024
+        }
+      ],
+      "file": "context_svc_a.elf",
+      "path": "bin/context_svc_a",
+      "sha256": "c6e8fd9e2212de116aec529d89c8e8024776f2955bad319acc0ac02c013e0ad1"
+    },
+    "context_svc_b": {
+      "entry": 4294967296,
+      "pages": 4,
+      "symbols": {
+        "context_captured": 4295034572,
+        "grant_message": 4295036928,
+        "message": 4295036940,
+        "pattern": 4295036955,
+        "native_start": 4294967296,
+        "poll_start": 4294967552,
+        "poll_end": 4294967560,
+        "release": 4294975488,
+        "private_data": 4294975496,
+        "capture": 4297063424,
+        "write_svc": 4295032852,
+        "exit_svc": 4295032880,
+        "fault": 4295032904,
+        "loop_start": 4295032916,
+        "loop_end": 4295032920,
+        "context_set_dit": 4295034272,
+        "context_set_ssbs": 4295034280,
+        "context_svc": 4295034564
+      },
+      "segments": [
+        {
+          "flags": 5,
+          "offset": 4096,
+          "va": 4294967296,
+          "filesz": 268,
+          "memsz": 268,
+          "align": 4096,
+          "start": 4294967296,
+          "end": 4294971392
+        },
+        {
+          "flags": 6,
+          "offset": 8192,
+          "va": 4294975488,
+          "filesz": 16,
+          "memsz": 16,
+          "align": 4096,
+          "start": 4294975488,
+          "end": 4294979584
+        },
+        {
+          "flags": 5,
+          "offset": 12288,
+          "va": 4295032832,
+          "filesz": 3540,
+          "memsz": 3540,
+          "align": 4096,
+          "start": 4295032832,
+          "end": 4295036928
+        },
+        {
+          "flags": 4,
+          "offset": 16384,
+          "va": 4295036928,
+          "filesz": 360,
+          "memsz": 360,
+          "align": 4096,
+          "start": 4295036928,
+          "end": 4295041024
+        }
+      ],
+      "file": "context_svc_b.elf",
+      "path": "bin/context_svc_b",
+      "sha256": "081061ca28d615ced750994e3cdca838f54d8e3c9e42beab8c933488526de45b"
+    },
+    "context_irq_a": {
+      "entry": 4294967296,
+      "pages": 4,
+      "symbols": {
+        "context_captured": 4295034556,
+        "grant_message": 4295036928,
+        "message": 4295036940,
+        "pattern": 4295036955,
+        "native_start": 4294967296,
+        "poll_start": 4294967552,
+        "poll_end": 4294967560,
+        "release": 4294975488,
+        "private_data": 4294975496,
+        "capture": 4297063424,
+        "write_svc": 4295032852,
+        "exit_svc": 4295032880,
+        "fault": 4295032904,
+        "loop_start": 4295032916,
+        "loop_end": 4295032920,
+        "context_set_dit": 4295034272,
+        "context_set_ssbs": 4295034280,
+        "context_svc": 4295034552
+      },
+      "segments": [
+        {
+          "flags": 5,
+          "offset": 4096,
+          "va": 4294967296,
+          "filesz": 268,
+          "memsz": 268,
+          "align": 4096,
+          "start": 4294967296,
+          "end": 4294971392
+        },
+        {
+          "flags": 6,
+          "offset": 8192,
+          "va": 4294975488,
+          "filesz": 16,
+          "memsz": 16,
+          "align": 4096,
+          "start": 4294975488,
+          "end": 4294979584
+        },
+        {
+          "flags": 5,
+          "offset": 12288,
+          "va": 4295032832,
+          "filesz": 3500,
+          "memsz": 3500,
+          "align": 4096,
+          "start": 4295032832,
+          "end": 4295036928
+        },
+        {
+          "flags": 4,
+          "offset": 16384,
+          "va": 4295036928,
+          "filesz": 283,
+          "memsz": 283,
+          "align": 4096,
+          "start": 4295036928,
+          "end": 4295041024
+        }
+      ],
+      "file": "context_irq_a.elf",
+      "path": "bin/context_irq_a",
+      "sha256": "2edfdf2c051bdb4fa85bfc1a83f5619bb05d9e525d6815835b59dcdf9c7986b8"
+    },
+    "context_irq_b": {
+      "entry": 4294967296,
+      "pages": 4,
+      "symbols": {
+        "context_captured": 4295034556,
+        "grant_message": 4295036928,
+        "message": 4295036940,
+        "pattern": 4295036955,
+        "native_start": 4294967296,
+        "poll_start": 4294967552,
+        "poll_end": 4294967560,
+        "release": 4294975488,
+        "private_data": 4294975496,
+        "capture": 4297063424,
+        "write_svc": 4295032852,
+        "exit_svc": 4295032880,
+        "fault": 4295032904,
+        "loop_start": 4295032916,
+        "loop_end": 4295032920,
+        "context_set_dit": 4295034272,
+        "context_set_ssbs": 4295034280,
+        "context_svc": 4295034552
+      },
+      "segments": [
+        {
+          "flags": 5,
+          "offset": 4096,
+          "va": 4294967296,
+          "filesz": 268,
+          "memsz": 268,
+          "align": 4096,
+          "start": 4294967296,
+          "end": 4294971392
+        },
+        {
+          "flags": 6,
+          "offset": 8192,
+          "va": 4294975488,
+          "filesz": 16,
+          "memsz": 16,
+          "align": 4096,
+          "start": 4294975488,
+          "end": 4294979584
+        },
+        {
+          "flags": 5,
+          "offset": 12288,
+          "va": 4295032832,
+          "filesz": 3512,
+          "memsz": 3512,
+          "align": 4096,
+          "start": 4295032832,
+          "end": 4295036928
+        },
+        {
+          "flags": 4,
+          "offset": 16384,
+          "va": 4295036928,
+          "filesz": 283,
+          "memsz": 283,
+          "align": 4096,
+          "start": 4295036928,
+          "end": 4295041024
+        }
+      ],
+      "file": "context_irq_b.elf",
+      "path": "bin/context_irq_b",
+      "sha256": "e12bfc991d57be7f56c86a67545a88527dc35f3f80312f20180c0568ff4a6469"
+    },
+    "loop": {
+      "entry": 4294967296,
+      "pages": 4,
+      "symbols": {
+        "context_captured": 4295034556,
+        "grant_message": 4295036928,
+        "message": 4295036940,
+        "pattern": 4295036955,
+        "native_start": 4294967296,
+        "poll_start": 4294967552,
+        "poll_end": 4294967560,
+        "release": 4294975488,
+        "private_data": 4294975496,
+        "capture": 4297063424,
+        "write_svc": 4295032852,
+        "exit_svc": 4295032880,
+        "fault": 4295032904,
+        "loop_start": 4295032916,
+        "loop_end": 4295032920,
+        "context_set_dit": 4295034272,
+        "context_set_ssbs": 4295034280,
+        "context_svc": 4295034552
+      },
+      "segments": [
+        {
+          "flags": 5,
+          "offset": 4096,
+          "va": 4294967296,
+          "filesz": 268,
+          "memsz": 268,
+          "align": 4096,
+          "start": 4294967296,
+          "end": 4294971392
+        },
+        {
+          "flags": 6,
+          "offset": 8192,
+          "va": 4294975488,
+          "filesz": 16,
+          "memsz": 16,
+          "align": 4096,
+          "start": 4294975488,
+          "end": 4294979584
+        },
+        {
+          "flags": 5,
+          "offset": 12288,
+          "va": 4295032832,
+          "filesz": 3588,
+          "memsz": 3588,
+          "align": 4096,
+          "start": 4295032832,
+          "end": 4295036928
+        },
+        {
+          "flags": 4,
+          "offset": 16384,
+          "va": 4295036928,
+          "filesz": 283,
+          "memsz": 283,
+          "align": 4096,
+          "start": 4295036928,
+          "end": 4295041024
+        }
+      ],
+      "file": "loop.elf",
+      "path": "bin/loop",
+      "sha256": "214d0c715b73452eb13cfd847e8a2e4b9a1fdaf8e9f97ccb82e82e6c0f1ee751"
+    },
+    "hello": {
+      "entry": 4294967296,
+      "pages": 4,
+      "symbols": {
+        "context_captured": 4295034556,
+        "grant_message": 4295036928,
+        "message": 4295036940,
+        "pattern": 4295036955,
+        "native_start": 4294967296,
+        "poll_start": 4294967552,
+        "poll_end": 4294967560,
+        "release": 4294975488,
+        "private_data": 4294975496,
+        "capture": 4297063424,
+        "write_svc": 4295032852,
+        "exit_svc": 4295032880,
+        "fault": 4295032904,
+        "loop_start": 4295032916,
+        "loop_end": 4295032920,
+        "context_set_dit": 4295034272,
+        "context_set_ssbs": 4295034280,
+        "context_svc": 4295034552
+      },
+      "segments": [
+        {
+          "flags": 5,
+          "offset": 4096,
+          "va": 4294967296,
+          "filesz": 268,
+          "memsz": 268,
+          "align": 4096,
+          "start": 4294967296,
+          "end": 4294971392
+        },
+        {
+          "flags": 6,
+          "offset": 8192,
+          "va": 4294975488,
+          "filesz": 16,
+          "memsz": 16,
+          "align": 4096,
+          "start": 4294975488,
+          "end": 4294979584
+        },
+        {
+          "flags": 5,
+          "offset": 12288,
+          "va": 4295032832,
+          "filesz": 3656,
+          "memsz": 3656,
+          "align": 4096,
+          "start": 4295032832,
+          "end": 4295036928
+        },
+        {
+          "flags": 4,
+          "offset": 16384,
+          "va": 4295036928,
+          "filesz": 283,
+          "memsz": 283,
+          "align": 4096,
+          "start": 4295036928,
+          "end": 4295041024
+        }
+      ],
+      "file": "hello.elf",
+      "path": "bin/hello",
+      "sha256": "c6cdffed9f8010eac743610d32d39111bacfb711b776fa23aa39b1d93634d4df"
+    },
+    "byte_budget": {
+      "entry": 4294967296,
+      "pages": 5,
+      "symbols": {
+        "context_captured": 4295034556,
+        "grant_message": 4295041024,
+        "message": 4295041036,
+        "pattern": 4295041051,
+        "native_start": 4294967296,
+        "poll_start": 4294967552,
+        "poll_end": 4294967560,
+        "release": 4294975488,
+        "private_data": 4294975496,
+        "capture": 4297063424,
+        "write_svc": 4295032852,
+        "exit_svc": 4295032880,
+        "fault": 4295032904,
+        "loop_start": 4295032916,
+        "loop_end": 4295032920,
+        "context_set_dit": 4295034272,
+        "context_set_ssbs": 4295034280,
+        "context_svc": 4295034552
+      },
+      "segments": [
+        {
+          "flags": 5,
+          "offset": 4096,
+          "va": 4294967296,
+          "filesz": 268,
+          "memsz": 268,
+          "align": 4096,
+          "start": 4294967296,
+          "end": 4294971392
+        },
+        {
+          "flags": 6,
+          "offset": 8192,
+          "va": 4294975488,
+          "filesz": 16,
+          "memsz": 16,
+          "align": 4096,
+          "start": 4294975488,
+          "end": 4294979584
+        },
+        {
+          "flags": 5,
+          "offset": 12288,
+          "va": 4295032832,
+          "filesz": 4192,
+          "memsz": 4192,
+          "align": 4096,
+          "start": 4295032832,
+          "end": 4295041024
+        },
+        {
+          "flags": 4,
+          "offset": 20480,
+          "va": 4295041024,
+          "filesz": 283,
+          "memsz": 283,
+          "align": 4096,
+          "start": 4295041024,
+          "end": 4295045120
+        }
+      ],
+      "file": "byte_budget.elf",
+      "path": "bin/byte_budget",
+      "sha256": "40a758748d94f3ffa4ea390f726cc017ee59ab1525f1669a7c15fb52655e5fdd"
+    },
+    "call_limit": {
+      "entry": 4294967296,
+      "pages": 4,
+      "symbols": {
+        "context_captured": 4295034556,
+        "grant_message": 4295036928,
+        "message": 4295036940,
+        "pattern": 4295036955,
+        "native_start": 4294967296,
+        "poll_start": 4294967552,
+        "poll_end": 4294967560,
+        "release": 4294975488,
+        "private_data": 4294975496,
+        "capture": 4297063424,
+        "write_svc": 4295032852,
+        "exit_svc": 4295032880,
+        "fault": 4295032904,
+        "loop_start": 4295032916,
+        "loop_end": 4295032920,
+        "context_set_dit": 4295034272,
+        "context_set_ssbs": 4295034280,
+        "context_svc": 4295034552
+      },
+      "segments": [
+        {
+          "flags": 5,
+          "offset": 4096,
+          "va": 4294967296,
+          "filesz": 268,
+          "memsz": 268,
+          "align": 4096,
+          "start": 4294967296,
+          "end": 4294971392
+        },
+        {
+          "flags": 6,
+          "offset": 8192,
+          "va": 4294975488,
+          "filesz": 16,
+          "memsz": 16,
+          "align": 4096,
+          "start": 4294975488,
+          "end": 4294979584
+        },
+        {
+          "flags": 5,
+          "offset": 12288,
+          "va": 4295032832,
+          "filesz": 3612,
+          "memsz": 3612,
+          "align": 4096,
+          "start": 4295032832,
+          "end": 4295036928
+        },
+        {
+          "flags": 4,
+          "offset": 16384,
+          "va": 4295036928,
+          "filesz": 283,
+          "memsz": 283,
+          "align": 4096,
+          "start": 4295036928,
+          "end": 4295041024
+        }
+      ],
+      "file": "call_limit.elf",
+      "path": "bin/call_limit",
+      "sha256": "2f0afd2cbbe8e6c0202c445ac4beb6961c7c9857250e3f4fca76c4013359ebea"
+    },
+    "fault": {
+      "entry": 4294967296,
+      "pages": 4,
+      "symbols": {
+        "context_captured": 4295034556,
+        "grant_message": 4295036928,
+        "message": 4295036940,
+        "pattern": 4295036955,
+        "native_start": 4294967296,
+        "poll_start": 4294967552,
+        "poll_end": 4294967560,
+        "release": 4294975488,
+        "private_data": 4294975496,
+        "capture": 4297063424,
+        "write_svc": 4295032852,
+        "exit_svc": 4295032880,
+        "fault": 4295032904,
+        "loop_start": 4295032916,
+        "loop_end": 4295032920,
+        "context_set_dit": 4295034272,
+        "context_set_ssbs": 4295034280,
+        "context_svc": 4295034552
+      },
+      "segments": [
+        {
+          "flags": 5,
+          "offset": 4096,
+          "va": 4294967296,
+          "filesz": 268,
+          "memsz": 268,
+          "align": 4096,
+          "start": 4294967296,
+          "end": 4294971392
+        },
+        {
+          "flags": 6,
+          "offset": 8192,
+          "va": 4294975488,
+          "filesz": 16,
+          "memsz": 16,
+          "align": 4096,
+          "start": 4294975488,
+          "end": 4294979584
+        },
+        {
+          "flags": 5,
+          "offset": 12288,
+          "va": 4295032832,
+          "filesz": 3588,
+          "memsz": 3588,
+          "align": 4096,
+          "start": 4295032832,
+          "end": 4295036928
+        },
+        {
+          "flags": 4,
+          "offset": 16384,
+          "va": 4295036928,
+          "filesz": 283,
+          "memsz": 283,
+          "align": 4096,
+          "start": 4295036928,
+          "end": 4295041024
+        }
+      ],
+      "file": "fault.elf",
+      "path": "bin/fault",
+      "sha256": "f6e7657456ebb3e845eee12f35ba5a6146f5315b09ad3bb6f89456675fa33eca"
+    },
+    "yield": {
+      "entry": 4294967296,
+      "pages": 4,
+      "symbols": {
+        "context_captured": 4295034556,
+        "grant_message": 4295036928,
+        "message": 4295036940,
+        "pattern": 4295036955,
+        "native_start": 4294967296,
+        "poll_start": 4294967552,
+        "poll_end": 4294967560,
+        "release": 4294975488,
+        "private_data": 4294975496,
+        "capture": 4297063424,
+        "write_svc": 4295032852,
+        "exit_svc": 4295032880,
+        "fault": 4295032904,
+        "loop_start": 4295032916,
+        "loop_end": 4295032920,
+        "context_set_dit": 4295034272,
+        "context_set_ssbs": 4295034280,
+        "context_svc": 4295034552
+      },
+      "segments": [
+        {
+          "flags": 5,
+          "offset": 4096,
+          "va": 4294967296,
+          "filesz": 268,
+          "memsz": 268,
+          "align": 4096,
+          "start": 4294967296,
+          "end": 4294971392
+        },
+        {
+          "flags": 6,
+          "offset": 8192,
+          "va": 4294975488,
+          "filesz": 16,
+          "memsz": 16,
+          "align": 4096,
+          "start": 4294975488,
+          "end": 4294979584
+        },
+        {
+          "flags": 5,
+          "offset": 12288,
+          "va": 4295032832,
+          "filesz": 3656,
+          "memsz": 3656,
+          "align": 4096,
+          "start": 4295032832,
+          "end": 4295036928
+        },
+        {
+          "flags": 4,
+          "offset": 16384,
+          "va": 4295036928,
+          "filesz": 283,
+          "memsz": 283,
+          "align": 4096,
+          "start": 4295036928,
+          "end": 4295041024
+        }
+      ],
+      "file": "yield.elf",
+      "path": "bin/yield",
+      "sha256": "6a99749715aa288f4101eeff10970334633047a2b73669f6c2667bcc3564a4a5"
+    },
+    "grant": {
+      "entry": 4294967296,
+      "pages": 5,
+      "symbols": {
+        "context_captured": 4295034556,
+        "grant_message": 4295041024,
+        "message": 4295041036,
+        "pattern": 4295041051,
+        "native_start": 4294967296,
+        "poll_start": 4294967552,
+        "poll_end": 4294967560,
+        "release": 4294975488,
+        "private_data": 4294975496,
+        "capture": 4297063424,
+        "write_svc": 4295032852,
+        "exit_svc": 4295032880,
+        "fault": 4295032904,
+        "loop_start": 4295032916,
+        "loop_end": 4295032920,
+        "context_set_dit": 4295034272,
+        "context_set_ssbs": 4295034280,
+        "context_svc": 4295034552
+      },
+      "segments": [
+        {
+          "flags": 5,
+          "offset": 4096,
+          "va": 4294967296,
+          "filesz": 268,
+          "memsz": 268,
+          "align": 4096,
+          "start": 4294967296,
+          "end": 4294971392
+        },
+        {
+          "flags": 6,
+          "offset": 8192,
+          "va": 4294975488,
+          "filesz": 16,
+          "memsz": 16,
+          "align": 4096,
+          "start": 4294975488,
+          "end": 4294979584
+        },
+        {
+          "flags": 5,
+          "offset": 12288,
+          "va": 4295032832,
+          "filesz": 8048,
+          "memsz": 8048,
+          "align": 4096,
+          "start": 4295032832,
+          "end": 4295041024
+        },
+        {
+          "flags": 4,
+          "offset": 20480,
+          "va": 4295041024,
+          "filesz": 712,
+          "memsz": 712,
+          "align": 4096,
+          "start": 4295041024,
+          "end": 4295045120
+        }
+      ],
+      "file": "grant.elf",
+      "path": "bin/grant",
+      "sha256": "3aec3f766b36e7b17d73256a61e0f9ffe6e496b78cd657ec925742316bd37bd5"
+    }
+  },
+  "archive": {
+    "bytes": 224768,
+    "sha256": "1b5a86130b0b7fdc6de91a4dc00881c07ca6234b704fb85b319528fff086d5dd",
+    "entries": 12,
+    "files": 11,
+    "kernel_file_offset": 430698
+  },
+  "symbols": {
+    "__kernel_end": 1077243904,
+    "arm_vectors": 1075841024,
+    "arm_process_vectors": 1075849216,
+    "arm_timer_window_begin": 1075845284,
+    "arm_timer_window_end": 1075845360,
+    "arm_fault_fixups": 1076195328,
+    "__stack_guard": 1076506624,
+    "__exception_stack_guard": 1076576256,
+    "arm_probe_ro_datum": 1076195580,
+    "arm_probe_nx_target": 1076195584,
+    "arm_root": 1076436992
+  },
+  "sources": {
+    "tools/test_runtime.py": "69fbb78ee1b4c891c95ed0d3849e40a3ef43c43b2eea35785279ff7f861b38c0",
+    "tools/test_launcher.py": "602fb89c69b1ca5ac44deb9ac29eeb03cbbc63edc5c182e43b50ee86a81f86b7",
+    "tools/test_process.py": "d1d761a06ce8da518243c0d6e4453a9c2af803d34ff92c2f626b8a9bf6991d6e",
+    "tools/build_runtime.py": "9f8bdd0048aa7e4d217bd1200772c6d9eedb72dc0b5d9a17c02a654800c268bd",
+    "crates/hm-core/src/process.rs": "9fb86075973ce0a088736d4867dad325779a5af2c0f99a2fd84a172a260b0717",
+    "crates/hm-core/src/process_group.rs": "d7cb1d93fdad7d4fa579954a432c2adc5ca95f317b885ece243982193e1d271d",
+    "crates/hm-core/src/runtime_checks.rs": "c242896bf93f2a287c44f03167ccf85a684c7a283ece2b8db4e8068306450127",
+    "crates/hm-core/fixtures/runtime.rs": "b510b0854dca8d51a7119f1b9f17a63d07976fc3010af0f81d6ea776644daf75",
+    "crates/hm-core/fixtures/runtime.S": "3698ae904ca9d418152a2e86c599f8a323bd676bcb22f1d2a65f4d43a15641b4",
+    "crates/hm-core/fixtures/runtime.ld": "bba336e6d73df1bd6f42bbe69cc94c44d5fcdcb25d9a230543ab48dec3cd2019"
+  }
+}

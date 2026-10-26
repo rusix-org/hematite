@@ -1,0 +1,13 @@
+{
+  "passed": true,
+  "process_bytes": 9832,
+  "fixtures": 11,
+  "archive": {
+    "bytes": 224768,
+    "sha256": "1b5a86130b0b7fdc6de91a4dc00881c07ca6234b704fb85b319528fff086d5dd",
+    "entries": 12,
+    "files": 11,
+    "kernel_file_offset": 434810
+  },
+  "scope": "artifact and actual layout admission only; no guest"
+}

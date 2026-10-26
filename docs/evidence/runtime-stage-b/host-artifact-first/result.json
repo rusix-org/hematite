@@ -1,0 +1,4 @@
+{
+  "passed": false,
+  "error": "Initial candidate path used hm-core instead of actual hematite binary; failed file lookup after GNU archive checks. No guest launched."
+}
