@@ -214,10 +214,17 @@ The exact commit/job result and raw logs are archived in
 and push in [ADR 0007](docs/adr/0007-public-repository.md). License selection
 remains pending (ADR 0002); preliminary naming findings remain in ADR 0003.
 
+Mutex source/evidence is committed locally as `ee6b8a4`. Automatic approval
+review rejected its public push, requiring direct authorization in the current
+conversation despite ADR 0007. No push retry or remote mutex CI run has occurred;
+publication awaits Aaron's response. Local kernel development remains authorized.
+
 ## Next actions
 
-1. Design/review IRQ-safe synchronization and timer-driven preemption, including how existing
-   single-CPU ownership remains protected while tasks are interrupted. Extend recovery to fault-aware user operations only with
+1. Implement and source-review the [ARM preemption contract](docs/design/0012-arm-preemption.md),
+   whose [independent prerequisite audit/design review](docs/reviews/0012-arm-preemption.md)
+   is complete. Preserve the masked coordinator and restricted worker capabilities;
+   verify timer-driven progress of callbacks that never yield. Extend recovery to fault-aware user operations only with
    address-space and lifetime proofs. Add interrupt/SMP-safe ownership before concurrency;
    implement measured small-object allocation before service workloads.
 2. Define the native userspace wire contract from those experiments; select
@@ -311,3 +318,9 @@ remains pending (ADR 0002); preliminary naming findings remain in ADR 0003.
   22 new compiler clients per target and hosted four-thread 80,000-update stress.
   Preserved exact source, commands, host binary hash and raw results. Ordinary
   cooperative mutexes do not authorize blocking acquisition in interrupt handlers.
+- 2026-10-26: Audited the existing scheduler/IRQ ownership boundaries and completed
+  independently reviewed design 0012 for actual timer-driven ARM preemption.
+  Review clarified fresh coordinator saves on every dispatch, emergency-stack
+  reclamation, cooperative mask preservation and timer setup/teardown failures.
+  This is design evidence only: no preemption implementation or runtime tests
+  added. Public mutex push remains pending approval; local work continues.
