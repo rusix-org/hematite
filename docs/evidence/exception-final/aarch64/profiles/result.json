@@ -1,0 +1,12 @@
+{
+  "passed": true,
+  "scope": "bootstrap CPU rejection and serial monitor; no Linux ABI claims",
+  "profiles": {
+    "missing-pan": true,
+    "monitor": true,
+    "memory-64m": true,
+    "unexpected-fault": true,
+    "nested-fault": true
+  },
+  "arch": "aarch64"
+}

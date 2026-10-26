@@ -19,6 +19,8 @@ unsafe extern "C" {
     static __rodata_start: [u8; 0];
     static __rodata_end: [u8; 0];
     static __stack_guard: [u8; 0];
+    static __exception_stack_guard: [u8; 0];
+    static __exception_stack_top: [u8; 0];
     static __kernel_end: [u8; 0];
 }
 
@@ -36,6 +38,10 @@ pub(super) struct BootPlatform {
 pub(super) const BANNER: &str = "hematite: ARM64 Rust kernel entered at EL1\n";
 
 impl Platform for BootPlatform {
+    fn fault_checks(&self) -> Option<hm_kernel::FaultChecks> {
+        Some(super::exceptions::checks())
+    }
+
     type HeapBlock<'a> = super::frames::Block<'a>;
     type HeapBox<'a, T: 'a> = super::frames::KernelBox<'a, T>;
 
@@ -117,6 +123,7 @@ impl Platform for BootPlatform {
         let mair: u64;
         let ttbr: u64;
         let pan: u64;
+        let exception_sp: u64;
         // SAFETY: Entry checked EL1 and PAN support. These architectural
         // register reads do not change CPU state or dereference memory.
         unsafe {
@@ -127,6 +134,7 @@ impl Platform for BootPlatform {
             asm!("mrs {}, ttbr0_el1", out(reg) ttbr, options(nomem, nostack, preserves_flags));
             // Architectural encoding of PAN, usable with the baseline target.
             asm!("mrs {}, S3_0_C4_C2_3", out(reg) pan, options(nomem, nostack, preserves_flags));
+            asm!("mrs {}, sp_el0", out(reg) exception_sp, options(nomem, nostack, preserves_flags));
         }
         let root = core::ptr::addr_of!(arm_root) as u64;
         let dev_l2 = core::ptr::addr_of!(arm_device_l2) as u64;
@@ -138,6 +146,7 @@ impl Platform for BootPlatform {
         let rodata = (core::ptr::addr_of!(__rodata_start) as usize)
             ..(core::ptr::addr_of!(__rodata_end) as usize);
         let guard = core::ptr::addr_of!(__stack_guard) as usize;
+        let exception_guard = core::ptr::addr_of!(__exception_stack_guard) as usize;
         let mut mappings = ttbr == root && tcr == 0x8099_3519 && mair == 0xff;
         // SAFETY: Each loop index lies within its named linker-owned array.
         // These initialized tables are mapped and not mutated by safe policy;
@@ -180,7 +189,7 @@ impl Platform for BootPlatform {
         }
         for index in 0..4096usize {
             let address = RAM + index * 4096;
-            let expected = if address == guard {
+            let expected = if address == guard || address == exception_guard {
                 0
             } else {
                 address as u64
@@ -203,7 +212,11 @@ impl Platform for BootPlatform {
             user_execute_protect: mmu && mappings,
             user_access_protect: current_el == 4 && pan & (1 << 22) != 0 && sctlr & (1 << 23) == 0,
             wx: mmu && sctlr & (1 << 19) != 0 && mappings,
-            stack_guard: mmu && mappings && leaf((guard - RAM) / 4096) == 0,
+            stack_guard: mmu
+                && mappings
+                && leaf((guard - RAM) / 4096) == 0
+                && leaf((exception_guard - RAM) / 4096) == 0
+                && exception_sp == core::ptr::addr_of!(__exception_stack_top) as u64,
             // Root[0] has only the UART page. Full mapping check proves no
             // translation for virtual address zero or any alias of that page.
             null_guard: mmu && mappings,

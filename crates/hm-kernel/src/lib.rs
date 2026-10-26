@@ -33,6 +33,9 @@ pub struct BootChecks {
 
 /// The core retains all hardware authority; policy only exchanges owned values.
 pub trait Platform {
+    fn fault_checks(&self) -> Option<FaultChecks> {
+        None
+    }
     type HeapBlock<'a>: heap_api::OwnedBlock
     where
         Self: 'a;
@@ -67,6 +70,44 @@ pub trait Platform {
     fn boot_memory(&self) -> Option<&boot_memory::MemoryMap> {
         None
     }
+}
+
+/// Actual fixed-site ARM exception observations; not a user-memory API.
+pub struct FaultChecks {
+    pub null_read: bool,
+    pub stack_guard: bool,
+    pub exception_guard: bool,
+    pub read_only: bool,
+    pub no_execute: bool,
+    pub context: bool,
+}
+
+fn fault_contract(platform: &mut impl Platform) -> bool {
+    for _ in 0..2 {
+        let Some(checks) = platform.fault_checks() else {
+            return cfg!(target_arch = "x86_64");
+        };
+        if !cfg!(target_arch = "aarch64") {
+            return false;
+        }
+        for (name, passed) in [
+            ("null read", checks.null_read),
+            ("normal guard", checks.stack_guard),
+            ("exception guard", checks.exception_guard),
+            ("read-only write", checks.read_only),
+            ("NX execution", checks.no_execute),
+            ("context preservation", checks.context),
+        ] {
+            if !passed {
+                platform.write("Fault check failed: ");
+                platform.write(name);
+                platform.write("\n");
+                return false;
+            }
+        }
+    }
+    let checks = platform.checks();
+    checks.stack_guard && checks.wx && checks.nx
 }
 
 pub fn report_memory(platform: &mut impl Platform) {
@@ -259,12 +300,13 @@ pub fn run_tests(platform: &mut impl Platform) -> bool {
         ("frame_contract", frame_api::contract(platform)),
         ("heap_blocks", heap_tests::blocks(platform)),
         ("heap_values", heap_tests::values(platform)),
+        ("fault_contract", fault_contract(platform)),
         (
             "cap_orderings",
             capability_tests::orderings(|message| platform.write(message)),
         ),
     ];
-    platform.write("HMTEST BEGIN 21\n");
+    platform.write("HMTEST BEGIN 22\n");
     let mut passed = true;
     for (name, success) in cases {
         platform.write(if success {
@@ -276,7 +318,7 @@ pub fn run_tests(platform: &mut impl Platform) -> bool {
         platform.write("\n");
         passed &= success;
     }
-    platform.write("HMTEST END 21\n");
+    platform.write("HMTEST END 22\n");
     passed
 }
 

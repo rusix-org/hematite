@@ -13,9 +13,9 @@ import test_boot_profiles as profiles
 
 
 def valid_report():
-    lines = ["hematite bootstrap", "HMTEST BEGIN 21"]
+    lines = ["hematite bootstrap", "HMTEST BEGIN 22"]
     lines.extend(f"HMTEST PASS {case}" for case in harness.CASES)
-    lines.append("HMTEST END 21")
+    lines.append("HMTEST END 22")
     return ("\n".join(lines) + "\n").encode("ascii")
 
 
@@ -46,10 +46,10 @@ class ReportTests(unittest.TestCase):
 
     def test_summary_and_inventory_must_be_exact(self):
         for old, new in (
-            (b"HMTEST BEGIN 21\n", b""),
-            (b"HMTEST END 21\n", b""),
-            (b"HMTEST BEGIN 21", b"HMTEST BEGIN 8"),
-            (b"HMTEST END 21", b"HMTEST END 10"),
+            (b"HMTEST BEGIN 22\n", b""),
+            (b"HMTEST END 22\n", b""),
+            (b"HMTEST BEGIN 22", b"HMTEST BEGIN 8"),
+            (b"HMTEST END 22", b"HMTEST END 10"),
             (b"HMTEST PASS nx", b"HMTEST PASS imaginary"),
             (b"HMTEST PASS nx\nHMTEST PASS user_execute_protect",
              b"HMTEST PASS user_execute_protect\nHMTEST PASS nx"),
@@ -109,7 +109,7 @@ class ArchitectureTests(unittest.TestCase):
         for data in (b"", b"qemu: invalid CPU\n", b"prefix HMBOOT REJECT PAN\n",
                      b"HMBOOT REJECT PAN",
                      b"HMBOOT REJECT PAN\nHMBOOT REJECT PAN\n",
-                     b"HMBOOT REJECT PAN\nHMTEST BEGIN 21\n"):
+                     b"HMBOOT REJECT PAN\nHMTEST BEGIN 22\n"):
             with self.subTest(data=data):
                 self.assertFalse(all(profiles.rejection_checks(data, result).values()))
         for update in ({"returncode": 0}, {"timed_out": True}, {"launch_error": "no qemu"}):
@@ -121,6 +121,23 @@ class ArchitectureTests(unittest.TestCase):
 
 
 class ExecutionTests(unittest.TestCase):
+    def test_unexpected_exception_requires_complete_marker_and_fatal_exit(self):
+        result = {"returncode": 2, "timed_out": False, "launch_error": None}
+        marker = b"HMEXCEPTION FATAL\r\n"
+        self.assertTrue(all(profiles.fatal_checks(marker, result).values()))
+        nested = b"HMEXCEPTION NESTED\n" + marker
+        self.assertTrue(all(profiles.fatal_checks(nested, result, nested=True).values()))
+        self.assertFalse(all(profiles.fatal_checks(marker, result, nested=True).values()))
+        self.assertFalse(all(profiles.fatal_checks(nested, result).values()))
+        for data in (b"", b"qemu failed\n", b"HMEXCEPTION FATAL", marker + marker,
+                     b"prefix " + marker, marker + b"HMTEST PASS nx\n"):
+            with self.subTest(data=data):
+                self.assertFalse(all(profiles.fatal_checks(data, result).values()))
+        for change in ({"returncode": 0}, {"returncode": 1}, {"returncode": None},
+                       {"timed_out": True}, {"launch_error": "missing executable"}):
+            with self.subTest(change=change):
+                self.assertFalse(all(profiles.fatal_checks(marker, {**result, **change}).values()))
+
     def test_launch_failure_preserves_command_log_and_result(self):
         with tempfile.TemporaryDirectory() as directory:
             output = Path(directory)
@@ -132,7 +149,7 @@ class ExecutionTests(unittest.TestCase):
             self.assertEqual(json.loads((output / "result.json").read_text()), result)
 
     def test_timeout_retains_partial_serial_and_fails(self):
-        partial = b"HMTEST BEGIN 21\nHMTEST PASS write_protect\n"
+        partial = b"HMTEST BEGIN 22\nHMTEST PASS write_protect\n"
 
         def timeout(command, **kwargs):
             kwargs["stdout"].write(partial)

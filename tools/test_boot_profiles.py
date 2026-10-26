@@ -29,6 +29,8 @@ def prepare(output, kernel, cpu, arch="aarch64", ram_mb=128):
     command = qemu_command(kernel, "tcg", arch)
     command[command.index("-cpu") + 1] = cpu
     command[command.index("-m") + 1] = f"{ram_mb}M"
+    if arch == "aarch64":
+        command += ["-d", "int", "-D", str(output / "exceptions.log")]
     write_json(output / "command.json", command)
     write_json(output / "input.json", {
         "kernel": str(kernel),
@@ -51,6 +53,45 @@ def rejection_checks(console, result, arch="aarch64"):
         lines = [line.removesuffix(b"\r") for line in console.split(b"\n")[:-1]]
         checks["explicit_pan_rejection_marker"] = lines.count(b"HMBOOT REJECT PAN") == 1
     return checks
+
+
+def fatal_checks(console, result, nested=False):
+    lines = [line.removesuffix(b"\r") for line in console.split(b"\n")[:-1]]
+    return {
+        "explicit_exception_exit": result["returncode"] == 2,
+        "fatal_marker": lines.count(b"HMEXCEPTION FATAL") == 1,
+        "nested_route": lines.count(b"HMEXCEPTION NESTED") == int(nested),
+        "no_test_report": b"HMTEST" not in console,
+        "within_deadline": not result["timed_out"],
+        "launched": result["launch_error"] is None,
+    }
+
+
+def run_fatal_exception(output, kernel, scope, nested=False):
+    command = prepare(output, kernel, "max", "aarch64")
+    result = {"scope": scope,
+              "started_utc": datetime.now(timezone.utc).isoformat(),
+              "timeout_seconds": DEADLINE_SECONDS, "returncode": None,
+              "timed_out": False, "launch_error": None}
+    started = time.monotonic()
+    with (output / "serial.log").open("wb") as log:
+        try:
+            with subprocess.Popen(command, stdin=subprocess.DEVNULL,
+                                  stdout=log, stderr=subprocess.STDOUT) as proc:
+                try:
+                    proc.wait(timeout=DEADLINE_SECONDS)
+                except subprocess.TimeoutExpired:
+                    result["timed_out"] = True
+                    proc.kill()
+                    proc.wait()
+                result["returncode"] = proc.returncode
+        except OSError as error:
+            result["launch_error"] = str(error)
+    result["checks"] = fatal_checks((output / "serial.log").read_bytes(), result, nested)
+    result["passed"] = all(result["checks"].values())
+    result["elapsed_seconds"] = time.monotonic() - started
+    write_json(output / "result.json", result)
+    return result
 
 
 def run_rejected_cpu(output, kernel, feature, arch="aarch64"):
@@ -237,9 +278,15 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--test-kernel", type=Path, required=True)
     parser.add_argument("--monitor-kernel", type=Path, required=True)
+    parser.add_argument("--fault-kernel", type=Path)
+    parser.add_argument("--nested-kernel", type=Path)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--arch", choices=("aarch64", "x86_64"), default="aarch64")
     args = parser.parse_args()
+    if args.arch == "aarch64" and (args.fault_kernel is None or not args.fault_kernel.is_file()):
+        parser.error("ARM verification requires an unexpected-fault kernel")
+    if args.arch == "aarch64" and (args.nested_kernel is None or not args.nested_kernel.is_file()):
+        parser.error("ARM verification requires a nested-fault kernel")
     test_kernel, monitor_kernel = args.test_kernel.resolve(), args.monitor_kernel.resolve()
     output = args.output.resolve()
     for kernel in (test_kernel, monitor_kernel):
@@ -256,6 +303,10 @@ def main():
     results["monitor"] = run_monitor(output / "monitor", monitor_kernel, args.arch)
     if args.arch == "aarch64":
         results["memory-64m"] = run_monitor(output / "memory-64m", monitor_kernel, args.arch, 64)
+        results["unexpected-fault"] = run_fatal_exception(output / "unexpected-fault", args.fault_kernel.resolve(),
+            "unregistered ARM fault with normal stack in guard must be fatal")
+        results["nested-fault"] = run_fatal_exception(output / "nested-fault", args.nested_kernel.resolve(),
+            "nested fault while entering emergency stack must be fatal", nested=True)
     summary = {
         "passed": all(result["passed"] for result in results.values()),
         "scope": "bootstrap CPU rejection and serial monitor; no Linux ABI claims",

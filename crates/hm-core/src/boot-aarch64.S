@@ -12,6 +12,8 @@ arm_start:
     msr spsel, #1
     ldr x0, =__stack_top
     mov sp, x0
+    ldr x0, =__exception_stack_top
+    msr sp_el0, x0
     ldr x0, =arm_vectors
     msr vbar_el1, x0
     isb
@@ -68,8 +70,11 @@ arm_start:
     ldr x9, =__rodata_start
     ldr x10, =__rodata_end
     ldr x11, =__stack_guard
+    ldr x12, =__exception_stack_guard
 4:
     cmp x3, x11
+    b.eq 8f
+    cmp x3, x12
     b.eq 8f
     cmp x3, x7
     b.lo 7f
@@ -146,6 +151,7 @@ arm_reject_pan:
     ldr x1, =reject_block
     b arm_semihost_exit
 
+.global arm_exception_fail
 arm_exception_fail:
     ldr x1, =failure_block
 arm_semihost_exit:
@@ -170,13 +176,6 @@ arm_uart_init:
     str w1, [x0, #0x30]
     ret
     .ltorg
-
-.balign 2048
-arm_vectors:
-.rept 16
-    b arm_exception_fail
-    .space 124
-.endr
 
 .section .rodata.boot,"a"
 .balign 8

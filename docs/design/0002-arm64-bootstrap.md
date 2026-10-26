@@ -25,10 +25,11 @@ then initialize a 16-byte-aligned 64 KiB stack. Never treat incoming registers
 as validated boot metadata. This fixed QEMU profile is not a device-discovery
 or physical-hardware protocol.
 
-Before risky setup, install a 2 KiB-aligned minimal exception-vector table.
-Each of its 16 128-byte entries branches to a stack-free failure path. This
-provides deterministic abort behavior, not recoverable exception handling.
-Leaving VBAR unspecified is not a fail-closed contract.
+Before risky setup, install a 2 KiB-aligned exception-vector table. The
+original all-fatal routing is extended by [design 0007](0007-arm-exceptions.md):
+current-EL SPx synchronous faults use a separately guarded SP_EL0 stack and
+may resume only registered fixed sites. Other faults remain fatal; no general
+user fault handling is implied. Leaving VBAR unspecified is not permitted.
 
 Require 4 KiB translation granule support and PAN from the architectural ID
 registers before using those mechanisms. Enable FP/SIMD through CPACR_EL1,
@@ -51,7 +52,7 @@ hardware permission-update modes disabled. MAIR attribute 0 is normal WB
 | Everything else | Invalid entries | No translation |
 
 Text is EL1 RO/executable and UXN. Rodata is EL1 RO/PXN/UXN. Other RAM is
-EL1 RW/PXN/UXN. The stack guard is a separate invalid leaf; page zero is
+EL1 RW/PXN/UXN. Each normal/exception stack guard is a separate invalid leaf; page zero is
 unmapped because the only low-address leaf is PL011. All section/guard edges
 are page-aligned. Set leaf AF explicitly. No second alias or user mapping is
 created; every unused table entry stays zero.
@@ -93,7 +94,8 @@ Boot checks read actual CurrentEL, SCTLR, TCR, TTBR, MAIR, PAN and the complete
 table tree. `write_protect` means the active EL1 AP permissions match the
 required RO/RW layout; `nx` means active translation and expected PXN/UXN
 restrictions, not merely the presence of a feature bit. W^X also requires
-WXN and no alias. Guard checks inspect invalid translation paths.
+WXN and no alias. Guard checks inspect invalid translation paths; design 0007 additionally
+executes guarded fault probes and tests recovery and fatal routes.
 
 Architecture-neutral user-protection names must retain explicit scope. UXN
 denies EL0 execution; it is not equivalent to x86 SMEP. Privileged execution

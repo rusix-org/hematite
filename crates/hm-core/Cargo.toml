@@ -9,6 +9,8 @@ hm-kernel = { path = "../hm-kernel" }
 
 [features]
 boot-tests = []
+unhandled-fault-test = []
+nested-fault-test = []
 
 [[bin]]
 name = "hematite"

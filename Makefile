@@ -31,6 +31,10 @@ test: image
 		python3 tools/check_safety.py; \
 		cargo build --locked --offline -p hm-core --release --features boot-tests --target $(TARGET) --target-dir target/$(ARCH)/boot-test; \
 		cargo build --locked --offline -p hm-core --release --target $(TARGET) --target-dir target/$(ARCH)/monitor; \
+		if [ "$(ARCH)" = aarch64 ]; then \
+			cargo build --locked --offline -p hm-core --release --features unhandled-fault-test --target $(TARGET) --target-dir target/$(ARCH)/fault-test; \
+			cargo build --locked --offline -p hm-core --release --features nested-fault-test --target $(TARGET) --target-dir target/$(ARCH)/nested-test; \
+		fi; \
 		cargo build --locked --offline -p hm-kernel --release --target $(TARGET) --target-dir target/$(ARCH)/boot-test; \
 		python3 tools/check_capability_types.py \
 			--library target/$(ARCH)/boot-test/$(TARGET)/release/libhm_kernel.rlib \
@@ -44,6 +48,8 @@ test: image
 		python3 tools/test_boot_profiles.py \
 			--test-kernel target/$(ARCH)/boot-test/$(TARGET)/release/hematite \
 			--monitor-kernel target/$(ARCH)/monitor/$(TARGET)/release/hematite \
+			--fault-kernel target/$(ARCH)/fault-test/$(TARGET)/release/hematite \
+			--nested-kernel target/$(ARCH)/nested-test/$(TARGET)/release/hematite \
 			--output "$$evidence_dir/profiles" --arch $(ARCH)'
 
 test-all:

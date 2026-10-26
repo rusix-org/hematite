@@ -25,6 +25,10 @@ SECTIONS {
         . += 4096;
         . += 65536;
         __stack_top = .;
+        __exception_stack_guard = .;
+        . += 4096;
+        . += 16384;
+        __exception_stack_top = .;
     } :data
     __bss_end = .;
     __kernel_end = .;
@@ -36,4 +40,6 @@ ASSERT((__text_start & 4095) == 0, "unaligned text")
 ASSERT((__text_end & 4095) == 0, "unaligned text end")
 ASSERT((__rodata_end & 4095) == 0, "unaligned rodata end")
 ASSERT((__stack_guard & 4095) == 0, "unaligned guard")
+ASSERT((__exception_stack_guard & 4095) == 0, "unaligned exception guard")
+ASSERT((__exception_stack_top & 15) == 0, "unaligned exception stack")
 ASSERT((__bss_end & 7) == 0, "BSS must contain whole doublewords")

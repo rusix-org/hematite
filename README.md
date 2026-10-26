@@ -13,7 +13,7 @@ make run    # build and open the ARM64 monitor; Ctrl-C exits
 ```
 
 Type `help`, `status`, or `test`. `status` reports the active memory protections;
-`test` runs 21 bootstrap, capability, memory and heap checks. The ARM boot banner reports discovered RAM and usable frame capacity.
+`test` runs 22 bootstrap, capability, memory, heap and exception checks. The ARM boot banner reports discovered RAM and usable frame capacity.
 Memory tests exercise real frame and heap allocation. Two pages are deliberately
 retained once per boot to verify that forgotten owners cannot cause reuse.
 This is a kernel monitor, not a shell.
@@ -34,6 +34,9 @@ Test runs preserve serial output, input hash, expanded QEMU command and results
 under `target/evidence/`. Missing/duplicate/failed cases, unexpected exit status
 and timeouts fail the command. GitHub CI runs the same `make test-all` command;
 remote results are available in the repository’s GitHub Actions tab.
+
+ARM tests also induce protected-memory faults and verify fixed-site recovery
+on a separate exception stack. Unrecognized faults remain fatal.
 
 ARM kernel code can now request fallible page-backed blocks and typed owners;
 failed typed allocations return the original value. Allocations currently round

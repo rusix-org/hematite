@@ -15,7 +15,7 @@ CASES = (
     "write_protect", "nx", "user_execute_protect", "user_access_protect",
     "wx", "stack_guard", "null_guard",
     "checked_range", "monitor_bounds",
-    "cap_authority", "cap_limits", "cap_lifetime", "cap_generation", "boot_memory_valid", "boot_memory_malformed", "frame_ranges", "frame_boundaries", "frame_contract", "heap_blocks", "heap_values", "cap_orderings",
+    "cap_authority", "cap_limits", "cap_lifetime", "cap_generation", "boot_memory_valid", "boot_memory_malformed", "frame_ranges", "frame_boundaries", "frame_contract", "heap_blocks", "heap_values", "fault_contract", "cap_orderings",
 )
 SUCCESS_EXITS = {"aarch64": 0, "x86_64": 33}
 TIMEOUT_SECONDS = 20
@@ -146,7 +146,10 @@ def main():
         "sha256": hashlib.sha256(kernel.read_bytes()).hexdigest(),
         "accel": args.accel, "arch": args.arch,
     }, indent=2) + "\n")
-    result = run_qemu(qemu_command(kernel, args.accel, args.arch), output, args.arch)
+    command = qemu_command(kernel, args.accel, args.arch)
+    if args.arch == "aarch64":
+        command += ["-d", "int", "-D", str(output / "exceptions.log")]
+    result = run_qemu(command, output, args.arch)
     print(json.dumps(result, indent=2))
     return 0 if result["passed"] else 1
 

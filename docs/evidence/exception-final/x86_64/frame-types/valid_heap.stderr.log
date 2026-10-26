@@ -1,0 +1,16 @@
+warning: unused imports: `Block`, `Frame`, and `KernelBox`
+ --> /workspace/target/evidence/20261026T065907-103186372-x86_64/frame-types/valid_heap.rs:3:17
+  |
+3 | use hm_frames::{Frame, Pool, Block, KernelBox};
+  |                 ^^^^^        ^^^^^  ^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `hm_kernel::frame_api::OwnedFrame`
+ --> /workspace/target/evidence/20261026T065907-103186372-x86_64/frame-types/valid_heap.rs:4:5
+  |
+4 | use hm_kernel::frame_api::OwnedFrame;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: 2 warnings emitted
+

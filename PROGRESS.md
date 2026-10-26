@@ -1,6 +1,6 @@
 # Progress
 
-Current phase: **Phase 1 underway: ARM64 fallible heap ownership verified**.
+Current phase: **Phase 1 underway: ARM64 fixed-site fault recovery verified**.
 Aaron approved scratch implementation and then changed the primary objective
 from strict Linux parity to native OS design with selective compatibility.
 [ADR 0005](docs/adr/0005-native-first-design.md) records the native direction;
@@ -19,17 +19,17 @@ from strict Linux parity to native OS design with selective compatibility.
 - Serial monitor: `make run` defaults to ARM64; `ARCH=x86_64` selects the
   regression port. Commands `help`, `status`, `test`; Ctrl-C exits.
 - `make test-all`: formatting, Clippy and safety checks for both targets,
-  12 host harness tests, 21 guest tests per architecture, ARM no-PAN rejection,
+  13 host harness tests, 22 guest tests per architecture, ARM no-PAN rejection,
   x86 missing-NX/SMEP/SMAP rejection, and live monitor recovery tests on both.
   ARM discovery matches both 128 MiB and 64 MiB guest configurations.
   All passed locally. `make test` tests ARM64 alone by default.
 - Pinned Rust base and Debian package snapshot, QEMU 7.2.22. One CPU/128 MiB
   guest by default; ARM discovery also tests 64 MiB; no attached disks or networking. Both targets use TCG.
 
-Latest evidence: [heap verification](docs/evidence/heap-ownership.md),
-[ARM guest results](docs/evidence/heap-final/aarch64/boot/result.json),
-[ARM profiles](docs/evidence/heap-final/aarch64/profiles/result.json),
-and matching x86 results under `docs/evidence/heap-final/x86_64/`.
+Latest evidence: [exception verification](docs/evidence/arm-exceptions.md),
+[ARM guest results](docs/evidence/exception-final/aarch64/boot/result.json),
+[ARM profiles](docs/evidence/exception-final/aarch64/profiles/result.json),
+and matching x86 results under `docs/evidence/exception-final/x86_64/`.
 Earlier [bootstrap verification](docs/evidence/hematite-bootstrap.md) is retained.
 The earlier [Asterinas baseline](docs/evidence/asterinas-evaluation.md) remains
 an evaluation only; it is not this kernel's implementation.
@@ -90,12 +90,31 @@ See [design](docs/design/0006-fallible-heap.md),
 [review](docs/reviews/0006-fallible-heap.md) and
 [evidence](docs/evidence/heap-ownership.md).
 
+## ARM fixed-site exception recovery verified locally
+
+A separately guarded 16 KiB SP_EL0 emergency stack preserves the interrupted
+normal SP_EL1 stack. Recovery requires an exact instruction address, fault
+address and syndrome match in a fixed core table; it leaves saved PSTATE intact.
+The handler saves all GPRs and performs no FP/SIMD operations or Rust calls.
+
+Actual faults verify null/normal-guard/emergency-guard read rejection, RO-write
+rejection and NX execution rejection. A context fixture checks all 31 GPRs,
+all 32 Q registers, NZCV, FPCR/FPSR and both stack pointers across recovery.
+Separate negative boot images prove fatal handling with an invalid normal SP
+and a fault during the emergency-stack save. The SP0 route has a distinct
+marker; QEMU exception traces are retained. x86 explicitly lacks this recovery
+API; its existing architecture checks still run.
+See [design](docs/design/0007-arm-exceptions.md),
+[review](docs/reviews/0007-arm-exceptions.md) and
+[evidence](docs/evidence/arm-exceptions.md).
+
 ## Limits and gates
 
 No userspace, syscall ABI, general interrupt/exception handling, SMP, storage,
-virtio drivers or networking exists. Page-guard tests inspect mappings; there
-is no recoverable page-fault handler. ARM has minimal fatal exception vectors;
-x86 unexpected exceptions may triple-fault. ARM bootstrap isolation checks are
+virtio drivers or networking exists. ARM recovery is restricted to the fixed
+EL1 probe sites above; general user-copy and process-fault handling remain
+unimplemented. x86 guards are checked through mappings and unexpected x86
+exceptions may triple-fault. ARM bootstrap isolation checks are
 not claims about a future EL0 address space or equivalence to SMEP. No Linux
 compatibility claim exists.
 The safe capability model now checks bounded resource accounting, attenuated
@@ -105,15 +124,16 @@ labels are trusted inputs and completion is a simulated backend acknowledgment.
 See [model verification](docs/evidence/capability-model.md).
 
 Published bootstrap CI passed at `b1b824c` ([run 40276324135](https://github.com/rusix-org/hematite/actions/runs/40276324135)).
-The capability, boot-memory, frame and heap changes passed locally; remote CI has not
+The capability, memory, heap and exception changes passed locally; remote CI has not
 run these changes. Aaron authorized public repository creation
 and push in [ADR 0007](docs/adr/0007-public-repository.md). License selection
 remains pending (ADR 0002); preliminary naming findings remain in ADR 0003.
 
 ## Next actions
 
-1. Design/review page-table ownership and recoverable exceptions, then timers
-   and scheduling. Add interrupt/SMP-safe ownership before concurrency;
+1. Design/review page-table ownership, then timer/interrupt delivery and
+   scheduling. Extend recovery to fault-aware user operations only with
+   address-space and lifetime proofs. Add interrupt/SMP-safe ownership before concurrency;
    implement measured small-object allocation before service workloads.
 2. Define the native userspace wire contract from those experiments; select
    compatibility workloads and pin a Linux oracle when the adapter exists.
@@ -170,3 +190,9 @@ remains pending (ADR 0002); preliminary naming findings remain in ADR 0003.
   borrowed values, reentrant destruction and original-value return on exhaustion.
   Page-level allocation cost, diagnostic leaks and missing global allocator are
   explicit; no workload or performance advantage claimed.
+
+- 2026-10-26: Added reviewed ARM fixed-site EL1 recovery, dedicated exception
+  stack and live protection/context tests. All 22 guest cases and 13 host
+  harness tests pass on both targets; ARM invalid-normal-stack and nested-fault
+  images exit through their required fatal routes. Preserved raw QEMU exception
+  traces, exact source/ELF identities and compiler evidence.

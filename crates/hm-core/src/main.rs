@@ -6,6 +6,8 @@ use core::panic::PanicInfo;
 use hm_kernel::Platform;
 
 #[cfg(target_arch = "aarch64")]
+mod exceptions;
+#[cfg(target_arch = "aarch64")]
 mod frames;
 
 #[cfg(target_arch = "x86_64")]
@@ -19,10 +21,24 @@ extern "C" fn boot_main(_boot_info: u64) -> ! {
     let mut platform = arch::init();
     platform.write(arch::BANNER);
     hm_kernel::report_memory(&mut platform);
-    #[cfg(feature = "boot-tests")]
-    arch::exit(hm_kernel::run_tests(&mut platform));
-    #[cfg(not(feature = "boot-tests"))]
-    hm_kernel::run_monitor(&mut platform)
+    #[cfg(all(target_arch = "aarch64", feature = "nested-fault-test"))]
+    exceptions::nested();
+    #[cfg(all(
+        target_arch = "aarch64",
+        feature = "unhandled-fault-test",
+        not(feature = "nested-fault-test")
+    ))]
+    exceptions::unexpected();
+    #[cfg(not(all(
+        target_arch = "aarch64",
+        any(feature = "unhandled-fault-test", feature = "nested-fault-test")
+    )))]
+    {
+        #[cfg(feature = "boot-tests")]
+        arch::exit(hm_kernel::run_tests(&mut platform));
+        #[cfg(not(feature = "boot-tests"))]
+        hm_kernel::run_monitor(&mut platform)
+    }
 }
 
 #[panic_handler]
