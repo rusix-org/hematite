@@ -1,0 +1,21 @@
+
+running 16 tests
+test all_task_operations ... ok
+test byte_budget_survives_owned_transitions ... ok
+test dropped_guard_is_session_local ... ok
+test guard_at_attempt_63 ... ok
+test host_borrow_ends_at_admission ... ok
+test legacy_dispatch_parity ... ok
+test legacy_limit_parity ... ok
+test malformed_limit_preserves_legacy_reply ... ok
+test malformed_task_arguments_are_deferred ... ok
+test non_wait_park_returns_guard ... ok
+test parked_drop_is_session_local ... ok
+test reply_preserves_session ... ok
+test shared_attempt_counter ... ok
+test stopped_session_is_sticky ... ok
+test valid_task_limit_has_no_host_effect ... ok
+test wait_park_wake_preserves_session ... ok
+
+test result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

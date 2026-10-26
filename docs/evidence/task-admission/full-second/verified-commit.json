@@ -1,0 +1,6 @@
+{
+  "commit": "19df35f2a515ab627e7f847147d527e5022a903e",
+  "verified_source_files": 248,
+  "all_match_tested_inputs": true,
+  "scope": "post-test committed-source identity; original full-first timing failure remains preserved"
+}

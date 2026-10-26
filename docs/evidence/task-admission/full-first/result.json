@@ -1,0 +1,6 @@
+{
+  "passed": false,
+  "returncode": 2,
+  "elapsed_seconds": 229.24009037017822,
+  "scope": "local make test-all; safe Session policy only; no core task creation or remote CI claim"
+}

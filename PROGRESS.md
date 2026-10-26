@@ -8,16 +8,20 @@ from strict Linux parity to native OS design with selective compatibility.
 
 ## Implementation and verification
 
-- Native userspace task creation remains **planned**. Its standalone safe
-  wire codec is **implemented and verified locally**: 18 independent Rust
-  cases, six compiler clients per architecture, and full `make test-all`
-  (205 Python validator cases per architecture) pass. All 23 kernel images
-  remain byte-identical to the reviewed process-group milestone. See
-  [codec evidence](docs/evidence/task-wire-codec.md). The
-  [0029 design](docs/design/0029-native-task-creation.md) and
-  [Session supplement](docs/design/0029-session-admission.md) separate this
-  metadata-only work from pending capability, scheduler and hardware integration.
-  No SPAWN/WAIT/CANCEL syscall or new monitor command is exposed yet.
+- Native userspace task creation remains **planned**. Its wire codec and
+  owned Session admission policy are **implemented and verified locally**.
+  The latest stage passes 16 independent policy cases, 13 compiler clients per
+  architecture and a full ARM/x86 rerun (210 Python validator cases per target).
+  All 23 kernels remain byte-identical to the reviewed process-group milestone.
+  The first full run failed an existing 64 MiB runtime expectation after one
+  281.3 ms measured turn exhausted its remaining budget. That failure is
+  preserved; isolated and full unchanged reruns pass, and the interval's cause
+  remains unestablished. See [Session evidence](docs/evidence/task-admission.md)
+  and [codec evidence](docs/evidence/task-wire-codec.md).
+  Core [dispatch](docs/design/0029-core-dispatch.md) and
+  [authority](docs/design/0029-task-authority.md) designs prepare the actual
+  lifecycle integration. No SPAWN/WAIT/CANCEL syscall or new monitor command is
+  exposed yet; remote CI remains unverified.
 
 - Stage B group runtime design and hardware protocol passed independent review.
   Core resumable turns, owned groups and ordinary launcher integration are
@@ -795,3 +799,11 @@ does not claim resumable execution or process-group support.
   Preserved the formatting preflight failure and its corrected final run.
   Userspace task creation remains pending Session/core implementation; the
   owned-Session admission supplement records the next design boundary.
+
+- 2026-10-26: Added the reviewed owned Session admission API, preserving legacy
+  dispatch and the original call/byte/console state across reply, park and wake.
+  Sixteen host cases and thirteen compiler clients per architecture pass. All
+  23 linked kernels remain unchanged. Full rerun passes in 180.4 seconds after
+  preserving and diagnosing an earlier runtime budget failure without changing
+  its assertions, deadlines or binary. Core ownership/finalization design is
+  reviewed; actual capability/lifecycle/hardware integration remains next.

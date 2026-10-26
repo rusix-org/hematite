@@ -1,0 +1,11 @@
+{
+  "aarch64": {
+    "source": "target/evidence/20261026T225647-084005624-aarch64",
+    "archive": "aarch64-failed-evidence.tar.gz",
+    "sha256": "9c0407cd1aeaa1fed3387525a0666538031bf9bee18e9bb31528e4b9a8fe41c5"
+  },
+  "x86_64": {
+    "executed": false,
+    "reason": "make stopped at failing ARM runtime gate"
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "passed": true,
+  "returncode": 0,
+  "elapsed_seconds": 180.42813777923584,
+  "scope": "local make test-all; safe Session policy only; original timing failure preserved in full-first"
+}

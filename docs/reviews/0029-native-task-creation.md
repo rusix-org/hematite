@@ -177,3 +177,185 @@ local regression results only. No EL0 task creation, launch-capability issuance,
 Session extension, parking/wake integration or new kernel execution path is
 implemented by this stage. Remote CI and the full 0029 core/hardware design remain
 unverified or pending, respectively. The standalone codec review is now frozen.
+
+## Safe Session implementation scope
+
+The exact owned-admission API in the Session supplement is approved for safe-policy
+implementation independently of core integration. This includes statuses Denied 8,
+Resources 9 and Pending 10; copied TaskOperation; owned non-Clone Admission,
+TaskAdmission and ParkedSession; and shared private counting/finalization helpers.
+Session layout, Stop and existing dispatch semantics must remain unchanged.
+Only WAIT may park, with rejection returning the same guard. Consuming reply/wake
+returns the original Session without another count or console effect. Dropping
+an unfinished guard merely loses that Session; it performs no hardware action.
+
+This approval does not claim that losing a guard already tears down a real Process.
+The core abandonment mechanism, Process state transitions and terminal-after-park
+handling remain unimplemented and unapproved. Independent source and policy tests
+must check both legacy regressions and the newly specified admission precedence
+before accepting this safe-policy stage.
+
+## Safe Session source review
+
+Reviewed the `native.rs` implementation diff. No source blocker found. Session
+fields/order and existing evaluate/write behavior remain unchanged. The extracted
+begin/finish/stop helpers preserve the original single attempt increment,
+console revocation and sticky terminal ordering. Opt-in admission recognizes
+correctly versioned task operations only, suppresses all guards/Host effects on
+attempt 64, and routes other requests through existing evaluation/finalization.
+
+TaskAdmission owns the original Session and copied Request. Neither it nor
+ParkedSession has a public constructor, Clone/Copy implementation or borrowed
+user state. Non-WAIT parking returns the original guard; reply and wake consume
+ownership without counters or effects. Dropping these safe metadata owners does
+not perform hardware cleanup. This accepts source within the approved policy
+scope only. Independent tests, actual-library compiler probes and linked runtime
+identity/stack checks remain necessary; legacy dispatch refactoring may change
+code generation even when its source semantics are preserved.
+
+## Safe Session tests and initial evidence
+
+Reviewed all 16 public-API integration cases, the strict host runner and its five
+mutation cases, 13 actual-library ownership clients, and Makefile wiring. No
+blocking issue found. Literal expected legacy outcomes supplement direct/owned
+parity checks; tests cover task attempt 63/64 precedence, no Host effects for task
+admission, the shared attempt and 4096-byte counters, original console continuity,
+owned Host-independent guards, non-WAIT rejection and owner-local abandonment.
+The compiler clients test private construction/extraction, no Clone, moved Session
+ownership, reuse after reply/park and double wake; positive clients check actual
+owned results rather than a substitute type.
+
+Independently revalidated the exact 16-case raw host report and all recorded
+inputs in `target/evidence/task-admission/host-first`. The new policy is locally
+host-tested, while compiler execution and full-suite acceptance remain pending.
+Initial linked candidates, including normal ARM, match their reviewed baseline
+ELF hashes; final all-profile identity review waits for the complete inventory.
+
+The completed Session-policy candidate inventory contains exactly the prior 23
+profiles, each with build exit zero. Independently hashed every actual linked ELF
+from `target/evidence/task-admission/first-candidates/inputs.json` and compared it
+with the accepted task-wire/runtime baseline: all 23 are byte-identical. This
+includes the previously narrow runtime and normal launcher stack paths. Existing
+compiled stack and transition proofs therefore remain applicable without a new
+stack interpretation. Approved these unchanged binaries for full-suite guests;
+this does not turn the unused safe admission API into executed core integration.
+
+## Lease-bound core dispatch draft review
+
+The sequential owned-command proposal addresses the original wide-borrow and
+provisional-WAIT problems in principle. Short selected-Space borrows end before
+sequential Group mutation; an outer finalizer replaces a Group-borrowing Drop guard.
+A provisional Park is discarded before Waiting publication if final accounting
+selects a terminal outcome. This is not yet core implementation approval.
+
+Concrete remaining refinements sent to the authors:
+
+- Carry copied calls/written metrics through every Settlement and DispatchFailure.
+  Once an error drops the owned Session and Process.session is None, the outer
+  finalizer cannot recover its actual admitted counter from the Process.
+- Carry the trusted capability slot/generation in the WAIT command alongside its
+  child TaskId; Park must retain the exact lookup identity.
+- Define a checked Waiting-to-Dispatching installation transition or separate wake
+  installation helper. The proposed put_session accepts only Dispatching, while
+  the wake description currently starts in Waiting.
+- Preserve Fault when final accounting exhausts budget. Actual run_turn substitutes
+  Budget only when no terminal reason exists; the draft's broad “otherwise” rule
+  must not override that existing behavior.
+- Extend the compiler-ordering proof to detached Session/Command/Settlement storage.
+  Existing group_counter exposes opaque Process/Capture pointers, which must not
+  silently be assumed to cover newly detached stack owners. Validate the chosen
+  ordering in actual linked code before claiming admission/commit work is charged.
+
+Catalog/capability commit rollback, structured Closing and exact hardware protocol
+also remain separately pending; no core source edits are approved by this review.
+
+The revised core-dispatch supplement resolves those five specific findings at the
+design level. DispatchResult snapshots actual post-admission counters before any
+fallible task helper or guard drop. WAIT owns the trusted PendingWait identity.
+Wake validates first, takes Waiting into Dispatching, consumes once and publishes
+Ready last. Fault precedence now exactly follows existing run_turn. A private
+TurnWork stores the detached result before the final counter; explicit opaque
+Group/Process/TurnWork/Capture addresses establish a new compiler-ordering review
+obligation instead of assuming the old proof covers detached storage.
+
+Approved this ownership/finalization boundary as one design component. This is
+not complete core implementation approval: catalog/capability commit rollback,
+typed internal errors, complete lifecycle and hardware protocol remain pending.
+Actual source must still establish every exit reaches finalization, error snapshots
+remain accurate, wake install failures close safely, and compiler ordering plus
+Process/Slot size and 64 KiB stack bounds hold in linked artifacts.
+
+## Preserved Session-stage full-suite failure
+
+Independently inspected the first Session-stage runtime failure at
+`target/evidence/20261026T225647-084005624-aarch64/runtime/runtime-64m`.
+This is a genuine failed guest, not a timeout or merely a parser rejection:
+QEMU exited 1 after about 4 seconds. The raw stream contains 21 completed HMRT
+cases, then case index 21 `completion_tokens` fails its expected outcome.
+
+Group 27 slot 2 turn 2 starts at counter 227603833 and finishes at 245182292:
+17,578,459 ticks, or 281.255344 ms at 62.5 MHz, against 5,668,590 ticks
+(90.69744 ms) remaining. The actual raw trace shows EL0 IRQ at 0x10001099c,
+PPI 30 acknowledgement/EOI and restored controller sequencing. Budget accounting
+terminates that owner with zero calls/written bytes and reclaims its 36 frames.
+Its peers subsequently exit; free frames reach 3241 before the held-completion
+assertion expects all four owners to have exited normally. The tail is an EL1
+failure semihost exit. Recorded raw artifact hashes match.
+
+The kernel binary is identical to the previously reviewed runtime. These records
+establish an unexpectedly long measured interval and correct fail-closed budget
+outcome, but cannot establish a historical host pause or locate the delay within
+that interval. Current host pressure readings are not proof of its cause. The
+128 MiB sibling passing does not erase this failure. Full-suite acceptance for
+the Session stage is therefore pending; preserve this result and do not weaken
+budgets or expected outcomes to manufacture a pass.
+
+## Final safe Session acceptance
+
+Accepted the safe Session policy stage with the first full-suite failure explicitly
+retained. The unchanged isolated runtime rerun passes both profiles; the subsequent
+complete `make test-all` exits zero in 180.4 seconds. Durable evidence is in
+`docs/evidence/task-admission/full-second`. Independently checked all 82 ARM and
+17 x86 archived result files, the exact 16-case host stdout/execution envelope,
+and all 13 actual-library compiler clients per architecture. Negative raw
+compiler diagnostics contain the expected private-field/construction, no-Clone
+or moved-owner errors; three ownership-positive clients compile. The full log
+contains 210 Python validator cases per target.
+
+All recorded source hashes and both archive hashes match. Independently hashed
+all 23 linked kernels again: each remains identical to the prior accepted runtime
+baseline. The new Session admission remains unused by core execution. This
+supports local policy/API and regression acceptance, not EL0 task creation or
+core waiting/teardown acceptance. The repeat pass does not explain or erase the
+preserved first runtime timing failure, and no historical host-pause cause is
+claimed. Remote CI remains unverified.
+
+## Authority/catalog draft findings
+
+The proposed boxed catalog/authority lifetime and local scalar reservation before
+atomic child/cap publication are reasonable design components. Full authority
+approval remains pending two concrete policy details: store the console-delegation
+permission in the actual authority (or explicitly freeze it as always enabled),
+and define existing public Group mutation behavior while task authority exists.
+Unrestricted external child reap could invalidate a parent's capability or
+PendingWait; ordinary admission could consume reserved capacity. Freeze a private
+setup/empty-group precondition plus restricted root-only administrative operations
+or exact relationship reconciliation. Typed setup errors and complete hardware
+protocol remain pending. No core implementation approval follows from the safe
+Session stage's passing evidence.
+
+The revised authority supplement resolves those two component findings. Persisted
+LaunchCap.console_allowed governs both the actual envelope and console-delegation
+checks. A fresh task-mode constructor cannot convert populated ordinary groups;
+TaskActive blocks public admission and restricts administration to the exact root.
+TaskClosed permanently rejects mutation after root reap, preventing accidental
+ordinary-mode fallback. Private child operations remain relationship-aware and
+lease-bound. Root completion stays hidden during Closing; metadata charge persists
+until root reap or Group Drop. These are acceptable component design choices.
+
+Before concrete API freeze, name the constructor's executor borrow lifetime in
+its returned Group instead of ambiguous `'_` across multiple reference inputs;
+root_image must remain an independent temporary borrow. Typed errors, exact root
+Closing reports, actual charge/layout proofs and the complete hardware protocol
+remain pending before core implementation approval. The logical 512-frame test
+must use measured legal image charges and is distinct from physical Pool pressure.

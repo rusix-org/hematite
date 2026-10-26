@@ -1,0 +1,16 @@
+{
+  "aarch64": {
+    "source": "target/evidence/20261026T230346-087653768-aarch64",
+    "archive": "aarch64-evidence.tar.gz",
+    "sha256": "690aa46d91638507b8f3c43f3d0a2f8bd61955fe946b3216a845d0d04a854ea3",
+    "bytes": 8839506,
+    "result_files": 82
+  },
+  "x86_64": {
+    "source": "target/evidence/20261026T230552-604040842-x86_64",
+    "archive": "x86_64-evidence.tar.gz",
+    "sha256": "8efd7fa078b761f37c85fc12c8ff0977f6b98afca7d6aa1b8996635c12f90760",
+    "bytes": 216292,
+    "result_files": 17
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "source": "target/evidence/task-admission/first-candidates",
+  "archive": "candidate-builds.tar.gz",
+  "sha256": "dfd0e133d993407136e39fda63521513c99bd8c60aa927a7a09dff0222f47972",
+  "bytes": 4502387
+}
