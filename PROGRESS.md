@@ -1,6 +1,6 @@
 # Progress
 
-Current phase: **Phase 1 underway: ARM event waits and wakeups verified locally**.
+Current phase: **Phase 1 underway: SMP topology validated; execution remains single-CPU**.
 Aaron approved scratch implementation and then changed the primary objective
 from strict Linux parity to native OS design with selective compatibility.
 [ADR 0005](docs/adr/0005-native-first-design.md) records the native direction;
@@ -19,26 +19,37 @@ from strict Linux parity to native OS design with selective compatibility.
 - Serial monitor: `make run` defaults to ARM64; `ARCH=x86_64` selects the
   regression port. Commands `help`, `status`, `test`; Ctrl-C exits.
 - `make test-all`: formatting, Clippy and safety checks for both targets,
-  41 host harness tests, 33 guest tests per architecture, ARM no-PAN rejection,
+  41 host harness tests, 36 guest tests per architecture, ARM no-PAN rejection,
   x86 missing-NX/SMEP/SMAP rejection, and live monitor recovery tests on both.
   ARM discovery matches both 128 MiB and 64 MiB guest configurations.
   Separate ARM images run five scheduling/wait cases at both memory sizes, then
-  repeat the 33 baseline cases in the same guest. Forced-transition, withheld
+  repeat the 36 baseline cases in the same guest. Forced-transition, withheld
   timer delivery, stack-overflow and all-blocked retention profiles also pass.
   All passed locally; CI at `d13b032` covers the preceding thread milestone.
   `make test` tests ARM64 alone by default.
 - Pinned Rust base and Debian package snapshot, QEMU 7.2.22. One CPU/128 MiB
   guest by default; ARM discovery also tests 64 MiB; no attached disks or networking. Both targets use TCG.
 
-Latest evidence: [wait/wake verification](docs/evidence/arm-wait-wake.md),
-[ARM scheduling results](docs/evidence/wait-final/aarch64/preemption-128m/result.json),
-[ARM profiles](docs/evidence/wait-final/aarch64/profiles/result.json),
-and matching x86 results under `docs/evidence/wait-final/x86_64/`.
+Latest evidence: [topology verification](docs/evidence/cpu-topology.md),
+[actual QEMU topology results](docs/evidence/topology-final/aarch64/cpu-topology/result.json),
+[ARM profiles](docs/evidence/topology-final/aarch64/profiles/result.json),
+and matching x86 results under `docs/evidence/topology-final/x86_64/`.
 Earlier [bootstrap verification](docs/evidence/hematite-bootstrap.md) is retained.
 The earlier [Asterinas baseline](docs/evidence/asterinas-evaluation.md) remains
 an evaluation only; it is not this kernel's implementation.
 
 ## Boot-memory discovery verified locally
+
+Safe CPU/PSCI parsing now returns owned, bounded metadata for CPU0 or CPUs0/1.
+It validates CPU identities, hierarchy/cell widths, enabled status, duplicate
+properties and PSCI compatibility/conduit; malformed or unsupported inputs
+return no partial topology. ARM derives this description through the same
+existing bounded DTB borrow. Invalid topology leaves no descriptor, rather than
+preventing otherwise valid single-CPU memory initialization. No startup
+capability or PSCI call exists yet. Live boot, malformed fixtures and actual
+QEMU one/two/three-CPU trees pass their declared checks; see
+[source review](docs/reviews/0014-cpu-topology-source.md) and
+[evidence](docs/evidence/cpu-topology.md).
 
 The ARM ELF now starts at `0x40200000`, leaving a 2 MiB DTB prefix. Core reads
 only that bounded mapped prefix and returns owned metadata from a safe parser.
@@ -256,7 +267,7 @@ publication awaits Aaron's response. Local kernel development remains authorized
 ## Next actions
 
 1. Implement the [reviewed two-CPU execution contract](docs/design/0014-arm-smp.md):
-   validate topology/PSCI, refactor CPU-local records and shared/local GIC ownership
+   topology/PSCI description parsing is verified. Refactor CPU-local records and shared/local GIC ownership
    under existing regressions, then add secondary startup and simultaneous
    preemptive callbacks. [Independent review](docs/reviews/0014-arm-smp.md) is
    complete at design level. Preserve CPU0-only allocator/mapping authority;
@@ -384,3 +395,10 @@ publication awaits Aaron's response. Local kernel development remains authorized
   counters, immutable secondary tables excluding the owned arena, shared GIC
   ownership and confirmed CPU_OFF before reuse. No CPU_ON, SMP implementation
   or multicore execution verification occurred in this design increment.
+- 2026-10-26: Implemented reviewed safe CPU/PSCI topology parsing and extraction
+  through the existing bounded ARM DTB borrow. First suite stopped at a Clippy
+  style error; fixed it and strengthened legacy-alias/malformed fixtures after
+  review. Final full suite passes 41 host/36 baseline guest cases per target,
+  all scheduling/negative regressions, and actual QEMU trees accepting one/two
+  CPUs and rejecting three. Archived source/ELF identities, raw DTBs and logs.
+  This is descriptive metadata only; secondary startup remains unimplemented.

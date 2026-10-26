@@ -7,6 +7,8 @@ pub mod boot_memory;
 mod boot_memory_tests;
 pub mod capability;
 mod capability_tests;
+pub mod cpu_topology;
+mod cpu_topology_tests;
 pub mod frame_api;
 pub mod frame_plan;
 mod frame_plan_tests;
@@ -42,6 +44,9 @@ pub struct BootChecks {
 
 /// The core retains all hardware authority; policy only exchanges owned values.
 pub trait Platform {
+    fn cpu_topology(&self) -> Option<cpu_topology::Topology> {
+        None
+    }
     type Mutex<T>: mutex_api::OwnedMutex<T>;
     fn new_mutex<T>(&self, value: T) -> Self::Mutex<T>;
     fn mutex_checks(&self) -> Option<MutexChecks> {
@@ -469,6 +474,18 @@ pub fn run_tests(platform: &mut impl Platform) -> bool {
         ("cap_generation", capability_tests::generation()),
         ("boot_memory_valid", boot_memory_tests::valid()),
         ("boot_memory_malformed", boot_memory_tests::malformed()),
+        ("cpu_topology_valid", cpu_topology_tests::valid()),
+        ("cpu_topology_malformed", cpu_topology_tests::malformed()),
+        (
+            "cpu_topology_live",
+            if cfg!(target_arch = "aarch64") {
+                platform.cpu_topology().is_some_and(|topology| {
+                    topology.cpu_count() == 1 && topology.affinities() == [0]
+                })
+            } else {
+                platform.cpu_topology().is_none()
+            },
+        ),
         ("frame_ranges", frame_plan_tests::ranges()),
         ("frame_boundaries", frame_plan_tests::boundaries()),
         ("frame_contract", frame_api::contract(platform)),
@@ -491,7 +508,7 @@ pub fn run_tests(platform: &mut impl Platform) -> bool {
             capability_tests::orderings(|message| platform.write(message)),
         ),
     ];
-    platform.write("HMTEST BEGIN 33\n");
+    platform.write("HMTEST BEGIN 36\n");
     let mut passed = true;
     for (name, success) in cases {
         platform.write(if success {
@@ -503,7 +520,7 @@ pub fn run_tests(platform: &mut impl Platform) -> bool {
         platform.write("\n");
         passed &= success;
     }
-    platform.write("HMTEST END 33\n");
+    platform.write("HMTEST END 36\n");
     passed
 }
 

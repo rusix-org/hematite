@@ -35,6 +35,7 @@ const UART_PAGE: u64 = 0x0060_0000_0900_0407;
 
 pub(super) struct BootPlatform {
     memory: hm_kernel::boot_memory::MemoryMap,
+    topology: Option<hm_kernel::cpu_topology::Topology>,
     pool: Option<super::frames::Pool>,
     mapper: Option<super::mappings::Mapper>,
     runner: Option<super::threads::Runner>,
@@ -42,6 +43,9 @@ pub(super) struct BootPlatform {
 pub(super) const BANNER: &str = "hematite: ARM64 Rust kernel entered at EL1\n";
 
 impl Platform for BootPlatform {
+    fn cpu_topology(&self) -> Option<hm_kernel::cpu_topology::Topology> {
+        self.topology
+    }
     type Mutex<T> = super::mutex::Mutex<T>;
 
     fn new_mutex<T>(&self, value: T) -> Self::Mutex<T> {
@@ -349,9 +353,10 @@ pub(super) fn init() -> BootPlatform {
 fn initialize() -> Result<BootPlatform, ()> {
     use hm_kernel::boot_memory::Region;
     use hm_kernel::frame_plan::Plan;
-    let memory = discover_memory()?;
+    let (memory, topology) = discover_metadata()?;
     let mut platform = BootPlatform {
         memory,
+        topology,
         pool: None,
         mapper: None,
         runner: None,
@@ -471,7 +476,13 @@ pub(super) fn wait_blocked_marker() {
     }
 }
 
-fn discover_memory() -> Result<hm_kernel::boot_memory::MemoryMap, ()> {
+fn discover_metadata() -> Result<
+    (
+        hm_kernel::boot_memory::MemoryMap,
+        Option<hm_kernel::cpu_topology::Topology>,
+    ),
+    (),
+> {
     const LIMIT: usize = 2 * 1024 * 1024;
     // SAFETY: The pinned QEMU virt ELF profile initializes RAM at RAM. The
     // first 40 bytes are identity mapped, outside all linker-owned storage.
@@ -487,7 +498,11 @@ fn discover_memory() -> Result<hm_kernel::boot_memory::MemoryMap, ()> {
     // it, and the linker reserves the complete window from code/tables/stack.
     // No allocator or concurrent writer exists; parsing returns owned values.
     let blob = unsafe { core::slice::from_raw_parts(RAM as *const u8, size) };
-    hm_kernel::boot_memory::parse(blob).map_err(|_| ())
+    let memory = hm_kernel::boot_memory::parse(blob).map_err(|_| ())?;
+    // Descriptive metadata only. Unsupported topology grants no SMP authority;
+    // this increment never starts a secondary CPU.
+    let topology = hm_kernel::cpu_topology::parse(blob).ok();
+    Ok((memory, topology))
 }
 
 fn serial_byte(byte: u8) {

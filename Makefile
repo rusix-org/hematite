@@ -56,6 +56,7 @@ test: image
 		mutex_host_args=(); \
 		if [ "$(ARCH)" = aarch64 ]; then \
 			cargo build --locked --offline -p hm-kernel --release --target x86_64-unknown-linux-gnu --target-dir target/host-mutex; \
+			python3 tools/check_cpu_topology.py --library target/host-mutex/x86_64-unknown-linux-gnu/release/libhm_kernel.rlib --output "$$evidence_dir/cpu-topology"; \
 			mutex_host_args=(--host-library target/host-mutex/x86_64-unknown-linux-gnu/release/libhm_kernel.rlib); \
 		fi; \
 		python3 tools/check_mutex_types.py \
