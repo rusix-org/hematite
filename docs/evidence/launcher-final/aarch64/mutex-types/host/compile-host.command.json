@@ -1,0 +1,17 @@
+[
+  "rustc",
+  "--edition=2024",
+  "-C",
+  "panic=abort",
+  "--extern",
+  "hm_kernel=/workspace/target/host-mutex/x86_64-unknown-linux-gnu/release/libhm_kernel.rlib",
+  "-L",
+  "dependency=/workspace/target/host-mutex/x86_64-unknown-linux-gnu/release/deps",
+  "-C",
+  "opt-level=2",
+  "--extern",
+  "hm_mutex=/workspace/target/evidence/20261026T195828-447588634-aarch64/mutex-types/host/libhm_mutex.rlib",
+  "/workspace/tools/test_mutex_host.rs",
+  "-o",
+  "/workspace/target/evidence/20261026T195828-447588634-aarch64/mutex-types/host/mutex-host"
+]

@@ -175,7 +175,7 @@ directory; final full-suite/guest outcomes still require their own exact hashes.
 ## Final-source runtime acceptance
 
 Independently inspected the final ARM full-suite launcher outputs under
-`target/evidence/20261026T195828-447588634-aarch64/launcher`, to be preserved at
+`target/evidence/20261026T195828-447588634-aarch64/launcher`, preserved at
 [launcher-final/aarch64/launcher](../evidence/launcher-final/aarch64/launcher/result.json).
 All three input records bind the corrected normal ELF`4b8d0289…`; all raw
 serial/exception/stderr hashes and harness source hashes match. Fresh strict
@@ -194,3 +194,11 @@ launcher runtime acceptance passes for these exact artifacts.** This supersedes
 the old-hash runtime acceptance for release/reproduction purposes without
 discarding its historical evidence. Complete cross-architecture suite status
 and remote-CI phase closure remain separate from this launcher-specific review.
+
+The completed [local full-suite summary](../evidence/launcher-final/verification-summary.json)
+now records`make test-all` exit0. Independently checked all59 ARM and13 x86
+archived result objects report success, all21 final built ELF hashes still match
+the reviewed inventory, and all101 files in the stable launcher archive equal
+the originally reviewed raw directory byte-for-byte. This confirms the final
+launcher evidence survived archival unchanged. Local full-suite completion
+does not imply newly published remote CI or formal phase closure.

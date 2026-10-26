@@ -1,0 +1,25 @@
+{
+  "scope": "safe callback stack exhaustion must fault in worker zero guard",
+  "started_utc": "2026-10-26T19:59:50.684826+00:00",
+  "timeout_seconds": 20,
+  "returncode": 2,
+  "timed_out": false,
+  "launch_error": null,
+  "checks": {
+    "explicit_exception_exit": true,
+    "fatal_marker": true,
+    "nested_route": true,
+    "no_test_report": true,
+    "within_deadline": true,
+    "launched": true,
+    "unique_guard_symbol": true,
+    "single_guard_read_abort": true,
+    "terminal_semihost_exit": true,
+    "translation_read_fault": true,
+    "worker_guard_far": true,
+    "fault_not_resumed": true,
+    "complete_trace": true
+  },
+  "passed": true,
+  "elapsed_seconds": 0.06819955701939762
+}

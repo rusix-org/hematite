@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "archive": {
+    "bytes": 729088,
+    "sha256": "bd37dbaa482b0d20bb70f3f38970cf9d96c1701eb5aa3a9295ef9e6e1ffed31c",
+    "entries": 6,
+    "files": 4,
+    "kernel_file_offset": 371336
+  },
+  "kernel_sha256": "4b8d02898264846846e19772bd0ec7a3159e468d5913f31e448822f3b99df04c"
+}

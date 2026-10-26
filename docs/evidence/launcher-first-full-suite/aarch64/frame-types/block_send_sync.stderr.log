@@ -1,0 +1,22 @@
+warning: unused imports: `Frame`, `KernelBox`, and `Pool`
+ --> /workspace/target/evidence/20261026T195015-963718208-aarch64/frame-types/block_send_sync.rs:3:17
+  |
+3 | use hm_frames::{Frame, Pool, Block, KernelBox};
+  |                 ^^^^^  ^^^^         ^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `hm_kernel::frame_api::OwnedFrame`
+ --> /workspace/target/evidence/20261026T195015-963718208-aarch64/frame-types/block_send_sync.rs:4:5
+  |
+4 | use hm_kernel::frame_api::OwnedFrame;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `hm_kernel::heap_api::OwnedBlock`
+ --> /workspace/target/evidence/20261026T195015-963718208-aarch64/frame-types/block_send_sync.rs:5:5
+  |
+5 | use hm_kernel::heap_api::OwnedBlock;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: 3 warnings emitted
+

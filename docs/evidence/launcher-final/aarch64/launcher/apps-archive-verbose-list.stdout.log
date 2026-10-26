@@ -1,0 +1,6 @@
+drwxr-xr-x   2 0        0               0 Jan  1  1970 bin
+-rwxr-xr-x   1 0        0           13856 Jan  1  1970 bin/hello
+-rwxr-xr-x   1 0        0          686648 Jan  1  1970 bin/info
+drwxr-xr-x   2 0        0               0 Jan  1  1970 demo
+-rwxr-xr-x   1 0        0           13856 Jan  1  1970 demo/fault
+-rwxr-xr-x   1 0        0           13856 Jan  1  1970 demo/loop

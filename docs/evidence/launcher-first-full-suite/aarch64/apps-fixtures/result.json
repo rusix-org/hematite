@@ -1,0 +1,4 @@
+{
+  "passed": false,
+  "error": "Canonical app artifact does not reproduce: /workspace/crates/hm-core/fixtures/apps/info.elf"
+}

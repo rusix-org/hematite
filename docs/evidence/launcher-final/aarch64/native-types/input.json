@@ -1,0 +1,20 @@
+{
+  "library": "/workspace/target/aarch64/boot-test/aarch64-unknown-none/release/libhm_kernel.rlib",
+  "library_sha256": "79ae16b80bf051e3bfc0c66f9f3589e25bf2f4239cfb296ab121b0aea8c24a75",
+  "target": "aarch64-unknown-none",
+  "source_sha256": "3643ebc632409b0d25d4ddba82b1afe30b08ab2aab04c40f34a11a05a0631e48",
+  "expected_probes": [
+    "valid_issue_startup",
+    "valid_dispatch_host",
+    "valid_move_session",
+    "forge_issuer",
+    "forge_session",
+    "issuer_clone",
+    "session_clone",
+    "change_generation",
+    "change_grant",
+    "change_calls",
+    "change_budget",
+    "revive_session"
+  ]
+}

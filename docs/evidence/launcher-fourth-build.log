@@ -1,0 +1,31 @@
+{
+  "passed": true,
+  "archive": {
+    "bytes": 729088,
+    "sha256": "bd37dbaa482b0d20bb70f3f38970cf9d96c1701eb5aa3a9295ef9e6e1ffed31c",
+    "entries": 6,
+    "files": 4
+  },
+  "scope": "kernel-independent native apps, GNU exact archive listing/extraction; no execution"
+}
+aarch64-monitor compiled; no guest executed
+aarch64-boot-test compiled; no guest executed
+aarch64-fault-test compiled; no guest executed
+aarch64-nested-test compiled; no guest executed
+aarch64-thread-overflow-test compiled; no guest executed
+aarch64-preemption-test compiled; no guest executed
+aarch64-preemption-boundary-test compiled; no guest executed
+aarch64-preemption-no-timer-test compiled; no guest executed
+aarch64-preemption-overflow-test compiled; no guest executed
+aarch64-wait-all-blocked-test compiled; no guest executed
+aarch64-space-test compiled; no guest executed
+aarch64-process-test compiled; no guest executed
+aarch64-secondary-test compiled; no guest executed
+aarch64-secondary-stale-test compiled; no guest executed
+aarch64-secondary-off-return-test compiled; no guest executed
+aarch64-smp-test compiled; no guest executed
+aarch64-smp-no-peer-timer-test compiled; no guest executed
+aarch64-smp-peer-overflow-test compiled; no guest executed
+aarch64-smp-all-blocked-test compiled; no guest executed
+x86_64-monitor compiled; no guest executed
+x86_64-boot-test compiled; no guest executed

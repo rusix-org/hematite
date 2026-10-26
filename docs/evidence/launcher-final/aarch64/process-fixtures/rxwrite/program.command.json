@@ -1,0 +1,5 @@
+[
+  "readelf",
+  "-lW",
+  "/workspace/target/evidence/20261026T195828-447588634-aarch64/process-fixtures/rxwrite.elf"
+]

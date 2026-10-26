@@ -1,0 +1,131 @@
+PASS: safe crate roots, dependency-free lockfile, core SAFETY-comment hygiene
+Scope: structural hygiene only; compile all targets and review core soundness separately
+    Checking hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+    Checking hm-core v0.1.0 (/workspace/crates/hm-core)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 1.59s
+   Compiling hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+   Compiling hm-core v0.1.0 (/workspace/crates/hm-core)
+    Finished `release` profile [optimized] target(s) in 8.55s
+   Compiling hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+   Compiling hm-core v0.1.0 (/workspace/crates/hm-core)
+    Finished `release` profile [optimized] target(s) in 8.23s
+   Compiling hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+   Compiling hm-core v0.1.0 (/workspace/crates/hm-core)
+    Finished `release` profile [optimized] target(s) in 4.42s
+   Compiling hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+    Finished `release` profile [optimized] target(s) in 1.61s
+{
+  "passed": true,
+  "probes": {
+    "library": {
+      "passed": true,
+      "returncode": 0
+    },
+    "valid_prepare_run": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "valid_input_released": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "valid_forget_inactive": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "valid_owned_report": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "private_terminal_constructor": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0624"
+    },
+    "private_output_mode": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0616"
+    },
+    "private_constructor": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0624"
+    },
+    "private_context": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0616"
+    },
+    "private_space": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0616"
+    },
+    "private_session": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0616"
+    },
+    "private_issuer": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0616"
+    },
+    "process_clone": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "executor_clone": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "process_send": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "process_sync": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "executor_send": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "executor_sync": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "process_consumed_once": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0382"
+    },
+    "no_callback": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0061"
+    },
+    "pool_lifetime": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0515"
+    },
+    "forge_process": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0451"
+    }
+  },
+  "scope": "actual native-process safe-client authority and lifetime boundaries; execution tested separately"
+}

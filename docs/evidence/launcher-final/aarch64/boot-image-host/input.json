@@ -1,0 +1,28 @@
+{
+  "cwd": "/workspace",
+  "expected_cases": [
+    "canonical_native_image",
+    "corrupt_suffix_precedes_missing",
+    "corrupt_suffix_rejects_existing_image",
+    "directory_entry",
+    "exact_lookup_only",
+    "image_outlives_temporary_path",
+    "invalid_elf_entry",
+    "missing_entry"
+  ],
+  "sources": {
+    "rust-toolchain.toml": "da55df283f88667ec7a31b7392d493f574a36c88467b955d467c3a3cbe2e9fb1",
+    "Cargo.lock": "383e08e95bee956a6cc81d5ee51e1b4dca8355d92c80473228e2c1413b7b177b",
+    "Cargo.toml": "b5ce112343302244db423f588b44e1c4da81b030bf2a3b2d66c7552a94bec1d8",
+    "crates/hm-kernel/Cargo.toml": "5b738f47733eb9c7ff18b1a4a635da1f747595796e3f68ba812379f03c694b9c",
+    "crates/hm-kernel/src/lib.rs": "e69bb315c8e1fe46ad2d2149e33d603aea8faa0be06823e9c41e67c7fa6b661a",
+    "crates/hm-kernel/src/initramfs.rs": "4ed94918c48c0ef554b0dd361cbe7f0f95d4a321c87f1f6ffcc5b8f7a56c1773",
+    "crates/hm-kernel/src/boot_image.rs": "0463fb748d4f9b036f0eb9c21e376f1cef6e1c5d0b0536113dd4255f04e9ce07",
+    "crates/hm-kernel/src/elf.rs": "d03ef069e9cce1b1324533207e9dd5cb5e4e1b914e0eeebf47af78241654ed32",
+    "crates/hm-kernel/tests/boot_image.rs": "8925597b466de3eb249532bfd0d9702e82ea95aba767cce7372439a18a6cfb17",
+    "tools/check_boot_image.py": "ba66de7a7b2de836a1ba27b2cecd79677bc7b9d4f77d97a9d88542880442a10a",
+    "crates/hm-core/fixtures/malformed-initramfs.cpio": "ad4ba05d51654aaa3c31ad9e63d25e643596e4efcfbdd7a6d24cf497b938ffa0",
+    "crates/hm-core/fixtures/initramfs.cpio": "b912d0090fc5d4315cc721271fb054f1fccd60867fed0b93b94ba8890d898797",
+    "crates/hm-core/fixtures/process/hello.elf": "ff2e501c58a3aacf376045d496d3313d6f8872e763e27e8bb04451e33b2b4e52"
+  }
+}

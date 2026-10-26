@@ -1,0 +1,11 @@
+{
+  "sources": {
+    "crates/hm-core/fixtures/apps.rs": "03d3c975adb9eec14b65fea1120a72c224adf646fd24bbd4c50ef0fc10f3b0e8",
+    "crates/hm-core/fixtures/apps.S": "dfc3a961983801d869468bffc51c669763cd89fc5ab65efcdd075e87b68692d2",
+    "crates/hm-core/fixtures/native-elf.ld": "20a9ff90960aaaad9f0c680c8bcef4e155038888ff3afbbd207c1b0fe28528f1",
+    "tools/build_apps.py": "a71de2b3fcc34e4c78630a371659e7bb84dc2326e413c2d293d5242a8ca27697",
+    "tools/build_initramfs.py": "3ef54b0f1caa7a35eb554532abffe3cc9b87fc687119600621c77903ec3cb116",
+    "docs/design/0026-native-launcher.md": "e139e72b5592f0e23ea7ded964e69888a5b0eb6b88cd39877d45358838658995"
+  },
+  "update": true
+}

@@ -1,0 +1,36 @@
+{
+  "changed_profiles": [
+    "aarch64-monitor"
+  ],
+  "unchanged_profiles": [
+    "aarch64-boot-test",
+    "aarch64-fault-test",
+    "aarch64-nested-test",
+    "aarch64-thread-overflow-test",
+    "aarch64-preemption-test",
+    "aarch64-preemption-boundary-test",
+    "aarch64-preemption-no-timer-test",
+    "aarch64-preemption-overflow-test",
+    "aarch64-wait-all-blocked-test",
+    "aarch64-space-test",
+    "aarch64-process-test",
+    "aarch64-secondary-test",
+    "aarch64-secondary-stale-test",
+    "aarch64-secondary-off-return-test",
+    "aarch64-smp-test",
+    "aarch64-smp-no-peer-timer-test",
+    "aarch64-smp-peer-overflow-test",
+    "aarch64-smp-all-blocked-test",
+    "x86_64-monitor",
+    "x86_64-boot-test"
+  ],
+  "normal_old": "0ad998d20161cf406323da919304579ed2340f7fc10c5ebcb14895c8f43a82b3",
+  "normal_new": "4b8d02898264846846e19772bd0ec7a3159e468d5913f31e448822f3b99df04c",
+  "info_byte_changes": [
+    {
+      "offset": 12664,
+      "old": 81,
+      "new": 108
+    }
+  ]
+}

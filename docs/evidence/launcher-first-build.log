@@ -1,0 +1,2 @@
+crates/hm-core/src/process.rs:149: missing nearby explanatory SAFETY comment
+crates/hm-core/src/launcher.rs:83: missing nearby explanatory SAFETY comment

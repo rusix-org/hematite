@@ -1,0 +1,47 @@
+{
+  "passed": true,
+  "errors": [],
+  "execution": {
+    "returncode": 0,
+    "timed_out": false,
+    "launch_error": null,
+    "host_terminated": true,
+    "host_killed": false,
+    "alive_after_last_prompt": true,
+    "elapsed_seconds": 1.5849276470253244
+  },
+  "serial": {
+    "commands": 27,
+    "completed": 5,
+    "generation": 5,
+    "free_frames": 3129
+  },
+  "trace": {
+    "runs": 5,
+    "el0_svcs": 6,
+    "el0_faults": 1,
+    "el0_timer_irqs": 1,
+    "el1_timer_irqs": 40,
+    "scope": "pinned QEMU exact registered EL1 diagnostics and actual normal-app EL0 transitions"
+  },
+  "artifacts": {
+    "serial.log": {
+      "exists": true,
+      "bytes": 5994,
+      "sha256": "d8fa4c34719286994ecdf4f7a63e94890733fe91f61fa96bb4a724f1905559cf",
+      "within_size_limit": true
+    },
+    "exceptions.log": {
+      "exists": true,
+      "bytes": 32556,
+      "sha256": "9905c1f8357c9beaa900c22511f72d8b4b32b03db033d063ce12681fcecf6e8c",
+      "within_size_limit": true
+    },
+    "stderr.log": {
+      "exists": true,
+      "bytes": 70,
+      "sha256": "08eb4127f29112fd46005b963cae8a992bec00dc097ed1774b49478311337b65",
+      "within_size_limit": true
+    }
+  }
+}

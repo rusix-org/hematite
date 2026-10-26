@@ -1,0 +1,7 @@
+{
+  "passed": false,
+  "command": "make test-all",
+  "exit_code": 2,
+  "stopped_at": "normal app fixture byte reproduction: info.elf",
+  "source_evidence": "target/evidence/20261026T195015-963718208-aarch64"
+}

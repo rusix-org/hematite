@@ -1,0 +1,4 @@
+drwxr-xr-x   2 0        0               0 Jan  1  1970 bin
+-rwxr-xr-x   1 0        0           19816 Jan  1  1970 bin/hello
+drwxr-xr-x   2 0        0               0 Jan  1  1970 etc
+-rw-r--r--   1 0        0              26 Jan  1  1970 etc/banner

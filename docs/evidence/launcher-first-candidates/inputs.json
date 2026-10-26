@@ -1,0 +1,23 @@
+{
+  "arm-monitor": {
+    "elf": "target/aarch64/monitor/aarch64-unknown-none/release/hematite",
+    "elf_sha256": "fa045390bbb16cd5bc8ba582125fadfedd5f3017461f9fc261ac0067237e5d3d",
+    "asm": "target/aarch64/monitor/aarch64-unknown-none/release/deps/hematite-0aefa6e86bca8961.s",
+    "asm_sha256": "b58f52ed10e7cbcaba58ef1533be68ecf5c79456e7c6a11db4f4e32fecb5b90a",
+    "bss": "00000000402ff000"
+  },
+  "arm-process": {
+    "elf": "target/aarch64/process-test/aarch64-unknown-none/release/hematite",
+    "elf_sha256": "e93bc4336086267b592f032291ed0ce33fee5ab8a1983dc3940e89fa5b6caa34",
+    "asm": "target/aarch64/process-test/aarch64-unknown-none/release/deps/hematite-97951d16c02ba655.s",
+    "asm_sha256": "0988c2c8cf1531d16e742459d8347ab16a48e3021171e96c81a021f5cf2476f8",
+    "bss": "0000000040393000"
+  },
+  "x86-monitor": {
+    "elf": "target/x86_64/monitor/x86_64-unknown-none/release/hematite",
+    "elf_sha256": "4f86e773008b3ce448a692ec90f46c31e9ade9599d3e89609b9d6fc8af734ea1",
+    "asm": "target/x86_64/monitor/x86_64-unknown-none/release/deps/hematite-e0b7078e8bf6100a.s",
+    "asm_sha256": "17345c598473792e343acb5b496c71f6de885644f1a9d42776cb7e5baae541d5",
+    "bss": "0000000000125000"
+  }
+}
