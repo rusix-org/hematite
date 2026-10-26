@@ -564,7 +564,10 @@ fn initialize() -> Result<BootPlatform, ()> {
     // supervisor RW/NX normal RAM, initially without aliases. Identity maps
     // never change. Only consuming Frame mappings may add matching-attribute
     // aliases, keeping identity bytes private until completed invalidation.
-    // One CPU/interrupts masked. Constructor permanently claims singleton use.
+    // Construction occurs with one CPU/interrupts masked. Admitted secondary
+    // CPUs install the same coherent identity subtrees before pool access;
+    // allocator metadata masks local IRQs and synchronizes between CPUs.
+    // Constructor permanently claims singleton use.
     // SAFETY: The checks and exclusions above prove the constructor contract;
     // repeated initialization is rejected before any physical memory access.
     platform.pool = Some(unsafe { super::frames::Pool::from_boot(plan) }.map_err(|_| ())?);
@@ -779,15 +782,20 @@ pub(super) fn smp_tests(platform: &mut BootPlatform) -> bool {
         feature = "smp-peer-overflow-test",
         feature = "smp-all-blocked-test"
     )))]
-    struct Output<'a>(&'a mut BootPlatform);
+    struct Output;
     #[cfg(not(any(
         feature = "smp-no-peer-timer-test",
         feature = "smp-peer-overflow-test",
         feature = "smp-all-blocked-test"
     )))]
-    impl core::fmt::Write for Output<'_> {
+    impl core::fmt::Write for Output {
         fn write_str(&mut self, text: &str) -> core::fmt::Result {
-            self.0.write(text);
+            for byte in text.bytes() {
+                if byte == b'\n' {
+                    serial_byte(b'\r');
+                }
+                serial_byte(byte);
+            }
             Ok(())
         }
     }
@@ -831,7 +839,12 @@ pub(super) fn smp_tests(platform: &mut BootPlatform) -> bool {
         feature = "smp-peer-overflow-test",
         feature = "smp-all-blocked-test"
     )))]
-    super::smp_checks::run(&mut runner, &mut Output(platform))
+    {
+        let Some(pool) = platform.pool.as_ref() else {
+            return false;
+        };
+        super::smp_checks::run(&mut runner, pool, &mut Output)
+    }
 }
 
 #[cfg(any(feature = "smp-no-peer-timer-test", feature = "smp-all-blocked-test"))]

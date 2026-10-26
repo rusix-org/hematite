@@ -1,5 +1,8 @@
-//! Single-CPU frame ownership. Construction proof: design 0005.
-use core::cell::Cell;
+//! Shared frame/heap ownership. Construction and concurrency: designs 0005/0020.
+use core::arch::asm;
+use core::cell::{Cell, UnsafeCell};
+use core::marker::PhantomData;
+use core::ops::{Deref, DerefMut};
 use core::sync::atomic::{AtomicBool, Ordering};
 use hm_kernel::frame_api::{FrameError, FrameStats, OwnedFrame};
 use hm_kernel::frame_plan::{MAX_FRAMES, PAGE_SIZE, Plan};
@@ -9,9 +12,109 @@ const WORDS: usize = MAX_FRAMES / 64;
 
 pub struct Pool {
     plan: Plan,
-    used: Cell<[u64; WORDS]>,
-    leak_checked: Cell<bool>,
-    heap_leak_checked: Cell<bool>,
+    metadata: Metadata,
+}
+
+struct State {
+    used: [u64; WORDS],
+    leak_checked: bool,
+    heap_leak_checked: bool,
+}
+struct Metadata {
+    locked: AtomicBool,
+    state: UnsafeCell<State>,
+}
+// SAFETY: Only an Acquire lock owner accesses state; Release unlock publishes
+// its writes. Every guard masks local IRQs and cannot cross CPUs. State is Send.
+unsafe impl Sync for Metadata {}
+
+struct MetadataGuard<'a> {
+    metadata: &'a Metadata,
+    irq: u64,
+    _local: PhantomData<*mut ()>,
+}
+impl Metadata {
+    fn lock(&self) -> MetadataGuard<'_> {
+        let irq = mask_irqs();
+        while self
+            .locked
+            .compare_exchange(false, true, Ordering::Acquire, Ordering::Relaxed)
+            .is_err()
+        {
+            core::hint::spin_loop();
+        }
+        MetadataGuard {
+            metadata: self,
+            irq,
+            _local: PhantomData,
+        }
+    }
+}
+impl Deref for MetadataGuard<'_> {
+    type Target = State;
+    fn deref(&self) -> &State {
+        // SAFETY: This guard owns the lock; its borrow prevents unlock/mutation.
+        unsafe { &*self.metadata.state.get() }
+    }
+}
+impl DerefMut for MetadataGuard<'_> {
+    fn deref_mut(&mut self) -> &mut State {
+        // SAFETY: Exclusive guard borrow and lock ownership exclude all aliases.
+        unsafe { &mut *self.metadata.state.get() }
+    }
+}
+impl Drop for MetadataGuard<'_> {
+    fn drop(&mut self) {
+        self.metadata.locked.store(false, Ordering::Release);
+        restore_irqs(self.irq);
+    }
+}
+
+/// Scalar observation only; no interrupt-control authority escapes this module.
+#[cfg_attr(not(feature = "smp-tests"), allow(dead_code))]
+pub(super) fn irq_state() -> u64 {
+    let state: u64;
+    // SAFETY: Privileged kernel-only observation; compiler memory effects remain.
+    unsafe {
+        #[cfg(target_arch = "aarch64")]
+        asm!("mrs {}, daif", out(reg) state, options(nostack, preserves_flags));
+        #[cfg(target_arch = "x86_64")]
+        asm!("pushfq", "pop {}", out(reg) state, options(preserves_flags));
+    }
+    #[cfg(target_arch = "aarch64")]
+    {
+        state
+    }
+    #[cfg(target_arch = "x86_64")]
+    {
+        state & (1 << 9)
+    }
+}
+fn mask_irqs() -> u64 {
+    let state: u64;
+    // SAFETY: Private allocator entry at privileged kernel level. No lock is
+    // held until after masking; assembly keeps compiler memory side effects.
+    unsafe {
+        #[cfg(target_arch = "aarch64")]
+        asm!("mrs {}, daif", "msr daifset, #2", out(reg) state, options(nostack, preserves_flags));
+        #[cfg(target_arch = "x86_64")]
+        asm!("pushfq", "pop {}", "cli", out(reg) state, options(preserves_flags));
+    }
+    state
+}
+fn restore_irqs(state: u64) {
+    // SAFETY: Private nontransferable guard calls this after Release unlock.
+    // No callback changes control state while held; restore prior local IRQs.
+    unsafe {
+        #[cfg(target_arch = "aarch64")]
+        asm!("msr daif, {}", in(reg) state, options(nostack, preserves_flags));
+        #[cfg(target_arch = "x86_64")]
+        if state & (1 << 9) != 0 {
+            asm!("sti", options(nostack, preserves_flags));
+        } else {
+            asm!("cli", options(nostack, preserves_flags));
+        }
+    }
 }
 
 pub struct Frame<'pool> {
@@ -26,11 +129,13 @@ impl Pool {
     /// The plan excludes all boot storage and reservations. Identity mappings
     /// never change. Only the consuming owned-mapping protocol (design 0008)
     /// may create matching-attribute aliases, without identity byte access until
-    /// invalidation completes. One CPU; this capability stays in the IRQ-masked coordinator.
+    /// invalidation completes. All admitted CPUs use coherent matching normal
+    /// identity mappings. Only metadata is locked; zeroing and value access
+    /// retain exclusive frame/run ownership outside that lock.
     /// Scoped timer IRQs (design 0009) touch only private assembly/GIC state,
     /// never this pool, frames, mappings or borrowed Rust memory.
-    /// Preemptible function-pointer jobs cannot capture this non-Sync pool;
-    /// scheduler IRQs access only owned task context, never allocator state.
+    /// Scoped preemptible jobs may share this pool under design 0020; scheduler
+    /// IRQs access only owned task context, never allocator state.
     /// If already claimed, no physical precondition applies: the method returns
     /// AlreadyInitialized before using the supplied plan.
     // SAFETY: Caller establishes the documented physical ownership contract
@@ -41,19 +146,23 @@ impl Pool {
             .map_err(|_| FrameError::AlreadyInitialized)?;
         Ok(Self {
             plan,
-            used: Cell::new([0; WORDS]),
-            leak_checked: Cell::new(false),
-            heap_leak_checked: Cell::new(false),
+            metadata: Metadata {
+                locked: AtomicBool::new(false),
+                state: UnsafeCell::new(State {
+                    used: [0; WORDS],
+                    leak_checked: false,
+                    heap_leak_checked: false,
+                }),
+            },
         })
     }
 
     fn claim(&self) -> Result<usize, FrameError> {
-        let mut used = self.used.get();
+        let mut state = self.metadata.lock();
         for index in 0..self.plan.page_count() {
             let mask = 1u64 << (index % 64);
-            if self.plan.eligible(index) && used[index / 64] & mask == 0 {
-                used[index / 64] |= mask;
-                self.used.set(used);
+            if self.plan.eligible(index) && state.used[index / 64] & mask == 0 {
+                state.used[index / 64] |= mask;
                 return Ok(index);
             }
         }
@@ -64,9 +173,8 @@ impl Pool {
     /// borrows. Only Frame::drop or the private exhaustion ledger returns bits.
     // SAFETY: Caller owns the claimed valid index without live byte aliases.
     unsafe fn release(&self, index: usize) {
-        let mut used = self.used.get();
-        used[index / 64] &= !(1u64 << (index % 64));
-        self.used.set(used);
+        let mut state = self.metadata.lock();
+        state.used[index / 64] &= !(1u64 << (index % 64));
     }
 
     fn address(&self, index: usize) -> usize {
@@ -78,17 +186,43 @@ impl Pool {
         // SAFETY: Constructor proves all eligible pages are exclusive mapped
         // RAM. claim just removed this page from availability; no Frame or
         // byte reference to it exists. Full zeroing initializes every byte
-        // before returning its sole owner. No callback/reentrancy occurs.
+        // before returning its sole owner. The run remains claimed during preemption.
         unsafe {
             core::ptr::write_bytes(self.address(index) as *mut u8, 0, PAGE_SIZE);
         }
         Ok(Frame { pool: self, index })
     }
 
+    fn snapshot(&self) -> [u64; WORDS] {
+        self.metadata.lock().used
+    }
+
+    fn reserve_leak_check(&self, heap: bool) -> bool {
+        let mut state = self.metadata.lock();
+        let flag = if heap {
+            &mut state.heap_leak_checked
+        } else {
+            &mut state.leak_checked
+        };
+        if *flag {
+            false
+        } else {
+            *flag = true;
+            true
+        }
+    }
+    fn retry_leak_check(&self, heap: bool) {
+        let mut state = self.metadata.lock();
+        if heap {
+            state.heap_leak_checked = false;
+        } else {
+            state.leak_checked = false;
+        }
+    }
+
     pub fn stats(&self) -> FrameStats {
         let used: usize = self
-            .used
-            .get()
+            .snapshot()
             .iter()
             .map(|w| w.count_ones() as usize)
             .sum();
@@ -96,6 +230,18 @@ impl Pool {
             total: self.plan.total(),
             free: self.plan.total() - used,
         }
+    }
+
+    #[cfg_attr(not(feature = "smp-tests"), allow(dead_code))]
+    pub(super) fn critical_section_check(&self) -> bool {
+        let before = irq_state();
+        let guard = self.metadata.lock();
+        #[cfg(target_arch = "aarch64")]
+        let masked = irq_state() == (before | 0x80);
+        #[cfg(target_arch = "x86_64")]
+        let masked = irq_state() == 0;
+        drop(guard);
+        masked && irq_state() == before
     }
 
     /// Observe immutable eligibility, never current allocation state. Reject
@@ -177,28 +323,26 @@ impl Pool {
         if !matches!(attempted, Err(FrameError::AlreadyInitialized)) {
             return false;
         }
-        if !self.leak_checked.get() {
+        if self.reserve_leak_check(false) {
             let Ok(frame) = self.allocate() else {
+                self.retry_leak_check(false);
                 return false;
             };
             core::mem::forget(frame);
-            self.leak_checked.set(true);
         }
-        let original = self.used.get();
+        let original = self.snapshot();
         let before = self.stats();
         let mut ledger = [0u64; WORDS];
         let mut count = 0;
         let mut okay = true;
         while let Ok(index) = self.claim() {
             let mask = 1u64 << (index % 64);
-            if ledger[index / 64] & mask != 0
-                || original[index / 64] & mask != 0
-                || !self.plan.eligible(index)
-            {
+            let duplicate = ledger[index / 64] & mask != 0;
+            ledger[index / 64] |= mask;
+            if duplicate || original[index / 64] & mask != 0 || !self.plan.eligible(index) {
                 okay = false;
                 break;
             }
-            ledger[index / 64] |= mask;
             count += 1;
         }
         okay &= count == before.free && self.stats().free == 0;
@@ -214,7 +358,7 @@ impl Pool {
                 }
             }
         }
-        okay && self.used.get() == original && self.stats() == before
+        okay && self.snapshot() == original && self.stats() == before
     }
 }
 
@@ -262,6 +406,13 @@ pub struct KernelBox<'pool, T> {
     owns: core::marker::PhantomData<T>,
 }
 
+// SAFETY: Unique backing ownership transfers with T. The pool is Sync and its
+// metadata release is synchronized; moving this owner grants no other aliases.
+unsafe impl<T: Send> Send for KernelBox<'_, T> {}
+// SAFETY: Shared access exposes only &T, requiring T: Sync. Mutable access and
+// destruction require exclusive owner access; backing bytes remain private.
+unsafe impl<T: Sync> Sync for KernelBox<'_, T> {}
+
 impl Pool {
     fn claim_run(
         &self,
@@ -272,22 +423,27 @@ impl Pool {
         if pages == 0 || !align.is_power_of_two() {
             return Err(HeapError::InvalidLayout);
         }
-        let Some(last) = self.plan.page_count().checked_sub(pages) else {
+        if pages > self.plan.page_count() {
             return Err(HeapError::Exhausted);
-        };
-        let mut used = self.used.get();
-        for start in 0..=last {
-            if !self.address(start).is_multiple_of(align) {
+        }
+        let mut state = self.metadata.lock();
+        let mut candidate = None;
+        for index in 0..self.plan.page_count() {
+            if !self.plan.eligible(index) || state.used[index / 64] & (1u64 << (index % 64)) != 0 {
+                candidate = None;
                 continue;
             }
-            let end = start + pages; // bounded by page_count <= MAX_FRAMES
-            if (start..end).all(|i| self.plan.eligible(i) && used[i / 64] & (1u64 << (i % 64)) == 0)
-            {
-                for i in start..end {
-                    used[i / 64] |= 1u64 << (i % 64);
+            if candidate.is_none() && self.address(index).is_multiple_of(align) {
+                candidate = Some(index);
+            }
+            if let Some(start) = candidate {
+                // Every page from start through index is eligible and free.
+                if index - start + 1 == pages {
+                    for i in start..=index {
+                        state.used[i / 64] |= 1u64 << (i % 64);
+                    }
+                    return Ok(start);
                 }
-                self.used.set(used);
-                return Ok(start);
             }
         }
         Err(HeapError::Exhausted)
@@ -297,11 +453,10 @@ impl Pool {
     /// aliases or overlapping Frame/Block. Reclamation follows value destruction.
     // SAFETY: Caller supplies exclusive ownership of the whole claimed run.
     unsafe fn release_run(&self, start: usize, pages: usize) {
-        let mut used = self.used.get();
+        let mut state = self.metadata.lock();
         for i in start..start + pages {
-            used[i / 64] &= !(1u64 << (i % 64));
+            state.used[i / 64] &= !(1u64 << (i % 64));
         }
-        self.used.set(used);
     }
 
     pub fn allocate_heap(
@@ -373,35 +528,36 @@ impl Pool {
             }
         }
         let forgotten_drops = Cell::new(0);
-        if !self.heap_leak_checked.get() {
+        if self.reserve_leak_check(true) {
             let Ok(value) = self.box_value(Tracked {
                 drops: &forgotten_drops,
                 marker: 17,
             }) else {
+                self.retry_leak_check(true);
                 return false;
             };
             core::mem::forget(value);
-            self.heap_leak_checked.set(true);
             if forgotten_drops.get() != 0 {
                 return false;
             }
         }
-        let original = self.used.get();
+        let original = self.snapshot();
         let before = self.stats();
         let mut ledger = [0u64; WORDS];
         let mut count = 0;
         let mut okay = true;
         while let Ok(index) = self.claim() {
             let mask = 1u64 << (index % 64);
-            if ledger[index / 64] & mask != 0 || original[index / 64] & mask != 0 {
+            let duplicate = ledger[index / 64] & mask != 0;
+            ledger[index / 64] |= mask;
+            if duplicate || original[index / 64] & mask != 0 {
                 okay = false;
                 break;
             }
-            ledger[index / 64] |= mask;
             count += 1;
         }
         okay &= count == before.free && self.stats().free == 0;
-        let full = self.used.get();
+        let full = self.snapshot();
         okay &= matches!(self.allocate_heap(8193, 8192), Err(HeapError::Exhausted));
         okay &= matches!(self.allocate_heap(0, 1), Err(HeapError::Exhausted));
         let drops = Cell::new(0);
@@ -418,7 +574,7 @@ impl Pool {
                 drop(other);
             }
         }
-        okay &= drops.get() == 1 && self.used.get() == full;
+        okay &= drops.get() == 1 && self.snapshot() == full;
         // Free only even ledger-owned indices: enough total capacity remains,
         // but every potential two-page run has an unavailable neighbour.
         for index in (0..self.plan.page_count()).step_by(2) {
@@ -432,13 +588,13 @@ impl Pool {
                 ledger[index / 64] &= !mask;
             }
         }
-        let fragmented = self.used.get();
+        let fragmented = self.snapshot();
         okay &= self.stats().free >= 2
             && matches!(
                 self.allocate_heap(4097, PAGE_SIZE),
                 Err(HeapError::Exhausted)
             )
-            && self.used.get() == fragmented;
+            && self.snapshot() == fragmented;
         for index in 0..self.plan.page_count() {
             if ledger[index / 64] & (1u64 << (index % 64)) != 0 {
                 // SAFETY: Only this diagnostic claimed each ledger index;
@@ -448,7 +604,7 @@ impl Pool {
                 }
             }
         }
-        okay && self.used.get() == original && self.stats() == before
+        okay && self.snapshot() == original && self.stats() == before
     }
 }
 
@@ -503,7 +659,7 @@ impl<T> core::ops::DerefMut for KernelBox<'_, T> {
 impl<T> Drop for KernelBox<'_, T> {
     fn drop(&mut self) {
         // SAFETY: This is the unique initialized T, with no surviving borrows.
-        // Run its destructor once while Block still owns storage. No Cell
+        // Run its destructor once while Block still owns storage. No metadata
         // borrow/lock is held, so destructors may allocate other disjoint runs.
         unsafe {
             core::ptr::drop_in_place(self.value);

@@ -104,10 +104,23 @@ HVC1 = HVC0.replace(b"CPU 0", b"CPU 1")
 EXIT0 = b"Taking exception 16 [Semihosting call] on CPU 0\n...handling as semihosting call 0x20\n"
 
 
+def case_irqs(name):
+    both = ("progress_contexts", "mixed_truncation", "allocation_isolation", "allocation_reentry")
+    return int(name in both or name == "mutex"), int(name in both)
+
+
 def positive_console():
-    lines = ["hematite bootstrap", "HMSCHED BEGIN 8"]
+    lines = ["hematite bootstrap", f"HMSCHED BEGIN {len(harness.CASES)}"]
     for generation, (name, completed0, completed1) in enumerate(harness.CASES, 1):
-        irq0, irq1 = int(generation in (1, 2, 3)), int(generation in (1, 3))
+        irq0, irq1 = case_irqs(name)
+        if name in harness.ALLOCATION_CASES:
+            allocations, peak, drops = {
+                "allocation_isolation": (1024, 24, 0),
+                "allocation_exhaustion": (6000, 3000, 16),
+                "allocation_reentry": (1280, 12, 512),
+            }[name]
+            lines.append(f"HMALLOC case={name} free_before=3000 free_after=3000 "
+                         f"allocations={allocations} peak={peak} drops={drops}")
         worker0 = SYMBOLS["__thread0_top"] - 128 if completed0 else 0
         worker1 = SYMBOLS["__secondary_thread0_top"] - 128 if completed1 else 0
         lines.append(f"HMSCHED SESSION generation={generation} cpu0=0 cpu1=1 "
@@ -115,14 +128,16 @@ def positive_console():
                      f"off=1 checks=255 root={SYMBOLS['arm_secondary_root']} "
                      f"sp={SYMBOLS['__secondary_stack_top'] - 128} worker0={worker0} worker1={worker1}")
         lines.append(f"HMSCHED PASS {name}")
-    lines += ["HMSCHED END 8", f"HMTEST BEGIN {len(BASELINE_CASES)}"]
+    lines += [f"HMSCHED END {len(harness.CASES)}", f"HMTEST BEGIN {len(BASELINE_CASES)}"]
     lines += [f"HMTEST PASS {name}" for name in BASELINE_CASES]
     lines.append(f"HMTEST END {len(BASELINE_CASES)}")
     return ("\n".join(lines) + "\n").encode()
 
 
 def positive_trace():
-    return HVC0 + (entry(0) + ack(0) + eoi(0)) * 19 + (entry(1) + ack(1) + eoi(1)) * 2 + HVC1 * 8 + EXIT0
+    counts = [sum(case_irqs(name)[cpu] for name, _, _ in harness.CASES) for cpu in (0, 1)]
+    return (HVC0 + (entry(0) + ack(0) + eoi(0)) * (counts[0] + 16)
+            + (entry(1) + ack(1) + eoi(1)) * counts[1] + HVC1 * len(harness.CASES) + EXIT0)
 
 
 class ReportTests(unittest.TestCase):
@@ -131,14 +146,62 @@ class ReportTests(unittest.TestCase):
 
     def test_exact_inventory_generations_and_counts(self):
         raw = positive_console()
-        for before, after in ((b"HMSCHED BEGIN 8", b"HMSCHED BEGIN 7"),
+        for before, after in ((b"HMSCHED BEGIN 11", b"HMSCHED BEGIN 7"),
                               (b"generation=2", b"generation=1"), (b"cpu1=1", b"cpu1=0"),
                               (b"completed0=2", b"completed0=1"), (b"off=1", b"off=0"),
                               (b"checks=255", b"checks=127"),
                               (b"HMSCHED PASS mutex\n", b""),
-                              (b"HMSCHED END 8\n", b"HMSCHED PASS limits_reuse\nHMSCHED END 8\n"),
+                              (b"HMSCHED END 11\n", b"HMSCHED PASS limits_reuse\nHMSCHED END 11\n"),
                               (b"generation=1 ", b"generation=" + b"9" * 5000 + b" ")):
             self.assertFalse(harness.validate(raw.replace(before, after), positive_trace(), EXECUTION, SYMBOLS)["passed"])
+
+    def test_allocation_metrics_inventory_and_position(self):
+        raw = positive_console()
+        metrics = [line for line in raw.splitlines(keepends=True) if line.startswith(b"HMALLOC")]
+        self.assertEqual(len(metrics), 3)
+        for bad in (raw.replace(metrics[0], b""), raw + metrics[0],
+                    raw.replace(metrics[0], metrics[0] + metrics[0]),
+                    raw.replace(metrics[0], metrics[1]).replace(metrics[2], metrics[0]),
+                    metrics[0] + raw.replace(metrics[0], b""),
+                    raw.replace(metrics[0], metrics[0].replace(b"HMALLOC", b"prefix HMALLOC")),
+                    raw.replace(metrics[0], metrics[0].replace(b"free_before=3000", b"free_before=03000")),
+                    raw.replace(metrics[0], metrics[0].replace(b"case=allocation_isolation", b"case=unknown")),
+                    raw + metrics[0].rstrip(b"\n"),
+                    raw.replace(metrics[0], metrics[0].replace(b"case=", b"case=\xff"))):
+            result = harness.validate(bad, positive_trace(), EXECUTION, SYMBOLS)
+            self.assertFalse(result["passed"])
+            self.assertFalse(result["checks"]["allocation_inventory_and_metrics"])
+
+    def test_allocation_metrics_exact_accounting(self):
+        raw = positive_console()
+        for before, after in ((b"free_after=3000", b"free_after=2999"),
+                              (b"free_before=3000", b"free_before=0"),
+                              (b"free_before=3000 free_after=3000", b"free_before=4097 free_after=4097"),
+                              (b"allocations=1024", b"allocations=1023"),
+                              (b"peak=24 drops=0", b"peak=23 drops=0"),
+                              (b"peak=24 drops=0", b"peak=24 drops=1"),
+                              (b"allocations=6000", b"allocations=3000"),
+                              (b"peak=3000", b"peak=2999"),
+                              (b"drops=16", b"drops=15"),
+                              (b"allocations=1280", b"allocations=1279"),
+                              (b"peak=12", b"peak=0"),
+                              (b"peak=12", b"peak=3001"),
+                              (b"drops=512", b"drops=511"),
+                              (b"case=allocation_reentry free_before=3000 free_after=3000",
+                               b"case=allocation_reentry free_before=2999 free_after=2999")):
+            result = harness.validate(raw.replace(before, after), positive_trace(), EXECUTION, SYMBOLS)
+            self.assertFalse(result["passed"])
+            self.assertFalse(result["checks"]["allocation_inventory_and_metrics"])
+
+    def test_allocation_preemption_required_on_both_cpus(self):
+        raw = positive_console()
+        for generation in (9, 11):
+            line = next(line for line in raw.splitlines() if line.startswith(
+                f"HMSCHED SESSION generation={generation} ".encode()))
+            for field in (b"irq0=1", b"irq1=1"):
+                changed = line.replace(field, field[:-1] + b"0")
+                result = harness.validate(raw.replace(line, changed), positive_trace(), EXECUTION, SYMBOLS)
+                self.assertFalse(result["checks"]["exact_sessions_and_elf_addresses"])
 
     def test_runtime_addresses_match_elf_symbols(self):
         raw = positive_console()
@@ -163,7 +226,7 @@ class ReportTests(unittest.TestCase):
         raw = positive_console()
         split = raw.index(b"HMTEST BEGIN")
         for bad in (raw[:split], raw[split:] + raw[:split], raw.replace(b"HMTEST PASS wx", b"HMTEST FAIL wx"),
-                    raw + b"HMSCHED END 8", raw.replace(b"HMSCHED PASS mutex", b"HMSCHED PASS mut\xffex")):
+                    raw + b"HMSCHED END 11", raw.replace(b"HMSCHED PASS mutex", b"HMSCHED PASS mut\xffex")):
             self.assertFalse(harness.validate(bad, positive_trace(), EXECUTION, SYMBOLS)["passed"])
         for change in ({"returncode": 1}, {"timed_out": True}, {"launch_error": "QEMU missing"}):
             self.assertFalse(harness.validate(raw, positive_trace(), {**EXECUTION, **change}, SYMBOLS)["passed"])
@@ -192,6 +255,15 @@ class NegativeTests(unittest.TestCase):
             self.assertFalse(harness.validate(bad, HVC0, result, SYMBOLS, "all-blocked")["passed"])
         for change in ({"returncode": 0}, {"timed_out": False}, {"launch_error": "bad launch"}):
             self.assertFalse(harness.validate(raw, HVC0, {**result, **change}, SYMBOLS, "all-blocked")["passed"])
+
+    def test_negative_profile_rejects_any_allocation_output(self):
+        raw = b"HMSCHED EXPECT ALL-BLOCKED\nHMSCHED BLOCKED cpu0=1 cpu1=1\n"
+        execution = {**EXECUTION, "returncode": -9, "timed_out": True}
+        for extra in (b"HMALLOC case=allocation_isolation free_before=3000 free_after=3000 allocations=1024 peak=24 drops=0\n",
+                      b"garbage HMALLOC\n"):
+            result = harness.validate(raw + extra, HVC0, execution, SYMBOLS, "all-blocked")
+            self.assertFalse(result["passed"])
+            self.assertFalse(result["checks"]["no_allocation_report"])
 
     def test_peer_overflow_exit_is_specific(self):
         raw = b"HMSCHED EXPECT PEER-OVERFLOW\n"

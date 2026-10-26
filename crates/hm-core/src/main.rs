@@ -5,6 +5,21 @@
 use core::panic::PanicInfo;
 use hm_kernel::Platform;
 
+#[cfg(all(target_arch = "aarch64", feature = "smp-tests"))]
+#[cfg_attr(
+    any(
+        feature = "nested-fault-test",
+        feature = "unhandled-fault-test",
+        feature = "thread-overflow-test",
+        feature = "preemption-overflow-test",
+        feature = "wait-all-blocked-test",
+        feature = "smp-no-peer-timer-test",
+        feature = "smp-peer-overflow-test",
+        feature = "smp-all-blocked-test"
+    ),
+    allow(dead_code)
+)]
+mod allocation_checks;
 #[cfg(target_arch = "aarch64")]
 mod cpu_local;
 mod mutex;

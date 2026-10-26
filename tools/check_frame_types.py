@@ -26,8 +26,16 @@ PROBES = {
     "mutable_alias": ("pub fn client(mut f: Frame<'_>) { let a = f.bytes_mut(); let b = f.bytes_mut(); a[0] = b[0]; }", "E0499"),
     "forge_frame": ("pub fn client(p: &Pool) { let _ = Frame { pool: p, index: 0 }; }", "E0451"),
     "private_constructor": ("pub fn client(p: hm_kernel::frame_plan::Plan) { let _ = Pool::from_boot(p); }", "E0624"),
-    "frame_send": ("fn send<T: Send>() {} pub fn client() { send::<Frame<'static>>(); }", "E0277"),
-    "pool_sync": ("fn sync<T: Sync>() {} pub fn client() { sync::<Pool>(); }", "E0277"),
+    "frame_send": ("fn send<T: Send>() {} pub fn client() { send::<Frame<'static>>(); }", None),
+    "pool_sync": ("fn sync<T: Sync>() {} pub fn client() { sync::<Pool>(); }", None),
+    "pool_send": ("fn send<T: Send>() {} pub fn client() { send::<Pool>(); }", None),
+    "frame_sync": ("fn sync<T: Sync>() {} pub fn client() { sync::<Frame<'static>>(); }", None),
+    "block_send_sync": ("fn shared<T: Send + Sync>() {} pub fn client() { shared::<Block<'static>>(); }", None),
+    "box_cell_send": ("fn send<T: Send>() {} pub fn client() { send::<KernelBox<'static,core::cell::Cell<u64>>>(); }", None),
+    "box_cell_sync": ("fn sync<T: Sync>() {} pub fn client() { sync::<KernelBox<'static,core::cell::Cell<u64>>>(); }", "E0277"),
+    "box_borrowed_cell_send": ("fn send<T: Send>() {} pub fn client() { send::<KernelBox<'static,&'static core::cell::Cell<u64>>>(); }", "E0277"),
+    "box_raw_pointer_send": ("fn send<T: Send>() {} pub fn client() { send::<KernelBox<'static,*mut u64>>(); }", "E0277"),
+    "private_metadata_guard": ("pub fn client(_: hm_frames::frames::MetadataGuard<'_>) {}", "E0603"),
 
     "valid_heap": ("pub fn client(p: &Pool) { let mut b = p.allocate_heap(8193,8192).unwrap(); b.bytes_mut()[8192]=7; let mut v=p.box_value(17u64).unwrap(); *v+=1; }", None),
     "block_clone": ("pub fn client(b: &Block<'_>) { let _ = <Block<'_> as Clone>::clone(b); }", "E0277"),
@@ -39,8 +47,8 @@ PROBES = {
     "private_backing_bytes": ("pub fn client(mut b: KernelBox<'_,u64>) { b._block.bytes_mut()[0]=1; }", "E0616"),
     "forge_box": ("pub fn client(b: Block<'_>) { let _=KernelBox { _block:b, value:core::ptr::null_mut::<u64>(), owns:core::marker::PhantomData }; }", "E0451"),
     "drop_borrowed_block": ("pub fn client(b: Block<'_>) -> u8 { let r=b.bytes(); drop(b); r[0] }", "E0505"),
-    "box_send": ("fn send<T: Send>() {} pub fn client() { send::<KernelBox<'static,u64>>(); }", "E0277"),
-    "box_sync": ("fn sync<T: Sync>() {} pub fn client() { sync::<KernelBox<'static,u64>>(); }", "E0277"),
+    "box_send": ("fn send<T: Send>() {} pub fn client() { send::<KernelBox<'static,u64>>(); }", None),
+    "box_sync": ("fn sync<T: Sync>() {} pub fn client() { sync::<KernelBox<'static,u64>>(); }", None),
 }
 
 

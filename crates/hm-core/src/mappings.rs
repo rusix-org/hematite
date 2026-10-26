@@ -24,6 +24,7 @@ unsafe extern "C" {
 pub struct Mapper {
     occupied: Cell<[u64; SLOTS]>,
     leak_checked: Cell<bool>,
+    _local: core::marker::PhantomData<*mut ()>,
 }
 
 pub struct MappedPage<'mapper, 'pool> {
@@ -48,6 +49,7 @@ impl Mapper {
         Ok(Self {
             occupied: Cell::new([0; SLOTS]),
             leak_checked: Cell::new(false),
+            _local: core::marker::PhantomData,
         })
     }
 

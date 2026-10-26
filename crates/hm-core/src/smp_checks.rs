@@ -45,7 +45,7 @@ impl Drop for Witness {
     }
 }
 
-fn record(context: &dyn ThreadContext, input: u64) -> bool {
+pub(super) fn record(context: &dyn ThreadContext, input: u64) -> bool {
     let Ok(slot) = usize::try_from(input) else {
         return false;
     };
@@ -76,12 +76,36 @@ fn execute(
     entry1: ThreadEntry,
     n1: usize,
 ) -> Option<SmpReport> {
+    execute_inner(runner, None, entry0, n0, entry1, n1)
+}
+pub(super) fn execute_with_pool(
+    runner: &mut Runner,
+    pool: &super::frames::Pool,
+    entry0: ThreadEntry,
+    n0: usize,
+    entry1: ThreadEntry,
+    n1: usize,
+) -> Option<SmpReport> {
+    execute_inner(runner, Some(pool), entry0, n0, entry1, n1)
+}
+fn execute_inner(
+    runner: &mut Runner,
+    pool: Option<&super::frames::Pool>,
+    entry0: ThreadEntry,
+    n0: usize,
+    entry1: ThreadEntry,
+    n1: usize,
+) -> Option<SmpReport> {
     for stack in &STACKS {
         stack.store(0, Ordering::Relaxed);
     }
     let left = jobs(entry0, 0);
     let right = jobs(entry1, 1);
-    let report = runner.run_smp(left.get(..n0)?, right.get(..n1)?).ok()?;
+    let report = match pool {
+        Some(pool) => runner.run_smp_with_pool(pool, left.get(..n0)?, right.get(..n1)?),
+        None => runner.run_smp(left.get(..n0)?, right.get(..n1)?),
+    }
+    .ok()?;
     if report.cpus != [0, 1] || !report.off || report.peer_checks != 255 {
         return None;
     }
@@ -400,7 +424,7 @@ fn limits_reuse(runner: &mut Runner) -> Option<SmpReport> {
 }
 
 type Case = fn(&mut Runner) -> Option<SmpReport>;
-pub(super) fn run(runner: &mut Runner, output: &mut dyn Write) -> bool {
+pub(super) fn run(runner: &mut Runner, pool: &super::frames::Pool, output: &mut dyn Write) -> bool {
     if TEST_BUSY
         .compare_exchange(false, true, Ordering::AcqRel, Ordering::Acquire)
         .is_err()
@@ -418,7 +442,7 @@ pub(super) fn run(runner: &mut Runner, output: &mut dyn Write) -> bool {
         ("event_unrelated", event_unrelated),
         ("limits_reuse", limits_reuse),
     ];
-    if output.write_str("HMSCHED BEGIN 8\n").is_err() {
+    if output.write_str("HMSCHED BEGIN 11\n").is_err() {
         return false;
     }
     for (name, test) in cases {
@@ -426,14 +450,37 @@ pub(super) fn run(runner: &mut Runner, output: &mut dyn Write) -> bool {
             let _ = writeln!(output, "HMSCHED FAIL {name}");
             return false;
         };
-        if writeln!(output, "HMSCHED SESSION generation={} cpu0={} cpu1={} completed0={} completed1={} irq0={} irq1={} off=1 checks={} root={} sp={} worker0={} worker1={}",
-            report.generation, report.cpus[0], report.cpus[1], report.reports[0].run.completed,
-            report.reports[1].run.completed, report.irq_counts[0], report.irq_counts[1],
-            report.peer_checks, report.peer_root, report.peer_sp,
-            STACKS[0].load(Ordering::Acquire), STACKS[4].load(Ordering::Acquire)).is_err()
-            || writeln!(output, "HMSCHED PASS {name}").is_err() { return false; }
+        if !report_case(name, &report, output) {
+            return false;
+        }
     }
-    output.write_str("HMSCHED END 8\n").is_ok()
+    type AllocationCase = fn(&mut Runner, &super::frames::Pool) -> Option<SmpReport>;
+    let allocation_cases: [(&str, AllocationCase); 3] = [
+        ("allocation_isolation", super::allocation_checks::isolation),
+        (
+            "allocation_exhaustion",
+            super::allocation_checks::exhaustion,
+        ),
+        ("allocation_reentry", super::allocation_checks::reentry),
+    ];
+    for (name, test) in allocation_cases {
+        let Some(report) = test(runner, pool) else {
+            let _ = writeln!(output, "HMSCHED FAIL {name}");
+            return false;
+        };
+        let [before, after, allocations, peak, drops] = super::allocation_checks::metrics();
+        if writeln!(output, "HMALLOC case={name} free_before={before} free_after={after} allocations={allocations} peak={peak} drops={drops}").is_err()
+            || !report_case(name, &report, output) { return false; }
+    }
+    output.write_str("HMSCHED END 11\n").is_ok()
+}
+fn report_case(name: &str, report: &SmpReport, output: &mut dyn Write) -> bool {
+    writeln!(output, "HMSCHED SESSION generation={} cpu0={} cpu1={} completed0={} completed1={} irq0={} irq1={} off=1 checks={} root={} sp={} worker0={} worker1={}",
+        report.generation, report.cpus[0], report.cpus[1], report.reports[0].run.completed,
+        report.reports[1].run.completed, report.irq_counts[0], report.irq_counts[1],
+        report.peer_checks, report.peer_root, report.peer_sp,
+        STACKS[0].load(Ordering::Acquire), STACKS[4].load(Ordering::Acquire)).is_ok()
+        && writeln!(output, "HMSCHED PASS {name}").is_ok()
 }
 
 #[cfg(feature = "smp-no-peer-timer-test")]

@@ -1,0 +1,5 @@
+[
+  "readelf",
+  "-sW",
+  "target/aarch64/smp-test/aarch64-unknown-none/release/hematite"
+]

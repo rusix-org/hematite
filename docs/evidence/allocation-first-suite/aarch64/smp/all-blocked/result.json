@@ -1,0 +1,128 @@
+{
+  "passed": true,
+  "checks": {
+    "launched": true,
+    "no_foreign_report": true,
+    "strict_serial_records": true,
+    "no_normal_report": true,
+    "no_allocation_report": true,
+    "expected_termination": true,
+    "per_cpu_irq_trace": true,
+    "admitted_without_peer_shutdown": true,
+    "negative_inventory": true,
+    "retained_without_fault_or_exit": true,
+    "no_fatal_serial": true,
+    "artifacts_present_and_bounded": true,
+    "symbols_extracted": true
+  },
+  "errors": [],
+  "observed_records": [
+    "HMSCHED EXPECT ALL-BLOCKED",
+    "HMSCHED BLOCKED cpu0=1 cpu1=1"
+  ],
+  "trace": {
+    "passed": true,
+    "errors": [],
+    "counts": [
+      {
+        "irq": 0,
+        "vector": 0,
+        "ack": 0,
+        "eoi": 0
+      },
+      {
+        "irq": 0,
+        "vector": 0,
+        "ack": 0,
+        "eoi": 0
+      }
+    ],
+    "events": [
+      {
+        "kind": 11,
+        "name": "Hypervisor Call",
+        "cpu": 0
+      },
+      {
+        "kind": 11,
+        "name": "Hypervisor Call",
+        "cpu": 0
+      },
+      {
+        "kind": 11,
+        "name": "Hypervisor Call",
+        "cpu": 0
+      },
+      {
+        "kind": 11,
+        "name": "Hypervisor Call",
+        "cpu": 0
+      },
+      {
+        "kind": 11,
+        "name": "Hypervisor Call",
+        "cpu": 0
+      },
+      {
+        "kind": 11,
+        "name": "Hypervisor Call",
+        "cpu": 0
+      }
+    ],
+    "unfinished_cpu_phases": [
+      null,
+      null
+    ],
+    "expected_interrupts": null
+  },
+  "hvc_counts": [
+    6,
+    0
+  ],
+  "peer_fault": null,
+  "scope": "bounded negative SMP ownership profile",
+  "started_utc": "2026-10-26T16:22:44.503876+00:00",
+  "timeout_seconds": 2,
+  "returncode": -9,
+  "timed_out": true,
+  "launch_error": null,
+  "elapsed_seconds": 2.005317887989804,
+  "artifacts": {
+    "serial": {
+      "exists": true,
+      "bytes": 235,
+      "sha256": "ba4ae312eb59df38a653a460dbee749f29049e14a419df27ed23e30ec4389c8d",
+      "within_size_limit": true
+    },
+    "exceptions": {
+      "exists": true,
+      "bytes": 1347,
+      "sha256": "bbcf71063732f8f1475dc185b15b081079cd11999c8f7fc1437effd6f52abfda",
+      "within_size_limit": true
+    }
+  },
+  "symbols": {
+    "arm_vectors": 1075841024,
+    "arm_secondary_vectors": 1075853312,
+    "arm_preempt_start": 1075848056,
+    "arm_secondary_root": 1075900416,
+    "__secondary_stack_guard": 1076334592,
+    "__secondary_stack_top": 1076404224,
+    "__thread0_guard": 1076056064,
+    "__thread0_top": 1076125696,
+    "__thread1_guard": 1076125696,
+    "__thread1_top": 1076195328,
+    "__thread2_guard": 1076195328,
+    "__thread2_top": 1076264960,
+    "__thread3_guard": 1076264960,
+    "__thread3_top": 1076334592,
+    "__secondary_thread0_guard": 1076424704,
+    "__secondary_thread0_top": 1076494336,
+    "__secondary_thread1_guard": 1076494336,
+    "__secondary_thread1_top": 1076563968,
+    "__secondary_thread2_guard": 1076563968,
+    "__secondary_thread2_top": 1076633600,
+    "__secondary_thread3_guard": 1076633600,
+    "__secondary_thread3_top": 1076703232
+  }
+}

@@ -60,6 +60,7 @@ PROBES = {
     "mapper_clone": ('''pub fn client(m: &Mapper) { let _ = <Mapper as Clone>::clone(m); }''', "E0277"),
     "mapping_send": ('''fn send<T: Send>() {} pub fn client() { send::<MappedPage<'static, 'static>>(); }''', "E0277"),
     "mapping_sync": ('''fn sync<T: Sync>() {} pub fn client() { sync::<MappedPage<'static, 'static>>(); }''', "E0277"),
+    "mapper_send": ('''fn send<T: Send>() {} pub fn client() { send::<Mapper>(); }''', "E0277"),
     "mapper_sync": ('''fn sync<T: Sync>() {} pub fn client() { sync::<Mapper>(); }''', "E0277"),
     "private_backing": ('''pub fn client(p: MappedPage<'_, '_>) { let _ = p.frame; }''', "E0616"),
     "forge_mapping": ('''pub fn client(m: &Mapper, f: Frame<'_>) {

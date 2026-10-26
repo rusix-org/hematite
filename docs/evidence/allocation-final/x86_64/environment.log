@@ -1,0 +1,5 @@
+rustc 1.99.0 (b940084d7 2026-09-28)
+cargo 1.99.0 (5f94df478 2026-08-27)
+QEMU emulator version 7.2.22 (Debian 1:7.2+dfsg-7+deb12u18+b3)
+Copyright (c) 2003-2022 Fabrice Bellard and the QEMU Project developers
+5c4d986a8829abc3ccc45302bb0e9e93e9f78435a6ed4d13a48f4e2822f91f74  /usr/share/qemu/bios-microvm.bin

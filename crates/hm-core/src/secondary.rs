@@ -1,8 +1,9 @@
 //! Fixed secondary lifecycle diagnostic; ownership and admission: design 0018.
+use super::frames::Pool;
 use core::arch::{asm, global_asm};
 use core::cell::UnsafeCell;
 use core::marker::PhantomData;
-use core::sync::atomic::{AtomicU64, Ordering};
+use core::sync::atomic::{AtomicPtr, AtomicU64, Ordering};
 use hm_kernel::cpu_topology::{Conduit, Topology};
 use hm_kernel::thread_api::{MAX_THREADS, PreemptReport, ThreadContext, ThreadJob};
 
@@ -75,6 +76,9 @@ static MAILBOX: Mailbox = Mailbox {
     work: UnsafeCell::new(Work::EMPTY),
 };
 static NEXT_GENERATION: AtomicU64 = AtomicU64::new(1);
+// Only execute publishes under BUSY; its borrowed pool outlives the complete
+// Returned/OFF join. A plain SMP or lifecycle session publishes no pool.
+static ACTIVE_POOL: AtomicPtr<Pool> = AtomicPtr::new(core::ptr::null_mut());
 const _: () = {
     assert!(core::mem::offset_of!(Mailbox, phase) == 0);
     assert!(core::mem::offset_of!(Mailbox, generation) == 8);
@@ -182,11 +186,32 @@ impl Runner {
     }
 
     pub(super) fn run(&mut self) -> Result<Session, Error> {
-        self.execute(Work::EMPTY).map(|(session, _, _)| session)
+        self.execute(Work::EMPTY, None)
+            .map(|(session, _, _)| session)
     }
     #[cfg(feature = "smp-tests")]
     pub(super) fn run_smp(
         &mut self,
+        cpu0_jobs: &[ThreadJob],
+        cpu1_jobs: &[ThreadJob],
+    ) -> Result<SmpReport, Error> {
+        self.run_smp_inner(None, cpu0_jobs, cpu1_jobs)
+    }
+    /// Lend this pool only to workers of the joined session. No scope guard or
+    /// borrowed callback can escape; execute cannot return while a peer is live.
+    #[cfg(feature = "smp-tests")]
+    pub(super) fn run_smp_with_pool(
+        &mut self,
+        pool: &Pool,
+        cpu0_jobs: &[ThreadJob],
+        cpu1_jobs: &[ThreadJob],
+    ) -> Result<SmpReport, Error> {
+        self.run_smp_inner(Some(pool), cpu0_jobs, cpu1_jobs)
+    }
+    #[cfg(feature = "smp-tests")]
+    fn run_smp_inner(
+        &mut self,
+        pool: Option<&Pool>,
         cpu0_jobs: &[ThreadJob],
         cpu1_jobs: &[ThreadJob],
     ) -> Result<SmpReport, Error> {
@@ -202,7 +227,7 @@ impl Runner {
         for (destination, source) in work.jobs[1].iter_mut().zip(cpu1_jobs) {
             *destination = *source;
         }
-        let (session, reports, irq_counts) = self.execute(work)?;
+        let (session, reports, irq_counts) = self.execute(work, pool)?;
         Ok(SmpReport {
             generation: session.generation,
             cpus: [0, session.cpu as usize],
@@ -214,14 +239,21 @@ impl Runner {
             peer_sp: session.sp,
         })
     }
-    fn execute(&mut self, work: Work) -> Result<(Session, [PreemptReport; 2], [u64; 2]), Error> {
+    fn execute(
+        &mut self,
+        work: Work,
+        pool: Option<&Pool>,
+    ) -> Result<(Session, [PreemptReport; 2], [u64; 2]), Error> {
         if !authority() {
             return Err(Error::Authority);
         }
         super::threads::BUSY
             .compare_exchange(false, true, Ordering::AcqRel, Ordering::Acquire)
             .map_err(|_| Error::Busy)?;
-        if hvc(AFFINITY_INFO, 1, 0, 0) != 1 || MAILBOX.phase.load(Ordering::Acquire) != IDLE {
+        if hvc(AFFINITY_INFO, 1, 0, 0) != 1
+            || MAILBOX.phase.load(Ordering::Acquire) != IDLE
+            || !ACTIVE_POOL.load(Ordering::Acquire).is_null()
+        {
             fail();
         }
         let generation = NEXT_GENERATION.load(Ordering::Relaxed);
@@ -243,6 +275,13 @@ impl Runner {
                 super::preempt::reset_smp_observations();
             }
         }
+        // All recoverable admission failures precede publication. The original
+        // &Pool borrow remains valid through the join; only shared access is
+        // lent to admitted workers, and Pool's synchronized metadata is Sync.
+        let pointer = pool.map_or(core::ptr::null_mut(), |pool| {
+            core::ptr::from_ref(pool).cast_mut()
+        });
+        ACTIVE_POOL.store(pointer, Ordering::Release);
         // SAFETY: BUSY and PSCI OFF prove there is no peer reader/writer or live
         // Rust frame. Prepare only permanent payload and private CPU1 record.
         unsafe {
@@ -296,6 +335,9 @@ impl Runner {
             super::cpu_local::restore_secondary();
             report
         };
+        // No callback or nested with_pool invocation survives local completion
+        // and peer Returned/OFF. Remove publication before ending the borrow.
+        ACTIVE_POOL.store(core::ptr::null_mut(), Ordering::Release);
         MAILBOX.phase.store(IDLE, Ordering::Release);
         super::threads::BUSY.store(false, Ordering::Release);
         Ok((
@@ -311,6 +353,23 @@ impl Runner {
             [local_irqs, report.irq_count],
         ))
     }
+}
+
+/// Grant a fresh shared borrow only during an admitted worker invocation.
+/// R is independent of that fresh lifetime, so owners/references cannot escape.
+#[cfg(feature = "smp-tests")]
+pub fn with_pool<R>(f: impl for<'a> FnOnce(&'a Pool) -> R) -> Option<R> {
+    super::preempt::worker_observation()?;
+    let pointer = ACTIVE_POOL.load(Ordering::Acquire);
+    if pointer.is_null() {
+        return None;
+    }
+    // SAFETY: The active worker cannot complete while this nested invocation
+    // is live. execute retains the original pool borrow through both callback
+    // sets and Returned/OFF, and only then clears publication. Pool is Sync;
+    // the higher-ranked closure cannot return or retain this fresh borrow.
+    let pool = unsafe { &*pointer };
+    Some(f(pool))
 }
 
 pub(super) fn admitted(topology: &Topology) -> bool {

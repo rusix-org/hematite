@@ -1,0 +1,9 @@
+{
+  "kernel": "/workspace/target/aarch64/secondary-test/aarch64-unknown-none/release/hematite",
+  "sha256": "462e6fe444c2da45c08ee428dda5c0f44ddfac7680b870ffd83cca0a06ea1d5c",
+  "arch": "aarch64",
+  "accel": "tcg,thread=multi",
+  "cpus": 1,
+  "ram_mb": 128,
+  "negative": "topology"
+}

@@ -16,6 +16,34 @@ use hm_threads::Runner;
 use hm_kernel::thread_api::{ThreadContext, ThreadJob, RunReport, ThreadError};
 '''
 PROBES = {
+    "valid_scoped_pool": ('''pub fn client(context: &mut dyn ThreadContext) -> Option<bool> {
+        use hm_kernel::frame_api::OwnedFrame;
+        hm_threads::with_pool(|pool| {
+            let Ok(mut frame) = pool.allocate() else { return false; };
+            frame.bytes_mut()[0] = 17;
+            context.yield_now();
+            let okay = frame.bytes()[0] == 17;
+            drop(frame);
+            okay
+        })
+    }''', None),
+    "scoped_pool_escape": ('''pub fn client() -> Option<&'static hm_threads::Pool> {
+        hm_threads::with_pool(|pool| pool)
+    }''', "scope_lifetime"),
+    "scoped_frame_escape": ('''pub fn client() -> Option<hm_threads::Frame<'static>> {
+        hm_threads::with_pool(|pool| pool.allocate().unwrap())
+    }''', "scope_lifetime"),
+    "scoped_bytes_escape": ('''pub fn client() -> Option<&'static [u8;4096]> {
+        use hm_kernel::frame_api::OwnedFrame;
+        hm_threads::with_pool(|pool| {
+            let frame = pool.allocate().unwrap(); frame.bytes()
+        })
+    }''', "scope_bytes"),
+    "scoped_owner_store": ('''pub fn client() {
+        let mut escaped = None;
+        hm_threads::with_pool(|pool| { escaped = Some(pool.allocate().unwrap()); });
+        drop(escaped);
+    }''', "E0521"),
     "secondary_runner_send": ('''fn send<T: Send>() {} pub fn client() {
         send::<hm_threads::SecondaryRunner>();
     }''', "E0277"),
@@ -91,6 +119,35 @@ PROBES = {
 }
 
 
+
+def rejected_scoped_lifetime(diagnostics, *, bytes_escape=False):
+    """Accept only the precise lifetime diagnostic (and local-owner E0515).
+
+    Rust emits some closure lifetime failures without an error code. Unrelated
+    uncoded errors must still fail instead of counting as scope enforcement.
+    """
+    lifetime = 0
+    local_owner = 0
+    for line in diagnostics.splitlines():
+        try:
+            item = json.loads(line)
+        except json.JSONDecodeError:
+            return False
+        if item.get("level") != "error":
+            continue
+        code = item.get("code")
+        message = item.get("message", "")
+        if code is not None:
+            if not bytes_escape or code.get("code") != "E0515":
+                return False
+            local_owner += 1
+        elif message == "lifetime may not live long enough":
+            lifetime += 1
+        elif not message.startswith("aborting due to "):
+            return False
+    return local_owner > 0 if bytes_escape else lifetime > 0
+
+
 def check_stack_probes(output, target, root):
     fixture = root / "tools/fixtures/thread-large-frame.rs"
     ir_path, asm_path = output / "large-frame.ll", output / "large-frame.s"
@@ -134,11 +191,14 @@ def main():
     source = root / "crates/hm-core/src/threads.rs"
     wrapper = output / "hm_threads.rs"
     wrapper.write_text('#![no_std]\n#![deny(unsafe_op_in_unsafe_fn)]\n'
+                       f'#[path={json.dumps(str(source.with_name("frames.rs")))}] mod frames;\n'
                        f'#[path={json.dumps(str(source.with_name("cpu_local.rs")))}] mod cpu_local;\n'
                        f'#[path={json.dumps(str(source.with_name("preempt.rs")))}] mod preempt;\n'
                        f'#[path={json.dumps(str(source.with_name("secondary.rs")))}] mod secondary;\n'
                        f'#[path={json.dumps(str(source))}] pub mod threads;\n'
-                       'pub use threads::Runner;\npub use secondary::Runner as SecondaryRunner;\n')
+                       'pub use threads::Runner;\npub use secondary::Runner as SecondaryRunner;\n'
+                       'pub use frames::{Pool, Frame};\n'
+                       'pub use secondary::with_pool;\n')
     base = ["rustc", "--edition=2024", "--target", args.target, "-C", "panic=abort",
             "--cfg", 'feature="secondary-tests"',
             "--cfg", 'feature="smp-tests"',
@@ -154,8 +214,12 @@ def main():
             command = base + ["--crate-type=lib", "--emit=metadata", "--error-format=json", "--extern",
                               f"hm_threads={thread_lib}", str(client), "-o", str(output / f"{name}.rmeta")]
             code, diagnostics = run(command, output, name)
-            passed = code == 0 if rejection is None else (
-                code is not None and code != 0 and rejected_only_for(diagnostics, rejection))
+            if rejection in ("scope_lifetime", "scope_bytes"):
+                passed = (code is not None and code != 0 and rejected_scoped_lifetime(
+                    diagnostics, bytes_escape=rejection == "scope_bytes"))
+            else:
+                passed = code == 0 if rejection is None else (
+                    code is not None and code != 0 and rejected_only_for(diagnostics, rejection))
             results[name] = {"passed": passed, "returncode": code, "expected_rejection": rejection}
     stack_probes = check_stack_probes(output, args.target, root)
     passed = (len(results) == len(PROBES) + 1

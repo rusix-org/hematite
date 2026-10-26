@@ -1,0 +1,71 @@
+hematite: ARM64 Rust kernel entered at EL1
+Boot RAM bytes: 0x0000000008000000 (discovered RAM)
+Frame pool pages: 0x0000000000000cf4 (4 KiB each; boot reservations excluded)
+HMSCHED BEGIN 11
+HMSCHED SESSION generation=1 cpu0=0 cpu1=1 completed0=2 completed1=2 irq0=19 irq1=19 off=1 checks=255 root=1076133888 sp=1076636528 worker0=1076359024 worker1=1076727664
+HMSCHED PASS progress_contexts
+HMSCHED SESSION generation=2 cpu0=0 cpu1=1 completed0=4 completed1=4 irq0=1 irq1=0 off=1 checks=255 root=1076133888 sp=1076636528 worker0=1076358992 worker1=1076727632
+HMSCHED PASS mutex
+HMSCHED SESSION generation=3 cpu0=0 cpu1=1 completed0=4 completed1=4 irq0=19 irq1=19 off=1 checks=255 root=1076133888 sp=1076636528 worker0=1076359024 worker1=1076727664
+HMSCHED PASS mixed_truncation
+HMSCHED SESSION generation=4 cpu0=0 cpu1=1 completed0=1 completed1=1 irq0=0 irq1=0 off=1 checks=255 root=1076133888 sp=1076636528 worker0=1076359024 worker1=1076727664
+HMSCHED PASS event_before
+HMSCHED SESSION generation=5 cpu0=0 cpu1=1 completed0=1 completed1=1 irq0=0 irq1=0 off=1 checks=255 root=1076133888 sp=1076636528 worker0=1076359024 worker1=1076727664
+HMSCHED PASS event_during
+HMSCHED SESSION generation=6 cpu0=0 cpu1=1 completed0=1 completed1=4 irq0=0 irq1=0 off=1 checks=255 root=1076133888 sp=1076636528 worker0=1076359024 worker1=1076727664
+HMSCHED PASS event_after_broadcast
+HMSCHED SESSION generation=7 cpu0=0 cpu1=1 completed0=1 completed1=2 irq0=0 irq1=0 off=1 checks=255 root=1076133888 sp=1076636528 worker0=1076359024 worker1=1076727664
+HMSCHED PASS event_unrelated
+HMSCHED SESSION generation=8 cpu0=0 cpu1=1 completed0=0 completed1=0 irq0=0 irq1=0 off=1 checks=255 root=1076133888 sp=1076636528 worker0=0 worker1=0
+HMSCHED PASS limits_reuse
+HMALLOC case=allocation_isolation free_before=3314 free_after=3314 allocations=1024 peak=30 drops=0
+HMSCHED SESSION generation=9 cpu0=0 cpu1=1 completed0=4 completed1=4 irq0=19 irq1=19 off=1 checks=255 root=1076133888 sp=1076636528 worker0=1076358832 worker1=1076727472
+HMSCHED PASS allocation_isolation
+HMALLOC case=allocation_exhaustion free_before=3314 free_after=3314 allocations=6628 peak=3314 drops=16
+HMSCHED SESSION generation=10 cpu0=0 cpu1=1 completed0=4 completed1=4 irq0=110 irq1=108 off=1 checks=255 root=1076133888 sp=1076636528 worker0=1076359024 worker1=1076727664
+HMSCHED PASS allocation_exhaustion
+HMALLOC case=allocation_reentry free_before=3314 free_after=3314 allocations=1280 peak=2 drops=512
+HMSCHED SESSION generation=11 cpu0=0 cpu1=1 completed0=4 completed1=4 irq0=20 irq1=19 off=1 checks=255 root=1076133888 sp=1076636528 worker0=1076358784 worker1=1076727424
+HMSCHED PASS allocation_reentry
+HMSCHED END 11
+HMTEST BEGIN 39
+HMTEST PASS write_protect
+HMTEST PASS nx
+HMTEST PASS user_execute_protect
+HMTEST PASS user_access_protect
+HMTEST PASS wx
+HMTEST PASS stack_guard
+HMTEST PASS null_guard
+HMTEST PASS checked_range
+HMTEST PASS monitor_bounds
+HMTEST PASS cap_authority
+HMTEST PASS cap_limits
+HMTEST PASS cap_lifetime
+HMTEST PASS cap_generation
+HMTEST PASS boot_memory_valid
+HMTEST PASS boot_memory_malformed
+HMTEST PASS cpu_topology_valid
+HMTEST PASS cpu_topology_malformed
+HMTEST PASS cpu_topology_live
+HMTEST PASS frame_ranges
+HMTEST PASS frame_boundaries
+HMTEST PASS frame_contract
+HMTEST PASS heap_blocks
+HMTEST PASS heap_values
+HMTEST PASS event_contract
+HMTEST PASS mutex_contract
+HMTEST PASS mutex_lifetime
+HMTEST PASS mutex_workers
+HMTEST PASS thread_contract
+HMTEST PASS thread_limits
+HMTEST PASS thread_core
+HMTEST PASS timer_contract
+HMTEST PASS fault_contract
+HMTEST PASS mapping_contract
+HMTEST PASS mapping_limits
+HMTEST PASS mapping_hardware
+HMTEST PASS cpu_local_state
+HMTEST PASS gic_ownership
+HMTEST PASS secondary_memory
+HMTEST PASS cap_orderings
+HMTEST END 39

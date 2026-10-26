@@ -1,0 +1,15 @@
+{
+  "passed": true,
+  "scope": "QEMU CPU0 physical timer IRQ/EOI trace",
+  "expected_interrupts": 32,
+  "counts": {
+    "irq_entries": 32,
+    "irq_vectors": 32,
+    "acknowledgments": 32,
+    "eois": 32,
+    "irq_returns": 32
+  },
+  "errors": [],
+  "trace_sha256": "a76c2059b2b66853b066ede0ad9bf14bc5ff0fa4d012dd7236d02b369f3e7f5c",
+  "trace": "target/evidence/20261026T162141-268389546-aarch64/profiles/memory-64m/exceptions.log"
+}

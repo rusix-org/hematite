@@ -1,0 +1,113 @@
+hematite: ARM64 Rust kernel entered at EL1
+Boot RAM bytes: 0x0000000008000000 (discovered RAM)
+Frame pool pages: 0x0000000000000cff (4 KiB each; boot reservations excluded)
+Hematite bootstrap monitor (local working name)
+Commands: help, status, test. This is not a Linux shell.
+hm> help
+help   - show commands
+status - inspect boot protections
+test   - run bootstrap tests
+hm> status
+write protection: OK
+NX: OK
+user execution protection: OK
+user access protection: OK
+W^X mappings: OK
+stack guard: OK
+null guard: OK
+Bootstrap only: one CPU; no userspace, storage, or networking.
+hm> test
+HMTEST BEGIN 39
+HMTEST PASS write_protect
+HMTEST PASS nx
+HMTEST PASS user_execute_protect
+HMTEST PASS user_access_protect
+HMTEST PASS wx
+HMTEST PASS stack_guard
+HMTEST PASS null_guard
+HMTEST PASS checked_range
+HMTEST PASS monitor_bounds
+HMTEST PASS cap_authority
+HMTEST PASS cap_limits
+HMTEST PASS cap_lifetime
+HMTEST PASS cap_generation
+HMTEST PASS boot_memory_valid
+HMTEST PASS boot_memory_malformed
+HMTEST PASS cpu_topology_valid
+HMTEST PASS cpu_topology_malformed
+HMTEST PASS cpu_topology_live
+HMTEST PASS frame_ranges
+HMTEST PASS frame_boundaries
+HMTEST PASS frame_contract
+HMTEST PASS heap_blocks
+HMTEST PASS heap_values
+HMTEST PASS event_contract
+HMTEST PASS mutex_contract
+HMTEST PASS mutex_lifetime
+HMTEST PASS mutex_workers
+HMTEST PASS thread_contract
+HMTEST PASS thread_limits
+HMTEST PASS thread_core
+HMTEST PASS timer_contract
+HMTEST PASS fault_contract
+HMTEST PASS mapping_contract
+HMTEST PASS mapping_limits
+HMTEST PASS mapping_hardware
+HMTEST PASS cpu_local_state
+HMTEST PASS gic_ownership
+HMTEST PASS secondary_memory
+HMTEST PASS cap_orderings
+HMTEST END 39
+Bootstrap tests passed.
+hm> xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+Rejected: use at most 64 printable ASCII bytes.
+hm> unknown
+Unknown command; type help.
+hm> help
+help   - show commands
+status - inspect boot protections
+test   - run bootstrap tests
+hm> test
+HMTEST BEGIN 39
+HMTEST PASS write_protect
+HMTEST PASS nx
+HMTEST PASS user_execute_protect
+HMTEST PASS user_access_protect
+HMTEST PASS wx
+HMTEST PASS stack_guard
+HMTEST PASS null_guard
+HMTEST PASS checked_range
+HMTEST PASS monitor_bounds
+HMTEST PASS cap_authority
+HMTEST PASS cap_limits
+HMTEST PASS cap_lifetime
+HMTEST PASS cap_generation
+HMTEST PASS boot_memory_valid
+HMTEST PASS boot_memory_malformed
+HMTEST PASS cpu_topology_valid
+HMTEST PASS cpu_topology_malformed
+HMTEST PASS cpu_topology_live
+HMTEST PASS frame_ranges
+HMTEST PASS frame_boundaries
+HMTEST PASS frame_contract
+HMTEST PASS heap_blocks
+HMTEST PASS heap_values
+HMTEST PASS event_contract
+HMTEST PASS mutex_contract
+HMTEST PASS mutex_lifetime
+HMTEST PASS mutex_workers
+HMTEST PASS thread_contract
+HMTEST PASS thread_limits
+HMTEST PASS thread_core
+HMTEST PASS timer_contract
+HMTEST PASS fault_contract
+HMTEST PASS mapping_contract
+HMTEST PASS mapping_limits
+HMTEST PASS mapping_hardware
+HMTEST PASS cpu_local_state
+HMTEST PASS gic_ownership
+HMTEST PASS secondary_memory
+HMTEST PASS cap_orderings
+HMTEST END 39
+Bootstrap tests passed.
+hm> qemu-system-aarch64: terminating on signal 15 from pid 911 (python3)

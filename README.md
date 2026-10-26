@@ -40,8 +40,10 @@ on a separate exception stack. Unrecognized faults remain fatal.
 
 ARM kernel code can now request fallible page-backed blocks and typed owners;
 failed typed allocations return the original value. Allocations currently round
-up to whole pages; standard Rust collections and concurrent allocation are
-not integrated yet.
+up to whole pages. The same pool now supports concurrent allocation on both
+ARM CPUs, with zeroing before publication, exact exhaustion/reclamation checks,
+and reentrant destructors. Standard Rust collections and small-object size
+classes are not integrated yet. See [allocator verification](docs/evidence/concurrent-allocation.md).
 
 ARM also supports 64 owned kernel data-page mappings. Each mapping retains its
 frame until unmapping completes translation-cache invalidation. Tests exercise

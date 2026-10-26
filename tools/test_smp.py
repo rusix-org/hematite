@@ -194,12 +194,72 @@ CASES = (
     ("progress_contexts", 2, 2), ("mutex", 4, 4), ("mixed_truncation", 4, 4),
     ("event_before", 1, 1), ("event_during", 1, 1), ("event_after_broadcast", 1, 4),
     ("event_unrelated", 1, 2), ("limits_reuse", 0, 0),
+    ("allocation_isolation", 4, 4), ("allocation_exhaustion", 4, 4),
+    ("allocation_reentry", 4, 4),
 )
 NUMBER = r"(0|[1-9][0-9]{0,19})"
 SESSION = re.compile(
     rf"HMSCHED SESSION generation={NUMBER} cpu0=0 cpu1=1 "
     rf"completed0={NUMBER} completed1={NUMBER} irq0={NUMBER} irq1={NUMBER} "
     rf"off=1 checks=255 root={NUMBER} sp={NUMBER} worker0={NUMBER} worker1={NUMBER}")
+
+
+ALLOCATION_CASES = ("allocation_isolation", "allocation_exhaustion", "allocation_reentry")
+ALLOCATION = re.compile(
+    rf"HMALLOC case=([a-z_]+) free_before={NUMBER} free_after={NUMBER} "
+    rf"allocations={NUMBER} peak={NUMBER} drops={NUMBER}")
+
+
+def allocation_records(console, scheduler_positions):
+    records, positions, errors = [], [], []
+    lines = console.split(b"\n")
+    for index, raw in enumerate(lines):
+        if b"HMALLOC" not in raw:
+            continue
+        positions.append(index)
+        if index == len(lines) - 1:
+            errors.append("Unterminated allocation record")
+        try:
+            match = ALLOCATION.fullmatch(raw.removesuffix(b"\r").decode("ascii"))
+        except UnicodeError:
+            match = None
+        if not match:
+            errors.append("Malformed allocation record")
+            continue
+        name = match[1]
+        before, after, allocations, peak, drops = map(int, match.groups()[1:])
+        records.append({"case": name, "free_before": before, "free_after": after,
+                        "allocations": allocations, "peak": peak, "drops": drops})
+    if len(positions) != 3 or [record["case"] for record in records] != list(ALLOCATION_CASES):
+        errors.append("Allocation inventory must contain exactly three ordered cases")
+    if len(scheduler_positions) != 2 + 2 * len(CASES):
+        errors.append("Cannot associate allocation evidence with complete SMP inventory")
+    elif len(positions) == 3:
+        for name, position in zip(ALLOCATION_CASES, positions):
+            case_index = next(index for index, case in enumerate(CASES) if case[0] == name)
+            # Metrics immediately precede the corresponding session report.
+            if position + 1 != scheduler_positions[case_index * 2 + 1]:
+                errors.append("Allocation record is outside its session position")
+    free_counts = set()
+    for record in records:
+        name, before, after = record["case"], record["free_before"], record["free_after"]
+        allocations, peak, drops = record["allocations"], record["peak"], record["drops"]
+        free_counts.add(before)
+        if not 0 < before == after <= 4096:
+            errors.append("Allocation accounting did not restore initial free capacity")
+        if name == "allocation_isolation":
+            good = allocations == 1024 and 24 <= peak <= before and drops == 0
+        elif name == "allocation_exhaustion":
+            good = allocations == before * 2 and peak == before and drops == 16
+        elif name == "allocation_reentry":
+            good = allocations == 1280 and 1 <= peak <= before and drops == 512
+        else:
+            good = False
+        if not good:
+            errors.append(f"Incorrect allocation metrics for {name}")
+    if len(free_counts) != 1:
+        errors.append("Allocation cases must observe the same retained/leaked capacity")
+    return {"passed": not errors, "records": records, "errors": errors}
 
 
 def serial_records(console):
@@ -222,6 +282,10 @@ def serial_records(console):
                 inside = True
             elif value.startswith("HMSCHED END"):
                 inside = False
+        elif b"HMALLOC" in raw:
+            # Exact inventory, syntax, accounting and position are checked by
+            # allocation_records; negative profiles reject any such line.
+            pass
         elif inside and (raw or index < len(lines) - 1):
             errors.append("Unexpected output inside SMP report")
     return records, positions, errors
@@ -242,7 +306,8 @@ def validate(console, trace, execution, symbols, negative=None):
     }
     if negative is not None:
         checks.update({"strict_serial_records": not errors,
-                       "no_normal_report": b"HMTEST" not in console})
+                       "no_normal_report": b"HMTEST" not in console,
+                       "no_allocation_report": b"HMALLOC" not in console})
         timeout = negative in ("no-peer-timer", "all-blocked")
         checks["expected_termination"] = (execution.get("timed_out") is True and execution.get("returncode") == -9
                                           if timeout else not execution.get("timed_out", True)
@@ -310,13 +375,16 @@ def validate(console, trace, execution, symbols, negative=None):
             for cpu, count, worker in ((0, count0, worker0), (1, count1, worker1)):
                 prefix = "__secondary_thread0" if cpu else "__thread0"
                 good &= worker == 0 if count == 0 else stack_contains(symbols, prefix, worker)
-            if name in ("progress_contexts", "mixed_truncation"):
+            if name in ("progress_contexts", "mixed_truncation",
+                        "allocation_isolation", "allocation_reentry"):
                 good &= irq0 > 0 and irq1 > 0
             elif name == "mutex":
                 good &= irq0 > 0
             elif name == "limits_reuse":
                 good &= irq0 == 0 and irq1 == 0
             admitted &= good
+    allocation = allocation_records(console, positions)
+    checks["allocation_inventory_and_metrics"] = allocation["passed"]
     checks["exact_sessions_and_elf_addresses"] = admitted and checks["secondary_root_symbol"]
     expected = (sum(item["irqs"][0] for item in sessions) + 16,
                 sum(item["irqs"][1] for item in sessions)) if len(sessions) == len(CASES) else None
@@ -339,7 +407,7 @@ def validate(console, trace, execution, symbols, negative=None):
     checks["post_shutdown_baseline"] = post["passed"]
     return {"passed": all(checks.values()), "checks": checks, "errors": errors,
             "observed_records": found, "sessions": sessions, "trace": irq_trace,
-            "post_shutdown": post, "hvc_counts": hvc_counts,
+            "post_shutdown": post, "hvc_counts": hvc_counts, "allocation": allocation,
             "scope": "two-CPU timer-driven callbacks and post-join regression on pinned TCG"}
 
 

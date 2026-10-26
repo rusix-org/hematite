@@ -1,6 +1,6 @@
 # Progress
 
-Current phase: **Phase 1 underway: two-CPU ARM preemptive scheduling verified; concurrent allocation remains open**.
+Current phase: **Phase 1 underway: two-CPU ARM scheduling and concurrent page-backed allocation verified locally**.
 Aaron approved scratch implementation and then changed the primary objective
 from strict Linux parity to native OS design with selective compatibility.
 [ADR 0005](docs/adr/0005-native-first-design.md) records the native direction;
@@ -19,7 +19,7 @@ from strict Linux parity to native OS design with selective compatibility.
 - Serial monitor: `make run` defaults to ARM64; `ARCH=x86_64` selects the
   regression port. Commands `help`, `status`, `test`; Ctrl-C exits.
 - `make test-all`: formatting, Clippy and safety checks for both targets,
-  71 host harness tests, 39 guest tests per architecture, ARM no-PAN rejection,
+  75 host harness tests, 39 guest tests per architecture, ARM no-PAN rejection,
   x86 missing-NX/SMEP/SMAP rejection, and live monitor recovery tests on both.
   ARM discovery matches both 128 MiB and 64 MiB guest configurations.
   Separate ARM images run five scheduling/wait cases at both memory sizes, then
@@ -27,7 +27,7 @@ from strict Linux parity to native OS design with selective compatibility.
   timer delivery, stack-overflow and all-blocked retention profiles also pass.
   Two-CPU lifecycle profiles at both RAM sizes and three admission/fatal profiles
   also pass; successful shutdown is followed by all 39 baseline cases.
-  Eight concurrent scheduling cases pass at both RAM sizes, with three strict
+  Eleven concurrent scheduling/allocation cases pass at both RAM sizes, with three strict
   negative profiles for withheld peer timer, peer overflow and both CPUs blocked.
   All passed locally; CI at `d13b032` covers the preceding thread milestone.
   `make test` tests ARM64 alone by default.
@@ -35,10 +35,10 @@ from strict Linux parity to native OS design with selective compatibility.
   guest by default; lifecycle and SMP tests use two CPUs with TCG thread=multi. ARM also
   tests 64 MiB; no attached disks or networking. Both targets use TCG.
 
-Latest evidence: [secondary lifecycle verification](docs/evidence/arm-secondary-lifecycle.md),
-[source identities](docs/evidence/secondary-lifecycle-final/source-sha256.txt),
-[lifecycle profiles](docs/evidence/secondary-lifecycle-final/aarch64/secondary/result.json),
-and matching ARM/x86 regressions under `docs/evidence/secondary-lifecycle-final/`.
+Latest evidence: [concurrent allocator verification](docs/evidence/concurrent-allocation.md),
+[source identities](docs/evidence/allocation-final/source-sha256.txt),
+[SMP profiles](docs/evidence/allocation-final/aarch64/smp/result.json),
+and matching ARM/x86 regressions under `docs/evidence/allocation-final/`.
 Earlier [bootstrap verification](docs/evidence/hematite-bootstrap.md) is retained.
 The earlier [Asterinas baseline](docs/evidence/asterinas-evaluation.md) remains
 an evaluation only; it is not this kernel's implementation.
@@ -114,7 +114,33 @@ guard at the ELF-identified probe. See [design](docs/design/0019-arm-smp-schedul
 [independent review](docs/reviews/0019-arm-smp-scheduling.md) and
 [evidence](docs/evidence/arm-smp-scheduling.md). This establishes the scoped
 simultaneous scheduling gate, not native-hardware memory-ordering verification,
-concurrent allocation, task migration, CPU idle, or the whole Phase 1 gate.
+task migration, CPU idle, or the whole Phase 1 gate. Concurrent allocation
+is verified by the later milestone below.
+
+## Concurrent page-backed allocation verified locally
+
+The actual boot Pool now synchronizes metadata with a private IRQ-masked lock.
+Claims commit before zeroing; releases follow byte-borrow termination and typed
+destruction. Initialization and destructors run outside the lock. A linear
+contiguous-run scan bounds metadata work. Scoped worker access retains the Pool
+borrow through normal callbacks and confirmed CPU1 OFF; the higher-ranked
+accessor prevents pool/owner/byte borrows escaping. Mapper remains CPU0-only.
+
+At both RAM sizes, eight workers pass mixed frame/block isolation (1024
+allocations), two complete exhaustion/reclamation cycles (3314 pages per cycle),
+and typed allocation/destructor reentry (1280 allocations, 512 destructor
+checks). A retained neighbour and a deliberately forgotten frame remain
+unavailable. Masked/enabled IRQ state is preserved on success and failure.
+Actual-type clients check 30 frame/heap boundaries, 22 mapping boundaries and
+28 thread/Event/scope boundaries. Owner transfer traits are compile-tested;
+these workloads allocate/drop each owner on its original CPU.
+
+See [design](docs/design/0020-concurrent-allocation.md),
+[independent source/stack review](docs/reviews/0020-concurrent-allocation.md) and
+[evidence](docs/evidence/concurrent-allocation.md). The emitted fixed workload
+paths conservatively fit below 20 KiB within guarded 64 KiB worker stacks.
+This is TCG evidence for shared page-backed ownership, not a scalable allocator,
+small-object heap, native ARM memory-ordering proof or published Phase 1 exit.
 
 ## Boot-memory discovery verified locally
 
@@ -145,14 +171,15 @@ A reviewed core pool allocates uniquely owned 4 KiB pages from the mapped
 16 MiB window after excluding the DTB prefix, complete kernel image and all
 reservations. Frames zero on allocation and reuse, retain the pool while live,
 and return on drop. One permanent construction latch prevents duplicate pools.
-Cell-based accounting is single-CPU only; frames cannot be sent across threads.
+Accounting now uses the shared metadata lock described above; frame transfer
+traits are checked without weakening ownership or pool lifetimes.
 
 Actual ARM tests cover byte isolation, zeroing, reuse, exhaustion while another
 frame remains live, singleton rejection and forgotten-owner retention. The
 exhaustion test holds a compact index ledger rather than thousands of frame
 objects; it does not touch every claimed page's bytes. Exactly one deliberately
 forgotten page remains allocated after the first diagnostic per boot. Repeated
-diagnostics preserve the remaining capacity. The combined frame/heap compiler suite now runs 22 safe-client probes
+diagnostics preserve the remaining capacity. The combined frame/heap compiler suite now runs 30 safe-client probes
 per target using the actual core module.
 
 x86 has no physical allocator yet: its contract case requires explicit
@@ -177,8 +204,8 @@ frame diagnostic's one page; subsequent tests preserve remaining capacity.
 
 This first heap charges whole pages (including one for zero-size requests).
 It has no global allocator or standard alloc-crate collection integration,
-and fragmentation may deny requests despite aggregate free capacity. It is
-single-CPU only. x86 heap requests explicitly return Unsupported.
+and fragmentation may deny requests despite aggregate free capacity. Concurrent
+ARM use is verified above; x86 heap requests explicitly return Unsupported.
 See [design](docs/design/0006-fallible-heap.md),
 [review](docs/reviews/0006-fallible-heap.md) and
 [evidence](docs/evidence/heap-ownership.md).
@@ -317,7 +344,7 @@ is exposed; allocator/mapping capabilities remain unavailable to workers.
 See [design](docs/design/0012-arm-preemption.md),
 [source review](docs/reviews/0012-arm-preemption-source.md) and
 [evidence](docs/evidence/arm-preemption.md). The later SMP milestone verifies simultaneous execution; general wait queues
-and SMP-safe allocator/mapping ownership remain ahead.
+and SMP-safe mapping ownership remain ahead. Shared allocation is verified above.
 
 No userspace, syscall ABI, general interrupt/exception handling, storage,
 virtio drivers or networking exists. ARM recovery is restricted to the fixed
@@ -346,13 +373,12 @@ publication awaits Aaron's response. Local kernel development remains authorized
 
 ## Next actions
 
-1. Design concurrent allocator/resource ownership and independent stress tests.
-   The [two-CPU execution contract](docs/design/0014-arm-smp.md) now has verified
-   owned jobs/reports, per-CPU stacks, simultaneous preemption and shared
-   Mutex/Event tests. Pool/Mapper remain CPU0-only; this is not the full Phase 1
-   exit gate. Add measured small-object allocation before service workloads.
-   Extend recovery to fault-aware user operations only with address-space and
-   lifetime proofs.
+1. Audit the remaining Phase 1 exit requirements against the local evidence;
+   remote CI still covers the earlier published commit. Prepare the reviewed
+   ARM EL0 address-space, static ELF and native startup contract for first
+   isolated userspace. Mapper remains CPU0-only: sharing address spaces requires
+   separate lifetime and shootdown proofs. Measure small-object allocation
+   before service workloads; the current heap still charges whole pages.
 2. Define the native userspace wire contract from those experiments; select
    compatibility workloads and pin a Linux oracle when the adapter exists.
 3. Resolve the license selection; keep remote CI current as further milestones are published.
@@ -515,3 +541,11 @@ publication awaits Aaron's response. Local kernel development remains authorized
   Full regression evidence and the corrected Clippy failure are retained in
   [SMP verification](docs/evidence/arm-smp-scheduling.md). Pool/Mapper remain
   CPU0-only; concurrent allocation is the next design task. No public push.
+
+- 2026-10-26: Verified shared boot-pool allocation under design0020, including
+  eight-worker retained owners, exact two-cycle exhaustion, zeroing/isolation,
+  typed destructor reentry, scoped lifetime rejection and IRQ-state restoration.
+  Full ARM/x86 suite passed before and after deterministic peer-reuse
+  strengthening; final compiler assembly and
+  independent stack review match the tested ELF. See
+  [allocator evidence](docs/evidence/concurrent-allocation.md). No public push.

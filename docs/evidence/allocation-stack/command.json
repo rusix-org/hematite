@@ -1,0 +1,19 @@
+[
+  "bash",
+  "tools/dev.sh",
+  "cargo",
+  "rustc",
+  "--locked",
+  "--offline",
+  "-p",
+  "hm-core",
+  "--release",
+  "--features",
+  "smp-tests",
+  "--target",
+  "aarch64-unknown-none",
+  "--target-dir",
+  "target/aarch64/smp-test",
+  "--",
+  "--emit=asm"
+]

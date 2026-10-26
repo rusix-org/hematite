@@ -1,0 +1,30 @@
+{
+  "passed": true,
+  "scope": "actual parser against generated device trees; no secondary execution",
+  "checks": {
+    "dump-1": {
+      "passed": true,
+      "returncode": 0,
+      "sha256": "48144ac49906e9aa2151aa7900519510a19e8596b4dc5c2d5fe2a47478a9627f"
+    },
+    "dump-2": {
+      "passed": true,
+      "returncode": 0,
+      "sha256": "f8d6823eb77115d5340f6431ce0d96711d3cd53e9b9fb34ac44dd57cd5196950"
+    },
+    "dump-3": {
+      "passed": true,
+      "returncode": 0,
+      "sha256": "0c814e7fd068fe0a545940ad358c078e0794fa0175ed0770cbea0d94a2bcb424"
+    },
+    "compile": {
+      "passed": true,
+      "returncode": 0
+    },
+    "execution": {
+      "passed": true,
+      "returncode": 0,
+      "sha256": "5e9d630836e764f9983385aad2aee4fd1e4b325b18003dfad4f5b1e9c7b732f7"
+    }
+  }
+}
