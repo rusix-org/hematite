@@ -1,0 +1,17 @@
+[
+  "rustc",
+  "--edition=2024",
+  "--crate-type=lib",
+  "--emit=metadata",
+  "--target",
+  "x86_64-unknown-none",
+  "-C",
+  "panic=abort",
+  "--extern",
+  "hm_kernel=/workspace/target/x86_64/boot-test/x86_64-unknown-none/release/libhm_kernel.rlib",
+  "-L",
+  "dependency=/workspace/target/x86_64/boot-test/x86_64-unknown-none/release/deps",
+  "-o",
+  "/workspace/target/evidence/20261026T061611-096549197-x86_64/type-boundary/escaping_handle.rmeta",
+  "/workspace/target/evidence/20261026T061611-096549197-x86_64/type-boundary/escaping_handle.rs"
+]

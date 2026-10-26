@@ -6,7 +6,7 @@ PHDRS {
     data PT_LOAD FLAGS(6);
 }
 SECTIONS {
-    . = 0x40080000;
+    . = 0x40200000;
     __text_start = .;
     .text : { KEEP(*(.text.boot)) *(.text .text.*) } :text
     . = ALIGN(4096);
@@ -31,6 +31,7 @@ SECTIONS {
     /DISCARD/ : { *(.eh_frame*) *(.comment) }
 }
 ASSERT(__kernel_end < 0x41000000, "bootstrap exceeds 16 MiB RAM mapping")
+ASSERT(__text_start == 0x40200000, "reserve 2 MiB before kernel for DTB")
 ASSERT((__text_start & 4095) == 0, "unaligned text")
 ASSERT((__text_end & 4095) == 0, "unaligned text end")
 ASSERT((__rodata_end & 4095) == 0, "unaligned rodata end")

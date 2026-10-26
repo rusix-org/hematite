@@ -10,7 +10,7 @@ REQUIRED = (
     "docs/adr/0003-name.md", "docs/adr/0004-core-architecture.md",
     "docs/adr/0005-native-first-design.md", "docs/design/0001-bootstrap.md",
     "docs/adr/0006-arm64-priority.md", "docs/design/0002-arm64-bootstrap.md",
-    "docs/design/0003-capability-model.md",
+    "docs/design/0003-capability-model.md", "docs/design/0004-boot-memory.md",
 )
 
 

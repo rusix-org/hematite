@@ -13,7 +13,8 @@ make run    # build and open the ARM64 monitor; Ctrl-C exits
 ```
 
 Type `help`, `status`, or `test`. `status` reports the active memory protections;
-`test` runs 14 bootstrap and capability-model checks. This is a kernel monitor, not a shell.
+`test` runs 16 bootstrap, capability-model and boot-memory checks. The ARM boot banner reports RAM discovered from QEMU’s device tree.
+This is a kernel monitor, not a shell.
 
 ```sh
 make build                  # ARM64 image under target/aarch64/monitor/

@@ -1,0 +1,7 @@
+Environment: hematite-build:phase0, QEMU 7.2.22; source parent 224571b plus working boot-memory changes.
+Dump: bash tools/dev.sh qemu-system-aarch64 -machine virt,virtualization=off,secure=off,dumpdtb=target/boot-memory/virt-128m.dtb -cpu max -m 128M -smp 1 -nodefaults -display none
+Old layout: QEMU monitor with -S, command xp /4wx 0x40000000 then quit, target/aarch64/monitor/aarch64-unknown-none/release/hematite from capability milestone.
+New layout: QEMU monitor with -S, command xp /10wx 0x40000000 then quit, target/aarch64/boot-test/aarch64-unknown-none/release/hematite from first relocated build.
+Monitor VM flags: -machine virt,virtualization=off,secure=off -cpu max -m 128M -smp 1 -nodefaults -display none -serial none -monitor stdio -S -kernel <ELF>; timeout 10s.
+Exception capture: stack-failure/command.json plus -d int -D target/boot-memory/exception.log, subprocess timeout20s. Kernel SHA-256 in stack-failure/input.json.
+Disassembly: llvm-objdump -d --start-address=0x4020f26c --stop-address=0x4020f2b0 <same ELF>.

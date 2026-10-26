@@ -1,0 +1,6 @@
+{
+  "kernel": "/workspace/target/aarch64/boot-test/aarch64-unknown-none/release/hematite",
+  "sha256": "6a5eed115ce2e5fe941ce5c1f4c27dacd56506d9103ffffc02a2dbef8f0a3b7d",
+  "accel": "tcg",
+  "arch": "aarch64"
+}

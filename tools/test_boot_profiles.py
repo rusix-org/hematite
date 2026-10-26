@@ -24,15 +24,16 @@ def write_json(path, value):
     path.write_text(json.dumps(value, indent=2) + "\n")
 
 
-def prepare(output, kernel, cpu, arch="aarch64"):
+def prepare(output, kernel, cpu, arch="aarch64", ram_mb=128):
     output.mkdir()
     command = qemu_command(kernel, "tcg", arch)
     command[command.index("-cpu") + 1] = cpu
+    command[command.index("-m") + 1] = f"{ram_mb}M"
     write_json(output / "command.json", command)
     write_json(output / "input.json", {
         "kernel": str(kernel),
         "sha256": hashlib.sha256(kernel.read_bytes()).hexdigest(),
-        "accel": "tcg", "cpu": cpu, "arch": arch,
+        "accel": "tcg", "cpu": cpu, "arch": arch, "ram_mb": ram_mb,
     })
     return command
 
@@ -109,8 +110,8 @@ def monitor_steps():
     )
 
 
-def run_monitor(output, kernel, arch="aarch64"):
-    command = prepare(output, kernel, "max", arch)
+def run_monitor(output, kernel, arch="aarch64", ram_mb=128):
+    command = prepare(output, kernel, "max", arch, ram_mb)
     started = time.monotonic()
     deadline = started + DEADLINE_SECONDS
     result = {
@@ -155,6 +156,11 @@ def run_monitor(output, kernel, arch="aarch64"):
                 b"Hematite bootstrap monitor (local working name)" in banner
                 and b"Commands: help, status, test. This is not a Linux shell." in banner
             )
+            if arch == "aarch64":
+                expected_memory = (f"Boot RAM bytes: 0x{ram_mb * 1024 * 1024:016x} "
+                                   "(discovered; not allocated)").encode("ascii")
+                lines = banner.replace(b"\r\n", b"\n").split(b"\n")
+                result["checks"]["discovered_ram_matches_vm"] = lines.count(expected_memory) == 1
             for name, request, expected in monitor_steps():
                 # No input is sent until the kernel has initialized its UART
                 # and emitted a prompt. Each command awaits its own next prompt.
@@ -202,6 +208,8 @@ def run_monitor(output, kernel, arch="aarch64"):
     expected_records += [f"HMTEST END {len(CASES)}".encode("ascii")]
     result["checks"]["complete_test_inventory"] = records == expected_records
     expected_checks = {"initial_prompt_and_banner", "monitor_still_running"}
+    if arch == "aarch64":
+        expected_checks.add("discovered_ram_matches_vm")
     expected_checks.add("complete_test_inventory")
     expected_checks.update(name for name, _, _ in monitor_steps())
     for name in sorted(expected_checks):
@@ -234,6 +242,8 @@ def main():
         name = f"missing-{feature}"
         results[name] = run_rejected_cpu(output / name, test_kernel, feature, args.arch)
     results["monitor"] = run_monitor(output / "monitor", monitor_kernel, args.arch)
+    if args.arch == "aarch64":
+        results["memory-64m"] = run_monitor(output / "memory-64m", monitor_kernel, args.arch, 64)
     summary = {
         "passed": all(result["passed"] for result in results.values()),
         "scope": "bootstrap CPU rejection and serial monitor; no Linux ABI claims",

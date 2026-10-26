@@ -1,6 +1,6 @@
 # Progress
 
-Current phase: **ARM64-first runnable bootstrap; capability model verified**.
+Current phase: **ARM64 boot-memory discovery verified; frame allocation next**.
 Aaron approved scratch implementation and then changed the primary objective
 from strict Linux parity to native OS design with selective compatibility.
 [ADR 0005](docs/adr/0005-native-first-design.md) records the native direction;
@@ -19,18 +19,32 @@ from strict Linux parity to native OS design with selective compatibility.
 - Serial monitor: `make run` defaults to ARM64; `ARCH=x86_64` selects the
   regression port. Commands `help`, `status`, `test`; Ctrl-C exits.
 - `make test-all`: formatting, Clippy and safety checks for both targets,
-  12 host harness tests, 14 guest tests per architecture, ARM no-PAN rejection,
+  12 host harness tests, 16 guest tests per architecture, ARM no-PAN rejection,
   x86 missing-NX/SMEP/SMAP rejection, and live monitor recovery tests on both.
+  ARM discovery matches both 128 MiB and 64 MiB guest configurations.
   All passed locally. `make test` tests ARM64 alone by default.
 - Pinned Rust base and Debian package snapshot, QEMU 7.2.22. One CPU/128 MiB
-  guest per run; no attached disks or networking. Both targets use TCG.
+  guest by default; ARM discovery also tests 64 MiB; no attached disks or networking. Both targets use TCG.
 
-Evidence: [bootstrap verification](docs/evidence/hematite-bootstrap.md),
-[ARM guest results](docs/evidence/hematite-dual-final/aarch64/boot/result.json),
-[ARM profiles](docs/evidence/hematite-dual-final/aarch64/profiles/result.json),
-and matching x86 results under `docs/evidence/hematite-dual-final/x86_64/`.
+Latest evidence: [boot-memory verification](docs/evidence/boot-memory.md),
+[ARM guest results](docs/evidence/boot-memory-final/aarch64/boot/result.json),
+[ARM profiles](docs/evidence/boot-memory-final/aarch64/profiles/result.json),
+and matching x86 results under `docs/evidence/boot-memory-final/x86_64/`.
+Earlier [bootstrap verification](docs/evidence/hematite-bootstrap.md) is retained.
 The earlier [Asterinas baseline](docs/evidence/asterinas-evaluation.md) remains
 an evaluation only; it is not this kernel's implementation.
+
+## Boot-memory discovery verified locally
+
+The ARM ELF now starts at `0x40200000`, leaving a 2 MiB DTB prefix. Core reads
+only that bounded mapped prefix and returns owned metadata from a safe parser.
+It validates RAM/reserved ranges and rejects unsupported memory layouts.
+Malformed fixtures, every truncation and deterministic byte mutations run on
+both architectures. This describes memory; it does not allocate frames or
+expand the 16 MiB bootstrap mapping. x86 PVH memory discovery remains unimplemented.
+See [design](docs/design/0004-boot-memory.md),
+[review](docs/reviews/0004-boot-memory.md) and
+[verification](docs/evidence/boot-memory.md).
 
 ## Limits and gates
 
@@ -47,17 +61,19 @@ labels are trusted inputs and completion is a simulated backend acknowledgment.
 See [model verification](docs/evidence/capability-model.md).
 
 Published bootstrap CI passed at `b1b824c` ([run 40276324135](https://github.com/rusix-org/hematite/actions/runs/40276324135)).
-The new capability model has passed locally; remote CI has not run this change. Aaron authorized public repository creation
+The capability model and boot-memory changes passed locally; remote CI has not
+run these changes. Aaron authorized public repository creation
 and push in [ADR 0007](docs/adr/0007-public-repository.md). License selection
 remains pending (ADR 0002); preliminary naming findings remain in ADR 0003.
 
 ## Next actions
 
-1. Design/review boot-memory discovery, frame allocation, exceptions and
-   scheduling before integrating the model with real resources (Phase 1).
+1. Design/review frame allocation over discovered memory: subtract reservations,
+   kernel and DTB; return unique frame owners. Then exceptions, timers and
+   scheduling (Phase 1).
 2. Define the native userspace wire contract from those experiments; select
    compatibility workloads and pin a Linux oracle when the adapter exists.
-3. Resolve the license selection; run remote CI for the new model when published.
+3. Resolve the license selection; run remote CI for the new changes when published.
 
 ## Session ledger
 
@@ -91,3 +107,9 @@ remains pending (ADR 0002); preliminary naming findings remain in ADR 0003.
   model. Both architecture suites pass 14 guest cases and five compiler probes,
   including all 24 revoke/release/cancel/complete permutations. Preserved initial
   Clippy failure and final evidence. No unsafe/core or hardware changes.
+
+- 2026-10-25: Implemented reviewed ARM DTB discovery and safe parser. Fixed
+  missing DTB by relocating the ELF; documented QEMU property-padding deviation.
+  A fixture stack overflow hit the guard and was fixed by bounded test frames.
+  Final dual suite passes 16 guest cases; ARM reports configured 64/128 MiB RAM.
+  Preserved failures, exception trace, source hashes and final evidence.

@@ -15,6 +15,7 @@ mod arch;
 extern "C" fn boot_main(_boot_info: u64) -> ! {
     let mut platform = arch::init();
     platform.write(arch::BANNER);
+    hm_kernel::report_memory(&mut platform);
     #[cfg(feature = "boot-tests")]
     arch::exit(hm_kernel::run_tests(&mut platform));
     #[cfg(not(feature = "boot-tests"))]

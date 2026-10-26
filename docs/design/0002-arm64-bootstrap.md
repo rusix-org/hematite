@@ -14,7 +14,8 @@ It does not implement userspace, allocation, DMA, scheduling or SMP.
 Use the project's pinned QEMU with `virt,virtualization=off,secure=off`, CPU
 `max`, one CPU and 128 MiB RAM. Record the exact emulator version and command;
 `max` is not a portable hardware baseline. Direct-load an AArch64 ELF linked
-at physical/virtual `0x40080000`. All bootstrap allocations must fit below
+at physical/virtual `0x40200000` (originally `0x40080000`;
+[boot-memory design 0004](0004-boot-memory.md) reserves the larger DTB prefix). All bootstrap allocations must fit below
 `0x41000000`; linker assertions cover file-backed and NOBITS storage.
 
 Require `CurrentEL == EL1` and initial SCTLR M/C/I clear. Other initial ELs or
@@ -71,8 +72,8 @@ or memory-attribute changes occur after this transition.
 
 ## Safe operations and host reporting
 
-The platform implements only bounded PL011 read/write and read-only boot
-checks. MMIO uses aligned 32-bit raw volatile operations on fixed registers
+The platform implements bounded PL011 read/write, read-only boot checks and
+the owned boot-memory metadata described in design 0004. MMIO uses aligned 32-bit raw volatile operations on fixed registers
 inside the mapped page; arbitrary addresses, widths and DMA are not exposed.
 UART polling is bounded on transmit. The single CPU and disabled interrupts
 bound the current concurrency model; they are not an SMP synchronization plan.

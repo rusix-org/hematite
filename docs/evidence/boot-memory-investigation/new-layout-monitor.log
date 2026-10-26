@@ -1,0 +1,6 @@
+QEMU 7.2.22 monitor - type 'help' for more information
+(qemu) x[K[Dxp[K[D[Dxp [K[D[D[Dxp /[K[D[D[D[Dxp /1[K[D[D[D[D[Dxp /10[K[D[D[D[D[D[Dxp /10w[K[D[D[D[D[D[D[Dxp /10wx[K[D[D[D[D[D[D[D[Dxp /10wx [K[D[D[D[D[D[D[D[D[Dxp /10wx 0[K[D[D[D[D[D[D[D[D[D[Dxp /10wx 0x[K[D[D[D[D[D[D[D[D[D[D[Dxp /10wx 0x4[K[D[D[D[D[D[D[D[D[D[D[D[Dxp /10wx 0x40[K[D[D[D[D[D[D[D[D[D[D[D[D[Dxp /10wx 0x400[K[D[D[D[D[D[D[D[D[D[D[D[D[D[Dxp /10wx 0x4000[K[D[D[D[D[D[D[D[D[D[D[D[D[D[D[Dxp /10wx 0x40000[K[D[D[D[D[D[D[D[D[D[D[D[D[D[D[D[Dxp /10wx 0x400000[K[D[D[D[D[D[D[D[D[D[D[D[D[D[D[D[D[Dxp /10wx 0x4000000[K[D[D[D[D[D[D[D[D[D[D[D[D[D[D[D[D[D[Dxp /10wx 0x40000000[K
+0000000040000000: 0xedfe0dd0 0x00001000 0x40000000 0x901b0000
+0000000040000010: 0x30000000 0x11000000 0x10000000 0x00000000
+0000000040000020: 0xc6010000 0x501b0000
+(qemu) q[K[Dqu[K[D[Dqui[K[D[D[Dquit[K

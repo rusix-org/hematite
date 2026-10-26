@@ -1,0 +1,324 @@
+000000004020dea0 <_RNvNtCsjStpv0Kdcdo_9hm_kernel17boot_memory_tests5valid>:
+4020dea0: a9bd7bfd     	stp	x29, x30, [sp, #-0x30]!
+4020dea4: a90157f6     	stp	x22, x21, [sp, #0x10]
+4020dea8: a9024ff4     	stp	x20, x19, [sp, #0x20]
+4020deac: d14007ff     	sub	sp, sp, #0x1, lsl #12   // =0x1000
+4020deb0: f94003ff     	ldr	xzr, [sp]
+4020deb4: d14007ff     	sub	sp, sp, #0x1, lsl #12   // =0x1000
+4020deb8: f94003ff     	ldr	xzr, [sp]
+4020debc: d11a43ff     	sub	sp, sp, #0x690
+4020dec0: f94003ff     	ldr	xzr, [sp]
+4020dec4: 94000212     	bl	0x4020e70c <_RNvNtCsjStpv0Kdcdo_9hm_kernel17boot_memory_tests17capacity_boundary>
+4020dec8: 340036c0     	cbz	w0, 0x4020e5a0 <_RNvNtCsjStpv0Kdcdo_9hm_kernel17boot_memory_tests5valid+0x700>
+4020decc: 9100a3e0     	add	x0, sp, #0x28
+4020ded0: 2a1f03e1     	mov	w1, wzr
+4020ded4: 52820002     	mov	w2, #0x1000             // =4096
+4020ded8: 9100a3f4     	add	x20, sp, #0x28
+4020dedc: 94000e22     	bl	0x40211764 <memset>
+4020dee0: b0000028     	adrp	x8, 0x40212000 <reject_block>
+4020dee4: 52820215     	mov	w21, #0x1010            // =4112
+4020dee8: 9100a3e0     	add	x0, sp, #0x28
+4020deec: 3dc05100     	ldr	q0, [x8, #0x140]
+4020def0: 52800021     	mov	w1, #0x1                // =1
+4020def4: aa1f03e2     	mov	x2, xzr
+4020def8: 3d8003e0     	str	q0, [sp]
+
+000000004020e70c <_RNvNtCsjStpv0Kdcdo_9hm_kernel17boot_memory_tests17capacity_boundary>:
+4020e70c: a9bd7bfd     	stp	x29, x30, [sp, #-0x30]!
+4020e710: a90157f6     	stp	x22, x21, [sp, #0x10]
+4020e714: a9024ff4     	stp	x20, x19, [sp, #0x20]
+4020e718: d14007ff     	sub	sp, sp, #0x1, lsl #12   // =0x1000
+4020e71c: f94003ff     	ldr	xzr, [sp]
+4020e720: d125c3ff     	sub	sp, sp, #0x970
+4020e724: f94003ff     	ldr	xzr, [sp]
+4020e728: 910823e0     	add	x0, sp, #0x208
+4020e72c: 2a1f03e1     	mov	w1, wzr
+4020e730: 52820002     	mov	w2, #0x1000             // =4096
+4020e734: 910823f4     	add	x20, sp, #0x208
+4020e738: 94000c0b     	bl	0x40211764 <memset>
+4020e73c: 90000028     	adrp	x8, 0x40212000 <reject_block>
+4020e740: 52820215     	mov	w21, #0x1010            // =4112
+4020e744: 910823e0     	add	x0, sp, #0x208
+4020e748: 3dc05100     	ldr	q0, [x8, #0x140]
+4020e74c: 52800021     	mov	w1, #0x1                // =1
+4020e750: aa1f03e2     	mov	x2, xzr
+4020e754: 3d8003e0     	str	q0, [sp]
+4020e758: a94027e8     	ldp	x8, x9, [sp]
+4020e75c: f90907e8     	str	x8, [sp, #0x1208]
+4020e760: 90000028     	adrp	x8, 0x40212000 <reject_block>
+4020e764: 3dc05500     	ldr	q0, [x8, #0x150]
+
+000000004020ee20 <_RNvMNtCsjStpv0Kdcdo_9hm_kernel17boot_memory_testsNtB2_4Blob5begin>:
+4020ee20: f81e0ffe     	str	x30, [sp, #-0x20]!
+4020ee24: a9014ff4     	stp	x20, x19, [sp, #0x10]
+4020ee28: f9480008     	ldr	x8, [x0, #0x1000]
+4020ee2c: aa0003f3     	mov	x19, x0
+4020ee30: b1001109     	adds	x9, x8, #0x4
+4020ee34: da9f3129     	csinv	x9, x9, xzr, lo
+4020ee38: f140053f     	cmp	x9, #0x1, lsl #12       // =0x1000
+4020ee3c: 540003e8     	b.hi	0x4020eeb8 <_RNvMNtCsjStpv0Kdcdo_9hm_kernel17boot_memory_testsNtB2_4Blob5begin+0x98>
+4020ee40: cb080120     	sub	x0, x9, x8
+4020ee44: f100101f     	cmp	x0, #0x4
+4020ee48: 54000921     	b.ne	0x4020ef6c <_RNvMNtCsjStpv0Kdcdo_9hm_kernel17boot_memory_testsNtB2_4Blob5begin+0x14c>
+4020ee4c: 8b080268     	add	x8, x19, x8
+4020ee50: 5280002a     	mov	w10, #0x1               // =1
+4020ee54: 39000d0a     	strb	w10, [x8, #0x3]
+4020ee58: 3900091f     	strb	wzr, [x8, #0x2]
+4020ee5c: 3900051f     	strb	wzr, [x8, #0x1]
+4020ee60: 3900011f     	strb	wzr, [x8]
+4020ee64: aa0903e8     	mov	x8, x9
+4020ee68: f9080269     	str	x9, [x19, #0x1000]
+4020ee6c: ab020129     	adds	x9, x9, x2
+4020ee70: da9f3134     	csinv	x20, x9, xzr, lo
+4020ee74: f140069f     	cmp	x20, #0x1, lsl #12      // =0x1000
+4020ee78: 540002c9     	b.ls	0x4020eed0 <_RNvMNtCsjStpv0Kdcdo_9hm_kernel17boot_memory_testsNtB2_4Blob5begin+0xb0>
+
+000000004020ef7c <_RNvMNtCsjStpv0Kdcdo_9hm_kernel17boot_memory_testsNtB2_4Blob8property>:
+4020ef7c: a9bc67fe     	stp	x30, x25, [sp, #-0x40]!
+4020ef80: a9015ff8     	stp	x24, x23, [sp, #0x10]
+4020ef84: a90257f6     	stp	x22, x21, [sp, #0x20]
+4020ef88: a9034ff4     	stp	x20, x19, [sp, #0x30]
+4020ef8c: aa0403f4     	mov	x20, x4
+4020ef90: aa0303f5     	mov	x21, x3
+4020ef94: aa0203f6     	mov	x22, x2
+4020ef98: aa0103f7     	mov	x23, x1
+4020ef9c: aa0003f3     	mov	x19, x0
+4020efa0: 92800df9     	mov	x25, #-0x70             // =-112
+4020efa4: d503201f     	nop
+4020efa8: 3001cb18     	adr	x24, 0x40212909 <pan_message+0x8e9>
+4020efac: 14000005     	b	0x4020efc0 <_RNvMNtCsjStpv0Kdcdo_9hm_kernel17boot_memory_testsNtB2_4Blob8property+0x44>
+4020efb0: 91000739     	add	x25, x25, #0x1
+4020efb4: 91000718     	add	x24, x24, #0x1
+4020efb8: ab1902df     	cmn	x22, x25
+4020efbc: 54000840     	b.eq	0x4020f0c4 <_RNvMNtCsjStpv0Kdcdo_9hm_kernel17boot_memory_testsNtB2_4Blob8property+0x148>
+4020efc0: aa1803e0     	mov	x0, x24
+4020efc4: aa1703e1     	mov	x1, x23
+4020efc8: aa1603e2     	mov	x2, x22
+4020efcc: 940009dc     	bl	0x4021173c <memcmp>
+4020efd0: 35ffff00     	cbnz	w0, 0x4020efb0 <_RNvMNtCsjStpv0Kdcdo_9hm_kernel17boot_memory_testsNtB2_4Blob8property+0x34>
+4020efd4: 38766b08     	ldrb	w8, [x24, x22]
+
+000000004020f1a0 <_RNvNtCsjStpv0Kdcdo_9hm_kernel17boot_memory_tests9sound_map>:
+4020f1a0: f81f0ffe     	str	x30, [sp, #-0x10]!
+4020f1a4: f9418002     	ldr	x2, [x0, #0x300]
+4020f1a8: f100445f     	cmp	x2, #0x11
+4020f1ac: 54000742     	b.hs	0x4020f294 <_RNvNtCsjStpv0Kdcdo_9hm_kernel17boot_memory_tests9sound_map+0xf4>
+4020f1b0: b4000402     	cbz	x2, 0x4020f230 <_RNvNtCsjStpv0Kdcdo_9hm_kernel17boot_memory_tests9sound_map+0x90>
+4020f1b4: 9108000b     	add	x11, x0, #0x200
+4020f1b8: aa1f03e8     	mov	x8, xzr
+4020f1bc: aa1f03ea     	mov	x10, xzr
+4020f1c0: 8b02116c     	add	x12, x11, x2, lsl #4
+4020f1c4: aa1f03e9     	mov	x9, xzr
+4020f1c8: 14000006     	b	0x4020f1e0 <_RNvNtCsjStpv0Kdcdo_9hm_kernel17boot_memory_tests9sound_map+0x40>
+4020f1cc: 9100416b     	add	x11, x11, #0x10
+4020f1d0: 9100054a     	add	x10, x10, #0x1
+4020f1d4: 91004108     	add	x8, x8, #0x10
+4020f1d8: eb0c017f     	cmp	x11, x12
+4020f1dc: 54000320     	b.eq	0x4020f240 <_RNvNtCsjStpv0Kdcdo_9hm_kernel17boot_memory_tests9sound_map+0xa0>
+4020f1e0: a940396d     	ldp	x13, x14, [x11]
+4020f1e4: eb0d01cf     	subs	x15, x14, x13
+4020f1e8: 54000249     	b.ls	0x4020f230 <_RNvNtCsjStpv0Kdcdo_9hm_kernel17boot_memory_tests9sound_map+0x90>
+4020f1ec: ab0901e9     	adds	x9, x15, x9
+4020f1f0: 54000202     	b.hs	0x4020f230 <_RNvNtCsjStpv0Kdcdo_9hm_kernel17boot_memory_tests9sound_map+0x90>
+4020f1f4: eb02015f     	cmp	x10, x2
+4020f1f8: 54000488     	b.hi	0x4020f288 <_RNvNtCsjStpv0Kdcdo_9hm_kernel17boot_memory_tests9sound_map+0xe8>
+
+000000004020f2b0 <_RNvNtCsjStpv0Kdcdo_9hm_kernel17boot_memory_tests9malformed>:
+4020f2b0: f81f0ffe     	str	x30, [sp, #-0x10]!
+4020f2b4: 940000c9     	bl	0x4020f5d8 <_RNvNtCsjStpv0Kdcdo_9hm_kernel17boot_memory_tests25truncations_and_mutations>
+4020f2b8: 340018a0     	cbz	w0, 0x4020f5cc <_RNvNtCsjStpv0Kdcdo_9hm_kernel17boot_memory_tests9malformed+0x31c>
+4020f2bc: aa1f03e0     	mov	x0, xzr
+4020f2c0: 2a1f03e1     	mov	w1, wzr
+4020f2c4: 9400011c     	bl	0x4020f734 <_RNvNtCsjStpv0Kdcdo_9hm_kernel17boot_memory_tests14invalid_header>
+4020f2c8: 36001820     	tbz	w0, #0x0, 0x4020f5cc <_RNvNtCsjStpv0Kdcdo_9hm_kernel17boot_memory_tests9malformed+0x31c>
+4020f2cc: 52800080     	mov	w0, #0x4                // =4
+4020f2d0: 528004e1     	mov	w1, #0x27               // =39
+4020f2d4: 94000118     	bl	0x4020f734 <_RNvNtCsjStpv0Kdcdo_9hm_kernel17boot_memory_tests14invalid_header>
+4020f2d8: 340017a0     	cbz	w0, 0x4020f5cc <_RNvNtCsjStpv0Kdcdo_9hm_kernel17boot_memory_tests9malformed+0x31c>
+4020f2dc: 52800021     	mov	w1, #0x1                // =1
+4020f2e0: 52800080     	mov	w0, #0x4                // =4
+4020f2e4: 72a00401     	movk	w1, #0x20, lsl #16
+4020f2e8: 94000113     	bl	0x4020f734 <_RNvNtCsjStpv0Kdcdo_9hm_kernel17boot_memory_tests14invalid_header>
+4020f2ec: 34001700     	cbz	w0, 0x4020f5cc <_RNvNtCsjStpv0Kdcdo_9hm_kernel17boot_memory_tests9malformed+0x31c>
+4020f2f0: 52800100     	mov	w0, #0x8                // =8
+4020f2f4: 52804c21     	mov	w1, #0x261              // =609
+4020f2f8: 9400010f     	bl	0x4020f734 <_RNvNtCsjStpv0Kdcdo_9hm_kernel17boot_memory_tests14invalid_header>
+4020f2fc: 34001680     	cbz	w0, 0x4020f5cc <_RNvNtCsjStpv0Kdcdo_9hm_kernel17boot_memory_tests9malformed+0x31c>
+4020f300: 52800100     	mov	w0, #0x8                // =8
+4020f304: 12800001     	mov	w1, #-0x1               // =-1
+4020f308: 9400010b     	bl	0x4020f734 <_RNvNtCsjStpv0Kdcdo_9hm_kernel17boot_memory_tests14invalid_header>
+
+000000004020f5d8 <_RNvNtCsjStpv0Kdcdo_9hm_kernel17boot_memory_tests25truncations_and_mutations>:
+4020f5d8: a9bc7bfd     	stp	x29, x30, [sp, #-0x40]!
+4020f5dc: a9015ff8     	stp	x24, x23, [sp, #0x10]
+4020f5e0: a90257f6     	stp	x22, x21, [sp, #0x20]
+4020f5e4: a9034ff4     	stp	x20, x19, [sp, #0x30]
+4020f5e8: d14007ff     	sub	sp, sp, #0x1, lsl #12   // =0x1000
+4020f5ec: f94003ff     	ldr	xzr, [sp]
+4020f5f0: d11983ff     	sub	sp, sp, #0x660
+4020f5f4: f94003ff     	ldr	xzr, [sp]
+4020f5f8: 910003e0     	mov	x0, sp
+4020f5fc: 910003f3     	mov	x19, sp
+4020f600: 940007b0     	bl	0x402114c0 <_RNvNtCsjStpv0Kdcdo_9hm_kernel17boot_memory_tests5basic>
+4020f604: 52820208     	mov	w8, #0x1010             // =4112
+4020f608: 38686a68     	ldrb	w8, [x19, x8]
+4020f60c: 34000188     	cbz	w8, 0x4020f63c <_RNvNtCsjStpv0Kdcdo_9hm_kernel17boot_memory_tests25truncations_and_mutations+0x64>
+4020f610: f94807f3     	ldr	x19, [sp, #0x1008]
+4020f614: f140067f     	cmp	x19, #0x1, lsl #12      // =0x1000
+4020f618: 54000868     	b.hi	0x4020f724 <_RNvNtCsjStpv0Kdcdo_9hm_kernel17boot_memory_tests25truncations_and_mutations+0x14c>
+4020f61c: 914007e0     	add	x0, sp, #0x1, lsl #12   // =0x1000
+4020f620: 910003e1     	mov	x1, sp
+4020f624: aa1303e2     	mov	x2, x19
+4020f628: 91006000     	add	x0, x0, #0x18
+4020f62c: 914007f5     	add	x21, sp, #0x1, lsl #12  // =0x1000
+4020f630: 97ffda7f     	bl	0x4020602c <_RNvNtCsjStpv0Kdcdo_9hm_kernel11boot_memory5parse>
+
+000000004020f734 <_RNvNtCsjStpv0Kdcdo_9hm_kernel17boot_memory_tests14invalid_header>:
+4020f734: f81d0ffd     	str	x29, [sp, #-0x30]!
+4020f738: a90157fe     	stp	x30, x21, [sp, #0x10]
+4020f73c: a9024ff4     	stp	x20, x19, [sp, #0x20]
+4020f740: d14007ff     	sub	sp, sp, #0x1, lsl #12   // =0x1000
+4020f744: f94003ff     	ldr	xzr, [sp]
+4020f748: d10d03ff     	sub	sp, sp, #0x340
+4020f74c: aa0003f4     	mov	x20, x0
+4020f750: 910003e0     	mov	x0, sp
+4020f754: 2a0103f3     	mov	w19, w1
+4020f758: 910003f5     	mov	x21, sp
+4020f75c: 94000759     	bl	0x402114c0 <_RNvNtCsjStpv0Kdcdo_9hm_kernel17boot_memory_tests5basic>
+4020f760: 5ac00a68     	rev	w8, w19
+4020f764: 8b1402aa     	add	x10, x21, x20
+4020f768: 5282020c     	mov	w12, #0x1010            // =4112
+4020f76c: 53187d09     	lsr	w9, w8, #24
+4020f770: 53107d0b     	lsr	w11, w8, #16
+4020f774: 53087d0d     	lsr	w13, w8, #8
+4020f778: 39000148     	strb	w8, [x10]
+4020f77c: 39000d49     	strb	w9, [x10, #0x3]
+4020f780: 386c6aa9     	ldrb	w9, [x21, x12]
+4020f784: 3900094b     	strb	w11, [x10, #0x2]
+4020f788: 3900054d     	strb	w13, [x10, #0x1]
+4020f78c: 34000169     	cbz	w9, 0x4020f7b8 <_RNvNtCsjStpv0Kdcdo_9hm_kernel17boot_memory_tests14invalid_header+0x84>
+
+000000004020f7e8 <_RNvNtCsjStpv0Kdcdo_9hm_kernel17boot_memory_tests17invalid_structure>:
+4020f7e8: f81d0ffd     	str	x29, [sp, #-0x30]!
+4020f7ec: a90157fe     	stp	x30, x21, [sp, #0x10]
+4020f7f0: a9024ff4     	stp	x20, x19, [sp, #0x20]
+4020f7f4: d14007ff     	sub	sp, sp, #0x1, lsl #12   // =0x1000
+4020f7f8: f94003ff     	ldr	xzr, [sp]
+4020f7fc: d10d83ff     	sub	sp, sp, #0x360
+4020f800: 2a0003f3     	mov	w19, w0
+4020f804: 910063e0     	add	x0, sp, #0x18
+4020f808: 9400072e     	bl	0x402114c0 <_RNvNtCsjStpv0Kdcdo_9hm_kernel17boot_memory_tests5basic>
+4020f80c: 72001e68     	ands	w8, w19, #0xff
+4020f810: 54000320     	b.eq	0x4020f874 <_RNvNtCsjStpv0Kdcdo_9hm_kernel17boot_memory_tests17invalid_structure+0x8c>
+4020f814: 7100051f     	cmp	w8, #0x1
+4020f818: 54000140     	b.eq	0x4020f840 <_RNvNtCsjStpv0Kdcdo_9hm_kernel17boot_memory_tests17invalid_structure+0x58>
+4020f81c: 7100151f     	cmp	w8, #0x5
+4020f820: 54000381     	b.ne	0x4020f890 <_RNvNtCsjStpv0Kdcdo_9hm_kernel17boot_memory_tests17invalid_structure+0xa8>
+4020f824: 12800008     	mov	w8, #-0x1               // =-1
+4020f828: b9028be8     	str	w8, [sp, #0x288]
+4020f82c: 52820208     	mov	w8, #0x1010             // =4112
+4020f830: 910063e9     	add	x9, sp, #0x18
+4020f834: 38686928     	ldrb	w8, [x9, x8]
+4020f838: 35001ec8     	cbnz	w8, 0x4020fc10 <_RNvNtCsjStpv0Kdcdo_9hm_kernel17boot_memory_tests17invalid_structure+0x428>
+4020f83c: 140000fe     	b	0x4020fc34 <_RNvNtCsjStpv0Kdcdo_9hm_kernel17boot_memory_tests17invalid_structure+0x44c>
+4020f840: f94813e8     	ldr	x8, [sp, #0x1020]
+
+000000004020fc88 <_RNvNtCsjStpv0Kdcdo_9hm_kernel17boot_memory_tests12invalid_tree>:
+4020fc88: a9bc7bfd     	stp	x29, x30, [sp, #-0x40]!
+4020fc8c: a9015ff8     	stp	x24, x23, [sp, #0x10]
+4020fc90: a90257f6     	stp	x22, x21, [sp, #0x20]
+4020fc94: a9034ff4     	stp	x20, x19, [sp, #0x30]
+4020fc98: d14007ff     	sub	sp, sp, #0x1, lsl #12   // =0x1000
+4020fc9c: f94003ff     	ldr	xzr, [sp]
+4020fca0: d10d83ff     	sub	sp, sp, #0x360
+4020fca4: 2a0003f3     	mov	w19, w0
+4020fca8: 910063e0     	add	x0, sp, #0x18
+4020fcac: 2a1f03e1     	mov	w1, wzr
+4020fcb0: 52820002     	mov	w2, #0x1000             // =4096
+4020fcb4: 910063f5     	add	x21, sp, #0x18
+4020fcb8: 940006ab     	bl	0x40211764 <memset>
+4020fcbc: f0000008     	adrp	x8, 0x40212000 <reject_block>
+4020fcc0: 52820216     	mov	w22, #0x1010            // =4112
+4020fcc4: 910063e0     	add	x0, sp, #0x18
+4020fcc8: 3dc05100     	ldr	q0, [x8, #0x140]
+4020fccc: 52800021     	mov	w1, #0x1                // =1
+4020fcd0: aa1f03e2     	mov	x2, xzr
+4020fcd4: 3d8003e0     	str	q0, [sp]
+4020fcd8: a94023e9     	ldp	x9, x8, [sp]
+4020fcdc: f9080fe9     	str	x9, [sp, #0x1018]
+4020fce0: f90813e8     	str	x8, [sp, #0x1020]
+
+000000004021090c <_RNvNtCsjStpv0Kdcdo_9hm_kernel17boot_memory_tests19invalid_reservation>:
+4021090c: a9bd7bfd     	stp	x29, x30, [sp, #-0x30]!
+40210910: a90157f6     	stp	x22, x21, [sp, #0x10]
+40210914: a9024ff4     	stp	x20, x19, [sp, #0x20]
+40210918: d14007ff     	sub	sp, sp, #0x1, lsl #12   // =0x1000
+4021091c: f94003ff     	ldr	xzr, [sp]
+40210920: d10d83ff     	sub	sp, sp, #0x360
+40210924: 2a0003f3     	mov	w19, w0
+40210928: 910063e0     	add	x0, sp, #0x18
+4021092c: 2a1f03e1     	mov	w1, wzr
+40210930: 52820002     	mov	w2, #0x1000             // =4096
+40210934: 910063f4     	add	x20, sp, #0x18
+40210938: 9400038b     	bl	0x40211764 <memset>
+4021093c: d0000008     	adrp	x8, 0x40212000 <reject_block>
+40210940: 52820215     	mov	w21, #0x1010            // =4112
+40210944: 910063e0     	add	x0, sp, #0x18
+40210948: 3dc05100     	ldr	q0, [x8, #0x140]
+4021094c: 52800021     	mov	w1, #0x1                // =1
+40210950: aa1f03e2     	mov	x2, xzr
+40210954: 3d8003e0     	str	q0, [sp]
+40210958: a94023e9     	ldp	x9, x8, [sp]
+4021095c: f9080fe9     	str	x9, [sp, #0x1018]
+40210960: f90813e8     	str	x8, [sp, #0x1020]
+40210964: 52800028     	mov	w8, #0x1                // =1
+
+0000000040211018 <_RNvNtCsjStpv0Kdcdo_9hm_kernel17boot_memory_tests26invalid_header_reservation>:
+40211018: a9be7bfd     	stp	x29, x30, [sp, #-0x20]!
+4021101c: a9014ff4     	stp	x20, x19, [sp, #0x10]
+40211020: d14007ff     	sub	sp, sp, #0x1, lsl #12   // =0x1000
+40211024: f94003ff     	ldr	xzr, [sp]
+40211028: d11503ff     	sub	sp, sp, #0x540
+4021102c: f94003ff     	ldr	xzr, [sp]
+40211030: 2a0003f3     	mov	w19, w0
+40211034: 910803e0     	add	x0, sp, #0x200
+40211038: 910803f4     	add	x20, sp, #0x200
+4021103c: 94000121     	bl	0x402114c0 <_RNvNtCsjStpv0Kdcdo_9hm_kernel17boot_memory_tests5basic>
+40211040: 12001e68     	and	w8, w19, #0xff
+40211044: 7100051f     	cmp	w8, #0x1
+40211048: 5400012c     	b.gt	0x4021106c <_RNvNtCsjStpv0Kdcdo_9hm_kernel17boot_memory_tests26invalid_header_reservation+0x54>
+4021104c: 34001ba8     	cbz	w8, 0x402113c0 <_RNvNtCsjStpv0Kdcdo_9hm_kernel17boot_memory_tests26invalid_header_reservation+0x3a8>
+40211050: 7100051f     	cmp	w8, #0x1
+40211054: 540002e1     	b.ne	0x402110b0 <_RNvNtCsjStpv0Kdcdo_9hm_kernel17boot_memory_tests26invalid_header_reservation+0x98>
+40211058: 9100a289     	add	x9, x20, #0x28
+4021105c: d2e04008     	mov	x8, #0x200000000000000  // =144115188075855872
+40211060: 9280000b     	mov	x11, #-0x1              // =-1
+40211064: 5280060a     	mov	w10, #0x30              // =48
+40211068: 140000dd     	b	0x402113dc <_RNvNtCsjStpv0Kdcdo_9hm_kernel17boot_memory_tests26invalid_header_reservation+0x3c4>
+4021106c: 7100091f     	cmp	w8, #0x2
+40211070: 540021a0     	b.eq	0x402114a4 <_RNvNtCsjStpv0Kdcdo_9hm_kernel17boot_memory_tests26invalid_header_reservation+0x48c>
+
+00000000402114c0 <_RNvNtCsjStpv0Kdcdo_9hm_kernel17boot_memory_tests5basic>:
+402114c0: f81c0ffd     	str	x29, [sp, #-0x40]!
+402114c4: a9015ffe     	stp	x30, x23, [sp, #0x10]
+402114c8: a90257f6     	stp	x22, x21, [sp, #0x20]
+402114cc: a9034ff4     	stp	x20, x19, [sp, #0x30]
+402114d0: d14007ff     	sub	sp, sp, #0x1, lsl #12   // =0x1000
+402114d4: f85c07ff     	ldr	xzr, [sp], #-0x40
+402114d8: aa0003f3     	mov	x19, x0
+402114dc: 910063e0     	add	x0, sp, #0x18
+402114e0: 2a1f03e1     	mov	w1, wzr
+402114e4: 52820002     	mov	w2, #0x1000             // =4096
+402114e8: 910063f4     	add	x20, sp, #0x18
+402114ec: 9400009e     	bl	0x40211764 <memset>
+402114f0: b0000008     	adrp	x8, 0x40212000 <reject_block>
+402114f4: 52820215     	mov	w21, #0x1010            // =4112
+402114f8: 910063e0     	add	x0, sp, #0x18
+402114fc: 3dc05100     	ldr	q0, [x8, #0x140]
+40211500: 52800021     	mov	w1, #0x1                // =1
+40211504: aa1f03e2     	mov	x2, xzr
+40211508: 3d8003e0     	str	q0, [sp]
+4021150c: a94023e9     	ldp	x9, x8, [sp]
+40211510: f9080fe9     	str	x9, [sp, #0x1018]
+40211514: f90813e8     	str	x8, [sp, #0x1020]
+40211518: 52800028     	mov	w8, #0x1                // =1

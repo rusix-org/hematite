@@ -1,0 +1,18 @@
+{
+  "command": "qemu-system-aarch64 -machine virt,virtualization=off,secure=off,dumpdtb=target/boot-memory/virt-128m.dtb -cpu max -m 128M -smp 1 -nodefaults -display none",
+  "qemu_version": "7.2.22",
+  "bytes": 1048576,
+  "sha256": "cd2599f39b8ca06840c3fcde4c03288442be5c0444adf0e86614ae108d86b21b",
+  "header_u32_be": [
+    3490578157,
+    1048576,
+    64,
+    7056,
+    48,
+    17,
+    16,
+    0,
+    454,
+    6992
+  ]
+}

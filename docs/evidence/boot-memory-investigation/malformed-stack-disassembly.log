@@ -1,0 +1,23 @@
+
+target/aarch64/boot-test/aarch64-unknown-none/release/hematite:	file format elf64-littleaarch64
+
+Disassembly of section .text:
+
+000000004020f26c <_RNvNtCsjStpv0Kdcdo_9hm_kernel17boot_memory_tests9malformed>:
+4020f26c: f81a0ffd     	str	x29, [sp, #-0x60]!
+4020f270: a9016ffe     	stp	x30, x27, [sp, #0x10]
+4020f274: a90267fa     	stp	x26, x25, [sp, #0x20]
+4020f278: a9035ff8     	stp	x24, x23, [sp, #0x30]
+4020f27c: a90457f6     	stp	x22, x21, [sp, #0x40]
+4020f280: a9054ff4     	stp	x20, x19, [sp, #0x50]
+4020f284: d14027e9     	sub	x9, sp, #0x9, lsl #12   // =0x9000
+4020f288: d14007ff     	sub	sp, sp, #0x1, lsl #12   // =0x1000
+4020f28c: f94003ff     	ldr	xzr, [sp]
+4020f290: eb2963ff     	cmp	sp, x9
+4020f294: 54ffffa1     	b.ne	0x4020f288 <_RNvNtCsjStpv0Kdcdo_9hm_kernel17boot_memory_tests9malformed+0x1c>
+4020f298: d11503ff     	sub	sp, sp, #0x540
+4020f29c: f94003ff     	ldr	xzr, [sp]
+4020f2a0: 911183e0     	add	x0, sp, #0x460
+4020f2a4: 911183f3     	add	x19, sp, #0x460
+4020f2a8: 940002b7     	bl	0x4020fd84 <_RNvNtCsjStpv0Kdcdo_9hm_kernel17boot_memory_tests5basic>
+4020f2ac: 52820208     	mov	w8, #0x1010             // =4112

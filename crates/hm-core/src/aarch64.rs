@@ -28,10 +28,16 @@ const PAGE_RO_NX: u64 = 0x0060_0000_0000_0783;
 const PAGE_RX: u64 = 0x0040_0000_0000_0783;
 const UART_PAGE: u64 = 0x0060_0000_0900_0407;
 
-pub(super) struct BootPlatform;
+pub(super) struct BootPlatform {
+    memory: hm_kernel::boot_memory::MemoryMap,
+}
 pub(super) const BANNER: &str = "hematite: ARM64 Rust kernel entered at EL1\n";
 
 impl Platform for BootPlatform {
+    fn boot_memory(&self) -> Option<&hm_kernel::boot_memory::MemoryMap> {
+        Some(&self.memory)
+    }
+
     fn write(&mut self, text: &str) {
         for byte in text.bytes() {
             if byte == b'\n' {
@@ -169,8 +175,34 @@ fn leaf(index: usize) -> u64 {
 }
 
 pub(super) fn init() -> BootPlatform {
-    // UART was initialized before feature checks; the same mapping remains.
-    BootPlatform
+    match discover_memory() {
+        Ok(memory) => BootPlatform { memory },
+        Err(_) => {
+            for byte in b"Boot memory rejected\r\n" {
+                serial_byte(*byte);
+            }
+            exit(false)
+        }
+    }
+}
+
+fn discover_memory() -> Result<hm_kernel::boot_memory::MemoryMap, ()> {
+    const LIMIT: usize = 2 * 1024 * 1024;
+    // SAFETY: The pinned QEMU virt ELF profile initializes RAM at RAM. The
+    // first 40 bytes are identity mapped, outside all linker-owned storage.
+    // One CPU, masked interrupts and no DMA/writers keep this temporary
+    // shared borrow immutable. No reference escapes this function.
+    let header = unsafe { core::slice::from_raw_parts(RAM as *const u8, 40) };
+    let size = u32::from_be_bytes([header[4], header[5], header[6], header[7]]) as usize;
+    if !(40..=LIMIT).contains(&size) {
+        return Err(());
+    }
+    // SAFETY: Size was bounded by the independent 2 MiB pre-kernel window,
+    // not by the tree's RAM claims. QEMU initializes this RAM, bootstrap maps
+    // it, and the linker reserves the complete window from code/tables/stack.
+    // No allocator or concurrent writer exists; parsing returns owned values.
+    let blob = unsafe { core::slice::from_raw_parts(RAM as *const u8, size) };
+    hm_kernel::boot_memory::parse(blob).map_err(|_| ())
 }
 
 fn serial_byte(byte: u8) {

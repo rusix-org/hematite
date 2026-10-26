@@ -3,6 +3,8 @@
 
 //! Safe bootstrap policy. This monitor is kernel code, not Linux userspace.
 
+pub mod boot_memory;
+mod boot_memory_tests;
 pub mod capability;
 mod capability_tests;
 
@@ -29,6 +31,25 @@ pub trait Platform {
     fn write(&mut self, text: &str);
     fn read_byte(&mut self) -> Option<u8>;
     fn checks(&self) -> BootChecks;
+    fn boot_memory(&self) -> Option<&boot_memory::MemoryMap> {
+        None
+    }
+}
+
+pub fn report_memory(platform: &mut impl Platform) {
+    let Some(memory) = platform.boot_memory() else {
+        return;
+    };
+    let total = memory.total_bytes();
+    platform.write("Boot RAM bytes: 0x");
+    let mut digits = [b'0'; 16];
+    for (index, digit) in digits.iter_mut().enumerate() {
+        *digit = b"0123456789abcdef"[((total >> ((15 - index) * 4)) & 15) as usize];
+    }
+    if let Ok(text) = core::str::from_utf8(&digits) {
+        platform.write(text);
+    }
+    platform.write(" (discovered; not allocated)\n");
 }
 
 /// Return a bounded half-open range, rejecting both arithmetic and bound errors.
@@ -189,12 +210,14 @@ pub fn run_tests(platform: &mut impl Platform) -> bool {
         ("cap_limits", capability_tests::limits()),
         ("cap_lifetime", capability_tests::lifetime()),
         ("cap_generation", capability_tests::generation()),
+        ("boot_memory_valid", boot_memory_tests::valid()),
+        ("boot_memory_malformed", boot_memory_tests::malformed()),
         (
             "cap_orderings",
             capability_tests::orderings(|message| platform.write(message)),
         ),
     ];
-    platform.write("HMTEST BEGIN 14\n");
+    platform.write("HMTEST BEGIN 16\n");
     let mut passed = true;
     for (name, success) in cases {
         platform.write(if success {
@@ -206,7 +229,7 @@ pub fn run_tests(platform: &mut impl Platform) -> bool {
         platform.write("\n");
         passed &= success;
     }
-    platform.write("HMTEST END 14\n");
+    platform.write("HMTEST END 16\n");
     passed
 }
 
