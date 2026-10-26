@@ -1,0 +1,764 @@
+{
+  "version": 1,
+  "fixtures": {
+    "context_svc_a": {
+      "entry": 4294967296,
+      "pages": 4,
+      "symbols": {
+        "context_captured": 4295034572,
+        "grant_message": 4295036928,
+        "message": 4295036940,
+        "pattern": 4295036955,
+        "native_start": 4294967296,
+        "poll_start": 4294967552,
+        "poll_end": 4294967560,
+        "release": 4294975488,
+        "private_data": 4294975496,
+        "capture": 4297063424,
+        "write_svc": 4295032852,
+        "exit_svc": 4295032880,
+        "fault": 4295032904,
+        "loop_start": 4295032916,
+        "loop_end": 4295032920,
+        "context_set_dit": 4295034272,
+        "context_set_ssbs": 4295034280,
+        "context_svc": 4295034564
+      },
+      "segments": [
+        {
+          "flags": 5,
+          "offset": 4096,
+          "va": 4294967296,
+          "filesz": 268,
+          "memsz": 268,
+          "align": 4096,
+          "start": 4294967296,
+          "end": 4294971392
+        },
+        {
+          "flags": 6,
+          "offset": 8192,
+          "va": 4294975488,
+          "filesz": 16,
+          "memsz": 16,
+          "align": 4096,
+          "start": 4294975488,
+          "end": 4294979584
+        },
+        {
+          "flags": 5,
+          "offset": 12288,
+          "va": 4295032832,
+          "filesz": 3540,
+          "memsz": 3540,
+          "align": 4096,
+          "start": 4295032832,
+          "end": 4295036928
+        },
+        {
+          "flags": 4,
+          "offset": 16384,
+          "va": 4295036928,
+          "filesz": 360,
+          "memsz": 360,
+          "align": 4096,
+          "start": 4295036928,
+          "end": 4295041024
+        }
+      ],
+      "file": "context_svc_a.elf",
+      "path": "bin/context_svc_a",
+      "sha256": "c6e8fd9e2212de116aec529d89c8e8024776f2955bad319acc0ac02c013e0ad1"
+    },
+    "context_svc_b": {
+      "entry": 4294967296,
+      "pages": 4,
+      "symbols": {
+        "context_captured": 4295034572,
+        "grant_message": 4295036928,
+        "message": 4295036940,
+        "pattern": 4295036955,
+        "native_start": 4294967296,
+        "poll_start": 4294967552,
+        "poll_end": 4294967560,
+        "release": 4294975488,
+        "private_data": 4294975496,
+        "capture": 4297063424,
+        "write_svc": 4295032852,
+        "exit_svc": 4295032880,
+        "fault": 4295032904,
+        "loop_start": 4295032916,
+        "loop_end": 4295032920,
+        "context_set_dit": 4295034272,
+        "context_set_ssbs": 4295034280,
+        "context_svc": 4295034564
+      },
+      "segments": [
+        {
+          "flags": 5,
+          "offset": 4096,
+          "va": 4294967296,
+          "filesz": 268,
+          "memsz": 268,
+          "align": 4096,
+          "start": 4294967296,
+          "end": 4294971392
+        },
+        {
+          "flags": 6,
+          "offset": 8192,
+          "va": 4294975488,
+          "filesz": 16,
+          "memsz": 16,
+          "align": 4096,
+          "start": 4294975488,
+          "end": 4294979584
+        },
+        {
+          "flags": 5,
+          "offset": 12288,
+          "va": 4295032832,
+          "filesz": 3540,
+          "memsz": 3540,
+          "align": 4096,
+          "start": 4295032832,
+          "end": 4295036928
+        },
+        {
+          "flags": 4,
+          "offset": 16384,
+          "va": 4295036928,
+          "filesz": 360,
+          "memsz": 360,
+          "align": 4096,
+          "start": 4295036928,
+          "end": 4295041024
+        }
+      ],
+      "file": "context_svc_b.elf",
+      "path": "bin/context_svc_b",
+      "sha256": "081061ca28d615ced750994e3cdca838f54d8e3c9e42beab8c933488526de45b"
+    },
+    "context_irq_a": {
+      "entry": 4294967296,
+      "pages": 4,
+      "symbols": {
+        "context_captured": 4295034556,
+        "grant_message": 4295036928,
+        "message": 4295036940,
+        "pattern": 4295036955,
+        "native_start": 4294967296,
+        "poll_start": 4294967552,
+        "poll_end": 4294967560,
+        "release": 4294975488,
+        "private_data": 4294975496,
+        "capture": 4297063424,
+        "write_svc": 4295032852,
+        "exit_svc": 4295032880,
+        "fault": 4295032904,
+        "loop_start": 4295032916,
+        "loop_end": 4295032920,
+        "context_set_dit": 4295034272,
+        "context_set_ssbs": 4295034280,
+        "context_svc": 4295034552
+      },
+      "segments": [
+        {
+          "flags": 5,
+          "offset": 4096,
+          "va": 4294967296,
+          "filesz": 268,
+          "memsz": 268,
+          "align": 4096,
+          "start": 4294967296,
+          "end": 4294971392
+        },
+        {
+          "flags": 6,
+          "offset": 8192,
+          "va": 4294975488,
+          "filesz": 16,
+          "memsz": 16,
+          "align": 4096,
+          "start": 4294975488,
+          "end": 4294979584
+        },
+        {
+          "flags": 5,
+          "offset": 12288,
+          "va": 4295032832,
+          "filesz": 3500,
+          "memsz": 3500,
+          "align": 4096,
+          "start": 4295032832,
+          "end": 4295036928
+        },
+        {
+          "flags": 4,
+          "offset": 16384,
+          "va": 4295036928,
+          "filesz": 283,
+          "memsz": 283,
+          "align": 4096,
+          "start": 4295036928,
+          "end": 4295041024
+        }
+      ],
+      "file": "context_irq_a.elf",
+      "path": "bin/context_irq_a",
+      "sha256": "2edfdf2c051bdb4fa85bfc1a83f5619bb05d9e525d6815835b59dcdf9c7986b8"
+    },
+    "context_irq_b": {
+      "entry": 4294967296,
+      "pages": 4,
+      "symbols": {
+        "context_captured": 4295034556,
+        "grant_message": 4295036928,
+        "message": 4295036940,
+        "pattern": 4295036955,
+        "native_start": 4294967296,
+        "poll_start": 4294967552,
+        "poll_end": 4294967560,
+        "release": 4294975488,
+        "private_data": 4294975496,
+        "capture": 4297063424,
+        "write_svc": 4295032852,
+        "exit_svc": 4295032880,
+        "fault": 4295032904,
+        "loop_start": 4295032916,
+        "loop_end": 4295032920,
+        "context_set_dit": 4295034272,
+        "context_set_ssbs": 4295034280,
+        "context_svc": 4295034552
+      },
+      "segments": [
+        {
+          "flags": 5,
+          "offset": 4096,
+          "va": 4294967296,
+          "filesz": 268,
+          "memsz": 268,
+          "align": 4096,
+          "start": 4294967296,
+          "end": 4294971392
+        },
+        {
+          "flags": 6,
+          "offset": 8192,
+          "va": 4294975488,
+          "filesz": 16,
+          "memsz": 16,
+          "align": 4096,
+          "start": 4294975488,
+          "end": 4294979584
+        },
+        {
+          "flags": 5,
+          "offset": 12288,
+          "va": 4295032832,
+          "filesz": 3512,
+          "memsz": 3512,
+          "align": 4096,
+          "start": 4295032832,
+          "end": 4295036928
+        },
+        {
+          "flags": 4,
+          "offset": 16384,
+          "va": 4295036928,
+          "filesz": 283,
+          "memsz": 283,
+          "align": 4096,
+          "start": 4295036928,
+          "end": 4295041024
+        }
+      ],
+      "file": "context_irq_b.elf",
+      "path": "bin/context_irq_b",
+      "sha256": "e12bfc991d57be7f56c86a67545a88527dc35f3f80312f20180c0568ff4a6469"
+    },
+    "loop": {
+      "entry": 4294967296,
+      "pages": 4,
+      "symbols": {
+        "context_captured": 4295034556,
+        "grant_message": 4295036928,
+        "message": 4295036940,
+        "pattern": 4295036955,
+        "native_start": 4294967296,
+        "poll_start": 4294967552,
+        "poll_end": 4294967560,
+        "release": 4294975488,
+        "private_data": 4294975496,
+        "capture": 4297063424,
+        "write_svc": 4295032852,
+        "exit_svc": 4295032880,
+        "fault": 4295032904,
+        "loop_start": 4295032916,
+        "loop_end": 4295032920,
+        "context_set_dit": 4295034272,
+        "context_set_ssbs": 4295034280,
+        "context_svc": 4295034552
+      },
+      "segments": [
+        {
+          "flags": 5,
+          "offset": 4096,
+          "va": 4294967296,
+          "filesz": 268,
+          "memsz": 268,
+          "align": 4096,
+          "start": 4294967296,
+          "end": 4294971392
+        },
+        {
+          "flags": 6,
+          "offset": 8192,
+          "va": 4294975488,
+          "filesz": 16,
+          "memsz": 16,
+          "align": 4096,
+          "start": 4294975488,
+          "end": 4294979584
+        },
+        {
+          "flags": 5,
+          "offset": 12288,
+          "va": 4295032832,
+          "filesz": 3588,
+          "memsz": 3588,
+          "align": 4096,
+          "start": 4295032832,
+          "end": 4295036928
+        },
+        {
+          "flags": 4,
+          "offset": 16384,
+          "va": 4295036928,
+          "filesz": 283,
+          "memsz": 283,
+          "align": 4096,
+          "start": 4295036928,
+          "end": 4295041024
+        }
+      ],
+      "file": "loop.elf",
+      "path": "bin/loop",
+      "sha256": "214d0c715b73452eb13cfd847e8a2e4b9a1fdaf8e9f97ccb82e82e6c0f1ee751"
+    },
+    "hello": {
+      "entry": 4294967296,
+      "pages": 4,
+      "symbols": {
+        "context_captured": 4295034556,
+        "grant_message": 4295036928,
+        "message": 4295036940,
+        "pattern": 4295036955,
+        "native_start": 4294967296,
+        "poll_start": 4294967552,
+        "poll_end": 4294967560,
+        "release": 4294975488,
+        "private_data": 4294975496,
+        "capture": 4297063424,
+        "write_svc": 4295032852,
+        "exit_svc": 4295032880,
+        "fault": 4295032904,
+        "loop_start": 4295032916,
+        "loop_end": 4295032920,
+        "context_set_dit": 4295034272,
+        "context_set_ssbs": 4295034280,
+        "context_svc": 4295034552
+      },
+      "segments": [
+        {
+          "flags": 5,
+          "offset": 4096,
+          "va": 4294967296,
+          "filesz": 268,
+          "memsz": 268,
+          "align": 4096,
+          "start": 4294967296,
+          "end": 4294971392
+        },
+        {
+          "flags": 6,
+          "offset": 8192,
+          "va": 4294975488,
+          "filesz": 16,
+          "memsz": 16,
+          "align": 4096,
+          "start": 4294975488,
+          "end": 4294979584
+        },
+        {
+          "flags": 5,
+          "offset": 12288,
+          "va": 4295032832,
+          "filesz": 3656,
+          "memsz": 3656,
+          "align": 4096,
+          "start": 4295032832,
+          "end": 4295036928
+        },
+        {
+          "flags": 4,
+          "offset": 16384,
+          "va": 4295036928,
+          "filesz": 283,
+          "memsz": 283,
+          "align": 4096,
+          "start": 4295036928,
+          "end": 4295041024
+        }
+      ],
+      "file": "hello.elf",
+      "path": "bin/hello",
+      "sha256": "c6cdffed9f8010eac743610d32d39111bacfb711b776fa23aa39b1d93634d4df"
+    },
+    "byte_budget": {
+      "entry": 4294967296,
+      "pages": 5,
+      "symbols": {
+        "context_captured": 4295034556,
+        "grant_message": 4295041024,
+        "message": 4295041036,
+        "pattern": 4295041051,
+        "native_start": 4294967296,
+        "poll_start": 4294967552,
+        "poll_end": 4294967560,
+        "release": 4294975488,
+        "private_data": 4294975496,
+        "capture": 4297063424,
+        "write_svc": 4295032852,
+        "exit_svc": 4295032880,
+        "fault": 4295032904,
+        "loop_start": 4295032916,
+        "loop_end": 4295032920,
+        "context_set_dit": 4295034272,
+        "context_set_ssbs": 4295034280,
+        "context_svc": 4295034552
+      },
+      "segments": [
+        {
+          "flags": 5,
+          "offset": 4096,
+          "va": 4294967296,
+          "filesz": 268,
+          "memsz": 268,
+          "align": 4096,
+          "start": 4294967296,
+          "end": 4294971392
+        },
+        {
+          "flags": 6,
+          "offset": 8192,
+          "va": 4294975488,
+          "filesz": 16,
+          "memsz": 16,
+          "align": 4096,
+          "start": 4294975488,
+          "end": 4294979584
+        },
+        {
+          "flags": 5,
+          "offset": 12288,
+          "va": 4295032832,
+          "filesz": 4192,
+          "memsz": 4192,
+          "align": 4096,
+          "start": 4295032832,
+          "end": 4295041024
+        },
+        {
+          "flags": 4,
+          "offset": 20480,
+          "va": 4295041024,
+          "filesz": 283,
+          "memsz": 283,
+          "align": 4096,
+          "start": 4295041024,
+          "end": 4295045120
+        }
+      ],
+      "file": "byte_budget.elf",
+      "path": "bin/byte_budget",
+      "sha256": "40a758748d94f3ffa4ea390f726cc017ee59ab1525f1669a7c15fb52655e5fdd"
+    },
+    "call_limit": {
+      "entry": 4294967296,
+      "pages": 4,
+      "symbols": {
+        "context_captured": 4295034556,
+        "grant_message": 4295036928,
+        "message": 4295036940,
+        "pattern": 4295036955,
+        "native_start": 4294967296,
+        "poll_start": 4294967552,
+        "poll_end": 4294967560,
+        "release": 4294975488,
+        "private_data": 4294975496,
+        "capture": 4297063424,
+        "write_svc": 4295032852,
+        "exit_svc": 4295032880,
+        "fault": 4295032904,
+        "loop_start": 4295032916,
+        "loop_end": 4295032920,
+        "context_set_dit": 4295034272,
+        "context_set_ssbs": 4295034280,
+        "context_svc": 4295034552
+      },
+      "segments": [
+        {
+          "flags": 5,
+          "offset": 4096,
+          "va": 4294967296,
+          "filesz": 268,
+          "memsz": 268,
+          "align": 4096,
+          "start": 4294967296,
+          "end": 4294971392
+        },
+        {
+          "flags": 6,
+          "offset": 8192,
+          "va": 4294975488,
+          "filesz": 16,
+          "memsz": 16,
+          "align": 4096,
+          "start": 4294975488,
+          "end": 4294979584
+        },
+        {
+          "flags": 5,
+          "offset": 12288,
+          "va": 4295032832,
+          "filesz": 3612,
+          "memsz": 3612,
+          "align": 4096,
+          "start": 4295032832,
+          "end": 4295036928
+        },
+        {
+          "flags": 4,
+          "offset": 16384,
+          "va": 4295036928,
+          "filesz": 283,
+          "memsz": 283,
+          "align": 4096,
+          "start": 4295036928,
+          "end": 4295041024
+        }
+      ],
+      "file": "call_limit.elf",
+      "path": "bin/call_limit",
+      "sha256": "2f0afd2cbbe8e6c0202c445ac4beb6961c7c9857250e3f4fca76c4013359ebea"
+    },
+    "fault": {
+      "entry": 4294967296,
+      "pages": 4,
+      "symbols": {
+        "context_captured": 4295034556,
+        "grant_message": 4295036928,
+        "message": 4295036940,
+        "pattern": 4295036955,
+        "native_start": 4294967296,
+        "poll_start": 4294967552,
+        "poll_end": 4294967560,
+        "release": 4294975488,
+        "private_data": 4294975496,
+        "capture": 4297063424,
+        "write_svc": 4295032852,
+        "exit_svc": 4295032880,
+        "fault": 4295032904,
+        "loop_start": 4295032916,
+        "loop_end": 4295032920,
+        "context_set_dit": 4295034272,
+        "context_set_ssbs": 4295034280,
+        "context_svc": 4295034552
+      },
+      "segments": [
+        {
+          "flags": 5,
+          "offset": 4096,
+          "va": 4294967296,
+          "filesz": 268,
+          "memsz": 268,
+          "align": 4096,
+          "start": 4294967296,
+          "end": 4294971392
+        },
+        {
+          "flags": 6,
+          "offset": 8192,
+          "va": 4294975488,
+          "filesz": 16,
+          "memsz": 16,
+          "align": 4096,
+          "start": 4294975488,
+          "end": 4294979584
+        },
+        {
+          "flags": 5,
+          "offset": 12288,
+          "va": 4295032832,
+          "filesz": 3588,
+          "memsz": 3588,
+          "align": 4096,
+          "start": 4295032832,
+          "end": 4295036928
+        },
+        {
+          "flags": 4,
+          "offset": 16384,
+          "va": 4295036928,
+          "filesz": 283,
+          "memsz": 283,
+          "align": 4096,
+          "start": 4295036928,
+          "end": 4295041024
+        }
+      ],
+      "file": "fault.elf",
+      "path": "bin/fault",
+      "sha256": "f6e7657456ebb3e845eee12f35ba5a6146f5315b09ad3bb6f89456675fa33eca"
+    },
+    "yield": {
+      "entry": 4294967296,
+      "pages": 4,
+      "symbols": {
+        "context_captured": 4295034556,
+        "grant_message": 4295036928,
+        "message": 4295036940,
+        "pattern": 4295036955,
+        "native_start": 4294967296,
+        "poll_start": 4294967552,
+        "poll_end": 4294967560,
+        "release": 4294975488,
+        "private_data": 4294975496,
+        "capture": 4297063424,
+        "write_svc": 4295032852,
+        "exit_svc": 4295032880,
+        "fault": 4295032904,
+        "loop_start": 4295032916,
+        "loop_end": 4295032920,
+        "context_set_dit": 4295034272,
+        "context_set_ssbs": 4295034280,
+        "context_svc": 4295034552
+      },
+      "segments": [
+        {
+          "flags": 5,
+          "offset": 4096,
+          "va": 4294967296,
+          "filesz": 268,
+          "memsz": 268,
+          "align": 4096,
+          "start": 4294967296,
+          "end": 4294971392
+        },
+        {
+          "flags": 6,
+          "offset": 8192,
+          "va": 4294975488,
+          "filesz": 16,
+          "memsz": 16,
+          "align": 4096,
+          "start": 4294975488,
+          "end": 4294979584
+        },
+        {
+          "flags": 5,
+          "offset": 12288,
+          "va": 4295032832,
+          "filesz": 3656,
+          "memsz": 3656,
+          "align": 4096,
+          "start": 4295032832,
+          "end": 4295036928
+        },
+        {
+          "flags": 4,
+          "offset": 16384,
+          "va": 4295036928,
+          "filesz": 283,
+          "memsz": 283,
+          "align": 4096,
+          "start": 4295036928,
+          "end": 4295041024
+        }
+      ],
+      "file": "yield.elf",
+      "path": "bin/yield",
+      "sha256": "6a99749715aa288f4101eeff10970334633047a2b73669f6c2667bcc3564a4a5"
+    },
+    "grant": {
+      "entry": 4294967296,
+      "pages": 5,
+      "symbols": {
+        "context_captured": 4295034556,
+        "grant_message": 4295041024,
+        "message": 4295041036,
+        "pattern": 4295041051,
+        "native_start": 4294967296,
+        "poll_start": 4294967552,
+        "poll_end": 4294967560,
+        "release": 4294975488,
+        "private_data": 4294975496,
+        "capture": 4297063424,
+        "write_svc": 4295032852,
+        "exit_svc": 4295032880,
+        "fault": 4295032904,
+        "loop_start": 4295032916,
+        "loop_end": 4295032920,
+        "context_set_dit": 4295034272,
+        "context_set_ssbs": 4295034280,
+        "context_svc": 4295034552
+      },
+      "segments": [
+        {
+          "flags": 5,
+          "offset": 4096,
+          "va": 4294967296,
+          "filesz": 268,
+          "memsz": 268,
+          "align": 4096,
+          "start": 4294967296,
+          "end": 4294971392
+        },
+        {
+          "flags": 6,
+          "offset": 8192,
+          "va": 4294975488,
+          "filesz": 16,
+          "memsz": 16,
+          "align": 4096,
+          "start": 4294975488,
+          "end": 4294979584
+        },
+        {
+          "flags": 5,
+          "offset": 12288,
+          "va": 4295032832,
+          "filesz": 8048,
+          "memsz": 8048,
+          "align": 4096,
+          "start": 4295032832,
+          "end": 4295041024
+        },
+        {
+          "flags": 4,
+          "offset": 20480,
+          "va": 4295041024,
+          "filesz": 712,
+          "memsz": 712,
+          "align": 4096,
+          "start": 4295041024,
+          "end": 4295045120
+        }
+      ],
+      "file": "grant.elf",
+      "path": "bin/grant",
+      "sha256": "3aec3f766b36e7b17d73256a61e0f9ffe6e496b78cd657ec925742316bd37bd5"
+    }
+  }
+}

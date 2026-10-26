@@ -1,0 +1,93 @@
+{
+  "version": 1,
+  "archive": "runtime-initramfs.cpio",
+  "sha256": "1b5a86130b0b7fdc6de91a4dc00881c07ca6234b704fb85b319528fff086d5dd",
+  "bytes": 224768,
+  "entries": [
+    {
+      "path": "bin",
+      "kind": "directory",
+      "mode": 16877,
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "bin/context_svc_a",
+      "kind": "file",
+      "mode": 33261,
+      "size": 19200,
+      "sha256": "c6e8fd9e2212de116aec529d89c8e8024776f2955bad319acc0ac02c013e0ad1"
+    },
+    {
+      "path": "bin/context_svc_b",
+      "kind": "file",
+      "mode": 33261,
+      "size": 19200,
+      "sha256": "081061ca28d615ced750994e3cdca838f54d8e3c9e42beab8c933488526de45b"
+    },
+    {
+      "path": "bin/context_irq_a",
+      "kind": "file",
+      "mode": 33261,
+      "size": 19096,
+      "sha256": "2edfdf2c051bdb4fa85bfc1a83f5619bb05d9e525d6815835b59dcdf9c7986b8"
+    },
+    {
+      "path": "bin/context_irq_b",
+      "kind": "file",
+      "mode": 33261,
+      "size": 19096,
+      "sha256": "e12bfc991d57be7f56c86a67545a88527dc35f3f80312f20180c0568ff4a6469"
+    },
+    {
+      "path": "bin/loop",
+      "kind": "file",
+      "mode": 33261,
+      "size": 19248,
+      "sha256": "214d0c715b73452eb13cfd847e8a2e4b9a1fdaf8e9f97ccb82e82e6c0f1ee751"
+    },
+    {
+      "path": "bin/hello",
+      "kind": "file",
+      "mode": 33261,
+      "size": 19344,
+      "sha256": "c6cdffed9f8010eac743610d32d39111bacfb711b776fa23aa39b1d93634d4df"
+    },
+    {
+      "path": "bin/byte_budget",
+      "kind": "file",
+      "mode": 33261,
+      "size": 23352,
+      "sha256": "40a758748d94f3ffa4ea390f726cc017ee59ab1525f1669a7c15fb52655e5fdd"
+    },
+    {
+      "path": "bin/call_limit",
+      "kind": "file",
+      "mode": 33261,
+      "size": 19160,
+      "sha256": "2f0afd2cbbe8e6c0202c445ac4beb6961c7c9857250e3f4fca76c4013359ebea"
+    },
+    {
+      "path": "bin/fault",
+      "kind": "file",
+      "mode": 33261,
+      "size": 19248,
+      "sha256": "f6e7657456ebb3e845eee12f35ba5a6146f5315b09ad3bb6f89456675fa33eca"
+    },
+    {
+      "path": "bin/yield",
+      "kind": "file",
+      "mode": 33261,
+      "size": 19344,
+      "sha256": "6a99749715aa288f4101eeff10970334633047a2b73669f6c2667bcc3564a4a5"
+    },
+    {
+      "path": "bin/grant",
+      "kind": "file",
+      "mode": 33261,
+      "size": 26632,
+      "sha256": "3aec3f766b36e7b17d73256a61e0f9ffe6e496b78cd657ec925742316bd37bd5"
+    }
+  ],
+  "fixtures_manifest_sha256": "8ab02103720602eded6e72750bda602aa8edfedf5799bbafb5e0544a65289811"
+}

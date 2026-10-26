@@ -96,6 +96,19 @@ pub struct Space<'pool> {
 }
 
 impl<'pool> Factory<'pool> {
+    pub(super) fn reborrow(&self) -> Factory<'pool> {
+        Factory {
+            pool: self.pool,
+            cpus: self.cpus,
+            _local: PhantomData,
+        }
+    }
+    pub(super) fn pool(&self) -> &'pool Pool {
+        self.pool
+    }
+    pub(super) fn cpus(&self) -> usize {
+        self.cpus
+    }
     /// The caller proves these are the actual BootPlatform pool/topology and
     /// immutable boot tables, with no external CPU starts or DMA; design 0022.
     // SAFETY: This private constructor binds the stronger platform proof to
@@ -174,6 +187,31 @@ impl<'pool> Factory<'pool> {
 }
 
 impl Space<'_> {
+    #[cfg(feature = "runtime-tests")]
+    pub(super) fn runtime_release_word(&self) -> Result<u64, Error> {
+        context()?;
+        const VA: u64 = 0x1_0000_2000;
+        if self
+            .page(VA)
+            .is_none_or(|page| page.permissions != Permissions::ReadWrite)
+        {
+            return Err(Error::Bounds);
+        }
+        let mut bytes = [0; 8];
+        self.read_into(VA, &mut bytes)?;
+        Ok(u64::from_le_bytes(bytes))
+    }
+    #[cfg(feature = "runtime-tests")]
+    pub(super) fn release_runtime_probe(&mut self) -> Result<(), Error> {
+        if self.runtime_release_word()? != 0 {
+            return Err(Error::Bounds);
+        }
+        let index = slot(0x1_0000_2000).ok_or(Error::Bounds)?;
+        let frame = self.pages[index].as_mut().ok_or(Error::Bounds)?;
+        frame.bytes_mut()[..8].copy_from_slice(&1u64.to_le_bytes());
+        Ok(())
+    }
+
     pub(super) fn cpus(&self) -> usize {
         self.cpus
     }

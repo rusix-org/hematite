@@ -13,7 +13,11 @@ global_asm!(include_str!("boot-aarch64.S"), rust_entry = sym super::boot_main,
 // assembly. Tables are mutable hardware storage; no Rust references escape.
 // Address-only linker markers are zero-sized, not immutable byte objects.
 unsafe extern "C" {
-    #[cfg(any(feature = "process-tests", feature = "startup-input-tests"))]
+    #[cfg(any(
+        feature = "process-tests",
+        feature = "startup-input-tests",
+        feature = "runtime-tests"
+    ))]
     static arm_vectors: [u8; 0];
     static mut arm_root: [u64; 512];
     static mut arm_secondary_root: [u64; 512];
@@ -64,7 +68,86 @@ pub(super) struct BootPlatform {
 }
 pub(super) const BANNER: &str = "hematite: ARM64 Rust kernel entered at EL1\n";
 
+#[cfg(feature = "runtime-tests")]
+#[cfg_attr(
+    any(
+        feature = "secondary-tests",
+        feature = "process-tests",
+        feature = "startup-input-tests",
+        feature = "nested-fault-test",
+        feature = "unhandled-fault-test",
+        feature = "thread-overflow-test",
+        feature = "preemption-overflow-test",
+        feature = "wait-all-blocked-test"
+    ),
+    allow(dead_code)
+)]
+pub(super) fn runtime_tests(platform: &mut BootPlatform) -> bool {
+    struct Output;
+    impl core::fmt::Write for Output {
+        fn write_str(&mut self, text: &str) -> core::fmt::Result {
+            for byte in text.bytes() {
+                if byte == b'\n' {
+                    serial_byte(b'\r');
+                }
+                serial_byte(byte);
+            }
+            Ok(())
+        }
+    }
+    let (Some(pool), Some(topology)) = (platform.pool.as_ref(), platform.topology.as_ref()) else {
+        return false;
+    };
+    if topology.affinities() != [0] {
+        return false;
+    }
+    let checks = super::timer::checks();
+    let bits = u8::from(checks.delivery)
+        | (u8::from(checks.context) << 1)
+        | (u8::from(checks.quiescent) << 2)
+        | (u8::from(checks.timeout) << 3);
+    let _ = core::fmt::write(
+        &mut Output,
+        format_args!("HMRT PREFLIGHT checks={bits} irqs=8\n"),
+    );
+    if bits != 15 {
+        return false;
+    }
+    // SAFETY: Actual private BootPlatform supplies the Pool exclusions,
+    // immutable mappings and CPU0-only topology, with no external CPU or DMA.
+    let Ok(factory) = (unsafe { super::user_space::Factory::from_boot(pool, topology) }) else {
+        return false;
+    };
+    // SAFETY: Same permanent boot proof and completed timer delivery/quiescence
+    // preflight; the permanent latch binds this boot's sole execution namespace.
+    let Ok(mut executor) = (unsafe { super::process::Executor::from_boot(topology) }) else {
+        return false;
+    };
+    super::runtime_checks::run(
+        pool,
+        &factory,
+        &mut executor,
+        core::ptr::addr_of!(arm_root) as u64,
+        core::ptr::addr_of!(arm_vectors) as u64,
+        &mut Output,
+    )
+}
+
 impl Platform for BootPlatform {
+    fn run_native_group(
+        &mut self,
+        paths: [&str; 2],
+    ) -> Result<hm_kernel::native_launch::GroupLaunchReport, hm_kernel::native_launch::LaunchError>
+    {
+        let (Some(pool), Some(topology)) = (self.pool.as_ref(), self.topology.as_ref()) else {
+            return Err(hm_kernel::native_launch::LaunchError::Unavailable);
+        };
+        // SAFETY: Private initialized BootPlatform fields bind actual mappings,
+        // Pool exclusions and topology; no external CPU starts or DMA exist.
+        // State admits both programs and restores/reclaims before returning.
+        unsafe { self.native.run_group(pool, topology, paths) }
+    }
+
     fn native_archive(&self) -> Option<&'static [u8]> {
         self.topology
             .as_ref()

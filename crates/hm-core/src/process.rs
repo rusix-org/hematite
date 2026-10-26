@@ -11,7 +11,7 @@ use hm_kernel::native::{self, Host, Issuer, Session};
 
 pub const STARTUP: u64 = 0x1_0010_0000;
 pub const STACK_TOP: u64 = 0x1_0020_0000;
-const MAX_COUNT: u64 = 0x00ff_ffff_ffff_ffff;
+pub(super) const MAX_COUNT: u64 = 0x00ff_ffff_ffff_ffff;
 static CLAIMED: AtomicBool = AtomicBool::new(false);
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum Error {
@@ -60,6 +60,9 @@ pub struct Executor {
     cpus: usize,
     index: u64,
     frequency: u64,
+    retired: bool,
+    next_group: u64,
+    last_prepared: Option<u32>,
     _local: PhantomData<*mut ()>,
 }
 pub struct Process<'pool> {
@@ -172,6 +175,9 @@ impl Executor {
             cpus,
             index: 0,
             frequency,
+            retired: false,
+            next_group: 1,
+            last_prepared: None,
             _local: PhantomData,
         })
     }
@@ -216,6 +222,9 @@ impl Executor {
         budget: usize,
         input: Option<&hm_kernel::startup_input::Input>,
     ) -> Result<Process<'p>, (Error, Space<'p>)> {
+        if self.retired {
+            return Err((Error::Platform, space));
+        }
         if admission().is_err() || space.cpus() != self.cpus {
             return Err((Error::Context, space));
         }
@@ -238,6 +247,9 @@ impl Executor {
         context[layout::USER_SP / 8] = STACK_TOP;
         context[layout::USER_PC / 8] = space.entry();
         context[layout::USER_PSTATE / 8] = 0x0040_0340;
+        if handle != 0 {
+            self.last_prepared = Some((handle >> 32) as u32);
+        }
         Ok(Process {
             space,
             session,
@@ -247,21 +259,18 @@ impl Executor {
     }
     #[inline(never)]
     pub fn run(&mut self, mut process: Process<'_>) -> Result<RunReport, Error> {
-        user_space::context().map_err(|_| Error::Context)?;
-        if super::threads::BUSY
-            .compare_exchange(false, true, Ordering::AcqRel, Ordering::Acquire)
-            .is_err()
-        {
-            return Err(Error::Busy);
-        }
-        let lease = Lease;
-        let result = self.execute(&mut process);
+        let lease = Lease::acquire()?;
+        let result = if self.retired {
+            Err(Error::Platform)
+        } else {
+            self.execute(&mut process, &lease)
+        };
         drop(process);
         drop(lease);
         result
     }
     #[inline(never)]
-    fn execute(&mut self, process: &mut Process<'_>) -> Result<RunReport, Error> {
+    fn execute(&mut self, process: &mut Process<'_>, lease: &Lease) -> Result<RunReport, Error> {
         admission()?;
         if self.cpus == 2
             && ((hvc(0x8400_000a, 0xc400_0004, 0) as i64) < 0 || hvc(0xc400_0004, 1, 0) != 1)
@@ -306,23 +315,7 @@ impl Executor {
                 break (Reason::Fault, 0);
             }
             admission()?;
-            // SAFETY: BUSY and actual peer OFF retained; private context and
-            // audited owned root stay alive. Assembly copies only under boot
-            // mappings, uses trusted exception stack, restores before return.
-            let kind = unsafe {
-                arm_process_slice(
-                    process.space.root_address(),
-                    process.context.as_mut_ptr(),
-                    deadline,
-                )
-            };
-            if observe() != saved || admission().is_err() {
-                fatal();
-            }
-            let spsr = process.context[layout::USER_PSTATE / 8];
-            if spsr & 0x1f != 0 {
-                fatal();
-            }
+            let kind = self.slice(process, deadline, &saved, lease);
             match kind {
                 3 => {
                     irqs += 1;
@@ -347,49 +340,8 @@ impl Executor {
             if now >= deadline {
                 break (Reason::Deadline, 0);
             }
-            let request = native::Request {
-                version: process.context[0],
-                operation: process.context[8],
-                argument: process.context[1],
-                address: process.context[2],
-                length: process.context[3],
-            };
-            let ordinal = process.session.calls() + 1;
-            if self.output == OutputMode::Trace {
-                let _ = writeln!(
-                    Uart,
-                    "HMPROC CALL index={index} ordinal={ordinal} pc={} version={} operation={} arg1={} arg2={} arg3={}",
-                    process.context[layout::USER_PC / 8],
-                    request.version,
-                    request.operation,
-                    request.argument,
-                    request.address,
-                    request.length
-                );
-            }
-            let mut host = Console {
-                output: self.output,
-                space: &process.space,
-                index,
-                ordinal,
-            };
-            match process.session.dispatch(request, &mut host) {
-                native::Outcome::Stop(native::Stop::Exit(code)) => break (Reason::Exit, code),
-                native::Outcome::Stop(native::Stop::CallLimit) => break (Reason::CallLimit, 0),
-                native::Outcome::Reply(reply) => {
-                    if self.output == OutputMode::Trace {
-                        let _ = writeln!(
-                            Uart,
-                            "HMPROC RESULT index={index} ordinal={ordinal} status={} bytes={}",
-                            reply.status as u64, reply.written
-                        );
-                    }
-                    process.context[0] = reply.status as u64;
-                    process.context[1] = reply.written;
-                    if !process.session.may_resume() {
-                        break (Reason::CallLimit, 0);
-                    }
-                }
+            if let Some(stop) = self.dispatch(process, index) {
+                break stop;
             }
         };
         let report = RunReport {
@@ -416,8 +368,202 @@ impl Executor {
         };
         Ok(report)
     }
+
+    fn slice(
+        &mut self,
+        process: &mut Process<'_>,
+        deadline: u64,
+        saved: &[u64; 26],
+        _lease: &Lease,
+    ) -> u64 {
+        // SAFETY: The retained private BUSY lease and caller's admitted CPU0/
+        // peer-OFF proof exclude other execution. Process owns the root and
+        // context throughout the assembly-only window; boot mappings and all
+        // listed controls are restored before any Rust resumes.
+        let kind = unsafe {
+            arm_process_slice(
+                process.space.root_address(),
+                process.context.as_mut_ptr(),
+                deadline,
+            )
+        };
+        if observe() != *saved
+            || admission().is_err()
+            || process.context[layout::USER_PSTATE / 8] & 0x1f != 0
+        {
+            fatal();
+        }
+        kind
+    }
+    pub(super) fn group_slice(
+        &mut self,
+        process: &mut Process<'_>,
+        deadline: u64,
+        saved: &[u64; 26],
+        lease: &Lease,
+    ) -> u64 {
+        if self.cpus != 1 || self.retired {
+            fatal();
+        }
+        self.slice(process, deadline, saved, lease)
+    }
+    pub(super) fn retire(&mut self) {
+        self.retired = true;
+    }
+    pub(super) fn retired(&self) -> bool {
+        self.retired
+    }
+    pub(super) fn cpus(&self) -> usize {
+        self.cpus
+    }
+    pub(super) fn last_prepared_generation(&self) -> Option<u32> {
+        self.last_prepared
+    }
+    pub(super) fn issue_group(&mut self) -> Result<u64, Error> {
+        if self.retired || self.next_group == 0 {
+            return Err(Error::Platform);
+        }
+        let group = self.next_group;
+        self.next_group = group.checked_add(1).unwrap_or(0);
+        Ok(group)
+    }
+    pub(super) fn tracing(&self) -> bool {
+        self.output == OutputMode::Trace
+    }
+    // Legacy execution retains synchronous HMPROC serialization and timing.
+    fn dispatch(&mut self, process: &mut Process<'_>, index: u64) -> Option<(Reason, u8)> {
+        let request = native::Request {
+            version: process.context[0],
+            operation: process.context[8],
+            argument: process.context[1],
+            address: process.context[2],
+            length: process.context[3],
+        };
+        let ordinal = process.session.calls() + 1;
+        if self.tracing() {
+            let _ = writeln!(
+                Uart,
+                "HMPROC CALL index={index} ordinal={ordinal} pc={} version={} operation={} arg1={} arg2={} arg3={}",
+                process.context[layout::USER_PC / 8],
+                request.version,
+                request.operation,
+                request.argument,
+                request.address,
+                request.length
+            );
+        }
+        let mut host = Console {
+            output: self.output,
+            space: &process.space,
+            index,
+            ordinal,
+        };
+        match process.session.dispatch(request, &mut host) {
+            native::Outcome::Stop(native::Stop::Exit(code)) => Some((Reason::Exit, code)),
+            native::Outcome::Stop(native::Stop::CallLimit) => Some((Reason::CallLimit, 0)),
+            native::Outcome::Reply(reply) => {
+                if self.tracing() {
+                    let _ = writeln!(
+                        Uart,
+                        "HMPROC RESULT index={index} ordinal={ordinal} status={} bytes={}",
+                        reply.status as u64, reply.written
+                    );
+                }
+                process.context[0] = reply.status as u64;
+                process.context[1] = reply.written;
+                if process.session.may_resume() {
+                    None
+                } else {
+                    Some((Reason::CallLimit, 0))
+                }
+            }
+        }
+    }
+    pub(super) fn dispatch_group(
+        &mut self,
+        process: &mut Process<'_>,
+        capture: &mut GroupCapture,
+    ) -> Option<(Reason, u8)> {
+        if capture.request.is_some() {
+            fatal();
+        }
+        let request = native::Request {
+            version: process.context[0],
+            operation: process.context[8],
+            argument: process.context[1],
+            address: process.context[2],
+            length: process.context[3],
+        };
+        capture.request = Some(request);
+        capture.ordinal = process.session.calls() + 1;
+        capture.pc = process.pc();
+        let mut host = GroupConsole {
+            output: self.output,
+            space: &process.space,
+            capture,
+        };
+        match process.session.dispatch(request, &mut host) {
+            native::Outcome::Stop(native::Stop::Exit(code)) => Some((Reason::Exit, code)),
+            native::Outcome::Stop(native::Stop::CallLimit) => Some((Reason::CallLimit, 0)),
+            native::Outcome::Reply(reply) => {
+                capture.reply = Some(reply);
+                process.context[0] = reply.status as u64;
+                process.context[1] = reply.written;
+                if process.session.may_resume() {
+                    None
+                } else {
+                    Some((Reason::CallLimit, 0))
+                }
+            }
+        }
+    }
 }
 impl Process<'_> {
+    pub(super) fn pc(&self) -> u64 {
+        self.context[layout::USER_PC / 8]
+    }
+    pub(super) fn executable_pc(&self) -> bool {
+        let pc = self.pc();
+        pc & 3 == 0
+            && self
+                .space
+                .page(pc)
+                .is_some_and(|p| p.permissions.executable())
+            && pc.checked_add(3).is_some_and(|end| {
+                self.space
+                    .page(end)
+                    .is_some_and(|p| p.permissions.executable())
+            })
+    }
+    pub(super) fn prepare_instructions(&self) -> Result<(), user_space::Error> {
+        self.space.prepare_instructions()
+    }
+    pub(super) fn calls(&self) -> usize {
+        self.session.calls()
+    }
+    pub(super) fn written(&self) -> usize {
+        self.session.written()
+    }
+    pub(super) fn trap(&self) -> (u64, u64, u64, u64) {
+        (
+            self.context[layout::USER_ESR / 8],
+            if self.context[layout::USER_FAR_VALID / 8] == 0 {
+                0
+            } else {
+                self.context[layout::USER_FAR / 8]
+            },
+            self.pc(),
+            self.context[layout::USER_PSTATE / 8],
+        )
+    }
+    #[cfg(feature = "runtime-tests")]
+    pub(super) fn runtime_release_word(&self) -> Result<u64, user_space::Error> {
+        self.space.runtime_release_word()
+    }
+    #[cfg(feature = "runtime-tests")]
+    pub(super) fn release_runtime_probe(&mut self) -> Result<(), user_space::Error> {
+        self.space.release_runtime_probe()
+    }
     /// Fixed-page, inactive-only observer for the startup-input profile.
     #[cfg(feature = "startup-input-tests")]
     pub(super) fn copy_startup(
@@ -447,7 +593,20 @@ impl Process<'_> {
         self.handle
     }
 }
-struct Lease;
+pub(super) struct Lease {
+    _local: PhantomData<*mut ()>,
+}
+impl Lease {
+    pub(super) fn acquire() -> Result<Self, Error> {
+        user_space::context().map_err(|_| Error::Context)?;
+        super::threads::BUSY
+            .compare_exchange(false, true, Ordering::AcqRel, Ordering::Acquire)
+            .map_err(|_| Error::Busy)?;
+        Ok(Self {
+            _local: PhantomData,
+        })
+    }
+}
 impl Drop for Lease {
     fn drop(&mut self) {
         super::threads::BUSY.store(false, Ordering::Release);
@@ -490,7 +649,117 @@ impl Host for Console<'_, '_> {
         uart(b'\n');
     }
 }
-struct Uart;
+/// One owned diagnostic sink, confined to a single inactive group turn.
+pub(super) struct GroupCapture {
+    request: Option<native::Request>,
+    reply: Option<native::Response>,
+    ordinal: usize,
+    pc: u64,
+    output: [u8; native::MAX_WRITE],
+    length: usize,
+    output_recorded: bool,
+}
+const _: () = assert!(core::mem::size_of::<GroupCapture>() <= 512);
+impl GroupCapture {
+    pub(super) fn new() -> Self {
+        Self {
+            request: None,
+            reply: None,
+            ordinal: 0,
+            pc: 0,
+            output: [0; native::MAX_WRITE],
+            length: 0,
+            output_recorded: false,
+        }
+    }
+    pub(super) fn emit(&self, group: u64, turn: u64) {
+        let Some(request) = self.request else {
+            return;
+        };
+        let ordinal = self.ordinal;
+        let _ = writeln!(
+            Uart,
+            "HMRT CALL group={group} turn={turn} ordinal={ordinal} pc={} version={} operation={} arg1={} arg2={} arg3={}",
+            self.pc,
+            request.version,
+            request.operation,
+            request.argument,
+            request.address,
+            request.length
+        );
+        if self.length != 0 {
+            let _ = write!(
+                Uart,
+                "HMRT OUTPUT group={group} turn={turn} ordinal={ordinal} length={} hex=",
+                self.length
+            );
+            const HEX: &[u8; 16] = b"0123456789abcdef";
+            for byte in &self.output[..self.length] {
+                uart(HEX[(byte >> 4) as usize]);
+                uart(HEX[(byte & 15) as usize]);
+            }
+            uart(b'\n');
+        }
+        if let Some(reply) = self.reply {
+            let _ = writeln!(
+                Uart,
+                "HMRT RESULT group={group} turn={turn} ordinal={ordinal} status={} bytes={}",
+                reply.status as u64, reply.written
+            );
+        }
+    }
+}
+struct GroupConsole<'space, 'pool, 'capture> {
+    output: OutputMode,
+    space: &'space Space<'pool>,
+    capture: &'capture mut GroupCapture,
+}
+impl Host for GroupConsole<'_, '_, '_> {
+    fn copy_from_user(&mut self, address: u64, output: &mut [u8]) -> Result<(), native::CopyError> {
+        self.space
+            .read_into(address, output)
+            .map_err(|_| native::CopyError)
+    }
+    fn write_console(&mut self, bytes: &[u8]) {
+        if bytes.len() > native::MAX_WRITE || self.capture.output_recorded {
+            fatal();
+        }
+        self.capture.output_recorded = true;
+        if self.output == OutputMode::Terminal {
+            // Real terminal output remains synchronous and inside the charge.
+            for byte in bytes {
+                if *byte == b'\n' {
+                    uart(b'\r');
+                }
+                uart(*byte);
+            }
+        } else {
+            // The Trace sink synchronously owns the complete output record.
+            // Only its diagnostic serialization is deferred; the retained BUSY
+            // lease prevents another user entry before the mandatory flush.
+            self.capture.output[..bytes.len()].copy_from_slice(bytes);
+            self.capture.length = bytes.len();
+        }
+    }
+}
+/// Group-only compiler memory boundary; legacy counter observations are unchanged.
+#[inline(always)]
+pub(super) fn group_counter(process: &Process<'_>, capture: &GroupCapture) -> u64 {
+    let value;
+    // SAFETY: Admitted EL1 counter read. Opaque addresses expose both owned
+    // objects to the compiler's memory clobber; instructions neither dereference
+    // nor mutate them. No nomem/readonly promise permits moving the capture or
+    // Process updates past this observation. ISB is not a data-completion fence.
+    unsafe {
+        asm!("isb", "mrs {value}, cntpct_el0", "/* {owner} {capture} */",
+            value = out(reg) value,
+            owner = in(reg) core::ptr::from_ref(process),
+            capture = in(reg) core::ptr::from_ref(capture),
+            options(nostack, preserves_flags));
+    }
+    value
+}
+pub(super) struct Uart;
 impl Write for Uart {
     fn write_str(&mut self, s: &str) -> fmt::Result {
         for b in s.bytes() {
@@ -512,11 +781,11 @@ fn uart(byte: u8) {
     }
     fatal();
 }
-fn fatal() -> ! {
+pub(super) fn fatal() -> ! {
     // SAFETY: Nonreturning stack-independent failure never reclaims active state.
     unsafe { arm_process_kernel_fatal() }
 }
-fn counter() -> u64 {
+pub(super) fn counter() -> u64 {
     let value;
     // SAFETY: Kernel physical counter observation.
     unsafe {
@@ -540,7 +809,7 @@ fn hvc(function: u64, a: u64, b: u64) -> u64 {
     }
     result
 }
-fn observe() -> [u64; 26] {
+pub(super) fn observe() -> [u64; 26] {
     macro_rules! read { ($register:literal) => {{
         let value:u64;
         // SAFETY: Read-only listed EL1 system register, no memory access.
@@ -585,7 +854,7 @@ fn observe() -> [u64; 26] {
     ]
 }
 
-fn admission() -> Result<(), Error> {
+pub(super) fn admission() -> Result<(), Error> {
     user_space::context().map_err(|_| Error::Context)?;
     let (pfr0, pfr1): (u64, u64);
     // SAFETY: Feature IDs are always accessible at admitted EL1; no optional

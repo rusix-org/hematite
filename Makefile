@@ -45,6 +45,8 @@ test: image
 		python3 tools/test_test_launcher.py; \
 		python3 tools/test_test_launch_input.py; \
 		python3 tools/test_test_startup_delivery.py; \
+		python3 tools/test_test_group_launcher.py; \
+		python3 tools/test_test_runtime.py; \
 		python3 tools/check_repository.py; \
 		python3 tools/check_safety.py; \
 		cargo build --locked --offline -p hm-core --release --features boot-tests --target $(TARGET) --target-dir target/$(ARCH)/boot-test; \
@@ -61,6 +63,7 @@ test: image
 			cargo build --locked --offline -p hm-core --release --features space-tests --target $(TARGET) --target-dir target/$(ARCH)/space-test; \
 			cargo build --locked --offline -p hm-core --release --features process-tests --target $(TARGET) --target-dir target/$(ARCH)/process-test; \
 			cargo build --locked --offline -p hm-core --release --features startup-input-tests --target $(TARGET) --target-dir target/$(ARCH)/startup-input-test; \
+			cargo build --locked --offline -p hm-core --release --features runtime-tests --target $(TARGET) --target-dir target/$(ARCH)/runtime-test; \
 			cargo build --locked --offline -p hm-core --release --features secondary-tests --target $(TARGET) --target-dir target/$(ARCH)/secondary-test; \
 			cargo build --locked --offline -p hm-core --release --features secondary-stale-generation-test --target $(TARGET) --target-dir target/$(ARCH)/secondary-stale-test; \
 			cargo build --locked --offline -p hm-core --release --features secondary-cpu-off-return-test --target $(TARGET) --target-dir target/$(ARCH)/secondary-off-return-test; \
@@ -104,6 +107,7 @@ test: image
 			python3 tools/check_process_budget.py --output "$$evidence_dir/process-budget-host"; \
 			python3 tools/build_apps.py --output "$$evidence_dir/apps-fixtures"; \
 			python3 tools/build_startup_probes.py --output "$$evidence_dir/startup-input-fixtures"; \
+			python3 tools/build_runtime.py --output "$$evidence_dir/runtime-fixtures"; \
 			cargo clippy -p hm-kernel --test launch_input --locked --offline --target x86_64-unknown-linux-gnu --target-dir target/host-launch-input -- -D warnings; \
 			python3 tools/check_launch_input.py --output "$$evidence_dir/launch-input-host"; \
 			python3 tools/build_initramfs.py --output "$$evidence_dir/initramfs-fixture"; \
@@ -124,6 +128,7 @@ test: image
 			python3 tools/check_process_types.py \
 				--library target/$(ARCH)/boot-test/$(TARGET)/release/libhm_kernel.rlib \
 				--target $(TARGET) --output "$$evidence_dir/process-types"; \
+			python3 tools/check_runtime_layout.py --library target/$(ARCH)/boot-test/$(TARGET)/release/libhm_kernel.rlib --output "$$evidence_dir/runtime-layout"; \
 			python3 tools/check_space_types.py \
 				--library target/$(ARCH)/boot-test/$(TARGET)/release/libhm_kernel.rlib \
 				--target $(TARGET) --output "$$evidence_dir/space-types"; \
@@ -153,6 +158,8 @@ test: image
 			python3 tools/test_process.py --kernel target/$(ARCH)/process-test/$(TARGET)/release/hematite --fixtures crates/hm-core/fixtures/process/manifest.json --archive crates/hm-core/fixtures/process-initramfs.cpio --output "$$evidence_dir/process"; \
 			python3 tools/test_startup_delivery.py --kernel target/$(ARCH)/startup-input-test/$(TARGET)/release/hematite --fixtures crates/hm-core/fixtures/startup-input/manifest.json --archive crates/hm-core/fixtures/startup-input-initramfs.cpio --output "$$evidence_dir/startup-delivery"; \
 			python3 tools/test_launcher.py --kernel target/$(ARCH)/monitor/$(TARGET)/release/hematite --apps crates/hm-core/fixtures/apps/manifest.json --archive crates/hm-core/fixtures/apps-initramfs.cpio --output "$$evidence_dir/launcher"; \
+			python3 tools/test_group_launcher.py --kernel target/$(ARCH)/monitor/$(TARGET)/release/hematite --apps crates/hm-core/fixtures/apps/manifest.json --archive crates/hm-core/fixtures/apps-initramfs.cpio --output "$$evidence_dir/group-launcher"; \
+			python3 tools/test_runtime.py --kernel target/$(ARCH)/runtime-test/$(TARGET)/release/hematite --fixtures crates/hm-core/fixtures/runtime/manifest.json --archive crates/hm-core/fixtures/runtime-initramfs.cpio --layout "$$evidence_dir/runtime-layout/result.json" --output "$$evidence_dir/runtime"; \
 			python3 tools/test_space.py --kernel target/$(ARCH)/space-test/$(TARGET)/release/hematite --output "$$evidence_dir/space"; \
 			python3 tools/test_secondary.py --kernel target/$(ARCH)/secondary-test/$(TARGET)/release/hematite --stale-generation-kernel target/$(ARCH)/secondary-stale-test/$(TARGET)/release/hematite --cpu-off-return-kernel target/$(ARCH)/secondary-off-return-test/$(TARGET)/release/hematite --output "$$evidence_dir/secondary"; \
 			python3 tools/test_smp.py --kernel target/$(ARCH)/smp-test/$(TARGET)/release/hematite --no-peer-timer-kernel target/$(ARCH)/smp-no-peer-timer-test/$(TARGET)/release/hematite --peer-overflow-kernel target/$(ARCH)/smp-peer-overflow-test/$(TARGET)/release/hematite --all-blocked-kernel target/$(ARCH)/smp-all-blocked-test/$(TARGET)/release/hematite --output "$$evidence_dir/smp"; \

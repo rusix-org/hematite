@@ -111,6 +111,9 @@ mod process;
     allow(dead_code)
 )]
 mod process_checks;
+#[cfg(target_arch = "aarch64")]
+#[allow(dead_code)]
+mod process_group;
 #[cfg(all(target_arch = "aarch64", feature = "process-tests"))]
 #[cfg_attr(
     any(
@@ -124,6 +127,23 @@ mod process_checks;
     allow(dead_code)
 )]
 mod process_inputs;
+#[cfg(all(target_arch = "aarch64", feature = "runtime-tests"))]
+#[cfg_attr(
+    any(
+        feature = "secondary-tests",
+        feature = "process-tests",
+        feature = "startup-input-tests",
+        feature = "nested-fault-test",
+        feature = "unhandled-fault-test",
+        feature = "thread-overflow-test",
+        feature = "preemption-overflow-test",
+        feature = "wait-all-blocked-test"
+    ),
+    allow(dead_code)
+)]
+mod runtime_checks;
+#[cfg(all(target_arch = "aarch64", feature = "runtime-tests"))]
+mod runtime_inputs;
 
 #[cfg(all(target_arch = "aarch64", feature = "startup-input-tests"))]
 #[cfg_attr(
@@ -271,11 +291,27 @@ extern "C" fn boot_main(_boot_info: u64) -> ! {
         }
         #[cfg(all(
             target_arch = "aarch64",
-            feature = "space-tests",
+            feature = "runtime-tests",
             not(any(
                 feature = "secondary-tests",
                 feature = "process-tests",
                 feature = "startup-input-tests"
+            ))
+        ))]
+        {
+            if !arch::runtime_tests(&mut platform) {
+                arch::exit(false);
+            }
+            arch::exit(hm_kernel::run_tests(&mut platform));
+        }
+        #[cfg(all(
+            target_arch = "aarch64",
+            feature = "space-tests",
+            not(any(
+                feature = "secondary-tests",
+                feature = "process-tests",
+                feature = "startup-input-tests",
+                feature = "runtime-tests"
             ))
         ))]
         {
@@ -292,7 +328,8 @@ extern "C" fn boot_main(_boot_info: u64) -> ! {
                     feature = "secondary-tests",
                     feature = "space-tests",
                     feature = "process-tests",
-                    feature = "startup-input-tests"
+                    feature = "startup-input-tests",
+                    feature = "runtime-tests"
                 )
             ))
         ))]
@@ -305,7 +342,8 @@ extern "C" fn boot_main(_boot_info: u64) -> ! {
                     feature = "secondary-tests",
                     feature = "space-tests",
                     feature = "process-tests",
-                    feature = "startup-input-tests"
+                    feature = "startup-input-tests",
+                    feature = "runtime-tests"
                 )
             ))
         ))]
@@ -323,7 +361,8 @@ extern "C" fn boot_main(_boot_info: u64) -> ! {
                     feature = "secondary-tests",
                     feature = "space-tests",
                     feature = "process-tests",
-                    feature = "startup-input-tests"
+                    feature = "startup-input-tests",
+                    feature = "runtime-tests"
                 )
             ))
         ))]
@@ -337,7 +376,8 @@ extern "C" fn boot_main(_boot_info: u64) -> ! {
                     feature = "secondary-tests",
                     feature = "space-tests",
                     feature = "process-tests",
-                    feature = "startup-input-tests"
+                    feature = "startup-input-tests",
+                    feature = "runtime-tests"
                 )
             )
         )))]

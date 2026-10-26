@@ -654,7 +654,7 @@ fn status(platform: &mut impl Platform) {
 pub fn run_monitor(platform: &mut impl Platform) -> ! {
     platform.write("Hematite bootstrap monitor (local working name)\n");
     platform.write(
-        "Commands: help, status, test, apps, run <path> [text]. This is not a Linux shell.\n",
+        "Commands: help, status, test, apps, run <path> [text], run-group <path1> <path2>. This is not a Linux shell.\n",
     );
     platform.write("hm> ");
     let mut line = InputLine::new();
@@ -677,7 +677,7 @@ pub fn run_monitor(platform: &mut impl Platform) -> ! {
                 match line.command() {
                     None => platform.write("Rejected: use at most 64 printable ASCII bytes.\n"),
                     Some(b"") => {}
-                    Some(b"help") => platform.write("help   - show commands\nstatus - inspect boot protections\ntest   - run bootstrap tests\napps   - list native programs\nrun <path> [text] - launch a native program\n"),
+                    Some(b"help") => platform.write("help   - show commands\nstatus - inspect boot protections\ntest   - run bootstrap tests\napps   - list native programs\nrun <path> [text] - launch a native program\nrun-group <path1> <path2> - run two native programs\n"),
                     Some(b"status") => status(platform),
                     Some(b"apps") => native_launch::list_apps(platform),
                     Some(b"run") => native_launch::run_command(platform, ""),

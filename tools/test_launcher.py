@@ -43,7 +43,7 @@ def banner(ram_mb, pages):
     return transport((f'hematite: ARM64 Rust kernel entered at EL1\nBoot RAM bytes: 0x{ram_mb * 1024 * 1024:016x} (discovered RAM)\n'
                       f'Frame pool pages: 0x{pages:016x} (4 KiB each; boot reservations excluded)\n'
                       'Hematite bootstrap monitor (local working name)\n'
-                      'Commands: help, status, test, apps, run <path> [text]. This is not a Linux shell.\n').encode())
+                      'Commands: help, status, test, apps, run <path> [text], run-group <path1> <path2>. This is not a Linux shell.\n').encode())
 
 
 def steps(pages, fresh=False, input_first=False):
@@ -245,7 +245,7 @@ def validate(raw, trace, execution, apps, symbols, fixups, ram_mb, pages, fresh=
     return {'passed': not errors, 'errors': errors, 'execution': execution, 'serial': serial_report, 'trace': trace_report}
 
 
-def run_profile(output, kernel, apps, symbols, fixups, ram_mb=128, fresh=False, input_first=False):
+def run_profile(output, kernel, apps, symbols, fixups, ram_mb=128, fresh=False, input_first=False, scenario=None):
     output.mkdir()
     pages = (0x41000000 - symbols['__kernel_end']) // 4096
     require(300 < pages < 4096, 'Invalid normal kernel frame baseline')
@@ -289,11 +289,15 @@ def run_profile(output, kernel, apps, symbols, fixups, ram_mb=128, fresh=False, 
             proc = subprocess.Popen(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=stderr, bufsize=0)
             selector.register(proc.stdout, selectors.EVENT_READ)
             require(read_prompt() == banner(ram_mb, pages), 'Wrong boot banner')
-            for name, request, expected in steps(pages, fresh, input_first):
+            plan = steps if scenario is None else scenario.steps
+            for name, request, expected in plan(pages, fresh, input_first):
                 require(proc.stdin.write(request) == len(request), 'Short monitor input write')
                 response = read_prompt()
-                interactions.append({'name': name, 'input_hex': request.hex(), 'expected_hex': expected.hex(), 'response_hex': response.hex()})
-                require(response == expected, 'Wrong interaction: ' + name)
+                choices = expected if isinstance(expected, tuple) else (expected,)
+                interactions.append({'name': name, 'input_hex': request.hex(),
+                    'expected_hex': [item.hex() for item in choices] if isinstance(expected, tuple) else expected.hex(),
+                    'response_hex': response.hex()})
+                require(response in choices, 'Wrong interaction: ' + name)
             execution['alive_after_last_prompt'] = proc.poll() is None
         except TimeoutError as error:
             execution['timed_out'] = True
@@ -316,7 +320,8 @@ def run_profile(output, kernel, apps, symbols, fixups, ram_mb=128, fresh=False, 
                 execution['returncode'] = proc.returncode
     execution['elapsed_seconds'] = time.monotonic() - started
     write_json(output / 'interactions.json', interactions)
-    result = validate(bounded_bytes(output / 'serial.log'), bounded_bytes(output / 'exceptions.log'), execution,
+    validator = validate if scenario is None else scenario.validate
+    result = validator(bounded_bytes(output / 'serial.log'), bounded_bytes(output / 'exceptions.log'), execution,
                       apps, symbols, fixups, ram_mb, pages, fresh, input_first)
     result['artifacts'] = {name: artifact(output / name) for name in ('serial.log', 'exceptions.log', 'stderr.log')}
     result['passed'] &= all(item['within_size_limit'] for item in result['artifacts'].values())

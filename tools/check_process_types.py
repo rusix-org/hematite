@@ -12,9 +12,41 @@ from check_mapping_types import rejected_only_for
 PREAMBLE = '''#![no_std]
 #![forbid(unsafe_code)]
 use hm_process::{Executor, Process, RunReport, Error, Space, Pool, Factory};
+use hm_process::{Group, TaskId};
 use hm_kernel::elf::Image;
 '''
 PROBES = {
+    "valid_group_owned_inputs": ('''pub fn client<'e, 'p>(e: &'e mut Executor, f: Factory<'p>, bytes: &mut [u8]) {
+        let mut group = Group::new(e, f, 512).ok().unwrap();
+        let image = Image::parse(bytes).ok().unwrap();
+        let input = hm_kernel::startup_input::Input::from_bytes(b"job").ok().unwrap();
+        let id = group.admit(&image, true, Some(&input)).ok().unwrap();
+        drop(input); drop(image); bytes.fill(0);
+        let copied = id; let _ = (id.group(), id.slot(), id.generation());
+        let _ = group.info(copied); let _ = group.turn();
+        let _ = group.request_cancel(id); let _ = group.completion(id); let _ = group.reap(id);
+    }''', None),
+    "valid_group_token_survives_drop": ('''pub fn client(e: &mut Executor, f: Factory<'_>, image: &Image<'_>) -> Option<TaskId> {
+        let mut group = Group::new(e, f, 512).ok()?;
+        let id = group.admit(image, false, None).ok()?; drop(group); Some(id)
+    }''', None),
+    "group_clone": ('''pub fn client(g: &Group<'_, '_>) { let _ = <Group<'_, '_> as Clone>::clone(g); }''', "E0277"),
+    "group_copy": ('''fn copy<T: Copy>() {} pub fn client() { copy::<Group<'static, 'static>>(); }''', "E0277"),
+    "group_send": ('''fn send<T: Send>() {} pub fn client() { send::<Group<'static, 'static>>(); }''', "E0277"),
+    "group_sync": ('''fn sync<T: Sync>() {} pub fn client() { sync::<Group<'static, 'static>>(); }''', "E0277"),
+    "group_shared_turn": ('''pub fn client(g: &Group<'_, '_>) { let _ = g.turn(); }''', "E0596"),
+    "group_no_callback": ('''pub fn client(g: &mut Group<'_, '_>) { let _ = g.turn(|| {}); }''', "E0061"),
+    "group_wrong_token": ('''pub fn client(g: &mut Group<'_, '_>) { let _ = g.request_cancel(1u64); }''', "E0308"),
+    "group_no_production_release": ('''pub fn client(g: &mut Group<'_, '_>, id: TaskId) { let _ = g.release_context_probe(id); }''', "E0599"),
+    "group_no_production_observer": ('''pub fn client(g: &Group<'_, '_>, id: TaskId) { let _ = g.test_release_word(id); }''', "E0599"),
+    "group_no_production_probe": ('''pub fn client(g: &mut Group<'_, '_>) { let _ = g.admit_context_probe(()); }''', "E0599"),
+    "group_forge_token": ('''pub fn client(id: TaskId) { let _ = TaskId { ..id }; }''', "E0451"),
+    "group_executor_exclusive": ('''pub fn client(e: &mut Executor, f: Factory<'_>, p: Process<'_>) {
+        let mut g = Group::new(e, f, 512).ok().unwrap(); let _ = e.run(p); let _ = g.turn();
+    }''', "E0499"),
+    "group_pool_lifetime": ('''pub fn client(e: &'static mut Executor, pool: Pool, make: for<'p> fn(&'p Pool)->Factory<'p>) -> Option<Group<'static, 'static>> {
+        Group::new(e, make(&pool), 512).ok()
+    }''', "E0515"),
     "valid_prepare_run": ('''pub fn client(e: &mut Executor, space: Space<'_>) -> Option<RunReport> {
         let process = e.prepare(space, true, 1).ok()?;
         let _ = (process.entry(), process.root_address(), process.frame_count(), process.handle());
@@ -84,14 +116,14 @@ def main():
         parser.error("use a fresh output directory")
     output.mkdir(parents=True)
     source = Path(__file__).resolve().parents[1] / "crates/hm-core/src"
-    modules = ("frames", "cpu_local", "threads", "preempt", "secondary", "user_space", "process")
+    modules = ("frames", "cpu_local", "threads", "preempt", "secondary", "user_space", "process", "process_group")
     inputs = [name + ".rs" for name in modules] + ["process_layout.rs",
         "process-aarch64.S", "user-space-aarch64.S", "threads-aarch64.S",
         "preempt-aarch64.S", "preempt-probe-aarch64.S", "secondary-aarch64.S"]
     wrapper = output / "hm_process.rs"
     wrapper.write_text('#![no_std]\n#![deny(unsafe_op_in_unsafe_fn)]\n' + ''.join(
         f'#[path={json.dumps(str(source / (name + ".rs")))}] mod {name};\n' for name in modules) +
-        'pub use user_space::{Factory, Space};\npub use frames::Pool;\npub use process::{Executor, Process, RunReport, Error};\n')
+        'pub use user_space::{Factory, Space};\npub use frames::Pool;\npub use process::{Executor, Process, RunReport, Error};\npub use process_group::{Group, TaskId};\n')
     (output / "input.json").write_text(json.dumps({"library": str(library),
         "sha256": hashlib.sha256(library.read_bytes()).hexdigest(), "target": args.target,
         "expected_probes": list(PROBES), "sources": {name: hashlib.sha256(
