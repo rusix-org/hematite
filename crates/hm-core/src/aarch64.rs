@@ -60,10 +60,37 @@ pub(super) struct BootPlatform {
     pool: Option<super::frames::Pool>,
     mapper: Option<super::mappings::Mapper>,
     runner: Option<super::threads::Runner>,
+    native: super::launcher::State,
 }
 pub(super) const BANNER: &str = "hematite: ARM64 Rust kernel entered at EL1\n";
 
 impl Platform for BootPlatform {
+    fn native_archive(&self) -> Option<&'static [u8]> {
+        self.topology
+            .as_ref()
+            .filter(|t| t.affinities() == [0])
+            .map(|_| super::launcher::ARCHIVE)
+    }
+    fn native_status(&self) -> hm_kernel::native_launch::NativeStatus {
+        if self.topology.as_ref().is_none_or(|t| t.affinities() != [0]) {
+            return hm_kernel::native_launch::NativeStatus::unsupported();
+        }
+        self.native.status(self.pool.as_ref())
+    }
+    fn run_native(
+        &mut self,
+        path: &str,
+    ) -> Result<hm_kernel::native_launch::LaunchReport, hm_kernel::native_launch::LaunchError> {
+        let (Some(pool), Some(topology)) = (self.pool.as_ref(), self.topology.as_ref()) else {
+            return Err(hm_kernel::native_launch::LaunchError::Unavailable);
+        };
+        // SAFETY: These private fields belong to this initialized BootPlatform;
+        // boot verified immutable mappings, Pool exclusions and CPU topology.
+        // No external peer starts or DMA exist; State performs masked-context,
+        // BUSY, timer and existing process admission before executing any ELF.
+        unsafe { self.native.run(pool, topology, path) }
+    }
+
     fn expected_cpu_count(&self) -> usize {
         if (cfg!(feature = "space-tests") || cfg!(feature = "process-tests"))
             && !cfg!(feature = "secondary-tests")
@@ -519,6 +546,7 @@ fn initialize() -> Result<BootPlatform, ()> {
         pool: None,
         mapper: None,
         runner: None,
+        native: super::launcher::State::new(),
     };
     let checks = platform.checks();
     if !checks.write_protect

@@ -162,28 +162,45 @@ def run_rejected_cpu(output, kernel, feature, arch="aarch64"):
     return result
 
 
-def monitor_steps():
-    help_body = (b"help   - show commands\nstatus - inspect boot protections\n"
-                 b"test   - run bootstrap tests\n")
-    status_body = b"".join(name + b": OK\n" for name in (
-        b"write protection", b"NX", b"user execution protection",
-        b"user access protection", b"W^X mappings",
-        b"stack guard", b"null guard",
-    )) + b"Bootstrap only: one CPU; no userspace, storage, or networking.\n"
+def help_body():
+    return (b"help   - show commands\nstatus - inspect boot protections\n"
+            b"test   - run bootstrap tests\napps   - list native programs\n"
+            b"run <path> - launch a native program\n")
+
+
+def status_body(arch="aarch64", free=0, completed=0, generation=None):
+    body = b"".join(name + b": OK\n" for name in (
+        b"write protection", b"NX", b"user execution protection", b"user access protection",
+        b"W^X mappings", b"stack guard", b"null guard")) + b"No storage or networking.\n"
+    availability = 'unsupported' if arch == 'x86_64' else 'not initialized' if generation is None else 'ready'
+    frames = 'unavailable' if arch == 'x86_64' else str(free)
+    gen = 'none' if generation is None else str(generation)
+    return body + (f"Native launcher: {availability}\nNative launches: {completed}\n"
+                   f"Last prepared generation: {gen}\nFree frames: {frames}\n").encode()
+
+
+def monitor_steps(arch="aarch64", pool_pages=0):
     test_lines = [f"HMTEST BEGIN {len(CASES)}"]
     test_lines += [f"HMTEST PASS {name}" for name in CASES]
     test_lines += [f"HMTEST END {len(CASES)}", "Bootstrap tests passed."]
     test_body = ("\n".join(test_lines) + "\n").encode("ascii")
-    return (
-        ("help", b"help\n", b"help\n" + help_body),
-        ("status", b"status\n", b"status\n" + status_body),
+    steps = (
+        ("help", b"help\n", b"help\n" + help_body()),
+        ("status", b"status\n", b"status\n" + status_body(arch, pool_pages)),
         ("tests", b"test\n", b"test\n" + test_body),
         ("oversized_line", b"x" * 65 + b"\n",
          b"x" * 64 + b"\nRejected: use at most 64 printable ASCII bytes.\n"),
         ("unknown_command", b"unknown\n", b"unknown\nUnknown command; type help.\n"),
-        ("help_after_rejection", b"help\n", b"help\n" + help_body),
+        ("help_after_rejection", b"help\n", b"help\n" + help_body()),
         ("repeated_tests", b"test\n", b"test\n" + test_body),
+        ("status_after_tests", b"status\n", b"status\n" + status_body(arch, pool_pages - 3)),
     )
+    if arch == "x86_64":
+        unsupported = b"Native launching is unsupported on this platform.\n"
+        steps += (("unsupported_apps", b"apps\n", b"apps\n" + unsupported),
+                  ("unsupported_run", b"run bin/hello\n", b"run bin/hello\n" + unsupported),
+                  ("status_after_unsupported", b"status\n", b"status\n" + status_body(arch)))
+    return steps
 
 
 def run_monitor(output, kernel, arch="aarch64", ram_mb=128):
@@ -201,6 +218,7 @@ def run_monitor(output, kernel, arch="aarch64", ram_mb=128):
     }
     proc = None
     pending = bytearray()
+    expected_pages = 0
     with (output / "serial.log").open("wb") as log, selectors.DefaultSelector() as selector:
         def read_prompt():
             while True:
@@ -230,7 +248,7 @@ def run_monitor(output, kernel, arch="aarch64", ram_mb=128):
             banner = read_prompt()
             result["checks"]["initial_prompt_and_banner"] = (
                 b"Hematite bootstrap monitor (local working name)" in banner
-                and b"Commands: help, status, test. This is not a Linux shell." in banner
+                and b"Commands: help, status, test, apps, run <path>. This is not a Linux shell." in banner
             )
             if arch == "aarch64":
                 expected_memory = (f"Boot RAM bytes: 0x{ram_mb * 1024 * 1024:016x} "
@@ -248,7 +266,7 @@ def run_monitor(output, kernel, arch="aarch64", ram_mb=128):
                 pool_line = (f"Frame pool pages: 0x{expected_pages:016x} "
                              "(4 KiB each; boot reservations excluded)").encode("ascii")
                 result["checks"]["pool_excludes_boot_storage"] = lines.count(pool_line) == 1
-            for name, request, expected in monitor_steps():
+            for name, request, expected in monitor_steps(arch, expected_pages):
                 # No input is sent until the kernel has initialized its UART
                 # and emitted a prompt. Each command awaits its own next prompt.
                 if proc.stdin.write(request) != len(request):
@@ -299,7 +317,7 @@ def run_monitor(output, kernel, arch="aarch64", ram_mb=128):
         expected_checks.add("discovered_ram_matches_vm")
         expected_checks.add("pool_excludes_boot_storage")
     expected_checks.add("complete_test_inventory")
-    expected_checks.update(name for name, _, _ in monitor_steps())
+    expected_checks.update(name for name, _, _ in monitor_steps(arch, expected_pages))
     for name in sorted(expected_checks):
         if not result["checks"].get(name, False):
             result["errors"].append(f"missing or failed check: {name}")

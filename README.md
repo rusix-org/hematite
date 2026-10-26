@@ -12,7 +12,26 @@ With Docker running and Make installed:
 make run    # build and open the ARM64 monitor; Ctrl-C exits
 ```
 
-Type `help`, `status`, or `test`. `status` reports the active memory protections;
+At the monitor prompt, try:
+
+```text
+apps
+run bin/hello
+run bin/info
+run demo/fault
+run demo/loop
+status
+```
+
+The ARM launcher runs isolated native programs from the checked application
+archive. `hello` prints from userspace; `info` reports its startup capabilities
+and budgets. The fault and loop demos return to the prompt after a contained
+fault or timer deadline. `status` reports launch counts, the last prepared
+generation, free frames and active memory protections. Native launch currently
+supports one ARM CPU at 64/128 MiB; the x86 monitor reports it as unsupported.
+Programs have console output but no input, command arguments or process spawning.
+
+Type `help` for commands;
 `test` runs 41 bootstrap, capability, memory, topology, event, mutex, thread, timer, exception and mapping checks. The ARM boot banner reports discovered RAM and usable frame capacity.
 Memory tests exercise real frame, heap and mapping ownership. Three pages are deliberately
 retained once per boot to verify that forgotten owners cannot cause reuse.

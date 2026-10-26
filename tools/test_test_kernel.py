@@ -86,7 +86,7 @@ class ArchitectureTests(unittest.TestCase):
         command = harness.qemu_command(Path("kernel.elf"), "tcg")
         self.assertEqual(command[0], "qemu-system-aarch64")
         self.assertIn("virt,virtualization=off,secure=off,gic-version=2", command)
-        self.assertIn("enable=on,target=native", command)
+        self.assertIn("enable=on,target=native,userspace=off", command)
         self.assertNotIn("isa-debug-exit,iobase=0xf4,iosize=0x04", command)
 
     def test_x86_remains_explicit_and_supports_kvm(self):

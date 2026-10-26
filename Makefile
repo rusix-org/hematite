@@ -14,7 +14,7 @@ image:
 	docker build --tag hematite-build:phase0 .
 
 build: image
-	bash tools/dev.sh cargo build --locked --offline -p hm-core --release --target $(TARGET) --target-dir target/$(ARCH)/monitor
+	bash tools/dev.sh bash -eu -c 'if [ "$(ARCH)" = aarch64 ]; then python3 tools/build_apps.py --output "target/apps-build/$$(date -u +%Y%m%dT%H%M%S-%N)"; fi; cargo build --locked --offline -p hm-core --release --target $(TARGET) --target-dir target/$(ARCH)/monitor'
 
 test: image
 	bash tools/dev.sh bash -eu -c '\
@@ -40,6 +40,7 @@ test: image
 		python3 tools/test_test_process.py; \
 		python3 tools/test_test_initramfs.py; \
 		python3 tools/test_test_boot_image.py; \
+		python3 tools/test_test_launcher.py; \
 		python3 tools/check_repository.py; \
 		python3 tools/check_safety.py; \
 		cargo build --locked --offline -p hm-core --release --features boot-tests --target $(TARGET) --target-dir target/$(ARCH)/boot-test; \
@@ -86,6 +87,7 @@ test: image
 		if [ "$(ARCH)" = aarch64 ]; then \
 			cargo build --locked --offline -p hm-kernel --release --target x86_64-unknown-linux-gnu --target-dir target/host-mutex; \
 			python3 tools/check_native.py --output "$$evidence_dir/native-host"; \
+			python3 tools/build_apps.py --output "$$evidence_dir/apps-fixtures"; \
 			python3 tools/build_initramfs.py --output "$$evidence_dir/initramfs-fixture"; \
 			python3 tools/build_initramfs.py --process --output "$$evidence_dir/process-archive"; \
 			cargo clippy -p hm-kernel --test boot_image --locked --offline --target x86_64-unknown-linux-gnu --target-dir target/host-boot-image -- -D warnings; \
@@ -131,6 +133,7 @@ test: image
 			python3 tools/test_preemption_negative.py --no-timer-kernel target/$(ARCH)/preemption-no-timer-test/$(TARGET)/release/hematite --overflow-kernel target/$(ARCH)/preemption-overflow-test/$(TARGET)/release/hematite --output "$$evidence_dir/preemption-negative"; \
 			python3 tools/test_wait_blocked.py --kernel target/$(ARCH)/wait-all-blocked-test/$(TARGET)/release/hematite --output "$$evidence_dir/wait-all-blocked"; \
 			python3 tools/test_process.py --kernel target/$(ARCH)/process-test/$(TARGET)/release/hematite --fixtures crates/hm-core/fixtures/process/manifest.json --archive crates/hm-core/fixtures/process-initramfs.cpio --output "$$evidence_dir/process"; \
+			python3 tools/test_launcher.py --kernel target/$(ARCH)/monitor/$(TARGET)/release/hematite --apps crates/hm-core/fixtures/apps/manifest.json --archive crates/hm-core/fixtures/apps-initramfs.cpio --output "$$evidence_dir/launcher"; \
 			python3 tools/test_space.py --kernel target/$(ARCH)/space-test/$(TARGET)/release/hematite --output "$$evidence_dir/space"; \
 			python3 tools/test_secondary.py --kernel target/$(ARCH)/secondary-test/$(TARGET)/release/hematite --stale-generation-kernel target/$(ARCH)/secondary-stale-test/$(TARGET)/release/hematite --cpu-off-return-kernel target/$(ARCH)/secondary-off-return-test/$(TARGET)/release/hematite --output "$$evidence_dir/secondary"; \
 			python3 tools/test_smp.py --kernel target/$(ARCH)/smp-test/$(TARGET)/release/hematite --no-peer-timer-kernel target/$(ARCH)/smp-no-peer-timer-test/$(TARGET)/release/hematite --peer-overflow-kernel target/$(ARCH)/smp-peer-overflow-test/$(TARGET)/release/hematite --all-blocked-kernel target/$(ARCH)/smp-all-blocked-test/$(TARGET)/release/hematite --output "$$evidence_dir/smp"; \

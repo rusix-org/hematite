@@ -83,7 +83,7 @@ def qemu_command(kernel, accel, arch="aarch64"):
             "-cpu", "max", "-accel", "tcg", "-m", "128M", "-smp", "1",
             "-nodefaults", "-no-user-config", "-display", "none",
             "-monitor", "none", "-serial", "stdio", "-no-reboot",
-            "-semihosting-config", "enable=on,target=native", "-kernel", str(kernel),
+            "-semihosting-config", "enable=on,target=native,userspace=off", "-kernel", str(kernel),
         ]
     if arch != "x86_64" or accel not in ("tcg", "kvm"):
         raise ValueError(f"Unsupported architecture/accelerator: {arch}/{accel}")

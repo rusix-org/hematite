@@ -23,6 +23,7 @@ mod mapping_tests;
 pub mod mutex_api;
 mod mutex_tests;
 pub mod native;
+pub mod native_launch;
 mod preemption_tests;
 pub mod thread_api;
 mod thread_tests;
@@ -49,6 +50,19 @@ pub struct BootChecks {
 
 /// The core retains all hardware authority; policy only exchanges owned values.
 pub trait Platform {
+    fn native_archive(&self) -> Option<&'static [u8]> {
+        None
+    }
+    fn run_native(
+        &mut self,
+        _path: &str,
+    ) -> Result<native_launch::LaunchReport, native_launch::LaunchError> {
+        Err(native_launch::LaunchError::Unsupported)
+    }
+    fn native_status(&self) -> native_launch::NativeStatus {
+        native_launch::NativeStatus::unsupported()
+    }
+
     /// Expected boot profile, independent of the discovered device tree.
     fn expected_cpu_count(&self) -> usize {
         1
@@ -618,12 +632,13 @@ fn status(platform: &mut impl Platform) {
         platform.write(name);
         platform.write(if enabled { ": OK\n" } else { ": FAILED\n" });
     }
-    platform.write("Bootstrap only: one CPU; no userspace, storage, or networking.\n");
+    platform.write("No storage or networking.\n");
+    native_launch::report_status(platform);
 }
 
 pub fn run_monitor(platform: &mut impl Platform) -> ! {
     platform.write("Hematite bootstrap monitor (local working name)\n");
-    platform.write("Commands: help, status, test. This is not a Linux shell.\n");
+    platform.write("Commands: help, status, test, apps, run <path>. This is not a Linux shell.\n");
     platform.write("hm> ");
     let mut line = InputLine::new();
     loop {
@@ -645,8 +660,15 @@ pub fn run_monitor(platform: &mut impl Platform) -> ! {
                 match line.command() {
                     None => platform.write("Rejected: use at most 64 printable ASCII bytes.\n"),
                     Some(b"") => {}
-                    Some(b"help") => platform.write("help   - show commands\nstatus - inspect boot protections\ntest   - run bootstrap tests\n"),
+                    Some(b"help") => platform.write("help   - show commands\nstatus - inspect boot protections\ntest   - run bootstrap tests\napps   - list native programs\nrun <path> - launch a native program\n"),
                     Some(b"status") => status(platform),
+                    Some(b"apps") => native_launch::list_apps(platform),
+                    Some(b"run") => native_launch::run_command(platform, ""),
+                    Some(command) if command.starts_with(b"run ") => {
+                        if let Ok(path) = core::str::from_utf8(&command[4..]) {
+                            native_launch::run_command(platform, path);
+                        }
+                    },
                     Some(b"test") => {
                         if run_tests(platform) {
                             platform.write("Bootstrap tests passed.\n");

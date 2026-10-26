@@ -66,12 +66,10 @@ mod smp_checks;
     allow(dead_code)
 )]
 mod space_checks;
-#[cfg(all(
-    target_arch = "aarch64",
-    any(feature = "space-tests", feature = "process-tests")
-))]
+#[cfg(target_arch = "aarch64")]
 #[cfg_attr(
     any(
+        not(feature = "space-tests"),
         feature = "process-tests",
         feature = "secondary-tests",
         feature = "nested-fault-test",
@@ -84,9 +82,12 @@ mod space_checks;
 )]
 mod user_space;
 
-#[cfg(all(target_arch = "aarch64", feature = "process-tests"))]
+#[cfg(target_arch = "aarch64")]
+mod launcher;
+#[cfg(target_arch = "aarch64")]
 #[cfg_attr(
     any(
+        not(feature = "process-tests"),
         feature = "secondary-tests",
         feature = "nested-fault-test",
         feature = "unhandled-fault-test",

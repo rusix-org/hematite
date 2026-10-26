@@ -49,8 +49,14 @@ pub struct RunReport {
     pub vbar: u64,
     pub controls: bool,
 }
+#[derive(Clone, Copy, Eq, PartialEq)]
+enum OutputMode {
+    Trace,
+    Terminal,
+}
 pub struct Executor {
     issuer: Issuer,
+    output: OutputMode,
     cpus: usize,
     index: u64,
     frequency: u64,
@@ -135,6 +141,18 @@ impl Executor {
     /// no external CPU starts/DMA, and permanent reviewed boot mappings.
     // SAFETY: Permanent latch prevents another hardware grant namespace.
     pub(crate) unsafe fn from_boot(topology: &Topology) -> Result<Self, Error> {
+        // SAFETY: The caller supplies the same permanent BootPlatform proof.
+        unsafe { Self::from_boot_mode(topology, OutputMode::Trace) }
+    }
+    /// Same permanent BootPlatform and completed timer-preflight proof as
+    /// from_boot; only the sealed private console representation differs.
+    // SAFETY: Caller proves actual boot authority and completed timer preflight.
+    pub(crate) unsafe fn from_boot_terminal(topology: &Topology) -> Result<Self, Error> {
+        // SAFETY: The caller supplies the same permanent BootPlatform proof.
+        unsafe { Self::from_boot_mode(topology, OutputMode::Terminal) }
+    }
+    // SAFETY: Private constructor callers pass their complete BootPlatform proof.
+    unsafe fn from_boot_mode(topology: &Topology, output: OutputMode) -> Result<Self, Error> {
         admission()?;
         let cpus = match topology.affinities() {
             [0] => 1,
@@ -150,6 +168,7 @@ impl Executor {
             .map_err(|_| Error::AlreadyInitialized)?;
         Ok(Self {
             issuer: Issuer::new(),
+            output,
             cpus,
             index: 0,
             frequency,
@@ -311,17 +330,20 @@ impl Executor {
                 length: process.context[3],
             };
             let ordinal = process.session.calls() + 1;
-            let _ = writeln!(
-                Uart,
-                "HMPROC CALL index={index} ordinal={ordinal} pc={} version={} operation={} arg1={} arg2={} arg3={}",
-                process.context[layout::USER_PC / 8],
-                request.version,
-                request.operation,
-                request.argument,
-                request.address,
-                request.length
-            );
+            if self.output == OutputMode::Trace {
+                let _ = writeln!(
+                    Uart,
+                    "HMPROC CALL index={index} ordinal={ordinal} pc={} version={} operation={} arg1={} arg2={} arg3={}",
+                    process.context[layout::USER_PC / 8],
+                    request.version,
+                    request.operation,
+                    request.argument,
+                    request.address,
+                    request.length
+                );
+            }
             let mut host = Console {
+                output: self.output,
                 space: &process.space,
                 index,
                 ordinal,
@@ -330,11 +352,13 @@ impl Executor {
                 native::Outcome::Stop(native::Stop::Exit(code)) => break (Reason::Exit, code),
                 native::Outcome::Stop(native::Stop::CallLimit) => break (Reason::CallLimit, 0),
                 native::Outcome::Reply(reply) => {
-                    let _ = writeln!(
-                        Uart,
-                        "HMPROC RESULT index={index} ordinal={ordinal} status={} bytes={}",
-                        reply.status as u64, reply.written
-                    );
+                    if self.output == OutputMode::Trace {
+                        let _ = writeln!(
+                            Uart,
+                            "HMPROC RESULT index={index} ordinal={ordinal} status={} bytes={}",
+                            reply.status as u64, reply.written
+                        );
+                    }
                     process.context[0] = reply.status as u64;
                     process.context[1] = reply.written;
                     if !process.session.may_resume() {
@@ -389,6 +413,7 @@ impl Drop for Lease {
     }
 }
 struct Console<'a, 'p> {
+    output: OutputMode,
     space: &'a Space<'p>,
     index: u64,
     ordinal: usize,
@@ -400,6 +425,15 @@ impl Host for Console<'_, '_> {
             .map_err(|_| native::CopyError)
     }
     fn write_console(&mut self, bytes: &[u8]) {
+        if self.output == OutputMode::Terminal {
+            for byte in bytes {
+                if *byte == b'\n' {
+                    uart(b'\r');
+                }
+                uart(*byte);
+            }
+            return;
+        }
         let _ = write!(
             Uart,
             "HMPROC OUTPUT index={} ordinal={} length={} hex=",

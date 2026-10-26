@@ -27,6 +27,8 @@ PROBES = {
     }''', None),
     "valid_forget_inactive": ('''pub fn client(p: Process<'_>) { core::mem::forget(p); }''', None),
     "valid_owned_report": ('''pub fn client(e: &mut Executor, p: Process<'_>) -> Option<RunReport> { e.run(p).ok() }''', None),
+    "private_terminal_constructor": ('''pub fn client(t: &hm_kernel::cpu_topology::Topology) { let _ = Executor::from_boot_terminal(t); }''', "E0624"),
+    "private_output_mode": ('''pub fn client(e: &Executor) { let _ = e.output; }''', "E0616"),
     "private_constructor": ('''pub fn client(t: &hm_kernel::cpu_topology::Topology) { let _ = Executor::from_boot(t); }''', "E0624"),
     "private_context": ('''pub fn client(p: &mut Process<'_>) { p.context[32] = 0; }''', "E0616"),
     "private_space": ('''pub fn client(p: Process<'_>) { let _ = p.space; }''', "E0616"),
