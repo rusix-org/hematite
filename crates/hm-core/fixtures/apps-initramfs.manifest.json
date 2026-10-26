@@ -1,8 +1,8 @@
 {
   "version": 1,
   "archive": "apps-initramfs.cpio",
-  "sha256": "bd37dbaa482b0d20bb70f3f38970cf9d96c1701eb5aa3a9295ef9e6e1ffed31c",
-  "bytes": 729088,
+  "sha256": "ea708fb72cd2e9cd277de319bd6e9697c54872472eaa1e3cc4a8f13ca4a9169d",
+  "bytes": 743936,
   "entries": [
     {
       "path": "bin",
@@ -15,15 +15,22 @@
       "path": "bin/hello",
       "kind": "file",
       "mode": 33261,
-      "size": 13856,
-      "sha256": "ded9cd383c16366ef6ae2b7ef1d82ade3c877f9d2d4223201e7ca0a7477d77af"
+      "size": 13984,
+      "sha256": "9d7008184000b47c3310c5d93392b871ad7fb60c4c0d0a0d47726393ffa1cde1"
     },
     {
       "path": "bin/info",
       "kind": "file",
       "mode": 33261,
-      "size": 686648,
-      "sha256": "822bc68acb684a61f7b22981553a06c4b1745bf23c2d14f9746a8db5ea079b97"
+      "size": 686776,
+      "sha256": "d5d23b71868d4b5e1acae46a61ef4458d5f4f8283c5b822e72b1368308c1bd8d"
+    },
+    {
+      "path": "bin/echo",
+      "kind": "file",
+      "mode": 33261,
+      "size": 13984,
+      "sha256": "8ae2a718620a9fb4c5942814a46a07cad066399e061aefdba9a35e95cb58a409"
     },
     {
       "path": "demo",
@@ -36,16 +43,16 @@
       "path": "demo/fault",
       "kind": "file",
       "mode": 33261,
-      "size": 13856,
-      "sha256": "72e18af98b3b4e8916562ef61cb3d5258cba4e59682b1e5b1d893ae59c8c8695"
+      "size": 13984,
+      "sha256": "4dcca64eb52cac001bb88f8ce7b020daf3a524eae011e7c9a8b2870039271c2d"
     },
     {
       "path": "demo/loop",
       "kind": "file",
       "mode": 33261,
-      "size": 13856,
-      "sha256": "8a131cedaa4ad55ef0fedc50cb06e80a79c4e4c738902e30144c12cb35d98d82"
+      "size": 13984,
+      "sha256": "bf8fcc427dd8f2400c09fb764c7028fc587ed1e57634150503cbbed8eadf85d5"
     }
   ],
-  "apps_manifest_sha256": "17853c021ef1a91a4c1a1d415eb2f5217853e1fcc4d4830a1528d4f0e20d6d13"
+  "apps_manifest_sha256": "383a9c40507c92f6a4707fb8c9ea608f0a20794faca29c9833056f0617780365"
 }

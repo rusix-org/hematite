@@ -187,9 +187,34 @@ impl Executor {
     #[inline(never)]
     pub fn prepare<'p>(
         &mut self,
+        space: Space<'p>,
+        console: bool,
+        budget: usize,
+    ) -> Result<Process<'p>, (Error, Space<'p>)> {
+        self.prepare_inner(space, console, budget, None)
+    }
+    /// Copies validated owned input before returning; Process retains no input borrow.
+    #[allow(clippy::result_large_err)]
+    #[inline(never)]
+    pub fn prepare_with_input<'p>(
+        &mut self,
+        space: Space<'p>,
+        console: bool,
+        budget: usize,
+        input: &hm_kernel::startup_input::Input,
+    ) -> Result<Process<'p>, (Error, Space<'p>)> {
+        self.prepare_inner(space, console, budget, Some(input))
+    }
+    // Inline into the two entry points to avoid another large by-value owner
+    // frame; compiler stack review remains mandatory for both paths.
+    #[allow(clippy::result_large_err)]
+    #[inline(always)]
+    fn prepare_inner<'p>(
+        &mut self,
         mut space: Space<'p>,
         console: bool,
         budget: usize,
+        input: Option<&hm_kernel::startup_input::Input>,
     ) -> Result<Process<'p>, (Error, Space<'p>)> {
         if admission().is_err() || space.cpus() != self.cpus {
             return Err((Error::Context, space));
@@ -199,7 +224,7 @@ impl Executor {
             Err(_) => return Err((Error::Generation, space)),
         };
         let startup = session.startup();
-        if let Err(e) = space.install_startup(&startup, budget) {
+        if let Err(e) = space.install_startup(&startup, budget, input) {
             let error = match e {
                 user_space::Error::Budget => Error::Budget,
                 user_space::Error::Exhausted => Error::Exhausted,
@@ -393,6 +418,22 @@ impl Executor {
     }
 }
 impl Process<'_> {
+    /// Fixed-page, inactive-only observer for the startup-input profile.
+    #[cfg(feature = "startup-input-tests")]
+    pub(super) fn copy_startup(
+        &self,
+        offset: usize,
+        output: &mut [u8],
+    ) -> Result<(), user_space::Error> {
+        if offset
+            .checked_add(output.len())
+            .is_none_or(|end| end > 4096)
+        {
+            return Err(user_space::Error::Bounds);
+        }
+        self.space.read_into(STARTUP + offset as u64, output)
+    }
+
     pub fn entry(&self) -> u64 {
         self.space.entry()
     }

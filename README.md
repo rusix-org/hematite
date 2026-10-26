@@ -18,6 +18,7 @@ At the monitor prompt, try:
 apps
 run bin/hello
 run bin/info
+run bin/echo hello from ARM
 run demo/fault
 run demo/loop
 status
@@ -25,11 +26,15 @@ status
 
 The ARM launcher runs isolated native programs from the checked application
 archive. `hello` prints from userspace; `info` reports its startup capabilities
-and budgets. The fault and loop demos return to the prompt after a contained
+and budgets. `echo` receives a copied startup payload and writes it back.
+Spaces after the path are preserved; there is no quoting or argument expansion.
+The fault and loop demos return to the prompt after a contained
 fault or timer deadline. `status` reports launch counts, the last prepared
 generation, free frames and active memory protections. Native launch currently
 supports one ARM CPU at 64/128 MiB; the x86 monitor reports it as unsupported.
-Programs have console output but no input, command arguments or process spawning.
+Programs can receive up to 256 opaque startup bytes through the typed native
+interface. Interactive commands retain the 64-byte line limit. Console reads,
+argument vectors and process spawning remain unimplemented.
 
 Type `help` for commands;
 `test` runs 41 bootstrap, capability, memory, topology, event, mutex, thread, timer, exception and mapping checks. The ARM boot banner reports discovered RAM and usable frame capacity.

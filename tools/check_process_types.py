@@ -25,6 +25,25 @@ PROBES = {
         let space = f.load(&image, 284).ok()?; drop(image); input.fill(0);
         e.prepare(space, true, 1).ok()
     }''', None),
+    "valid_startup_input_released": ('''pub fn client<'p>(e: &mut Executor, space: Space<'p>) -> Option<Process<'p>> {
+        let mut source = [7u8; 256];
+        let input = hm_kernel::startup_input::Input::from_bytes(&source).ok()?;
+        source.fill(0);
+        let process = e.prepare_with_input(space, true, 1, &input).ok()?;
+        drop(input); Some(process)
+    }''', None),
+    "startup_input_wrong_type": ('''pub fn client(e: &mut Executor, space: Space<'_>) {
+        let _ = e.prepare_with_input(space, true, 1, b"unchecked");
+    }''', "E0308"),
+    "startup_input_forge": ('''pub fn client(e: &mut Executor, space: Space<'_>, input: hm_kernel::startup_input::Input) {
+        let forged = hm_kernel::startup_input::Input { ..input };
+        let _ = e.prepare_with_input(space, true, 1, &forged);
+    }''', "E0451"),
+    "private_startup_observer": ('''pub fn client(p: &Process<'_>) { let _ = p.copy_startup(0, &mut [0; 64]); }''', "E0624"),
+    "startup_pool_lifetime": ('''pub fn client(e: &mut Executor, pool: Pool, bytes: &[u8], make: for<'a> fn(&'a Pool)->Factory<'a>) -> Option<Process<'static>> {
+        let factory = make(&pool); let space = factory.load(&Image::parse(bytes).ok()?, 284).ok()?;
+        e.prepare_with_input(space, true, 1, &hm_kernel::startup_input::Input::absent()).ok()
+    }''', "E0515"),
     "valid_forget_inactive": ('''pub fn client(p: Process<'_>) { core::mem::forget(p); }''', None),
     "valid_owned_report": ('''pub fn client(e: &mut Executor, p: Process<'_>) -> Option<RunReport> { e.run(p).ok() }''', None),
     "private_terminal_constructor": ('''pub fn client(t: &hm_kernel::cpu_topology::Topology) { let _ = Executor::from_boot_terminal(t); }''', "E0624"),
@@ -78,7 +97,7 @@ def main():
         "expected_probes": list(PROBES), "sources": {name: hashlib.sha256(
             (source / name).read_bytes()).hexdigest() for name in inputs}}, indent=2) + '\n')
     base = ["rustc", "--edition=2024", "--target", args.target, "-C", "panic=abort",
-        "--cfg", 'feature="secondary-tests"', "--cfg", 'feature="smp-tests"',
+        "--cfg", 'feature="startup-input-tests"', "--cfg", 'feature="secondary-tests"', "--cfg", 'feature="smp-tests"',
         "--extern", f"hm_kernel={library}", "-L", f"dependency={library.parent / 'deps'}"]
     compiled = output / "libhm_process.rlib"
     code, _ = run(base + ["--crate-type=rlib", "--crate-name=hm_process", str(wrapper), "-o", str(compiled)], output, "library")

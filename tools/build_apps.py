@@ -12,9 +12,9 @@ from test_process import require, embedded_archive
 ROOT = Path(__file__).resolve().parents[1]
 CANONICAL = ROOT / 'crates/hm-core/fixtures/apps'
 ARCHIVE = ROOT / 'crates/hm-core/fixtures/apps-initramfs.cpio'
-APPS = ('hello', 'info', 'fault', 'loop')
-PATHS = ('bin/hello', 'bin/info', 'demo/fault', 'demo/loop')
-SYMBOLS = ('native_start', 'write_svc', 'exit_svc', 'fault', 'loop_start', 'loop_end', 'message')
+APPS = ('hello', 'info', 'echo', 'fault', 'loop')
+PATHS = ('bin/hello', 'bin/info', 'bin/echo', 'demo/fault', 'demo/loop')
+SYMBOLS = ('native_start', 'write_svc', 'newline_svc', 'exit_svc', 'fault', 'loop_start', 'loop_end', 'message')
 
 
 def inspect(data, symbol_text):
@@ -52,7 +52,7 @@ def inspect(data, symbol_text):
             if segment['flags'] == 5 and segment['va'] <= va and va + 4 <= segment['va'] + segment['filesz']:
                 return struct.unpack_from('<I', data, segment['offset'] + va - segment['va'])[0]
         raise ValueError('App instruction outside RX file storage: ' + name)
-    for name in ('write_svc', 'exit_svc'):
+    for name in ('write_svc', 'newline_svc', 'exit_svc'):
         require(instruction(name) == 0xd4000001, 'App syscall is not SVC0')
     require(instruction('loop_start') == 0x14000000 and symbols['loop_end'] == symbols['loop_start'] + 4, 'App loop is not named self branch')
     # STR XZR,[X9]; the preceding ADR must resolve exactly to this app entry.
@@ -79,7 +79,7 @@ def inspect(data, symbol_text):
 
 def archive_entries(data):
     return [('bin', 0o40755, b''), ('bin/hello', 0o100755, data['hello']),
-            ('bin/info', 0o100755, data['info']), ('demo', 0o40755, b''),
+            ('bin/info', 0o100755, data['info']), ('bin/echo', 0o100755, data['echo']), ('demo', 0o40755, b''),
             ('demo/fault', 0o100755, data['fault']), ('demo/loop', 0o100755, data['loop'])]
 
 
@@ -121,7 +121,7 @@ def verify(manifest_path, archive_path, output, kernel=None):
     require(archive_path.with_suffix('.manifest.json').read_bytes() ==
             json_bytes(archive_manifest(raw, entries, manifest_path.read_bytes())), 'App archive manifest mismatch')
     cpio.inspect_with_gnu(archive_path, entries, output, 'apps-archive')
-    report = {'bytes': len(raw), 'sha256': cpio.sha(raw), 'entries': 6, 'files': 4}
+    report = {'bytes': len(raw), 'sha256': cpio.sha(raw), 'entries': 7, 'files': 5}
     if kernel is not None:
         report['kernel_file_offset'] = embedded_archive(kernel.read_bytes(), raw, list(data.values()))
     return document['apps'], report
@@ -137,7 +137,7 @@ def main():
         parser.error('use a fresh evidence directory')
     output.mkdir(parents=True)
     sources = ['crates/hm-core/fixtures/' + name for name in ('apps.rs', 'apps.S', 'native-elf.ld')]
-    sources += ['tools/build_apps.py', 'tools/build_initramfs.py', 'tools/test_process.py', 'docs/design/0026-native-launcher.md']
+    sources += ['crates/hm-kernel/src/startup_input.rs', 'tools/build_apps.py', 'tools/build_initramfs.py', 'tools/test_process.py', 'docs/design/0026-native-launcher.md']
     (output / 'input.json').write_bytes(json_bytes({'sources': {p: cpio.sha((ROOT / p).read_bytes()) for p in sources}, 'update': args.update}))
     try:
         data, apps = {}, {}

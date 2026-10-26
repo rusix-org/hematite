@@ -42,6 +42,8 @@ test: image
 		python3 tools/test_test_initramfs.py; \
 		python3 tools/test_test_boot_image.py; \
 		python3 tools/test_test_launcher.py; \
+		python3 tools/test_test_launch_input.py; \
+		python3 tools/test_test_startup_delivery.py; \
 		python3 tools/check_repository.py; \
 		python3 tools/check_safety.py; \
 		cargo build --locked --offline -p hm-core --release --features boot-tests --target $(TARGET) --target-dir target/$(ARCH)/boot-test; \
@@ -57,6 +59,7 @@ test: image
 			cargo build --locked --offline -p hm-core --release --features wait-all-blocked-test --target $(TARGET) --target-dir target/$(ARCH)/wait-all-blocked-test; \
 			cargo build --locked --offline -p hm-core --release --features space-tests --target $(TARGET) --target-dir target/$(ARCH)/space-test; \
 			cargo build --locked --offline -p hm-core --release --features process-tests --target $(TARGET) --target-dir target/$(ARCH)/process-test; \
+			cargo build --locked --offline -p hm-core --release --features startup-input-tests --target $(TARGET) --target-dir target/$(ARCH)/startup-input-test; \
 			cargo build --locked --offline -p hm-core --release --features secondary-tests --target $(TARGET) --target-dir target/$(ARCH)/secondary-test; \
 			cargo build --locked --offline -p hm-core --release --features secondary-stale-generation-test --target $(TARGET) --target-dir target/$(ARCH)/secondary-stale-test; \
 			cargo build --locked --offline -p hm-core --release --features secondary-cpu-off-return-test --target $(TARGET) --target-dir target/$(ARCH)/secondary-off-return-test; \
@@ -94,6 +97,9 @@ test: image
 			cargo clippy -p hm-kernel --test startup_input --locked --offline --target x86_64-unknown-linux-gnu --target-dir target/host-startup-input -- -D warnings; \
 			python3 tools/check_startup_input.py --output "$$evidence_dir/startup-input-host"; \
 			python3 tools/build_apps.py --output "$$evidence_dir/apps-fixtures"; \
+			python3 tools/build_startup_probes.py --output "$$evidence_dir/startup-input-fixtures"; \
+			cargo clippy -p hm-kernel --test launch_input --locked --offline --target x86_64-unknown-linux-gnu --target-dir target/host-launch-input -- -D warnings; \
+			python3 tools/check_launch_input.py --output "$$evidence_dir/launch-input-host"; \
 			python3 tools/build_initramfs.py --output "$$evidence_dir/initramfs-fixture"; \
 			python3 tools/build_initramfs.py --process --output "$$evidence_dir/process-archive"; \
 			cargo clippy -p hm-kernel --test boot_image --locked --offline --target x86_64-unknown-linux-gnu --target-dir target/host-boot-image -- -D warnings; \
@@ -139,6 +145,7 @@ test: image
 			python3 tools/test_preemption_negative.py --no-timer-kernel target/$(ARCH)/preemption-no-timer-test/$(TARGET)/release/hematite --overflow-kernel target/$(ARCH)/preemption-overflow-test/$(TARGET)/release/hematite --output "$$evidence_dir/preemption-negative"; \
 			python3 tools/test_wait_blocked.py --kernel target/$(ARCH)/wait-all-blocked-test/$(TARGET)/release/hematite --output "$$evidence_dir/wait-all-blocked"; \
 			python3 tools/test_process.py --kernel target/$(ARCH)/process-test/$(TARGET)/release/hematite --fixtures crates/hm-core/fixtures/process/manifest.json --archive crates/hm-core/fixtures/process-initramfs.cpio --output "$$evidence_dir/process"; \
+			python3 tools/test_startup_delivery.py --kernel target/$(ARCH)/startup-input-test/$(TARGET)/release/hematite --fixtures crates/hm-core/fixtures/startup-input/manifest.json --archive crates/hm-core/fixtures/startup-input-initramfs.cpio --output "$$evidence_dir/startup-delivery"; \
 			python3 tools/test_launcher.py --kernel target/$(ARCH)/monitor/$(TARGET)/release/hematite --apps crates/hm-core/fixtures/apps/manifest.json --archive crates/hm-core/fixtures/apps-initramfs.cpio --output "$$evidence_dir/launcher"; \
 			python3 tools/test_space.py --kernel target/$(ARCH)/space-test/$(TARGET)/release/hematite --output "$$evidence_dir/space"; \
 			python3 tools/test_secondary.py --kernel target/$(ARCH)/secondary-test/$(TARGET)/release/hematite --stale-generation-kernel target/$(ARCH)/secondary-stale-test/$(TARGET)/release/hematite --cpu-off-return-kernel target/$(ARCH)/secondary-off-return-test/$(TARGET)/release/hematite --output "$$evidence_dir/secondary"; \

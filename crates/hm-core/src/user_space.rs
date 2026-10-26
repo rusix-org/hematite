@@ -177,7 +177,12 @@ impl Space<'_> {
     pub(super) fn cpus(&self) -> usize {
         self.cpus
     }
-    pub(super) fn install_startup(&mut self, bytes: &[u8; 64], budget: usize) -> Result<(), Error> {
+    pub(super) fn install_startup(
+        &mut self,
+        bytes: &[u8; 64],
+        budget: usize,
+        input: Option<&hm_kernel::startup_input::Input>,
+    ) -> Result<(), Error> {
         context()?;
         if !self.audit()
             || self.startup
@@ -195,6 +200,11 @@ impl Space<'_> {
             return Err(Error::Corrupt);
         }
         page.bytes_mut()[..64].copy_from_slice(bytes);
+        if let Some(input) = input {
+            input
+                .encode_into(&mut page.bytes_mut()[64..])
+                .map_err(|_| Error::Corrupt)?;
+        }
         let Some(table) = self.tables[11].as_mut() else {
             return Err(Error::Corrupt);
         };

@@ -13,7 +13,7 @@ global_asm!(include_str!("boot-aarch64.S"), rust_entry = sym super::boot_main,
 // assembly. Tables are mutable hardware storage; no Rust references escape.
 // Address-only linker markers are zero-sized, not immutable byte objects.
 unsafe extern "C" {
-    #[cfg(feature = "process-tests")]
+    #[cfg(any(feature = "process-tests", feature = "startup-input-tests"))]
     static arm_vectors: [u8; 0];
     static mut arm_root: [u64; 512];
     static mut arm_secondary_root: [u64; 512];
@@ -89,6 +89,19 @@ impl Platform for BootPlatform {
         // No external peer starts or DMA exist; State performs masked-context,
         // BUSY, timer and existing process admission before executing any ELF.
         unsafe { self.native.run(pool, topology, path) }
+    }
+
+    fn run_native_with_input(
+        &mut self,
+        path: &str,
+        input: &hm_kernel::startup_input::Input,
+    ) -> Result<hm_kernel::native_launch::LaunchReport, hm_kernel::native_launch::LaunchError> {
+        let (Some(pool), Some(topology)) = (self.pool.as_ref(), self.topology.as_ref()) else {
+            return Err(hm_kernel::native_launch::LaunchError::Unavailable);
+        };
+        // SAFETY: The same private initialized BootPlatform proof as run_native;
+        // input is owned/validated and no caller pointer is retained in Process.
+        unsafe { self.native.run_with_input(pool, topology, path, input) }
     }
 
     fn expected_cpu_count(&self) -> usize {
@@ -1018,6 +1031,72 @@ pub(super) fn process_tests(platform: &mut BootPlatform) -> bool {
         &factory,
         &mut executor,
         topology.affinities().len(),
+        core::ptr::addr_of!(arm_root) as u64,
+        core::ptr::addr_of!(arm_vectors) as u64,
+        &mut Output,
+    )
+}
+
+#[cfg(feature = "startup-input-tests")]
+#[cfg_attr(
+    any(
+        feature = "secondary-tests",
+        feature = "process-tests",
+        feature = "nested-fault-test",
+        feature = "unhandled-fault-test",
+        feature = "thread-overflow-test",
+        feature = "preemption-overflow-test",
+        feature = "wait-all-blocked-test"
+    ),
+    allow(dead_code)
+)]
+pub(super) fn startup_input_tests(platform: &mut BootPlatform) -> bool {
+    struct Output;
+    impl core::fmt::Write for Output {
+        fn write_str(&mut self, text: &str) -> core::fmt::Result {
+            for byte in text.bytes() {
+                if byte == b'\n' {
+                    serial_byte(b'\r');
+                }
+                serial_byte(byte);
+            }
+            Ok(())
+        }
+    }
+    let (Some(pool), Some(topology)) = (platform.pool.as_ref(), platform.topology.as_ref()) else {
+        return false;
+    };
+    if topology.affinities() != [0]
+        || !super::startup_input_checks::reject_before(pool, &mut Output)
+    {
+        return false;
+    }
+    let checks = super::timer::checks();
+    let bits = u8::from(checks.delivery)
+        | (u8::from(checks.context) << 1)
+        | (u8::from(checks.quiescent) << 2)
+        | (u8::from(checks.timeout) << 3);
+    let _ = core::fmt::write(
+        &mut Output,
+        format_args!("HMINPUT PREFLIGHT checks={bits} irqs=8\n"),
+    );
+    if bits != 15 {
+        return false;
+    }
+    // SAFETY: The private BootPlatform supplies actual Pool/topology and
+    // immutable boot roots; no external CPU/DMA exists in this one-CPU profile.
+    let Ok(factory) = (unsafe { super::user_space::Factory::from_boot(pool, topology) }) else {
+        return false;
+    };
+    // SAFETY: Same boot proof and completed delivery/quiescence preflight;
+    // the permanent latch owns this boot's sole real process issuer.
+    let Ok(mut executor) = (unsafe { super::process::Executor::from_boot(topology) }) else {
+        return false;
+    };
+    super::startup_input_checks::run(
+        pool,
+        &factory,
+        &mut executor,
         core::ptr::addr_of!(arm_root) as u64,
         core::ptr::addr_of!(arm_vectors) as u64,
         &mut Output,

@@ -12,18 +12,18 @@ PAGES = 1000
 SYMBOLS = {'arm_vectors': 0x40200800, 'arm_process_vectors': 0x40210000,
            'arm_timer_window_begin': 0x40220000, 'arm_timer_window_end': 0x40220100}
 APPS = {name: {'entry': 0x100000000, 'symbols': {'write_svc': 0x100000040, 'exit_svc': 0x100000050,
-         'fault': 0x100000060, 'loop_start': 0x100000080, 'loop_end': 0x100000084}} for name in builder.APPS}
+         'newline_svc': 0x100000058, 'fault': 0x100000060, 'loop_start': 0x100000080, 'loop_end': 0x100000084}} for name in ('hello', 'info', 'echo', 'fault', 'loop')}
 FIXUPS = [(0x40230000 + i * 32, 0x40230010 + i * 32, 0 if i in (0, 5) else 0x40300000 + i * 4096, esr)
           for i, esr in enumerate((0x96000006, 0x96000007, 0x96000007, 0x9600004f, 0x8600000f, 0x96000006))]
 EXECUTION = {'returncode': -15, 'timed_out': False, 'launch_error': None, 'host_terminated': True,
              'host_killed': False, 'alive_after_last_prompt': True}
 
 
-def serial(fresh=False, ram_mb=128):
-    return h.banner(ram_mb, PAGES) + h.PROMPT + b''.join(response + h.PROMPT for _, _, response in h.steps(PAGES, fresh))
+def serial(fresh=False, ram_mb=128, input_first=False):
+    return h.banner(ram_mb, PAGES) + h.PROMPT + b''.join(response + h.PROMPT for _, _, response in h.steps(PAGES, fresh, input_first))
 
 
-def trace(fresh=False):
+def trace(fresh=False, input_first=False):
     lines = []
     def writes(sequence):
         for offset, value in sequence:
@@ -56,12 +56,13 @@ def trace(fresh=False):
         app = APPS[name]
         writes(h.SLICE_SETUP)
         returned(0, app['entry'])
-        if name in ('hello', 'info'):
-            for index, label in enumerate(('write_svc', 'exit_svc')):
+        if name in ('hello', 'info', 'echo'):
+            labels = ('write_svc', 'newline_svc', 'exit_svc') if name == 'echo' else ('write_svc', 'exit_svc')
+            for index, label in enumerate(labels):
                 pc = app['symbols'][label] + 4
                 exception(2, 0, 0x56000000, pc, SYMBOLS['arm_process_vectors'] + 0x400)
                 writes(h.SLICE_RESTORE)
-                if index == 0:
+                if index < len(labels) - 1:
                     writes(h.SLICE_SETUP); returned(0, pc)
         elif name == 'fault':
             exception(4, 0, 0x9200004f, app['symbols']['fault'], SYMBOLS['arm_process_vectors'] + 0x400, app['entry'])
@@ -74,8 +75,9 @@ def trace(fresh=False):
         baseline()
     timer()
     if fresh:
-        launch('hello')
+        launch('echo' if input_first else 'hello')
     else:
+        for _ in range(5): launch('echo')
         for name in ('info', 'hello', 'fault', 'loop'):
             launch(name)
         baseline(); launch('hello')
@@ -83,9 +85,9 @@ def trace(fresh=False):
 
 
 class LauncherTests(unittest.TestCase):
-    def reject(self, raw=None, traced=None, execution=None, fresh=False):
-        result = h.validate(serial(fresh) if raw is None else raw, trace(fresh) if traced is None else traced,
-                            EXECUTION if execution is None else execution, APPS, SYMBOLS, FIXUPS, 128, PAGES, fresh)
+    def reject(self, raw=None, traced=None, execution=None, fresh=False, input_first=False):
+        result = h.validate(serial(fresh, input_first=input_first) if raw is None else raw, trace(fresh, input_first) if traced is None else traced,
+                            EXECUTION if execution is None else execution, APPS, SYMBOLS, FIXUPS, 128, PAGES, fresh, input_first)
         self.assertFalse(result['passed'], result)
 
     def test_complete_matrix_and_fresh_smoke(self):
@@ -93,6 +95,21 @@ class LauncherTests(unittest.TestCase):
             for ram in (64, 128):
                 self.assertTrue(h.validate(serial(fresh, ram), trace(fresh), EXECUTION, APPS, SYMBOLS,
                                            FIXUPS, ram, PAGES, fresh)['passed'])
+
+    def test_input_first_and_exact_echo_spaces_and_line_bound(self):
+        self.assertTrue(h.validate(serial(True, input_first=True), trace(True, True), EXECUTION, APPS, SYMBOLS,
+                                  FIXUPS, 128, PAGES, True, True)['passed'])
+        self.reject(raw=serial(True, input_first=True).replace(b'first\r\nProgram', b'\r\nProgram'), fresh=True, input_first=True)
+        self.reject(traced=trace(True), fresh=True, input_first=True)
+        commands = {name: (request, response) for name, request, response in h.steps(PAGES)}
+        self.assertEqual(commands['echo_maximum'][0], b'run bin/echo ' + b'A' * 51 + b'\n')
+        self.assertEqual(len(commands['echo_maximum'][0]), 65)
+        self.assertIn(b' hi \r\nProgram exited', commands['echo_spaces'][1])
+        self.assertEqual(commands['echo_empty'][0], b'run bin/echo \n')
+        self.assertEqual(commands['echo_absent'][0], b'run bin/echo\n')
+        raw = serial()
+        self.reject(raw=raw.replace(b' hi \r\nProgram', b'hi\r\nProgram', 1))
+        self.reject(raw=raw.replace(b'A' * 51 + b'\r\nProgram', b'A' * 50 + b'\r\nProgram', 1))
 
     def test_missing_duplicate_and_wrong_commands_or_prompt(self):
         raw = serial()
@@ -117,9 +134,9 @@ class LauncherTests(unittest.TestCase):
     def test_generation_reclamation_and_lazy_initialization(self):
         raw = serial()
         for old, new in ((b'Last prepared generation: none', b'Last prepared generation: 1'),
-                         (b'Last prepared generation: 5', b'Last prepared generation: 1'),
+                         (b'Last prepared generation: 10', b'Last prepared generation: 1'),
                          (b'Last prepared generation: 3', b'Last prepared generation: 4'),
-                         (b'Native launches: 5', b'Native launches: 4'),
+                         (b'Native launches: 10', b'Native launches: 4'),
                          (b'Free frames: 997', b'Free frames: 996'),
                          (b'Native launcher: not initialized', b'Native launcher: ready')):
             self.reject(raw=raw.replace(old, new, 1))
@@ -231,7 +248,8 @@ class LauncherTests(unittest.TestCase):
         displacement = (-12) & ((1 << 21) - 1)
         adr = 0x10000009 | ((displacement & 3) << 29) | ((displacement >> 2) << 5)
         struct.pack_into('<6I', data, 4096, 0xd503201f, 0xd4000001, 0xd4000001, adr, 0xf900013f, 0x14000000)
-        names = dict(native_start=0, write_svc=4, exit_svc=8, fault=16, loop_start=20, loop_end=24)
+        struct.pack_into('<I', data, 4096 + 28, 0xd4000001)
+        names = dict(native_start=0, write_svc=4, exit_svc=8, fault=16, loop_start=20, loop_end=24, newline_svc=28)
         symbols = '\n'.join(f'{i}: {0x100000000 + off:016x} 0 NOTYPE GLOBAL DEFAULT 1 {name}' for i, (name, off) in enumerate(names.items()))
         self.assertEqual(builder.inspect(data, symbols)['entry'], 0x100000000)
         for offset, value in ((4096 + 4, 0xd4000021), (4096 + 16, 0xf900003f), (4096 + 20, 0x14000001),

@@ -165,7 +165,7 @@ def run_rejected_cpu(output, kernel, feature, arch="aarch64"):
 def help_body():
     return (b"help   - show commands\nstatus - inspect boot protections\n"
             b"test   - run bootstrap tests\napps   - list native programs\n"
-            b"run <path> - launch a native program\n")
+            b"run <path> [text] - launch a native program\n")
 
 
 def status_body(arch="aarch64", free=0, completed=0, generation=None):
@@ -199,6 +199,7 @@ def monitor_steps(arch="aarch64", pool_pages=0):
         unsupported = b"Native launching is unsupported on this platform.\n"
         steps += (("unsupported_apps", b"apps\n", b"apps\n" + unsupported),
                   ("unsupported_run", b"run bin/hello\n", b"run bin/hello\n" + unsupported),
+                  ("unsupported_input", b"run bin/echo text\n", b"run bin/echo text\n" + unsupported),
                   ("status_after_unsupported", b"status\n", b"status\n" + status_body(arch)))
     return steps
 
@@ -248,7 +249,7 @@ def run_monitor(output, kernel, arch="aarch64", ram_mb=128):
             banner = read_prompt()
             result["checks"]["initial_prompt_and_banner"] = (
                 b"Hematite bootstrap monitor (local working name)" in banner
-                and b"Commands: help, status, test, apps, run <path>. This is not a Linux shell." in banner
+                and b"Commands: help, status, test, apps, run <path> [text]. This is not a Linux shell." in banner
             )
             if arch == "aarch64":
                 expected_memory = (f"Boot RAM bytes: 0x{ram_mb * 1024 * 1024:016x} "

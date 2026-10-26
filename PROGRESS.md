@@ -1,6 +1,6 @@
 # Progress
 
-Current phase: **Phase 1 locally verified within its ARM scope; Phase 2 native functional experiment verified locally, including ordinary archive-backed program launch; matching CI remains open**.
+Current phase: **Phase 1 locally verified within its ARM scope; Phase 2 native functional experiment verified locally, including owned startup input and ordinary archive-backed program launch; matching CI remains open**.
 Aaron approved scratch implementation and then changed the primary objective
 from strict Linux parity to native OS design with selective compatibility.
 [ADR 0005](docs/adr/0005-native-first-design.md) records the native direction;
@@ -20,7 +20,7 @@ from strict Linux parity to native OS design with selective compatibility.
   regression port. Commands `help`, `status`, `test`, `apps`, `run <path>`; Ctrl-C exits.
   Native launch is supported on one ARM CPU at 64/128 MiB.
 - `make test-all`: formatting, Clippy and safety checks for both targets,
-  147 host harness tests, ten native-policy host tests, sixteen initramfs and eight boot-image host cases, 41 guest tests per architecture, ARM no-PAN rejection,
+  164 host harness tests, ten native-policy host tests, sixteen initramfs and eight boot-image host cases, 41 guest tests per architecture, ARM no-PAN rejection,
   x86 missing-NX/SMEP/SMAP rejection, and live monitor recovery tests on both.
   ARM discovery matches both 128 MiB and 64 MiB guest configurations.
   Separate ARM images run five scheduling/wait cases at both memory sizes, then
@@ -36,11 +36,17 @@ from strict Linux parity to native OS design with selective compatibility.
   guest by default; lifecycle and SMP tests use two CPUs with TCG thread=multi. ARM also
   tests 64 MiB; no attached disks or networking. Both targets use TCG.
 
-Latest execution evidence: [ordinary native launcher](docs/evidence/native-launcher.md),
+Latest execution evidence: [owned startup delivery](docs/evidence/native-startup-delivery.md),
+with [complete ARM/x86 regressions](docs/evidence/startup-input-stage-b/final/verification-summary.json).
+The normal monitor launches `bin/echo` with copied input. Two hardware profiles
+verify full 256-byte binary payloads, RO/NX faults, ownership and rollback;
+four monitor profiles cover 22 completed launches. No spawn or IPC exists yet.
+
+Earlier execution evidence: [ordinary native launcher](docs/evidence/native-launcher.md),
 with [complete ARM/x86 regressions](docs/evidence/launcher-final/verification-summary.json).
 Four native applications run from the normal monitor; fault/deadline outcomes
 return to its prompt. Three launcher profiles cover 11 completed runs with
-monotonic generations and exact frame reclamation. Native input, arguments,
+monotonic generations and exact frame reclamation. That milestone preceded startup-input delivery; console reads, argument vectors,
 spawn and concurrent userspace remain unimplemented.
 
 Earlier execution evidence: [archive-backed native processes](docs/evidence/archive-process-execution.md),
@@ -453,20 +459,18 @@ matrix passes at all three configurations. Exact embedded bytes, kernel address
 bindings, compiled stacks and raw traces were independently checked. See
 [execution evidence](docs/evidence/archive-process-execution.md).
 
-The safe startup-input codec is implemented separately from runtime delivery.
-Fourteen host cases and fourteen compiler clients per target verify bounded
-owned copies, immutable decoded views and canonical versioned extension bytes.
-All 21 runtime kernels remain byte-identical to the verified launcher milestone.
-See [codec evidence](docs/evidence/native-startup-input.md); no new monitor input
-or EL0 input-delivery claim follows from these host tests.
+The safe startup-input codec and its opt-in runtime integration are locally verified.
+The first-stage [codec evidence](docs/evidence/native-startup-input.md) is retained
+separately from actual [delivery evidence](docs/evidence/native-startup-delivery.md).
+The legacy native ABI header remains unchanged. Typed callers can supply 256
+opaque bytes; the monitor retains its 64-character line limit.
 
 ## Next actions
 
-1. Complete independently reviewed Stage B of [startup input design](docs/design/0027-native-startup-input.md):
-   opt-in owned startup copying, echo utility, actual maximum-size input and
-   read-only/nonexecutable mapping tests. Review all affected compiled stacks
-   before guests. Then define capability-scoped spawn/completion/cancellation;
-   concurrent userspace and a real service workload remain future gates.
+1. Design capability-scoped process creation and owned completion/cancellation
+   for the first multi-process native workload. Define authority transfer,
+   resource accounting, scheduling and teardown before core implementation;
+   follow the independent source, stack and runtime review gates.
 2. Use these experiments to refine the native wire contract; select compatibility
    workloads and pin a Linux oracle when the adapter exists.
 3. Resolve the license selection; keep remote CI current as further milestones are published.
@@ -713,3 +717,13 @@ or EL0 input-delivery claim follows from these host tests.
   Retained and corrected a test-only Clippy finding using lexical ownership
   scope. [Evidence](docs/evidence/native-startup-input.md) distinguishes codec
   guarantees from still-unimplemented runtime delivery and service lifecycle.
+
+- 2026-10-26: Connected owned startup input to ARM process preparation and
+  ordinary echo launch. Two 24-run hardware profiles verify binary input,
+  complete readback, source lifetime, RO/NX faults, deadlines and rollback;
+  four monitor profiles pass 22 launches. Fixed a standalone cfg omission and
+  a test-profile stack overflow before guests, preserving both failures.
+  Independent source/22-profile stack/raw-trace review passed; complete ARM/x86
+  regressions include 164 Python cases per target and 26 process compiler
+  clients. [Evidence](docs/evidence/native-startup-delivery.md). Spawn/IPC remain
+  next; no new remote CI or publication.

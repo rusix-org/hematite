@@ -5,6 +5,13 @@ use core::arch::global_asm;
 use core::fmt::{self, Write};
 use core::panic::PanicInfo;
 
+#[cfg(app = "echo")]
+#[allow(dead_code)]
+#[path = "../../hm-kernel/src/startup_input.rs"]
+mod startup_input;
+#[cfg(app = "echo")]
+const APP: u64 = 4;
+
 #[cfg(app = "hello")]
 const APP: u64 = 0;
 #[cfg(app = "info")]
@@ -25,6 +32,7 @@ struct Reply {
 // SAFETY: Fixed assembly definitions preserve AAPCS64 and return two u64 words.
 unsafe extern "C" {
     fn call_write(handle: u64, address: u64, length: u64) -> Reply;
+    fn call_newline(handle: u64) -> Reply;
     fn call_exit(status: u64) -> Reply;
     fn deliberate_fault(app: u64) -> !;
 }
@@ -32,6 +40,10 @@ unsafe extern "C" {
 // SAFETY: Unique immutable ELF symbol for independent payload inspection.
 #[unsafe(no_mangle)]
 static message: [u8; 15] = *b"hello from EL0\n";
+#[used]
+// SAFETY: Unique read-only newline referenced by the scalar assembly shim.
+#[unsafe(no_mangle)]
+static newline: [u8; 1] = [10];
 #[used]
 // SAFETY: Retained ordinary data makes the explicit RW LOAD nonempty.
 #[unsafe(link_section = ".fixture.data")]
@@ -106,6 +118,22 @@ extern "C" fn app_main(startup: u64, app: u64) -> ! {
             };
             demand(write!(&mut text, "native ABI {version}\nconsole: granted\nwrite limit: {max_write} bytes\nconsole budget: {budget} bytes\ncall limit: {calls}\n").is_ok());
             output(handle, &text.bytes[..text.used]);
+        }
+        #[cfg(app = "echo")]
+        4 => {
+            let extension = {
+                // SAFETY: The fixed startup page stays RO for this process;
+                // its exact base address was validated before forming a view.
+                unsafe { core::slice::from_raw_parts((startup + 64) as *const u8, 4032) }
+            };
+            let view = match startup_input::decode(extension) {
+                Ok(view) => view,
+                Err(_) => finish(203),
+            };
+            output(handle, view.bytes());
+            // SAFETY: The fixed shim writes its immutable one-byte newline.
+            let reply = unsafe { call_newline(handle) };
+            demand(reply.status == 0 && reply.bytes == 1);
         }
         2 | 3 => {
             // SAFETY: Deliberate RX-write/loop demonstrations run only at EL0;

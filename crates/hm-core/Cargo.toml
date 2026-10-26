@@ -11,6 +11,7 @@ hm-kernel = { path = "../hm-kernel" }
 boot-tests = []
 space-tests = []
 process-tests = []
+startup-input-tests = ["boot-tests"]
 unhandled-fault-test = []
 nested-fault-test = []
 thread-overflow-test = []

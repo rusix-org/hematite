@@ -70,7 +70,7 @@ failures. This is source review, not an assertion those compiler/host cases have
 already executed. Runtime installation and input delivery remain unimplemented
 by this stage.
 
-## StageB draft review: not yet implementation-approved
+## StageB initial draft review
 
 The runtime direction is coherent and carries the task beyond codec-only
 validation: preserve legacy prepare, add typed opt-in input, copy directly into
@@ -100,6 +100,50 @@ is essential with only1,952 bytes of prior normal-launch headroom. No StageA
 host result establishes runtime delivery, isolation or input-owner independence
 after hardware entry.
 
+## StageB concrete design review
+
+The appended freeze resolves the initial mechanism/test gaps: exact
+prepare_with_input and Platform signatures, private feature-only checked
+copy_startup observation, eight independently linked probes in a checked archive,
+twelve cases repeated twice, full presence/payload/tail proofs at EL0 and exact
+resource/generation records. Nine successful exits per pass issue27 SVCs; two
+faults and one deadline make30 slices per pass,60 total. The unchanged old66-run
+matrix remains mandatory. The test hook accepts only offsets in the startup
+page, prevalidates the complete output interval and returns immutable copied
+data under boot mappings; it cannot expose mutable owners or user VA authority.
+
+Invalid257-byte construction is checked before first issuer creation and after
+generation24. Budget/exhausted preparation failures consume25/26; successful
+inactive prepare/drop must reveal27 and reclaim its page. Comparing the full
+page in bounded chunks after source and Input end proves kernel ownership,
+while independently executed user probes prevent a kernel-only readback claim.
+Absence after binary/fault/deadline cases detects stale copy state. No caller
+input borrow is live under the alternate root, including omitted-arena inputs.
+
+A blocking architectural expectation was corrected before implementation:
+BR X9 from the ordinary unguarded RX source sets BTYPE01, not guarded-source11.
+The NX payload fault therefore requires BTYPE1 (saved0x00400740 after clearing
+NZCV), ESR0x8200000f and FAR/ELR=STARTUP+88. The RO byte-write requires
+ESR0x9200004f at its named instruction and that same FAR. This follows the
+existing0023 reviewed Arm BR rule; no widened syndrome mask is permitted.
+The payload's RET encoding is a known instruction, not a claimed safe fallback.
+
+**StageB design approved for the specified implementation.** Confirmed the
+coordinated fixed syscall-pointer/newline and exact probe-manifest wording on
+disk. The freeze uses payload pointer
+STARTUP+88 even for zero-length writes, independent validation of decoded data,
+and a distinct syscall for an immutable read-only newline byte. Source review,
+actual compiler clients and all affected compiled-stack gates remain required
+before any StageB guest.
+
+The ordinary integration gate also now freezes five echo launches (absent,
+empty, text, preserved spaces and the64-byte command boundary) plus the five
+existing launches: ten generations,21 SVCs and23 total process slices per main
+profile. Fresh legacy hello remains, and a separate fresh input-first echo
+requires generation1 without warm-up. This closes the usability scope alongside
+the separate binary256-byte hardware profile; codec-only evidence cannot satisfy
+the milestone.
+
 ## StageA initial actual evidence
 
 Independently inspected ARM batch
@@ -128,3 +172,120 @@ Together with the independently inspected14-case host execution and unchanged
 21 runtime ELFs, **StageA codec-only final acceptance passes**. This does not
 approve or verify StageB startup installation, monitor input or EL0 delivery;
 those remain the next separately reviewed integration work.
+
+## StageB source review
+
+Reviewed the actual optional preparation/launcher wiring, private startup
+observer, guest checks, safe monitor policy and user fixtures. **Core source
+approved for the frozen StageB scope**, subject to compiled stack and execution
+gates. `prepare_inner` retains no input lifetime; encoding writes directly into
+the newly owned zeroed startup frame before leaf publication. Any encoding or
+precommit failure drops that local frame and returns the unchanged Space.
+Legacy preparation passes None without a page-sized temporary. The observer
+validates the entire offset/length interval before delegating to immutable typed
+copy, including empty-end, overflow and crossing-end cases.
+
+The guest checks compare all4096 bytes in256-byte chunks after the construction
+source and owned Input have left scope. Expected wire bytes are independent of
+the encoder. They check absence after binary input and hostile termination,
+actual budget/exhaustion rollback, generation consumption and prepared-owner
+Drop. The additional by-value helper chain still needs emitted-assembly stack
+review; source-level noinline annotations alone do not establish a bound.
+
+The monitor preserves the first-delimiter distinction between absent and empty,
+remaining spaces and the existing line limit. The eight host cases import the
+actual policy source through a minimal recorder trait; this establishes parsing,
+dispatch and error-output behavior, not the real Platform implementation or
+hardware integration. The host tool requires exactly those eight cases plus
+successful bounded execution. Echo and the eight probes use the actual decoder;
+probes validate presence/payload, issue the fixed payload pointer even for empty
+writes and use a separately named read-only newline syscall.
+
+Reviewed artifact binding and requested an additional independent check of the
+probe X9 target materialization. The builder now checks the three exact RX
+MOVZ/MOVK words at its unique internal probe_end symbol, resolving to STARTUP+88,
+in addition to STRB/BR, NZCV clear, SVC and loop opcodes. This does not broaden
+the frozen public manifest. The delivery parser checks24 ordered runs,54 SVCs,
+60 process slices, exact output bytes, absence/empty exit distinctions,
+restoration/resource counts and generations through27. Shared TraceReader
+retains the existing strict timer/GIC/fixup grammar. Requested exact cleared
+NZCV on hostile write/execute/loop STOP records rather than masking those bits;
+ordinary exit NZCV remains unconstrained. Actual trace grammar acceptance and
+all22 candidate stack gates are pending; no StageB runtime success is claimed.
+
+The NZCV finding is resolved in source: no-call write/execute/loop cases now
+require their exact saved PSTATE, while ordinary exits mask only NZCV. Reviewed
+mutations inject each NZCV bit into each of the six hostile STOP records and
+retain an accepted ordinary-exit NZCV variant. No source-review blocker remains.
+
+StageB's initial new-profile compilation exposed75,712/76,176-byte preparation
+chains, rejected before guests. The reviewed owner-helper refactor preserves
+source/Input lifetime-end and full-page readback while removing redundant
+Process-return frames. Independently inspected and hash-bound all22 third
+candidates: **compiled-stack gate now passes**, with the normal monitor's largest
+conservative bound64,128 below65,536. The new profile's larger baseline bound is
+62,448. Exact chains, rejected evidence and final hashes are in the
+[stack review](../evidence/startup-input-stage-b/stack-review.md). First guest
+execution is approved for this inventory; actual delivery/interactive traces
+and regression results remain pending.
+
+## StageB first actual runtime acceptance
+
+Independently revalidated the raw serial and full exception/GIC traces for both
+[first delivery profiles](../evidence/startup-input-stage-b/first-delivery/result.json)
+and all four
+[first launcher profiles](../evidence/startup-input-stage-b/first-launcher/result.json).
+All six pass the frozen strict validators without overrides. Independently
+matched recorded raw-log and kernel hashes, canonical ELF bytes against GNU
+stdout extraction, and unique complete read-only kernel archive embedding with
+no individual-ELF fallback. Delivery archive SHA-256 is
+`8585f4de0f690effd2074a449dd46a17954555c55953d984a93b3284f1cc5798`
+(114,176 bytes at kernel offset380095); normal archive is
+`ea708fb72cd2e9cd277de319bd6e9697c54872472eaa1e3cc4a8f13ca4a9169d`
+(743,936 bytes at offset371352). These bind the reviewed c200f695… and e33eb4ae…
+kernels respectively.
+
+Each64/128MiB delivery profile executes24 runs and60 slices:54 exact SVCs,
+four actual startup-page faults and two deadline IRQs. Raw traces show the
+write permission fault ESR0x9200004f and execute permission fault0x8200000f at
+STARTUP+88, with the exact saved hostile PSTATE/BTYPE. Full256-byte binary output,
+empty/absent exit distinctions and recovery cases pass. Both rejected257-byte
+inputs leave the3280-frame baseline unchanged; generations1..24, failure25/26
+and inactive-drop27 complete with reclamation. Eight preflight and16 baseline
+IRQs plus the strict registered fault transactions are present.
+
+Both ordinary main profiles complete37 commands and ten launches through
+generation10 with3126 free frames after warm-up. Five actual echo runs cover
+absent, empty, ordinary text, retained spaces and the64-byte monitor line limit.
+Existing native info/hello, fault/deadline containment and post-test recovery
+remain exercised. Fresh hello and fresh input-first each start at generation1
+and retain3129 frames; inspected input-first transcript prints `first`, reports
+exit0 and returns the live prompt. No warm-up is needed to initialize this path.
+
+**StageB first runtime acceptance passes for these pinned one-CPU QEMU inputs.**
+This establishes actual protected startup delivery and interactive use, not just
+a codec. Final full-suite/regression archival acceptance is still pending;
+Linux compatibility, services and native ARM/KVM remain separate gaps.
+
+## StageB final local acceptance
+
+Independently inspected the stable
+[final archive](../evidence/startup-input-stage-b/final/verification-summary.json):
+all67 ARM and14 x86 result objects report success. Fresh validation of all six
+final raw delivery/launcher transcripts and full traces passes, with exact
+reviewed kernel identities and independently matched raw-log hashes. The two
+compressed final kernels hash to their reviewed third candidates; canonical
+archive/ELF hashes, GNU extracted payloads and unique complete read-only
+embedding also match. These are final-suite logs, not reused initial execution
+claims. Inspected actual26-client compiler outcomes and expected rejection
+classes in raw diagnostics. The x86 monitor explicitly prints unsupported for
+`run bin/echo text`, then accepts status at its recovered prompt.
+
+The final summary records `make test-all` exit0,164 Python cases per target,
+48 input-delivery runs,22 ordinary launcher runs and198 existing process runs.
+Audited the [milestone evidence](../evidence/native-startup-delivery.md): its
+claims and limitations agree with the reviewed source and actual evidence.
+**StageB final local acceptance passes.** This closes this startup-input
+milestone only; CI phase closure, Linux compatibility, concurrent services,
+storage/networking and ARM/KVM execution remain separate work. No broader goal
+completion, human audit or performance advantage is inferred.

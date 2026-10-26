@@ -23,6 +23,20 @@ write_svc:
     ret
 .size call_write,.-call_write
 
+.global call_newline
+.type call_newline,%function
+call_newline:
+    mov x1, x0
+    adr x2, newline
+    mov x3, #1
+    mov x0, #1
+    mov x8, #1
+.global newline_svc
+newline_svc:
+    svc #0
+    ret
+.size call_newline,.-call_newline
+
 .global call_exit
 .type call_exit,%function
 call_exit:

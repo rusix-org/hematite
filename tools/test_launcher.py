@@ -24,7 +24,7 @@ SYMBOLS = ('__kernel_end', 'arm_vectors', 'arm_process_vectors', 'arm_timer_wind
 INFO = b'native ABI 1\nconsole: granted\nwrite limit: 256 bytes\nconsole budget: 4096 bytes\ncall limit: 64\n'
 HELLO = b'hello from EL0\n'
 EXIT = b'Program exited (status 0).\n'
-APPS = b'Native programs:\n  bin/hello\n  bin/info\n  demo/fault\n  demo/loop\n'
+APPS = b'Native programs:\n  bin/hello\n  bin/info\n  bin/echo\n  demo/fault\n  demo/loop\n'
 SETUP = ((0, 0), (4, 255), (8, 0), (0, 1))
 SLICE_SETUP = ((4, 255), (8, 0), (0, 1))
 SLICE_RESTORE = ((0, 0), (4, 255), (8, 0), (0, 0))
@@ -43,10 +43,10 @@ def banner(ram_mb, pages):
     return transport((f'hematite: ARM64 Rust kernel entered at EL1\nBoot RAM bytes: 0x{ram_mb * 1024 * 1024:016x} (discovered RAM)\n'
                       f'Frame pool pages: 0x{pages:016x} (4 KiB each; boot reservations excluded)\n'
                       'Hematite bootstrap monitor (local working name)\n'
-                      'Commands: help, status, test, apps, run <path>. This is not a Linux shell.\n').encode())
+                      'Commands: help, status, test, apps, run <path> [text]. This is not a Linux shell.\n').encode())
 
 
-def steps(pages, fresh=False):
+def steps(pages, fresh=False, input_first=False):
     result = []
     def command(name, request, body):
         request = request.encode()
@@ -55,7 +55,8 @@ def steps(pages, fresh=False):
         command(name, 'status', status_body('aarch64', free, count, count or None))
     if fresh:
         status('initial_status', 0, pages)
-        command('hello', 'run bin/hello', HELLO + EXIT)
+        command('echo_first' if input_first else 'hello', 'run bin/echo first' if input_first else 'run bin/hello',
+                b'first\n' + EXIT if input_first else HELLO + EXIT)
         status('hello_status', 1, pages)
         return result
     command('warmup', 'test', test_body())
@@ -66,33 +67,39 @@ def steps(pages, fresh=False):
     command('missing', 'run bin/missing', b'Program not found.\n')
     command('directory', 'run bin', b'Cannot launch a directory.\n')
     for name, request in (('bare_run', 'run'), ('empty_path', 'run '), ('extra_separator', 'run  bin/hello'),
-                          ('arguments', 'run bin/hello extra')):
-        command(name, request, b'Usage: run <archive-path>.\n')
+                          ('empty_echo_path', 'run  bin/echo')):
+        command(name, request, b'Usage: run <archive-path> [text].\n')
     for name, request in (('relative_path', 'run ./bin/hello'), ('case_sensitive', 'run bin/Hello')):
         command(name, request, b'Program not found.\n')
     result.append(('overflow', b'x' * 65 + b'\n', transport(b'x' * 64 + b'\nRejected: use at most 64 printable ASCII bytes.\n')))
     command('help_recovery', 'help', help_body())
     status('rejected_status', 0, free)
+    for count, (name, command_text, payload) in enumerate((
+            ('echo_absent', 'run bin/echo', b''), ('echo_empty', 'run bin/echo ', b''),
+            ('echo_text', 'run bin/echo hello', b'hello'), ('echo_spaces', 'run bin/echo  hi ', b' hi '),
+            ('echo_maximum', 'run bin/echo ' + 'A' * 51, b'A' * 51)), 1):
+        command(name, command_text, payload + b'\n' + EXIT)
+        status(name + '_status', count, free)
     for count, (name, path, body) in enumerate((('info', 'bin/info', INFO + EXIT), ('hello', 'bin/hello', HELLO + EXIT),
-            ('fault', 'demo/fault', b'Program faulted.\n'), ('loop', 'demo/loop', b'Program timed out.\n')), 1):
+            ('fault', 'demo/fault', b'Program faulted.\n'), ('loop', 'demo/loop', b'Program timed out.\n')), 6):
         command(name, 'run ' + path, body)
         status(name + '_status', count, free)
     command('interleaved_test', 'test', test_body())
-    status('interleaved_status', 4, free)
+    status('interleaved_status', 9, free)
     command('missing_after_launch', 'run bin/missing', b'Program not found.\n')
     command('hello_again', 'run bin/hello', HELLO + EXIT)
-    status('final_status', 5, free)
+    status('final_status', 10, free)
     return result
 
 
-def validate_serial(raw, ram_mb, pages, fresh=False):
+def validate_serial(raw, ram_mb, pages, fresh=False, input_first=False):
     expected = banner(ram_mb, pages) + PROMPT
-    for _, _, response in steps(pages, fresh):
+    for _, _, response in steps(pages, fresh, input_first):
         expected += response + PROMPT
     require(raw == expected, 'Normal monitor transcript differs from exact command/output/prompt inventory')
     require(not any(marker in raw for marker in (b'HMPROC', b'HMSPACE', b'HMEXCEPTION')), 'Internal test diagnostics leaked into normal flow')
-    return {'commands': len(steps(pages, fresh)), 'completed': 1 if fresh else 5,
-            'generation': 1 if fresh else 5, 'free_frames': pages if fresh else pages - 3}
+    return {'commands': len(steps(pages, fresh, input_first)), 'completed': 1 if fresh else 10,
+            'generation': 1 if fresh else 10, 'free_frames': pages if fresh else pages - 3}
 
 
 def load_bytes(kernel, address, length, required_flags=None):
@@ -126,57 +133,70 @@ def fixup_table(kernel, symbols):
     return rows
 
 
-def validate_trace(raw, apps, symbols, fixups, fresh=False):
-    events, _ = parse_trace(raw)
-    cursor = iter(events)
-    def take():
-        value = next(cursor, None)
+class TraceReader:
+    """Consume only the reviewed exact timer/fixup/GIC transaction grammar."""
+    def __init__(self, raw, symbols, fixups):
+        events, _ = parse_trace(raw)
+        self.cursor = iter(events)
+        self.symbols, self.fixups = symbols, fixups
+
+    def take(self):
+        value = next(self.cursor, None)
         require(value is not None, 'Incomplete launcher trace')
         return value
-    def writes(sequence):
+    def writes(self, sequence):
         for offset, value in sequence:
-            event = take()
+            event = self.take()
             require(event['kind'] == 'write' and (event['offset'], event['value']) == (offset, value), 'Wrong exact GIC write sequence')
-    def returned(el, pc):
-        event = take()
+    def returned(self, el, pc):
+        event = self.take()
         require(event['kind'] == 'return' and event['el'] == el and event['pc'] == pc, 'Missing exact exception return')
-    def timer_group():
-        writes(SETUP)
+    def timer_group(self):
+        self.writes(SETUP)
         for _ in range(8):
-            event = take()
+            event = self.take()
             require(event['kind'] == 'exception' and event['number'] == 5 and event['source'] == event['target'] == 1 and
-                    event['vector'] == symbols['arm_vectors'] + 0x280 and
-                    symbols['arm_timer_window_begin'] <= event['elr'] < symbols['arm_timer_window_end'], 'Unexpected preflight/test timer exception')
-            ack = take()
+                    event['vector'] == self.symbols['arm_vectors'] + 0x280 and
+                    self.symbols['arm_timer_window_begin'] <= event['elr'] < self.symbols['arm_timer_window_end'], 'Unexpected preflight/test timer exception')
+            ack = self.take()
             require(ack['kind'] == 'ack' and ack['id'] == 30, 'Wrong timer acknowledge')
-            writes(((16, 30),))
-            returned(1, event['elr'])
-        writes(((0, 0),) + SETUP + ((0, 0),))
-    def baseline():
-        timer_group()
-        timer_group()
+            self.writes(((16, 30),))
+            self.returned(1, event['elr'])
+        self.writes(((0, 0),) + SETUP + ((0, 0),))
+    def baseline(self):
+        self.timer_group()
+        self.timer_group()
         for _ in range(4):
-            for pc, resume, far, esr in fixups:
-                event = take()
+            for pc, resume, far, esr in self.fixups:
+                event = self.take()
                 require(event['kind'] == 'exception' and event['source'] == event['target'] == 1 and
                         event['number'] == (3 if esr == 0x8600000f else 4) and
                         event['esr'] == esr and event.get('far') == far and event['elr'] == pc and
-                        event['vector'] == symbols['arm_vectors'] + 0x200, 'Unexpected baseline fault transaction')
-                returned(1, resume)
-        writes((SETUP + ((0, 0),)) * 2)
+                        event['vector'] == self.symbols['arm_vectors'] + 0x200, 'Unexpected baseline fault transaction')
+                self.returned(1, resume)
+        self.writes((SETUP + ((0, 0),)) * 2)
+    def done(self):
+        require(next(self.cursor, None) is None, 'Extra transitions after completed interactions')
+
+
+def validate_trace(raw, apps, symbols, fixups, fresh=False, input_first=False):
+    reader = TraceReader(raw, symbols, fixups)
+    take, writes, returned = reader.take, reader.writes, reader.returned
+    timer_group, baseline = reader.timer_group, reader.baseline
     def launch(name):
         app = apps[name]
         writes(SLICE_SETUP)
         returned(0, app['entry'])
-        if name in ('hello', 'info'):
-            for index, label in enumerate(('write_svc', 'exit_svc')):
+        if name in ('hello', 'info', 'echo'):
+            labels = ('write_svc', 'newline_svc', 'exit_svc') if name == 'echo' else ('write_svc', 'exit_svc')
+            for index, label in enumerate(labels):
                 event = take()
                 require(event['kind'] == 'exception' and event['number'] == 2 and event['source'] == 0 and
                         event['target'] == 1 and event['esr'] == 0x56000000 and event.get('far') is None and
                         event['elr'] == app['symbols'][label] + 4 and
                         event['vector'] == symbols['arm_process_vectors'] + 0x400, 'Wrong normal app SVC')
                 writes(SLICE_RESTORE)
-                if index == 0:
+                if index < len(labels) - 1:
                     writes(SLICE_SETUP)
                     returned(0, event['elr'])
         else:
@@ -197,33 +217,35 @@ def validate_trace(raw, apps, symbols, fixups, fresh=False):
         baseline()
     timer_group()
     if fresh:
-        launch('hello')
+        launch('echo' if input_first else 'hello')
     else:
+        for _ in range(5):
+            launch('echo')
         for name in ('info', 'hello', 'fault', 'loop'):
             launch(name)
         baseline()
         launch('hello')
-    require(next(cursor, None) is None, 'Extra transitions after completed monitor interactions')
-    return {'runs': 1 if fresh else 5, 'el0_svcs': 2 if fresh else 6, 'el0_faults': 0 if fresh else 1,
+    reader.done()
+    return {'runs': 1 if fresh else 10, 'el0_svcs': (3 if input_first else 2) if fresh else 21, 'el0_faults': 0 if fresh else 1,
             'el0_timer_irqs': 0 if fresh else 1, 'el1_timer_irqs': 8 if fresh else 40,
             'scope': 'pinned QEMU exact registered EL1 diagnostics and actual normal-app EL0 transitions'}
 
 
-def validate(raw, trace, execution, apps, symbols, fixups, ram_mb, pages, fresh=False):
+def validate(raw, trace, execution, apps, symbols, fixups, ram_mb, pages, fresh=False, input_first=False):
     errors, serial_report, trace_report = [], None, None
     try:
         require(execution.get('launch_error') is None and execution.get('timed_out') is False and
                 execution.get('host_terminated') is True and execution.get('host_killed') is False and
                 execution.get('alive_after_last_prompt') is True and execution.get('returncode') in (-15, 0),
                 'Monitor did not remain alive until deliberate bounded host shutdown')
-        serial_report = validate_serial(raw, ram_mb, pages, fresh)
-        trace_report = validate_trace(trace, apps, symbols, fixups, fresh)
+        serial_report = validate_serial(raw, ram_mb, pages, fresh, input_first)
+        trace_report = validate_trace(trace, apps, symbols, fixups, fresh, input_first)
     except (ValueError, KeyError, TypeError, UnicodeError, StopIteration) as error:
         errors.append(str(error))
     return {'passed': not errors, 'errors': errors, 'execution': execution, 'serial': serial_report, 'trace': trace_report}
 
 
-def run_profile(output, kernel, apps, symbols, fixups, ram_mb=128, fresh=False):
+def run_profile(output, kernel, apps, symbols, fixups, ram_mb=128, fresh=False, input_first=False):
     output.mkdir()
     pages = (0x41000000 - symbols['__kernel_end']) // 4096
     require(300 < pages < 4096, 'Invalid normal kernel frame baseline')
@@ -233,7 +255,7 @@ def run_profile(output, kernel, apps, symbols, fixups, ram_mb=128, fresh=False):
     command += ['-d', 'int', '-D', str(output / 'exceptions.log'), '-trace', 'enable=gic_acknowledge_irq', '-trace', 'enable=gic_cpu_write']
     write_json(output / 'command.json', command)
     write_json(output / 'input.json', {'kernel': str(kernel), 'kernel_sha256': hashlib.sha256(kernel.read_bytes()).hexdigest(),
-        'ram_mb': ram_mb, 'fresh': fresh, 'pages': pages, 'timeout_seconds': TIMEOUT})
+        'ram_mb': ram_mb, 'fresh': fresh, 'input_first': input_first, 'pages': pages, 'timeout_seconds': TIMEOUT})
     execution = {'returncode': None, 'timed_out': False, 'launch_error': None, 'host_terminated': False,
                  'host_killed': False, 'alive_after_last_prompt': False}
     pending, interactions = bytearray(), []
@@ -267,7 +289,7 @@ def run_profile(output, kernel, apps, symbols, fixups, ram_mb=128, fresh=False):
             proc = subprocess.Popen(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=stderr, bufsize=0)
             selector.register(proc.stdout, selectors.EVENT_READ)
             require(read_prompt() == banner(ram_mb, pages), 'Wrong boot banner')
-            for name, request, expected in steps(pages, fresh):
+            for name, request, expected in steps(pages, fresh, input_first):
                 require(proc.stdin.write(request) == len(request), 'Short monitor input write')
                 response = read_prompt()
                 interactions.append({'name': name, 'input_hex': request.hex(), 'expected_hex': expected.hex(), 'response_hex': response.hex()})
@@ -295,7 +317,7 @@ def run_profile(output, kernel, apps, symbols, fixups, ram_mb=128, fresh=False):
     execution['elapsed_seconds'] = time.monotonic() - started
     write_json(output / 'interactions.json', interactions)
     result = validate(bounded_bytes(output / 'serial.log'), bounded_bytes(output / 'exceptions.log'), execution,
-                      apps, symbols, fixups, ram_mb, pages, fresh)
+                      apps, symbols, fixups, ram_mb, pages, fresh, input_first)
     result['artifacts'] = {name: artifact(output / name) for name in ('serial.log', 'exceptions.log', 'stderr.log')}
     result['passed'] &= all(item['within_size_limit'] for item in result['artifacts'].values())
     write_json(output / 'result.json', result)
@@ -322,13 +344,13 @@ def main():
         sources = ('test_launcher.py', 'build_apps.py', 'build_initramfs.py', 'test_process.py', 'test_boot_profiles.py', 'test_kernel.py')
         write_json(output / 'metadata.json', {'apps': apps, 'archive': archive, 'symbols': symbols, 'fixups': fixups,
             'sources': {name: hashlib.sha256(Path(__file__).with_name(name).read_bytes()).hexdigest() for name in sources}})
-        for ram_mb, fresh in ((64, False), (128, False), (128, True)):
-            name = f'launcher-{ram_mb}m' + ('-fresh' if fresh else '')
-            profiles[name] = run_profile(output / name, kernel, apps, symbols, fixups, ram_mb, fresh)['passed']
+        for ram_mb, fresh, input_first in ((64, False, False), (128, False, False), (128, True, False), (128, True, True)):
+            name = f'launcher-{ram_mb}m' + ('-fresh-input' if input_first else '-fresh' if fresh else '')
+            profiles[name] = run_profile(output / name, kernel, apps, symbols, fixups, ram_mb, fresh, input_first)['passed']
     except (OSError, ValueError, UnicodeError, KeyError, TypeError, struct.error) as caught:
         error = str(caught)
-    result = {'passed': error is None and len(profiles) == 3 and all(profiles.values()), 'profiles': profiles, 'error': error,
-              'scope': 'ordinary ARM64 one-CPU native launcher, four real apps, containment, generations and reclamation; no Linux ABI/service claim'}
+    result = {'passed': error is None and len(profiles) == 4 and all(profiles.values()), 'profiles': profiles, 'error': error,
+              'scope': 'ordinary ARM64 one-CPU native launcher, five real apps, containment, generations and reclamation; no Linux ABI/service claim'}
     write_json(output / 'result.json', result)
     print(json.dumps(result, indent=2))
     return 0 if result['passed'] else 1

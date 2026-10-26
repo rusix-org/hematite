@@ -60,6 +60,13 @@ pub trait Platform {
     ) -> Result<native_launch::LaunchReport, native_launch::LaunchError> {
         Err(native_launch::LaunchError::Unsupported)
     }
+    fn run_native_with_input(
+        &mut self,
+        _path: &str,
+        _input: &startup_input::Input,
+    ) -> Result<native_launch::LaunchReport, native_launch::LaunchError> {
+        Err(native_launch::LaunchError::Unsupported)
+    }
     fn native_status(&self) -> native_launch::NativeStatus {
         native_launch::NativeStatus::unsupported()
     }
@@ -639,7 +646,9 @@ fn status(platform: &mut impl Platform) {
 
 pub fn run_monitor(platform: &mut impl Platform) -> ! {
     platform.write("Hematite bootstrap monitor (local working name)\n");
-    platform.write("Commands: help, status, test, apps, run <path>. This is not a Linux shell.\n");
+    platform.write(
+        "Commands: help, status, test, apps, run <path> [text]. This is not a Linux shell.\n",
+    );
     platform.write("hm> ");
     let mut line = InputLine::new();
     loop {
@@ -661,7 +670,7 @@ pub fn run_monitor(platform: &mut impl Platform) -> ! {
                 match line.command() {
                     None => platform.write("Rejected: use at most 64 printable ASCII bytes.\n"),
                     Some(b"") => {}
-                    Some(b"help") => platform.write("help   - show commands\nstatus - inspect boot protections\ntest   - run bootstrap tests\napps   - list native programs\nrun <path> - launch a native program\n"),
+                    Some(b"help") => platform.write("help   - show commands\nstatus - inspect boot protections\ntest   - run bootstrap tests\napps   - list native programs\nrun <path> [text] - launch a native program\n"),
                     Some(b"status") => status(platform),
                     Some(b"apps") => native_launch::list_apps(platform),
                     Some(b"run") => native_launch::run_command(platform, ""),

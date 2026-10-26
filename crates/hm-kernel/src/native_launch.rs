@@ -1,6 +1,6 @@
 //! Safe monitor-facing native launch results; these values confer no authority.
 #![forbid(unsafe_code)]
-use crate::{Platform, elf, initramfs};
+use crate::{Platform, elf, initramfs, startup_input::Input};
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum Availability {
@@ -77,12 +77,25 @@ pub(crate) fn list_apps(platform: &mut impl Platform) {
 
 /// Print only after synchronous core teardown; no writer is passed to execution.
 #[inline(never)]
-pub(crate) fn run_command(platform: &mut impl Platform, path: &str) {
+pub(crate) fn run_command(platform: &mut impl Platform, command: &str) {
+    let (path, bytes) = match command.split_once(' ') {
+        Some((path, bytes)) => (path, Some(bytes.as_bytes())),
+        None => (command, None),
+    };
     if path.is_empty() || path.bytes().any(|b| b.is_ascii_whitespace()) {
-        platform.write("Usage: run <archive-path>.\n");
+        platform.write("Usage: run <archive-path> [text].\n");
         return;
     }
-    match platform.run_native(path) {
+    let result = if let Some(bytes) = bytes {
+        let Ok(input) = Input::from_bytes(bytes) else {
+            platform.write("Usage: run <archive-path> [text].\n");
+            return;
+        };
+        platform.run_native_with_input(path, &input)
+    } else {
+        platform.run_native(path)
+    };
+    match result {
         Ok(report) => match report.outcome {
             Outcome::Exited(code) => {
                 platform.write("Program exited (status ");

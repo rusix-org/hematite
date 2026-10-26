@@ -49,6 +49,31 @@ impl State {
         topology: &Topology,
         path: &str,
     ) -> Result<LaunchReport, LaunchError> {
+        // SAFETY: Preserve the caller's actual BootPlatform proof.
+        unsafe { self.run_inner(pool, topology, path, None) }
+    }
+    /// Same actual BootPlatform proof as run; input is copied before execution.
+    #[inline(never)]
+    // SAFETY: Only BootPlatform supplies this private entry's boot authority.
+    pub(super) unsafe fn run_with_input(
+        &mut self,
+        pool: &Pool,
+        topology: &Topology,
+        path: &str,
+        input: &hm_kernel::startup_input::Input,
+    ) -> Result<LaunchReport, LaunchError> {
+        // SAFETY: Preserve the caller's actual BootPlatform proof.
+        unsafe { self.run_inner(pool, topology, path, Some(input)) }
+    }
+    #[inline(never)]
+    // SAFETY: Private callers preserve the actual Pool/topology/root proof.
+    unsafe fn run_inner(
+        &mut self,
+        pool: &Pool,
+        topology: &Topology,
+        path: &str,
+        input: Option<&hm_kernel::startup_input::Input>,
+    ) -> Result<LaunchReport, LaunchError> {
         if topology.affinities() != [0] {
             return Err(LaunchError::Unsupported);
         }
@@ -84,7 +109,7 @@ impl State {
         }
         .map_err(|_| LaunchError::Unavailable)?;
         let before = pool.stats().free;
-        let result = load_and_run(executor, &mut self.generation, &factory, &image);
+        let result = load_and_run(executor, &mut self.generation, &factory, &image, input);
         let after = pool.stats().free;
         if before != after {
             self.authority = Authority::Unavailable;
@@ -121,6 +146,7 @@ fn load_and_run(
     generation: &mut Option<u32>,
     factory: &Factory<'_>,
     image: &hm_kernel::elf::Image<'_>,
+    input: Option<&hm_kernel::startup_input::Input>,
 ) -> Result<Outcome, LaunchError> {
     let budget = image
         .page_count()
@@ -133,15 +159,19 @@ fn load_and_run(
         super::user_space::Error::Busy => LaunchError::Busy,
         _ => LaunchError::Unavailable,
     })?;
-    run_loaded(executor, generation, space)
+    run_loaded(executor, generation, space, input)
 }
 #[inline(never)]
 fn run_loaded(
     executor: &mut Executor,
     generation: &mut Option<u32>,
     space: Space<'_>,
+    input: Option<&hm_kernel::startup_input::Input>,
 ) -> Result<Outcome, LaunchError> {
-    let prepared = executor.prepare(space, true, 1);
+    let prepared = match input {
+        Some(input) => executor.prepare_with_input(space, true, 1, input),
+        None => executor.prepare(space, true, 1),
+    };
     let process = match prepared {
         Ok(process) => process,
         // Borrow the failure metadata; retain its Space in the owned Result

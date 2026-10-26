@@ -1,12 +1,13 @@
 # Owned bounded native startup input
 
-Status: Stage A implemented and verified locally; independent
-[review 0027](../reviews/0027-native-startup-input.md) and
-[evidence](../evidence/native-startup-input.md), 2026-10-26. Stage B remains
-draft/unapproved; runtime/wire/monitor integration requires separate source,
-stack and execution review. No spawn, process scheduling or IPC is implemented
-by either stage. [ADR0005](../adr/0005-native-first-design.md) supplies the native
-ownership direction; [0026](0026-native-launcher.md) supplies ordinary launch.
+Status: Stages A and B implemented and verified locally, 2026-10-26.
+[Independent review](../reviews/0027-native-startup-input.md),
+[codec evidence](../evidence/native-startup-input.md) and
+[delivery evidence](../evidence/native-startup-delivery.md) distinguish the
+host-only codec from actual protected execution. Matching remote CI remains
+open. No spawn, process scheduling or IPC is implemented by either stage.
+[ADR 0005](../adr/0005-native-first-design.md) supplies the native ownership
+direction; [0026](0026-native-launcher.md) supplies ordinary launch.
 
 ## Stage A: safe owned input and canonical codec
 
@@ -97,7 +98,7 @@ View bytes while the extension remains alive. Host tools enforce exact inventory
 exit status, timeouts and missing-case failures. Build both no_std kernel targets
 and retain all existing gates. Passing Stage A proves codec/ownership only.
 
-## Stage B draft: explicitly opt-in startup extension
+## Stage B: explicitly opt-in startup extension
 
 The existing v1 Session::startup() first64 bytes remain byte-for-byte unchanged,
 including version1, length64, features and reserved word56. SVC request version1
@@ -116,10 +117,9 @@ a legacy program that insists its entire tail is zero can reject supplied input
 normally without affecting isolation. Do not silently discard nonempty input
 or pretend a successful legacy exit proves it consumed the bytes.
 
-The remaining integration details and hardware gates are specified below before
-runtime implementation approval; Stage A may proceed independently after review.
+The runtime composition and hardware verification contract is specified below.
 
-### Proposed runtime composition and page geometry
+### Runtime composition and page geometry
 
 Preserve `Executor::prepare(space, console, budget)` unchanged for all existing
 callers. Add `prepare_with_input(space, console, budget, input: &Input)` returning
@@ -165,7 +165,7 @@ Input-sized temporary. Native status, generation reporting, output transport,
 resource outcomes and quiescence policy stay unchanged. Last prepared generation
 is set only after successful preparation; malformed input consumes none.
 
-### Proposed monitor text and echo behavior
+### Monitor text and echo behavior
 
 Keep InputLine capacity64 and printable-ASCII admission. `run <path>` means absent
 input. Split the command's remainder on its first ASCII space only: `run <path>
@@ -194,7 +194,7 @@ Terminal LF-to-CRLF conversion remains transport only; Trace mode records origin
 bytes. Passing input is data transfer, not extra authority: it creates no handle,
 resource grant, filesystem access, spawn right or shared memory.
 
-### Proposed Stage B verification and review gate
+### Stage B verification and review gate
 
 Before core code, independently review the concrete installer/shared prepare
 change, source lifetimes, decoder reuse and monitor grammar. Preserve all existing
@@ -340,9 +340,12 @@ named `strb wzr,[x9]` with x9=STARTUP+88 (0x1_0010_0058). Require ESR0x9200004f,
 FAR that address, ELR=fault_write, BTYPE0 and the established sanitized PSTATE.
 The execute probe validates input, clears NZCV and uses named `br x9` to that
 same aligned payload VA; BRX9 is independently checked as0xd61f0120. Require
-ESR0x8200000f, FAR=ELR=STARTUP+88 and captured BTYPE3, using the already reviewed
-pinned-QEMU BR/NX interpretation from0023. Its payload encodes RET only to make
-incorrect execution detectable; it must not execute. Loop is a named `b .`
+ESR0x8200000f, FAR=ELR=STARTUP+88 and captured BTYPE1, using the already reviewed
+pinned-QEMU BR/NX interpretation from0023: the source RX page is unguarded
+(no GP bit), so BR X9 selects BTYPE01, not the guarded-source BTYPE11. Its
+payload encodes a known RET instruction; this is not a standalone safe sentinel.
+The exact instruction-permission fault gate rejects any execution of that byte
+sequence, regardless of where an incorrect RET might subsequently branch. Loop is a named `b .`
 with loop_end=loop_start+4 and ends through the existing deadline IRQ. These
 three probes issue no SVC on their successful fault/deadline paths. Per pass,
 nine exits give27 SVCs, two faults and one IRQ:30 process slices,60 across two
@@ -403,5 +406,39 @@ Host artifact gates bind all probe ELF/archive bytes to the built kernel as in
 length, output byte, generation, free count, case/order, exit proof, readback
 flag, syndrome, target, branch type, extra/missing SVC/IRQ and missing rollback
 records. These frozen cases supersede the earlier paragraph's placeholder for
-later profile inventory/grammar; review still must approve their implementation
-and compiled stack bounds before execution.
+later profile inventory/grammar. Implementation and compiled-stack approval
+preceded execution; the linked evidence records the accepted binaries.
+
+Final Stage B wire/artifact details: after decoder validation, every probe payload
+WRITE uses the fixed address STARTUP+88, including zero-length writes (no pointer
+identity dependence on an empty View slice). The separate newline_svc writes
+one byte from the independently named immutable RO symbol `newline`, whose byte
+is0a. Exit uses the distinct exit_svc symbol. Each of the eight probe manifest
+records appears in an envelope containing exactly `version: 1` and `probes`
+(the eight named records). Each record has exactly `file`, `path`, `sha256`, `entry`, `pages`, `symbols`,
+`segments`, `input`; input has exactly `present` (boolean) and `hex` (canonical
+lowercase payload hex). Exact symbol inventory is native_start, write_svc,
+newline_svc, exit_svc, fault_write, branch_payload, loop_start, loop_end, newline.
+All symbols may be retained by shared assembly, but every exercised symbol and
+opcode/address is independently verified. Recovery cases reuse absent's manifest;
+they do not create additional ELF variants.
+
+The ordinary monitor integration sequence extends0026 after its warm-up test,
+apps and baseline status with five echo launches: absent (`run bin/echo`),
+present-empty (`run bin/echo `), text (`run bin/echo hello input`), preserved spaces
+(`run bin/echo  hi `, payload ` hi `), and exactly51 `A` bytes after the13-byte
+`run bin/echo ` prefix (the64-byte accepted command bound). Query status after
+each. Then retain info, hello, fault, loop, interleaved test and hello with their
+existing status observations. This gives10 launches/generations1..10,21 SVCs,
+one fault and one deadline IRQ:23 process slices. Test invalid empty-path spacing
+and65-byte overflow before first launch, with status confirming no initialization
+or generation. Their rejected lines must recover the prompt. Former extra-text
+usage rejections are explicitly replaced by this byte-input grammar, not silently
+accepted under an unchanged test expectation.
+
+Preserve the existing fresh128MiB legacy hello profile. Add a separate fresh128MiB
+input-first profile: status, `run bin/echo first`, status, with no warm-up test.
+Require `first` plus newline, exit0, generation1, unchanged initial free count,
+three SVCs and exactly8 preflight IRQs. Main64/128MiB profiles retain warm-up16,
+preflight8 and interleaved16 EL1 IRQs. Terminal transport remains LF-to-CRLF;
+wire output byte counts are original payload length plus one.
