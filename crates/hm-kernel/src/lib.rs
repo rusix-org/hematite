@@ -10,6 +10,8 @@ mod capability_tests;
 pub mod frame_api;
 pub mod frame_plan;
 mod frame_plan_tests;
+pub mod heap_api;
+mod heap_tests;
 
 use core::ops::Range;
 
@@ -31,6 +33,24 @@ pub struct BootChecks {
 
 /// The core retains all hardware authority; policy only exchanges owned values.
 pub trait Platform {
+    type HeapBlock<'a>: heap_api::OwnedBlock
+    where
+        Self: 'a;
+    type HeapBox<'a, T: 'a>: core::ops::DerefMut<Target = T>
+    where
+        Self: 'a;
+    fn allocate_heap(
+        &self,
+        size: usize,
+        align: usize,
+    ) -> Result<Self::HeapBlock<'_>, heap_api::HeapError>;
+    fn box_value<'a, T: 'a>(
+        &'a self,
+        value: T,
+    ) -> Result<Self::HeapBox<'a, T>, (heap_api::HeapError, T)>;
+    fn heap_exhaustion_check(&self) -> bool {
+        false
+    }
     type Frame<'a>: frame_api::OwnedFrame
     where
         Self: 'a;
@@ -237,12 +257,14 @@ pub fn run_tests(platform: &mut impl Platform) -> bool {
         ("frame_ranges", frame_plan_tests::ranges()),
         ("frame_boundaries", frame_plan_tests::boundaries()),
         ("frame_contract", frame_api::contract(platform)),
+        ("heap_blocks", heap_tests::blocks(platform)),
+        ("heap_values", heap_tests::values(platform)),
         (
             "cap_orderings",
             capability_tests::orderings(|message| platform.write(message)),
         ),
     ];
-    platform.write("HMTEST BEGIN 19\n");
+    platform.write("HMTEST BEGIN 21\n");
     let mut passed = true;
     for (name, success) in cases {
         platform.write(if success {
@@ -254,7 +276,7 @@ pub fn run_tests(platform: &mut impl Platform) -> bool {
         platform.write("\n");
         passed &= success;
     }
-    platform.write("HMTEST END 19\n");
+    platform.write("HMTEST END 21\n");
     passed
 }
 

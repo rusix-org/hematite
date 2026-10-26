@@ -27,6 +27,24 @@ unsafe extern "C" {
 pub(super) struct BootPlatform;
 
 impl Platform for BootPlatform {
+    type HeapBlock<'a> = hm_kernel::heap_api::UnsupportedBlock;
+    type HeapBox<'a, T: 'a> = hm_kernel::heap_api::UnsupportedBox<T>;
+
+    fn allocate_heap(
+        &self,
+        _size: usize,
+        _align: usize,
+    ) -> Result<Self::HeapBlock<'_>, hm_kernel::heap_api::HeapError> {
+        Err(hm_kernel::heap_api::HeapError::Unsupported)
+    }
+
+    fn box_value<'a, T: 'a>(
+        &'a self,
+        value: T,
+    ) -> Result<Self::HeapBox<'a, T>, (hm_kernel::heap_api::HeapError, T)> {
+        Err((hm_kernel::heap_api::HeapError::Unsupported, value))
+    }
+
     type Frame<'a> = hm_kernel::frame_api::UnsupportedFrame;
 
     fn allocate_frame(&self) -> Result<Self::Frame<'_>, hm_kernel::frame_api::FrameError> {

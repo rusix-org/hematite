@@ -13,9 +13,9 @@ make run    # build and open the ARM64 monitor; Ctrl-C exits
 ```
 
 Type `help`, `status`, or `test`. `status` reports the active memory protections;
-`test` runs 19 bootstrap, capability, boot-memory and frame checks. The ARM boot banner reports discovered RAM and usable frame capacity.
-Frame tests exercise real page allocation; one page is deliberately leaked once
-per boot to verify that forgotten owners cannot cause reuse.
+`test` runs 21 bootstrap, capability, memory and heap checks. The ARM boot banner reports discovered RAM and usable frame capacity.
+Memory tests exercise real frame and heap allocation. Two pages are deliberately
+retained once per boot to verify that forgotten owners cannot cause reuse.
 This is a kernel monitor, not a shell.
 
 ```sh
@@ -34,6 +34,11 @@ Test runs preserve serial output, input hash, expanded QEMU command and results
 under `target/evidence/`. Missing/duplicate/failed cases, unexpected exit status
 and timeouts fail the command. GitHub CI runs the same `make test-all` command;
 remote results are available in the repository’s GitHub Actions tab.
+
+ARM kernel code can now request fallible page-backed blocks and typed owners;
+failed typed allocations return the original value. Allocations currently round
+up to whole pages; standard Rust collections and concurrent allocation are
+not integrated yet.
 
 The safe capability experiment checks rights attenuation, bounded accounting,
 stale handles, revocation and cancellation/completion lifetimes. It models

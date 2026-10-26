@@ -1,6 +1,6 @@
 # Progress
 
-Current phase: **Phase 1 underway: ARM64 frame allocation verified**.
+Current phase: **Phase 1 underway: ARM64 fallible heap ownership verified**.
 Aaron approved scratch implementation and then changed the primary objective
 from strict Linux parity to native OS design with selective compatibility.
 [ADR 0005](docs/adr/0005-native-first-design.md) records the native direction;
@@ -19,17 +19,17 @@ from strict Linux parity to native OS design with selective compatibility.
 - Serial monitor: `make run` defaults to ARM64; `ARCH=x86_64` selects the
   regression port. Commands `help`, `status`, `test`; Ctrl-C exits.
 - `make test-all`: formatting, Clippy and safety checks for both targets,
-  12 host harness tests, 19 guest tests per architecture, ARM no-PAN rejection,
+  12 host harness tests, 21 guest tests per architecture, ARM no-PAN rejection,
   x86 missing-NX/SMEP/SMAP rejection, and live monitor recovery tests on both.
   ARM discovery matches both 128 MiB and 64 MiB guest configurations.
   All passed locally. `make test` tests ARM64 alone by default.
 - Pinned Rust base and Debian package snapshot, QEMU 7.2.22. One CPU/128 MiB
   guest by default; ARM discovery also tests 64 MiB; no attached disks or networking. Both targets use TCG.
 
-Latest evidence: [frame verification](docs/evidence/frame-allocation.md),
-[ARM guest results](docs/evidence/frame-final/aarch64/boot/result.json),
-[ARM profiles](docs/evidence/frame-final/aarch64/profiles/result.json),
-and matching x86 results under `docs/evidence/frame-final/x86_64/`.
+Latest evidence: [heap verification](docs/evidence/heap-ownership.md),
+[ARM guest results](docs/evidence/heap-final/aarch64/boot/result.json),
+[ARM profiles](docs/evidence/heap-final/aarch64/profiles/result.json),
+and matching x86 results under `docs/evidence/heap-final/x86_64/`.
 Earlier [bootstrap verification](docs/evidence/hematite-bootstrap.md) is retained.
 The earlier [Asterinas baseline](docs/evidence/asterinas-evaluation.md) remains
 an evaluation only; it is not this kernel's implementation.
@@ -59,8 +59,8 @@ frame remains live, singleton rejection and forgotten-owner retention. The
 exhaustion test holds a compact index ledger rather than thousands of frame
 objects; it does not touch every claimed page's bytes. Exactly one deliberately
 forgotten page remains allocated after the first diagnostic per boot. Repeated
-diagnostics preserve the remaining capacity. Ten safe-client compiler probes
-run per target, using the actual core module.
+diagnostics preserve the remaining capacity. The combined frame/heap compiler suite now runs 22 safe-client probes
+per target using the actual core module.
 
 x86 has no physical allocator yet: its contract case requires explicit
 Unsupported, while shared planner and compiler checks run on both targets.
@@ -68,9 +68,31 @@ See [design](docs/design/0005-frame-allocation.md),
 [review](docs/reviews/0005-frame-allocation.md) and
 [evidence](docs/evidence/frame-allocation.md).
 
+## Fallible ARM heap ownership verified locally
+
+The same physical pool now provides contiguous byte blocks and typed owners.
+Requests validate size/alignment, claim an entire run transactionally and zero
+before publication. Typed owners keep backing bytes private, run T's destructor
+before releasing pages, and return the original value on allocation failure.
+Reentrant destructors can allocate disjoint memory without held allocator locks.
+
+Tests cover multi-page blocks, over-alignment, zero-size requests, malformed and
+unavailable layouts, fragmented free space, byte/typed live-owner preservation,
+reuse, borrowed values, exact destruction and value preservation on exhaustion.
+One typed owner is deliberately forgotten once per pool in addition to the
+frame diagnostic's one page; subsequent tests preserve remaining capacity.
+
+This first heap charges whole pages (including one for zero-size requests).
+It has no global allocator or standard alloc-crate collection integration,
+and fragmentation may deny requests despite aggregate free capacity. It is
+single-CPU only. x86 heap requests explicitly return Unsupported.
+See [design](docs/design/0006-fallible-heap.md),
+[review](docs/reviews/0006-fallible-heap.md) and
+[evidence](docs/evidence/heap-ownership.md).
+
 ## Limits and gates
 
-No userspace, syscall ABI, kernel heap, general interrupt/exception handling, SMP, storage,
+No userspace, syscall ABI, general interrupt/exception handling, SMP, storage,
 virtio drivers or networking exists. Page-guard tests inspect mappings; there
 is no recoverable page-fault handler. ARM has minimal fatal exception vectors;
 x86 unexpected exceptions may triple-fault. ARM bootstrap isolation checks are
@@ -83,16 +105,16 @@ labels are trusted inputs and completion is a simulated backend acknowledgment.
 See [model verification](docs/evidence/capability-model.md).
 
 Published bootstrap CI passed at `b1b824c` ([run 40276324135](https://github.com/rusix-org/hematite/actions/runs/40276324135)).
-The capability, boot-memory and frame changes passed locally; remote CI has not
+The capability, boot-memory, frame and heap changes passed locally; remote CI has not
 run these changes. Aaron authorized public repository creation
 and push in [ADR 0007](docs/adr/0007-public-repository.md). License selection
 remains pending (ADR 0002); preliminary naming findings remain in ADR 0003.
 
 ## Next actions
 
-1. Design/review kernel heap and memory ownership for page tables; then
-   recoverable exceptions, timers and scheduling. Add interrupt/SMP-safe
-   ownership before concurrency (Phase 1).
+1. Design/review page-table ownership and recoverable exceptions, then timers
+   and scheduling. Add interrupt/SMP-safe ownership before concurrency;
+   implement measured small-object allocation before service workloads.
 2. Define the native userspace wire contract from those experiments; select
    compatibility workloads and pin a Linux oracle when the adapter exists.
 3. Resolve the license selection; run remote CI for the new changes when published.
@@ -141,3 +163,10 @@ remains pending (ADR 0002); preliminary naming findings remain in ADR 0003.
   passes 19 guest cases and ten frame compiler probes per architecture.
   ARM 64/128 MiB monitor profiles independently verify the eligible count
   against the ELF end marker. x86 allocation remains explicitly unsupported.
+
+- 2026-10-25: Implemented independently reviewed fallible page-backed heap and
+  typed ownership. Final dual suite passes 21 guest cases and 22 frame/heap
+  compiler probes per target. Verified failure atomicity under fragmentation,
+  borrowed values, reentrant destruction and original-value return on exhaustion.
+  Page-level allocation cost, diagnostic leaks and missing global allocator are
+  explicit; no workload or performance advantage claimed.

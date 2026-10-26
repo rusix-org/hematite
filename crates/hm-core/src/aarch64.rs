@@ -36,6 +36,36 @@ pub(super) struct BootPlatform {
 pub(super) const BANNER: &str = "hematite: ARM64 Rust kernel entered at EL1\n";
 
 impl Platform for BootPlatform {
+    type HeapBlock<'a> = super::frames::Block<'a>;
+    type HeapBox<'a, T: 'a> = super::frames::KernelBox<'a, T>;
+
+    fn allocate_heap(
+        &self,
+        size: usize,
+        align: usize,
+    ) -> Result<Self::HeapBlock<'_>, hm_kernel::heap_api::HeapError> {
+        self.pool
+            .as_ref()
+            .ok_or(hm_kernel::heap_api::HeapError::Unsupported)?
+            .allocate_heap(size, align)
+    }
+
+    fn box_value<'a, T: 'a>(
+        &'a self,
+        value: T,
+    ) -> Result<Self::HeapBox<'a, T>, (hm_kernel::heap_api::HeapError, T)> {
+        match self.pool.as_ref() {
+            Some(pool) => pool.box_value(value),
+            None => Err((hm_kernel::heap_api::HeapError::Unsupported, value)),
+        }
+    }
+
+    fn heap_exhaustion_check(&self) -> bool {
+        self.pool
+            .as_ref()
+            .is_some_and(super::frames::Pool::heap_exhaustion_check)
+    }
+
     type Frame<'a> = super::frames::Frame<'a>;
 
     fn allocate_frame(&self) -> Result<Self::Frame<'_>, hm_kernel::frame_api::FrameError> {

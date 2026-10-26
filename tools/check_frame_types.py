@@ -8,8 +8,9 @@ import sys
 
 PREAMBLE = '''#![no_std]
 #![forbid(unsafe_code)]
-use hm_frames::{Frame, Pool};
+use hm_frames::{Frame, Pool, Block, KernelBox};
 use hm_kernel::frame_api::OwnedFrame;
+use hm_kernel::heap_api::OwnedBlock;
 '''
 PROBES = {
     "valid_client": ('''pub fn client(pool: &Pool) -> bool {
@@ -27,6 +28,19 @@ PROBES = {
     "private_constructor": ("pub fn client(p: hm_kernel::frame_plan::Plan) { let _ = Pool::from_boot(p); }", "E0624"),
     "frame_send": ("fn send<T: Send>() {} pub fn client() { send::<Frame<'static>>(); }", "E0277"),
     "pool_sync": ("fn sync<T: Sync>() {} pub fn client() { sync::<Pool>(); }", "E0277"),
+
+    "valid_heap": ("pub fn client(p: &Pool) { let mut b = p.allocate_heap(8193,8192).unwrap(); b.bytes_mut()[8192]=7; let mut v=p.box_value(17u64).unwrap(); *v+=1; }", None),
+    "block_clone": ("pub fn client(b: &Block<'_>) { let _ = <Block<'_> as Clone>::clone(b); }", "E0277"),
+    "box_clone": ("pub fn client(b: &KernelBox<'_,u64>) { let _ = <KernelBox<'_,u64> as Clone>::clone(b); }", "E0277"),
+    "borrowed_value_escape": ("pub fn client(p: &Pool) -> KernelBox<'_, &u64> { let v=7; p.box_value(&v).unwrap() }", "E0515"),
+    "box_outlive_pool": ("pub fn client<'a>(p: Pool) -> KernelBox<'a,u64> { p.box_value(7).unwrap() }", "E0515"),
+    "drop_borrowed_box": ("pub fn client(b: KernelBox<'_,u64>) -> u64 { let r=&*b; drop(b); *r }", "E0505"),
+    "box_mutable_alias": ("pub fn client(mut b: KernelBox<'_,u64>) { let a=&mut*b; let c=&mut*b; *a=*c; }", "E0499"),
+    "private_backing_bytes": ("pub fn client(mut b: KernelBox<'_,u64>) { b._block.bytes_mut()[0]=1; }", "E0616"),
+    "forge_box": ("pub fn client(b: Block<'_>) { let _=KernelBox { _block:b, value:core::ptr::null_mut::<u64>(), owns:core::marker::PhantomData }; }", "E0451"),
+    "drop_borrowed_block": ("pub fn client(b: Block<'_>) -> u8 { let r=b.bytes(); drop(b); r[0] }", "E0505"),
+    "box_send": ("fn send<T: Send>() {} pub fn client() { send::<KernelBox<'static,u64>>(); }", "E0277"),
+    "box_sync": ("fn sync<T: Sync>() {} pub fn client() { sync::<KernelBox<'static,u64>>(); }", "E0277"),
 }
 
 
@@ -59,7 +73,7 @@ def main():
     wrapper = output / "hm_frames.rs"
     wrapper.write_text('#![no_std]\n#![deny(unsafe_op_in_unsafe_fn)]\n'
                        f'#[path={json.dumps(str(source))}] pub mod frames;\n'
-                       'pub use frames::{Frame, Pool};\n')
+                       'pub use frames::{Frame, Pool, Block, KernelBox};\n')
     base = ["rustc", "--edition=2024", "--target", args.target, "-C", "panic=abort",
             "--extern", f"hm_kernel={library}", "-L", f"dependency={library.parent / 'deps'}"]
     frame_lib = output / "libhm_frames.rlib"
@@ -76,7 +90,7 @@ def main():
             passed = code == 0 if rejection is None else (code is not None and code != 0 and rejection in diagnostics)
             results[name] = {"passed": passed, "returncode": code, "expected_rejection": rejection}
     passed = len(results) == len(PROBES) + 1 and all(r["passed"] for r in results.values())
-    result = {"passed": passed, "scope": "actual frame module safe-client types; no runtime physical-memory claim", "probes": results}
+    result = {"passed": passed, "scope": "actual frame/heap module safe-client types; no runtime physical-memory claim", "probes": results}
     (output / "result.json").write_text(json.dumps(result, indent=2) + "\n")
     print(json.dumps(result, indent=2))
     return 0 if passed else 1
