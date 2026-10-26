@@ -67,4 +67,14 @@ This is bounded cooperative kernel execution, not preemption, SMP, userspace
 threads, dynamic stack allocation or a stable userspace ABI. IRQ stays masked
 while Rust runs. The separate [AI design/source review](../reviews/0010-arm-kernel-threads.md)
 has no remaining findings within that scope; it is not a human or complete
-soundness audit. Remote CI is recorded separately once run.
+soundness audit.
+
+## Published CI
+
+Source commit `d13b0329bffd5692cee967e8b0e7af6c4634e526` passed
+[GitHub run 40324819664](https://github.com/rusix-org/hematite/actions/runs/40324819664).
+The pinned environment build, complete `make test-all` step and evidence upload
+succeeded. [Exact run/job metadata](threads-ci-result.json),
+[raw CI log](threads-ci.log) and [watch log](threads-ci-watch.log) are archived.
+This verifies the published cooperative milestone, not the remaining Phase 1
+preemptive scheduling/SMP exit gate.

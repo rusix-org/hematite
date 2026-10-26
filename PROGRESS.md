@@ -22,7 +22,7 @@ from strict Linux parity to native OS design with selective compatibility.
   23 host harness tests, 29 guest tests per architecture, ARM no-PAN rejection,
   x86 missing-NX/SMEP/SMAP rejection, and live monitor recovery tests on both.
   ARM discovery matches both 128 MiB and 64 MiB guest configurations.
-  All passed locally; CI at `8014e2f` covers the preceding timer milestone.
+  All passed locally and in CI at `d13b032`.
   `make test` tests ARM64 alone by default.
 - Pinned Rust base and Debian package snapshot, QEMU 7.2.22. One CPU/128 MiB
   guest by default; ARM discovery also tests 64 MiB; no attached disks or networking. Both targets use TCG.
@@ -187,10 +187,10 @@ probes per target verify the safe-client type boundary. This is metadata only: o
 labels are trusted inputs and completion is a simulated backend acknowledgment.
 See [model verification](docs/evidence/capability-model.md).
 
-Published kernel CI passed at `8014e2f` ([run 40320742456](https://github.com/rusix-org/hematite/actions/runs/40320742456)),
-including capability, memory, heap, exception, mapping and timer changes.
+Published kernel CI passed at `d13b032` ([run 40324819664](https://github.com/rusix-org/hematite/actions/runs/40324819664)),
+including capability, memory, heap, exception, mapping, timer and cooperative threads.
 The exact commit/job result and raw logs are archived in
-[timer verification](docs/evidence/arm-timer.md). Aaron authorized public repository creation
+[thread verification](docs/evidence/arm-threads.md). Aaron authorized public repository creation
 and push in [ADR 0007](docs/adr/0007-public-repository.md). License selection
 remains pending (ADR 0002); preliminary naming findings remain in ADR 0003.
 
@@ -282,3 +282,7 @@ remains pending (ADR 0002); preliminary naming findings remain in ADR 0003.
   Final dual suite passes 29 guest/23 host cases, 14 thread compiler probes,
   compiler stack-probe checks and actual worker guard-overflow rejection.
   Preserved initial failures, final traces and exact source/ELF identities.
+- 2026-10-26: Published thread commit `d13b032`; GitHub run `40324819664`
+  passed the complete environment/build/test job and evidence upload. Archived
+  exact commit/job metadata and raw logs. Phase 1 remains incomplete without
+  preemptive multi-CPU execution and its required stress/synchronization tests.
