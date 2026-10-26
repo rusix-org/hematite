@@ -13,9 +13,9 @@ import test_boot_profiles as profiles
 
 
 def valid_report():
-    lines = ["hematite bootstrap", "HMTEST BEGIN 37"]
+    lines = ["hematite bootstrap", "HMTEST BEGIN 38"]
     lines.extend(f"HMTEST PASS {case}" for case in harness.CASES)
-    lines.append("HMTEST END 37")
+    lines.append("HMTEST END 38")
     return ("\n".join(lines) + "\n").encode("ascii")
 
 
@@ -46,10 +46,10 @@ class ReportTests(unittest.TestCase):
 
     def test_summary_and_inventory_must_be_exact(self):
         for old, new in (
-            (b"HMTEST BEGIN 37\n", b""),
-            (b"HMTEST END 37\n", b""),
-            (b"HMTEST BEGIN 37", b"HMTEST BEGIN 8"),
-            (b"HMTEST END 37", b"HMTEST END 10"),
+            (b"HMTEST BEGIN 38\n", b""),
+            (b"HMTEST END 38\n", b""),
+            (b"HMTEST BEGIN 38", b"HMTEST BEGIN 8"),
+            (b"HMTEST END 38", b"HMTEST END 10"),
             (b"HMTEST PASS nx", b"HMTEST PASS imaginary"),
             (b"HMTEST PASS nx\nHMTEST PASS user_execute_protect",
              b"HMTEST PASS user_execute_protect\nHMTEST PASS nx"),
@@ -109,7 +109,7 @@ class ArchitectureTests(unittest.TestCase):
         for data in (b"", b"qemu: invalid CPU\n", b"prefix HMBOOT REJECT PAN\n",
                      b"HMBOOT REJECT PAN",
                      b"HMBOOT REJECT PAN\nHMBOOT REJECT PAN\n",
-                     b"HMBOOT REJECT PAN\nHMTEST BEGIN 37\n"):
+                     b"HMBOOT REJECT PAN\nHMTEST BEGIN 38\n"):
             with self.subTest(data=data):
                 self.assertFalse(all(profiles.rejection_checks(data, result).values()))
         for update in ({"returncode": 0}, {"timed_out": True}, {"launch_error": "no qemu"}):
@@ -167,7 +167,7 @@ class ExecutionTests(unittest.TestCase):
             self.assertEqual(json.loads((output / "result.json").read_text()), result)
 
     def test_timeout_retains_partial_serial_and_fails(self):
-        partial = b"HMTEST BEGIN 37\nHMTEST PASS write_protect\n"
+        partial = b"HMTEST BEGIN 38\nHMTEST PASS write_protect\n"
 
         def timeout(command, **kwargs):
             kwargs["stdout"].write(partial)

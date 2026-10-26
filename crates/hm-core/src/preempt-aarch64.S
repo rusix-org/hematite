@@ -40,6 +40,139 @@ arm_preempt_boundary_\name\()_end:
 .endif
 .endm
 
+// SAFETY: Session-only entries require CPU0, BUSY, masked DAIF and CPU1 off.
+// Shared distributor state is never accessed through the local lifecycle.
+.global arm_gic_session_start, arm_gic_session_stop
+.global arm_gic_probe_seed, arm_gic_probe_preserved
+arm_gic_session_start:
+    mrs x0, daif
+    cmp x0, #0x3c0
+    b.ne .Lgic_start_fail
+    mrs x0, tpidr_el1
+    add x1, x0, #{cpu_preempt}
+    ldr x2, [x1, #16]
+    cbnz x2, .Lgic_start_fail
+    add x1, x0, #{cpu_timer}
+    ldr x2, [x1, #16]
+    cbnz x2, .Lgic_start_fail
+    ldr x0, =0x08000000
+    ldr x1, =0x08010000
+    ldr w2, [x0]
+    cbnz w2, .Lgic_start_fail
+    ldr w2, [x1]
+    cbnz w2, .Lgic_start_fail
+    ldr w2, [x0, #4]
+    tbnz w2, #10, .Lgic_start_fail
+    and w6, w2, #31             // Number of SPI banks, excludes bank0.
+    cbz w6, .Lgic_start_fail    // Diagnostic SPI32 must exist.
+    ldr w2, [x1, #0xfc]
+    ubfx w2, w2, #16, #4
+    cmp w2, #2
+    b.ne .Lgic_start_fail
+    ldr w2, [x0, #0x100]
+    ldr w3, =0xbfff0000
+    tst w2, w3
+    b.ne .Lgic_start_fail
+    ldr w2, [x0, #0x200]
+    bic w2, w2, #0x40000000
+    cbnz w2, .Lgic_start_fail
+    ldr w2, [x0, #0x300]
+    cbnz w2, .Lgic_start_fail
+    add x3, x0, #0x304
+    mov w4, w6
+.Lgic_validate_spi:
+    ldr w2, [x3], #4
+    cbnz w2, .Lgic_start_fail
+    subs w4, w4, #1
+    b.ne .Lgic_validate_spi
+    // All fallible preconditions passed; mutation begins with GICC disabled.
+    add x3, x0, #0x184
+    add x4, x0, #0x284
+    mov w5, #-1
+.Lgic_reset_spi:
+    str w5, [x3], #4
+    str w5, [x4], #4
+    subs w6, w6, #1
+    b.ne .Lgic_reset_spi
+    dsb sy
+    mov w2, #1
+    str w2, [x0]
+    dsb sy
+    ldr w2, [x0]
+    cmp w2, #1
+    b.ne arm_exception_fatal
+    mov x0, #1
+    ret
+.Lgic_start_fail:
+    mov x0, #0
+    ret
+
+arm_gic_session_stop:
+    ldr x0, =0x08000000
+    ldr x1, =0x08010000
+    ldr w2, [x1]
+    cbnz w2, arm_exception_fatal
+    ldr w2, [x0, #0x100]
+    tbnz w2, #30, arm_exception_fatal
+    ldr w2, [x0, #0x200]
+    tbnz w2, #30, arm_exception_fatal
+    ldr w2, [x0, #0x300]
+    tbnz w2, #30, arm_exception_fatal
+    str wzr, [x0]
+    dsb sy
+    ldr w2, [x0]
+    cbnz w2, arm_exception_fatal
+    ldr w6, [x0, #4]
+    and w6, w6, #31
+    add x3, x0, #0x284
+    mov w4, w6
+    mov w5, #-1
+.Lgic_clear_pending:
+    str w5, [x3], #4
+    subs w4, w4, #1
+    b.ne .Lgic_clear_pending
+    dsb sy
+    add x3, x0, #0x104
+    add x4, x0, #0x204
+    add x5, x0, #0x304
+.Lgic_verify_quiet:
+    ldr w2, [x3], #4
+    cbnz w2, arm_exception_fatal
+    ldr w2, [x4], #4
+    cbnz w2, arm_exception_fatal
+    ldr w2, [x5], #4
+    cbnz w2, arm_exception_fatal
+    subs w6, w6, #1
+    b.ne .Lgic_verify_quiet
+    mov x0, #1
+    ret
+
+// Lease-owned diagnostic: SPI32 was cleared/disabled by session start.
+arm_gic_probe_seed:
+    ldr x0, =0x08000000
+    ldr w1, [x0, #0x104]
+    tbnz w1, #0, .Lgic_probe_fail
+    ldr w1, [x0, #0x204]
+    tbnz w1, #0, .Lgic_probe_fail
+    mov w1, #1
+    str w1, [x0, #0x204]
+    dsb sy
+arm_gic_probe_preserved:
+    ldr x0, =0x08000000
+    ldr w1, [x0]
+    cmp w1, #1
+    b.ne .Lgic_probe_fail
+    ldr w1, [x0, #0x104]
+    tbnz w1, #0, .Lgic_probe_fail
+    ldr w1, [x0, #0x204]
+    tbz w1, #0, .Lgic_probe_fail
+    mov x0, #1
+    ret
+.Lgic_probe_fail:
+    mov x0, #0
+    ret
+    .ltorg
+
 .global arm_preempt_setup, arm_preempt_stop, arm_preempt_dispatch
 .global arm_preempt_yield, arm_preempt_start, arm_preempt_irq
 .global arm_preempt_park
@@ -78,21 +211,28 @@ arm_preempt_setup:
     sub x4, x4, x6
     cmp x3, x4
     b.hi .Lsetup_fail
-    str wzr, [x0]
+    ldr w3, [x0]
+    cmp w3, #1
+    b.ne .Lsetup_fail
+    // Other local sources must be absent; SGI enable bits may be RAO.
+    ldr w3, [x0, #0x100]
+    ldr w4, =0xbfff0000
+    tst w3, w4
+    b.ne .Lsetup_fail
+    ldr w3, [x0, #0x200]
+    bic w3, w3, #0x40000000
+    cbnz w3, .Lsetup_fail
+    ldr w3, [x0, #0x300]
+    cbnz w3, .Lsetup_fail
     str wzr, [x1]
     mov x3, #2
     msr cntp_ctl_el0, x3
     isb
-    and w2, w2, #31
-    add w2, w2, #1
-    add x4, x0, #0x180
-    add x5, x0, #0x280
-    mov w3, #-1
-.Lsetup_clear:
-    str w3, [x4], #4
-    str w3, [x5], #4
-    subs w2, w2, #1
-    b.ne .Lsetup_clear
+    mov w3, #0x40000000
+    str w3, [x0, #0x180]          // Only this CPU's timer PPI30.
+    dsb sy
+    str w3, [x0, #0x280]
+    dsb sy
     ldr w2, [x0, #0x80]
     bic w2, w2, #0x40000000
     str w2, [x0, #0x80]
@@ -112,7 +252,6 @@ arm_preempt_setup:
     str wzr, [x1, #8]
     mov w2, #1
     str w2, [x1]
-    str w2, [x0]
     dsb sy
     mrs x0, tpidr_el1
     add x0, x0, #{cpu_preempt}
@@ -152,12 +291,12 @@ arm_preempt_setup:
 arm_preempt_stop:
     stp x29, x30, [sp, #-16]!
     bl .Lquiet
-    str wzr, [x0]
     ldr x1, =0x08010000
     str wzr, [x1]
     dsb sy
     ldr w2, [x0]
-    cbnz w2, arm_exception_fatal
+    cmp w2, #1                    // Local stop must preserve shared forwarding.
+    b.ne arm_exception_fatal
     ldr w2, [x1]
     cbnz w2, arm_exception_fatal
     ldr w2, [x0, #0x100]

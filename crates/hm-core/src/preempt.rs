@@ -88,6 +88,10 @@ const _: () = {
 unsafe extern "C" {
     static __exception_stack_top: [u8; 0];
     fn arm_preempt_context_probe(seed: u64) -> u64;
+    fn arm_gic_session_start() -> u64;
+    fn arm_gic_session_stop() -> u64;
+    fn arm_gic_probe_seed() -> u64;
+    fn arm_gic_probe_preserved() -> u64;
     fn arm_preempt_setup() -> u64;
     fn arm_preempt_stop() -> u64;
     fn arm_preempt_dispatch(host: *mut Context, task: *mut core::ffi::c_void, interval: u64);
@@ -100,6 +104,9 @@ unsafe extern "C" {
 
 #[inline(never)]
 pub(super) fn run(jobs: &[ThreadJob]) -> Result<PreemptReport, ThreadError> {
+    if super::cpu_local::current_id() != Some(0) {
+        return Err(ThreadError::Unsupported);
+    }
     if jobs.len() > MAX_THREADS {
         return Err(ThreadError::TooMany);
     }
@@ -113,8 +120,23 @@ pub(super) fn run(jobs: &[ThreadJob]) -> Result<PreemptReport, ThreadError> {
     }
     // SAFETY: Runner's boot authority and global lease ensure this masked
     // coordinator exclusively owns the one-CPU GIC/timer and guarded stacks.
+    let shared = unsafe { arm_gic_session_start() };
+    if shared == 0 {
+        super::threads::BUSY.store(false, Ordering::Release);
+        return Err(ThreadError::TimerUnavailable);
+    }
+    // SAFETY: Shared forwarding is initialized under the lease; CPU1 remains
+    // off. Local setup owns only this CPU's GICC, PPI30 and timer record.
     let interval = unsafe { arm_preempt_setup() };
     if interval == 0 {
+        // SAFETY: No worker has been published; local cleanup is idempotent.
+        // Shared shutdown is valid because CPU1 is still off, not just because
+        // the local setup failed. No armed controller escapes this lease.
+        unsafe {
+            if arm_preempt_stop() != 1 || arm_gic_session_stop() != 1 {
+                arm_exception_fail();
+            }
+        }
         super::threads::BUSY.store(false, Ordering::Release);
         return Err(ThreadError::TimerUnavailable);
     }
@@ -237,7 +259,7 @@ pub(super) fn run(jobs: &[ThreadJob]) -> Result<PreemptReport, ThreadError> {
         }
         // Quiesce source/controller before publication withdrawal and wiping
         // completed stacks. Failure terminates rather than reclaiming early.
-        if arm_preempt_stop() != 1 {
+        if arm_preempt_stop() != 1 || arm_gic_session_stop() != 1 {
             arm_exception_fail();
         }
         for id in 0..jobs.len() {
@@ -460,4 +482,52 @@ pub(super) fn control_checks() -> bool {
             && dist.add(0x200 / 4).read_volatile() & (1 << 30) == 0
             && dist.add(0x300 / 4).read_volatile() & (1 << 30) == 0
     }
+}
+
+/// Exercise local lifecycle while a disabled shared interrupt remains pending.
+/// No worker runs and IRQ stays masked throughout this diagnostic.
+pub(super) fn gic_checks() -> bool {
+    let daif: u64;
+    // SAFETY: Read-only EL1 mask observation; the private caller has boot
+    // authority. Reject enabled IRQ before any controller or lease mutation.
+    unsafe {
+        asm!("mrs {}, daif", out(reg) daif, options(nomem, nostack, preserves_flags));
+    }
+    if daif != 0x3c0 || super::cpu_local::current_id() != Some(0) {
+        return false;
+    }
+    if super::threads::BUSY
+        .compare_exchange(false, true, Ordering::AcqRel, Ordering::Acquire)
+        .is_err()
+    {
+        return false;
+    }
+    // SAFETY: CPU0 owns BUSY; CPU1 is off. The session disables all SPIs before
+    // the private SPI32 pending fixture. Every path after start stops both local
+    // and shared state before releasing the lease. No active bit is fabricated.
+    let passed = unsafe {
+        if arm_gic_session_start() == 0 {
+            false
+        } else {
+            let mut passed = arm_gic_probe_seed() == 1;
+            for _ in 0..2 {
+                let interval = arm_preempt_setup();
+                // A second local owner must be rejected without changing the
+                // first setup; normal stop must still preserve shared state.
+                let duplicate_rejected = arm_preempt_setup() == 0;
+                if arm_preempt_stop() != 1 {
+                    arm_exception_fail();
+                }
+                // Do not short-circuit cleanup or either repeated cycle.
+                let preserved = arm_gic_probe_preserved() == 1;
+                passed = passed && interval != 0 && duplicate_rejected && preserved;
+            }
+            if arm_gic_session_stop() != 1 {
+                arm_exception_fail();
+            }
+            passed && control_checks()
+        }
+    };
+    super::threads::BUSY.store(false, Ordering::Release);
+    passed
 }

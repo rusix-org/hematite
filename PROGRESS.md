@@ -1,6 +1,6 @@
 # Progress
 
-Current phase: **Phase 1 underway: CPU-local ARM state verified; execution remains single-CPU**.
+Current phase: **Phase 1 underway: ARM GIC ownership split verified; execution remains single-CPU**.
 Aaron approved scratch implementation and then changed the primary objective
 from strict Linux parity to native OS design with selective compatibility.
 [ADR 0005](docs/adr/0005-native-first-design.md) records the native direction;
@@ -19,21 +19,21 @@ from strict Linux parity to native OS design with selective compatibility.
 - Serial monitor: `make run` defaults to ARM64; `ARCH=x86_64` selects the
   regression port. Commands `help`, `status`, `test`; Ctrl-C exits.
 - `make test-all`: formatting, Clippy and safety checks for both targets,
-  41 host harness tests, 37 guest tests per architecture, ARM no-PAN rejection,
+  41 host harness tests, 38 guest tests per architecture, ARM no-PAN rejection,
   x86 missing-NX/SMEP/SMAP rejection, and live monitor recovery tests on both.
   ARM discovery matches both 128 MiB and 64 MiB guest configurations.
   Separate ARM images run five scheduling/wait cases at both memory sizes, then
-  repeat the 37 baseline cases in the same guest. Forced-transition, withheld
+  repeat the 38 baseline cases in the same guest. Forced-transition, withheld
   timer delivery, stack-overflow and all-blocked retention profiles also pass.
   All passed locally; CI at `d13b032` covers the preceding thread milestone.
   `make test` tests ARM64 alone by default.
 - Pinned Rust base and Debian package snapshot, QEMU 7.2.22. One CPU/128 MiB
   guest by default; ARM discovery also tests 64 MiB; no attached disks or networking. Both targets use TCG.
 
-Latest evidence: [CPU-local state verification](docs/evidence/arm-cpu-local-state.md),
-[source identities](docs/evidence/cpu-local-final/source-sha256.txt),
-[ARM profiles](docs/evidence/cpu-local-final/aarch64/profiles/result.json),
-and matching x86 results under `docs/evidence/cpu-local-final/x86_64/`.
+Latest evidence: [GIC ownership verification](docs/evidence/arm-gic-ownership.md),
+[source identities](docs/evidence/gic-ownership-final/source-sha256.txt),
+[ARM profiles](docs/evidence/gic-ownership-final/aarch64/profiles/result.json),
+and matching x86 results under `docs/evidence/gic-ownership-final/x86_64/`.
 Earlier [bootstrap verification](docs/evidence/hematite-bootstrap.md) is retained.
 The earlier [Asterinas baseline](docs/evidence/asterinas-evaluation.md) remains
 an evaluation only; it is not this kernel's implementation.
@@ -49,7 +49,21 @@ continue rejecting safe Runner transfer and construction. See
 [design](docs/design/0015-arm-cpu-local-state.md),
 [independent review](docs/reviews/0015-arm-cpu-local-state.md) and
 [evidence](docs/evidence/arm-cpu-local-state.md).
-CPU1 remains off: shared stacks, BUSY and GIC lifecycle still require separation.
+CPU1 remains off: shared stacks and a global lease still need the two-CPU
+session protocol. GIC shared/local separation is now verified below.
+
+## ARM GIC ownership verified locally
+
+Preemptive sessions own shared distributor forwarding and SPI state separately
+from local GICC/PPI30/timer state. Local teardown preserves shared forwarding.
+Two diagnostic local cycles, each including duplicate-setup rejection, preserve
+a disabled pending SPI32 until global cleanup. Existing real scheduling and
+exact IRQ traces pass. The diagnostic itself dispatches no task or interrupt;
+see [design](docs/design/0016-arm-gic-ownership.md),
+[review](docs/reviews/0016-arm-gic-ownership.md) and
+[evidence](docs/evidence/arm-gic-ownership.md). The older scoped timer diagnostics
+still require exclusive whole-controller ownership with CPU1 off. No secondary
+startup or concurrent interrupt handling is established.
 
 ## Boot-memory discovery verified locally
 
@@ -280,9 +294,9 @@ publication awaits Aaron's response. Local kernel development remains authorized
 ## Next actions
 
 1. Implement the [reviewed two-CPU execution contract](docs/design/0014-arm-smp.md):
-   topology/PSCI parsing and CPU-local software records are verified. Split
-   shared/local GIC ownership and stacks under existing regressions, then add
-   secondary startup and simultaneous
+   topology/PSCI parsing, CPU-local records and shared/local GIC ownership are
+   verified. Add private secondary stacks and immutable secondary mappings,
+   then secondary startup, the session mailbox and simultaneous
    preemptive callbacks. [Independent review](docs/reviews/0014-arm-smp.md) is
    complete at design level. Preserve CPU0-only allocator/mapping authority;
    concurrent allocator ownership still needs its own design and stress tests.
@@ -422,3 +436,10 @@ publication awaits Aaron's response. Local kernel development remains authorized
   scheduling, forced-boundary, monitor and negative profiles. Inactive CPU1
   canaries remain intact after actual IRQ activity; CPU1 was never started.
   Archived exact source/ELF identities and raw logs. No public push attempted.
+- 2026-10-26: Split reviewed preemption GIC ownership into shared session and
+  CPU-local lifecycles. First full suite passes 41 host/38 baseline guest cases
+  per target and every existing scheduling/negative profile. New repeated local
+  setup/stop fixture preserves shared forwarding and disabled pending SPI32;
+  duplicate local setup rejects, and global teardown clears the sentinel.
+  Archived exact source/ELF identities and raw logs. CPU1 remains off and public
+  publication remains pending; no push was attempted.

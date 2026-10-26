@@ -1,0 +1,17 @@
+warning: unused imports: `Handle`, `Owner`, `Rights`, and `with_model`
+ --> /workspace/target/evidence/20261026T144350-921785418-aarch64/type-boundary/uncloneable_instance.rs:3:29
+  |
+3 | use hm_kernel::capability::{with_model, Config, Owner, Rights, Handle, Model};
+  |                             ^^^^^^^^^^          ^^^^^  ^^^^^^  ^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+error[E0277]: the trait bound `Model<'_>: Clone` is not satisfied
+ --> /workspace/target/evidence/20261026T144350-921785418-aarch64/type-boundary/uncloneable_instance.rs:6:45
+  |
+6 | pub fn client(model: &Model<'_>) { let _ = <Model<'_> as Clone>::clone(model); }
+  |                                             ^^^^^^^^^ the trait `Clone` is not implemented for `Model<'_>`
+
+error: aborting due to 1 previous error; 1 warning emitted
+
+For more information about this error, try `rustc --explain E0277`.

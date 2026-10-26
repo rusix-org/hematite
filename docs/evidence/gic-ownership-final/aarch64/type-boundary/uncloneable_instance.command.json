@@ -1,0 +1,17 @@
+[
+  "rustc",
+  "--edition=2024",
+  "--crate-type=lib",
+  "--emit=metadata",
+  "--target",
+  "aarch64-unknown-none",
+  "-C",
+  "panic=abort",
+  "--extern",
+  "hm_kernel=/workspace/target/aarch64/boot-test/aarch64-unknown-none/release/libhm_kernel.rlib",
+  "-L",
+  "dependency=/workspace/target/aarch64/boot-test/aarch64-unknown-none/release/deps",
+  "-o",
+  "/workspace/target/evidence/20261026T144350-921785418-aarch64/type-boundary/uncloneable_instance.rmeta",
+  "/workspace/target/evidence/20261026T144350-921785418-aarch64/type-boundary/uncloneable_instance.rs"
+]

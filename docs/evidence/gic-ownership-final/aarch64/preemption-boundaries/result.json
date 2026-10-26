@@ -1,0 +1,161 @@
+{
+  "passed": true,
+  "errors": [],
+  "observed_records": [
+    "HMPREEMPT BEGIN 5",
+    "HMPREEMPT PASS preempt_progress",
+    "HMPREEMPT PASS preempt_mixed",
+    "HMPREEMPT PASS preempt_limits",
+    "HMPREEMPT PASS wait_workers",
+    "HMPREEMPT PASS preempt_core",
+    "HMPREEMPT END 5"
+  ],
+  "expected_cases": [
+    "preempt_progress",
+    "preempt_mixed",
+    "preempt_limits",
+    "wait_workers",
+    "preempt_core"
+  ],
+  "returncode": 0,
+  "timed_out": false,
+  "launch_error": null,
+  "scheduler_irqs": 145,
+  "post_scheduling": {
+    "passed": true,
+    "arch": "aarch64",
+    "expected_exit": 0,
+    "scope": "hematite bootstrap tests; no Linux ABI compatibility claim",
+    "expected_cases": [
+      "write_protect",
+      "nx",
+      "user_execute_protect",
+      "user_access_protect",
+      "wx",
+      "stack_guard",
+      "null_guard",
+      "checked_range",
+      "monitor_bounds",
+      "cap_authority",
+      "cap_limits",
+      "cap_lifetime",
+      "cap_generation",
+      "boot_memory_valid",
+      "boot_memory_malformed",
+      "cpu_topology_valid",
+      "cpu_topology_malformed",
+      "cpu_topology_live",
+      "frame_ranges",
+      "frame_boundaries",
+      "frame_contract",
+      "heap_blocks",
+      "heap_values",
+      "event_contract",
+      "mutex_contract",
+      "mutex_lifetime",
+      "mutex_workers",
+      "thread_contract",
+      "thread_limits",
+      "thread_core",
+      "timer_contract",
+      "fault_contract",
+      "mapping_contract",
+      "mapping_limits",
+      "mapping_hardware",
+      "cpu_local_state",
+      "gic_ownership",
+      "cap_orderings"
+    ],
+    "observed_records": [
+      "HMTEST BEGIN 38",
+      "HMTEST PASS write_protect",
+      "HMTEST PASS nx",
+      "HMTEST PASS user_execute_protect",
+      "HMTEST PASS user_access_protect",
+      "HMTEST PASS wx",
+      "HMTEST PASS stack_guard",
+      "HMTEST PASS null_guard",
+      "HMTEST PASS checked_range",
+      "HMTEST PASS monitor_bounds",
+      "HMTEST PASS cap_authority",
+      "HMTEST PASS cap_limits",
+      "HMTEST PASS cap_lifetime",
+      "HMTEST PASS cap_generation",
+      "HMTEST PASS boot_memory_valid",
+      "HMTEST PASS boot_memory_malformed",
+      "HMTEST PASS cpu_topology_valid",
+      "HMTEST PASS cpu_topology_malformed",
+      "HMTEST PASS cpu_topology_live",
+      "HMTEST PASS frame_ranges",
+      "HMTEST PASS frame_boundaries",
+      "HMTEST PASS frame_contract",
+      "HMTEST PASS heap_blocks",
+      "HMTEST PASS heap_values",
+      "HMTEST PASS event_contract",
+      "HMTEST PASS mutex_contract",
+      "HMTEST PASS mutex_lifetime",
+      "HMTEST PASS mutex_workers",
+      "HMTEST PASS thread_contract",
+      "HMTEST PASS thread_limits",
+      "HMTEST PASS thread_core",
+      "HMTEST PASS timer_contract",
+      "HMTEST PASS fault_contract",
+      "HMTEST PASS mapping_contract",
+      "HMTEST PASS mapping_limits",
+      "HMTEST PASS mapping_hardware",
+      "HMTEST PASS cpu_local_state",
+      "HMTEST PASS gic_ownership",
+      "HMTEST PASS cap_orderings",
+      "HMTEST END 38"
+    ],
+    "returncode": 0,
+    "timed_out": false,
+    "launch_error": null,
+    "errors": []
+  },
+  "diagnostic_irqs": 16,
+  "scope": "single-CPU ARM timer-driven scheduling; not SMP",
+  "trace": {
+    "passed": true,
+    "errors": [],
+    "counts": {
+      "irq": 161,
+      "vector": 161,
+      "ack": 161,
+      "eoi": 161
+    },
+    "expected_interrupts": 161,
+    "sha256": "3a231ae50ebd64d350864492e6e25f6b7d2ee27b55e978f53f8d29498b097b61"
+  },
+  "boundaries": {
+    "passed": true,
+    "errors": [],
+    "hits": {
+      "start": 13,
+      "yield": 8,
+      "complete": 13,
+      "park": 5
+    },
+    "ranges": {
+      "start": [
+        1075848424,
+        1075848556
+      ],
+      "yield": [
+        1075847784,
+        1075847916
+      ],
+      "complete": [
+        1075848656,
+        1075848788
+      ],
+      "park": [
+        1075848084,
+        1075848216
+      ]
+    }
+  },
+  "started_utc": "2026-10-26T14:44:25.945232+00:00",
+  "elapsed_seconds": 0.7225050079869106,
+  "timeout_seconds": 20
+}

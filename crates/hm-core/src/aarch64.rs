@@ -91,6 +91,9 @@ impl Platform for BootPlatform {
                 && super::cpu_local::checks()
         })
     }
+    fn gic_ownership_check(&self) -> Option<bool> {
+        Some(super::preempt::gic_checks())
+    }
     fn cpu_local_check(&self) -> Option<bool> {
         Some(super::cpu_local::checks())
     }

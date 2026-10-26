@@ -44,6 +44,9 @@ pub struct BootChecks {
 
 /// The core retains all hardware authority; policy only exchanges owned values.
 pub trait Platform {
+    fn gic_ownership_check(&self) -> Option<bool> {
+        None
+    }
     fn cpu_local_check(&self) -> Option<bool> {
         None
     }
@@ -513,11 +516,17 @@ pub fn run_tests(platform: &mut impl Platform) -> bool {
                 .unwrap_or(cfg!(target_arch = "x86_64")),
         ),
         (
+            "gic_ownership",
+            platform
+                .gic_ownership_check()
+                .unwrap_or(cfg!(target_arch = "x86_64")),
+        ),
+        (
             "cap_orderings",
             capability_tests::orderings(|message| platform.write(message)),
         ),
     ];
-    platform.write("HMTEST BEGIN 37\n");
+    platform.write("HMTEST BEGIN 38\n");
     let mut passed = true;
     for (name, success) in cases {
         platform.write(if success {
@@ -529,7 +538,7 @@ pub fn run_tests(platform: &mut impl Platform) -> bool {
         platform.write("\n");
         passed &= success;
     }
-    platform.write("HMTEST END 37\n");
+    platform.write("HMTEST END 38\n");
     passed
 }
 

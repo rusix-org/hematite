@@ -1,0 +1,9 @@
+Taking exception 4 [Data Abort] on CPU 0
+...from EL1 to EL1
+...with ESR 0x25/0x96000007
+...with FAR 0x4022ffb0
+...with ELR 0x40205950
+...to EL1 PC 0x40200a00 PSTATE 0x4003c5
+Taking exception 16 [Semihosting call] on CPU 0
+...from EL1 to EL1
+...handling as semihosting call 0x20
