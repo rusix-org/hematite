@@ -1,0 +1,5 @@
+[
+  "readelf",
+  "-lW",
+  "/workspace/target/evidence/20261026T190533-223385761-aarch64/process-fixtures/zerowrite.elf"
+]

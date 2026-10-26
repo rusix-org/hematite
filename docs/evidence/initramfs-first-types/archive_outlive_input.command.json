@@ -1,0 +1,18 @@
+[
+  "rustc",
+  "--edition=2024",
+  "--crate-type=lib",
+  "--emit=metadata",
+  "--error-format=json",
+  "--target",
+  "aarch64-unknown-none",
+  "-C",
+  "panic=abort",
+  "--extern",
+  "hm_kernel=/workspace/target/aarch64/boot-test/aarch64-unknown-none/release/libhm_kernel.rlib",
+  "-L",
+  "dependency=/workspace/target/aarch64/boot-test/aarch64-unknown-none/release/deps",
+  "-o",
+  "/workspace/docs/evidence/initramfs-first-types/archive_outlive_input.rmeta",
+  "/workspace/docs/evidence/initramfs-first-types/archive_outlive_input.rs"
+]

@@ -1,0 +1,20 @@
+{
+  "passed": true,
+  "command": "make test-all",
+  "exit_code": 0,
+  "parent_commit": "46b9df4",
+  "result_counts": {
+    "aarch64": 77,
+    "x86_64": 12
+  },
+  "python_harness_cases_per_target": 123,
+  "initramfs_host_cases": 16,
+  "initramfs_compiler_clients_per_target": 11,
+  "process_elf_sha256": "d8505cb2973854287b474e8d08175be76af9e9957e3e641d2a67d342c8269d52",
+  "reviewed_process_executable_unchanged": true,
+  "evidence_source_directories": [
+    "target/evidence/20261026T190533-223385761-aarch64",
+    "target/evidence/20261026T190727-902967842-x86_64"
+  ],
+  "implementation_commit": "cf976ef"
+}

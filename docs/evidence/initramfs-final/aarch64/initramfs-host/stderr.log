@@ -1,0 +1,2 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.06s
+     Running tests/initramfs.rs (target/host-initramfs/x86_64-unknown-linux-gnu/debug/deps/initramfs-8cab06162ba689b3)

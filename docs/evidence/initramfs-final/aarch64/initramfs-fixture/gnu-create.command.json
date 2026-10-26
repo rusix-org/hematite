@@ -1,0 +1,19 @@
+{
+  "argv": [
+    "cpio",
+    "--create",
+    "--format=newc",
+    "--reproducible",
+    "--owner=0:0",
+    "--null",
+    "--quiet"
+  ],
+  "cwd": "/workspace/target/evidence/20261026T190533-223385761-aarch64/initramfs-fixture/gnu-input",
+  "stdin_sha256": "9ab1290f3fc535d406d70a1e54f7cd6d5e1c75b6a4f518e627838158231b8541",
+  "stdout": "/workspace/target/evidence/20261026T190533-223385761-aarch64/initramfs-fixture/gnu-reference.cpio",
+  "env": {
+    "LC_ALL": "C",
+    "TZ": "UTC"
+  },
+  "timeout_seconds": 20
+}

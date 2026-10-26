@@ -1,0 +1,21 @@
+
+running 16 tests
+test alignment_and_hex_fields ... ok
+test borrowed_data_exact ... ok
+test canonical_payload_and_elf ... ok
+test complete_admission_no_prefix ... ok
+test descriptive_metadata_not_authority ... ok
+test empty_and_zero_length_files ... ok
+test entry_capacity ... ok
+test file_and_archive_capacity ... ok
+test gnu_reference_payload_and_elf ... ok
+test header_field_rejection ... ok
+test hierarchy_and_duplicates ... ok
+test metadata_and_types ... ok
+test mutations_are_total ... ok
+test padding_and_trailer ... ok
+test path_capacity_and_alphabet ... ok
+test truncation_all_prefixes ... ok
+
+test result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+

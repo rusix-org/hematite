@@ -1,0 +1,5 @@
+[
+  "readelf",
+  "-sW",
+  "/workspace/target/aarch64/smp-all-blocked-test/aarch64-unknown-none/release/hematite"
+]

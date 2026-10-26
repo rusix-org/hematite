@@ -1,0 +1,10 @@
+{
+  "passed": true,
+  "profiles": {
+    "smp-128m": true,
+    "smp-64m": true,
+    "no-peer-timer": true,
+    "peer-overflow": true,
+    "all-blocked": true
+  }
+}

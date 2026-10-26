@@ -1,0 +1,1 @@
+HMMUTEX HOST PASS workers=4 iterations=20000 updates=80000 rejected=4 retries=2667 drops=1

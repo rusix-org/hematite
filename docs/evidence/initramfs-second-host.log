@@ -1,0 +1,139 @@
+    Checking hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.15s
+{
+  "passed": true,
+  "checks": {
+    "exit_success": true,
+    "within_deadline": true,
+    "launched": true,
+    "complete_report": true,
+    "bounded_logs": true
+  },
+  "execution": {
+    "started_utc": "2026-10-26T19:04:50.162804+00:00",
+    "timeout_seconds": 60,
+    "returncode": 0,
+    "timed_out": false,
+    "launch_error": null,
+    "elapsed_seconds": 0.36514606897253543
+  },
+  "artifacts": {
+    "stdout": {
+      "bytes": 699,
+      "within_limit": true,
+      "sha256": "5ea7c04baf1c78757fe8c36b78c326707a6a2fd0659001798508fd683940c51a"
+    },
+    "stderr": {
+      "bytes": 252,
+      "within_limit": true,
+      "sha256": "28f6a6678c45f6c05d7df289de11693aee948629d6d8770280860b38aacb8790"
+    }
+  },
+  "report": {
+    "passed": true,
+    "errors": [],
+    "expected_cases": [
+      "alignment_and_hex_fields",
+      "borrowed_data_exact",
+      "canonical_payload_and_elf",
+      "complete_admission_no_prefix",
+      "descriptive_metadata_not_authority",
+      "empty_and_zero_length_files",
+      "entry_capacity",
+      "file_and_archive_capacity",
+      "gnu_reference_payload_and_elf",
+      "header_field_rejection",
+      "hierarchy_and_duplicates",
+      "metadata_and_types",
+      "mutations_are_total",
+      "padding_and_trailer",
+      "path_capacity_and_alphabet",
+      "truncation_all_prefixes"
+    ],
+    "observed_lines": [
+      "running 16 tests",
+      "test alignment_and_hex_fields ... ok",
+      "test borrowed_data_exact ... ok",
+      "test canonical_payload_and_elf ... ok",
+      "test complete_admission_no_prefix ... ok",
+      "test descriptive_metadata_not_authority ... ok",
+      "test empty_and_zero_length_files ... ok",
+      "test entry_capacity ... ok",
+      "test file_and_archive_capacity ... ok",
+      "test gnu_reference_payload_and_elf ... ok",
+      "test header_field_rejection ... ok",
+      "test hierarchy_and_duplicates ... ok",
+      "test metadata_and_types ... ok",
+      "test mutations_are_total ... ok",
+      "test padding_and_trailer ... ok",
+      "test path_capacity_and_alphabet ... ok",
+      "test truncation_all_prefixes ... ok",
+      "test result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s"
+    ]
+  },
+  "scope": "actual safe archive admission, canonical/GNU payload comparison and ELF planning; no archive-backed execution"
+}
+   Compiling hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+    Finished `release` profile [optimized] target(s) in 1.35s
+{
+  "passed": true,
+  "probes": {
+    "valid_parse_lookup": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "valid_entry_after_archive_drop": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "valid_elf_composition": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "valid_entry_copy": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "forge_archive": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0451"
+    },
+    "forge_entry": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0451"
+    },
+    "archive_outlive_input": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0515"
+    },
+    "entry_outlive_input": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0515"
+    },
+    "mutate_input_while_entry_live": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0506"
+    },
+    "mutate_payload": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0594"
+    },
+    "mutate_path": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0594"
+    }
+  },
+  "target": "aarch64-unknown-none",
+  "scope": "actual safe initramfs entry/input lifetime encapsulation; no archive-backed execution"
+}

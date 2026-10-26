@@ -1,0 +1,128 @@
+{
+  "passed": true,
+  "canonical_sha256": "92f2f815237cbe921b64802533ee945afb03c225d00d96f9f2d4cd723bb17201",
+  "reference_sha256": "c4d232abda3bd8dd9672abbd2135907b33517835723793ac65745b4acee215e7",
+  "reference": "/workspace/docs/evidence/initramfs-first-fixture/gnu-reference.cpio",
+  "entries": 4,
+  "scope": "deterministic fixture, GNU listing and byte-exact stdout extraction; Rust admission tested separately"
+}
+{
+  "passed": true,
+  "checks": {
+    "exit_success": true,
+    "within_deadline": true,
+    "launched": true,
+    "complete_report": true,
+    "bounded_logs": true
+  },
+  "execution": {
+    "started_utc": "2026-10-26T19:04:30.320342+00:00",
+    "timeout_seconds": 60,
+    "returncode": 0,
+    "timed_out": false,
+    "launch_error": null,
+    "elapsed_seconds": 1.8691908749751747
+  },
+  "artifacts": {
+    "stdout": {
+      "bytes": 699,
+      "within_limit": true,
+      "sha256": "5ea7c04baf1c78757fe8c36b78c326707a6a2fd0659001798508fd683940c51a"
+    },
+    "stderr": {
+      "bytes": 252,
+      "within_limit": true,
+      "sha256": "787ecdfb1f2ffee05984822258c85bea4f7a3ee32464bf1fb7f2d928beb89522"
+    }
+  },
+  "report": {
+    "passed": true,
+    "errors": [],
+    "expected_cases": [
+      "alignment_and_hex_fields",
+      "borrowed_data_exact",
+      "canonical_payload_and_elf",
+      "complete_admission_no_prefix",
+      "descriptive_metadata_not_authority",
+      "empty_and_zero_length_files",
+      "entry_capacity",
+      "file_and_archive_capacity",
+      "gnu_reference_payload_and_elf",
+      "header_field_rejection",
+      "hierarchy_and_duplicates",
+      "metadata_and_types",
+      "mutations_are_total",
+      "padding_and_trailer",
+      "path_capacity_and_alphabet",
+      "truncation_all_prefixes"
+    ],
+    "observed_lines": [
+      "running 16 tests",
+      "test alignment_and_hex_fields ... ok",
+      "test borrowed_data_exact ... ok",
+      "test canonical_payload_and_elf ... ok",
+      "test complete_admission_no_prefix ... ok",
+      "test descriptive_metadata_not_authority ... ok",
+      "test empty_and_zero_length_files ... ok",
+      "test entry_capacity ... ok",
+      "test file_and_archive_capacity ... ok",
+      "test gnu_reference_payload_and_elf ... ok",
+      "test header_field_rejection ... ok",
+      "test hierarchy_and_duplicates ... ok",
+      "test metadata_and_types ... ok",
+      "test mutations_are_total ... ok",
+      "test padding_and_trailer ... ok",
+      "test path_capacity_and_alphabet ... ok",
+      "test truncation_all_prefixes ... ok",
+      "test result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s"
+    ]
+  },
+  "scope": "actual safe archive admission, canonical/GNU payload comparison and ELF planning; no archive-backed execution"
+}
+    Checking hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+error: for loop over a single element
+   --> crates/hm-kernel/tests/initramfs.rs:301:5
+    |
+301 | /     for links in [0] {
+302 | |         let mut bytes = Vec::new();
+303 | |         record(&mut bytes, b"a", 0o040755, 1, &[]);
+304 | |         field(&mut bytes, 0, 4, links);
+305 | |         finish(&mut bytes);
+306 | |         rejected(&bytes);
+307 | |     }
+    | |_____^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#single_element_loop
+    = note: `-D clippy::single-element-loop` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::single_element_loop)]`
+help: try
+    |
+301 ~     {
+302 +         let links = 0;
+303 +         let mut bytes = Vec::new();
+304 +         record(&mut bytes, b"a", 0o040755, 1, &[]);
+305 +         field(&mut bytes, 0, 4, links);
+306 +         finish(&mut bytes);
+307 +         rejected(&bytes);
+308 +     }
+    |
+
+error: useless use of `vec!`
+   --> crates/hm-kernel/tests/initramfs.rs:203:33
+    |
+203 |     assert!(Archive::parse(&one(&vec![b'x'; MAX_PATH_SIZE], &[])).is_ok());
+    |                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^ help: you can use a slice directly: `&[b'x'; MAX_PATH_SIZE]`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#useless_vec
+    = note: `-D clippy::useless-vec` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::useless_vec)]`
+
+error: useless use of `vec!`
+   --> crates/hm-kernel/tests/initramfs.rs:204:19
+    |
+204 |     rejected(&one(&vec![b'x'; MAX_PATH_SIZE + 1], &[]));
+    |                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: you can use a slice directly: `&[b'x'; MAX_PATH_SIZE + 1]`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#useless_vec
+
+error: could not compile `hm-kernel` (test "initramfs") due to 3 previous errors
