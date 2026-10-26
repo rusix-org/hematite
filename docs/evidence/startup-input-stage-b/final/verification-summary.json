@@ -1,0 +1,27 @@
+{
+  "passed": true,
+  "command": "make test-all",
+  "exit_code": 0,
+  "parent_commit": "018c815",
+  "result_counts": {
+    "aarch64": 67,
+    "x86_64": 14
+  },
+  "python_harness_cases_per_target": 164,
+  "launch_input_host_cases": 8,
+  "process_compiler_clients": 26,
+  "startup_delivery_profiles": 2,
+  "startup_delivery_runs_per_profile": 24,
+  "launcher_profiles": 4,
+  "launcher_completed_runs": 22,
+  "existing_process_profiles": 3,
+  "existing_process_runs_per_profile": 66,
+  "all_22_reviewed_runtime_hashes_match": true,
+  "normal_arm_elf_sha256": "e33eb4ae20c4c260eca1ac566b260c06b70700a957273d8aa7a94ee3442ab17a",
+  "startup_input_elf_sha256": "c200f6955bda17e1a4d244749c7700f46b110b3d0a3703b9daf9ff4373230b91",
+  "evidence_source_directories": [
+    "target/evidence/20261026T203629-555187113-aarch64",
+    "target/evidence/20261026T203825-744152706-x86_64"
+  ],
+  "implementation_commit": "fb62076"
+}

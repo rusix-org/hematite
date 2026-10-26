@@ -1,0 +1,125 @@
+{
+  "passed": true,
+  "scope": "actual safe ELF admission and readelf comparison; no ELF loading or EL0 execution",
+  "checks": {
+    "fixture": {
+      "passed": true,
+      "returncode": 0,
+      "sha256": "1671600860226b3e9e0f03851a4827202b4ab9cf9046078f6c084e31c35e1c1c"
+    },
+    "canonical_fixture": {
+      "passed": true,
+      "path": "crates/hm-core/fixtures/native-elf",
+      "sha256": "1671600860226b3e9e0f03851a4827202b4ab9cf9046078f6c084e31c35e1c1c",
+      "regenerated_sha256": "1671600860226b3e9e0f03851a4827202b4ab9cf9046078f6c084e31c35e1c1c",
+      "comparison": "byte-for-byte equality with regenerated pinned-toolchain fixture"
+    },
+    "readelf": {
+      "passed": true
+    },
+    "reference": {
+      "passed": true,
+      "checks": {
+        "elf64": true,
+        "little_endian": true,
+        "static_executable": true,
+        "aarch64": true,
+        "entry_present": true,
+        "three_explicit_loads": true,
+        "rx_r_rw": true,
+        "nonempty_bss": true,
+        "load_bounds": true,
+        "separate_pages": true
+      },
+      "entry": 4294967296,
+      "segments": [
+        {
+          "offset": 4096,
+          "va": 4294967296,
+          "physical": 4294967296,
+          "filesz": 56,
+          "memsz": 56,
+          "flags": 5,
+          "align": 4096,
+          "page_start": 4294967296,
+          "page_end": 4294971392,
+          "file_hash": 5990023392080949802
+        },
+        {
+          "offset": 8192,
+          "va": 4294971392,
+          "physical": 4294971392,
+          "filesz": 16,
+          "memsz": 16,
+          "flags": 4,
+          "align": 4096,
+          "page_start": 4294971392,
+          "page_end": 4294975488,
+          "file_hash": 5298123916349964740
+        },
+        {
+          "offset": 12288,
+          "va": 4294975488,
+          "physical": 4294975488,
+          "filesz": 16,
+          "memsz": 8208,
+          "flags": 6,
+          "align": 4096,
+          "page_start": 4294975488,
+          "page_end": 4294987776,
+          "file_hash": 2014243065793578549
+        }
+      ],
+      "pages": 5
+    },
+    "host_compile": {
+      "passed": true,
+      "returncode": 0
+    },
+    "execution": {
+      "passed": true,
+      "returncode": 0,
+      "stderr_empty": true,
+      "executable_sha256": "6ac97cfe9aaf323f08a1ba96936d65a0855036a8c45e28903f27b25aac7c7e2c",
+      "report": {
+        "passed": true,
+        "checks": {
+          "exact_line_count": true,
+          "complete_final_line": true,
+          "image_matches_readelf": true,
+          "segments_match_readelf_and_file_bytes": true,
+          "strict_test_inventory": true
+        },
+        "segments": [
+          {
+            "va": 4294967296,
+            "filesz": 56,
+            "memsz": 56,
+            "flags": 5,
+            "page_start": 4294967296,
+            "page_end": 4294971392,
+            "file_hash": 5990023392080949802
+          },
+          {
+            "va": 4294971392,
+            "filesz": 16,
+            "memsz": 16,
+            "flags": 4,
+            "page_start": 4294971392,
+            "page_end": 4294975488,
+            "file_hash": 5298123916349964740
+          },
+          {
+            "va": 4294975488,
+            "filesz": 16,
+            "memsz": 8208,
+            "flags": 6,
+            "page_start": 4294975488,
+            "page_end": 4294987776,
+            "file_hash": 2014243065793578549
+          }
+        ]
+      }
+    }
+  }
+}

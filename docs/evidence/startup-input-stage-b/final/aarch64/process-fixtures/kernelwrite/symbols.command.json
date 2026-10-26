@@ -1,0 +1,5 @@
+[
+  "readelf",
+  "-sW",
+  "/workspace/target/evidence/20261026T203629-555187113-aarch64/process-fixtures/kernelwrite.elf"
+]

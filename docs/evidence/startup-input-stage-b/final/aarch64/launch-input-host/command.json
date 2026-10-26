@@ -1,0 +1,16 @@
+[
+  "cargo",
+  "test",
+  "-p",
+  "hm-kernel",
+  "--test",
+  "launch_input",
+  "--locked",
+  "--offline",
+  "--target",
+  "x86_64-unknown-linux-gnu",
+  "--target-dir",
+  "target/host-launch-input",
+  "--",
+  "--test-threads=1"
+]

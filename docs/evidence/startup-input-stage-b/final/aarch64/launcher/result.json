@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "profiles": {
+    "launcher-64m": true,
+    "launcher-128m": true,
+    "launcher-128m-fresh": true,
+    "launcher-128m-fresh-input": true
+  },
+  "error": null,
+  "scope": "ordinary ARM64 one-CPU native launcher, five real apps, containment, generations and reclamation; no Linux ABI/service claim"
+}

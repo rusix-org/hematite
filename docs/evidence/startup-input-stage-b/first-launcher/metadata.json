@@ -1,0 +1,314 @@
+{
+  "apps": {
+    "hello": {
+      "entry": 4294967296,
+      "pages": 3,
+      "symbols": {
+        "message": 4294971392,
+        "native_start": 4294967296,
+        "write_svc": 4294967328,
+        "newline_svc": 4294967356,
+        "exit_svc": 4294967384,
+        "loop_start": 4294967412,
+        "fault": 4294967404,
+        "loop_end": 4294967416
+      },
+      "segments": [
+        {
+          "flags": 5,
+          "offset": 4096,
+          "va": 4294967296,
+          "filesz": 320,
+          "memsz": 320,
+          "align": 4096,
+          "start": 4294967296,
+          "end": 4294971392
+        },
+        {
+          "flags": 4,
+          "offset": 8192,
+          "va": 4294971392,
+          "filesz": 16,
+          "memsz": 16,
+          "align": 4096,
+          "start": 4294971392,
+          "end": 4294975488
+        },
+        {
+          "flags": 6,
+          "offset": 12288,
+          "va": 4294975488,
+          "filesz": 1,
+          "memsz": 1,
+          "align": 4096,
+          "start": 4294975488,
+          "end": 4294979584
+        }
+      ],
+      "file": "hello.elf",
+      "path": "bin/hello",
+      "sha256": "9d7008184000b47c3310c5d93392b871ad7fb60c4c0d0a0d47726393ffa1cde1"
+    },
+    "info": {
+      "entry": 4294967296,
+      "pages": 4,
+      "symbols": {
+        "message": 4294975488,
+        "native_start": 4294967296,
+        "write_svc": 4294967328,
+        "newline_svc": 4294967356,
+        "exit_svc": 4294967384,
+        "loop_start": 4294967412,
+        "fault": 4294967404,
+        "loop_end": 4294967416
+      },
+      "segments": [
+        {
+          "flags": 5,
+          "offset": 4096,
+          "va": 4294967296,
+          "filesz": 6492,
+          "memsz": 6492,
+          "align": 4096,
+          "start": 4294967296,
+          "end": 4294975488
+        },
+        {
+          "flags": 4,
+          "offset": 12288,
+          "va": 4294975488,
+          "filesz": 584,
+          "memsz": 584,
+          "align": 4096,
+          "start": 4294975488,
+          "end": 4294979584
+        },
+        {
+          "flags": 6,
+          "offset": 16384,
+          "va": 4294979584,
+          "filesz": 1,
+          "memsz": 1,
+          "align": 4096,
+          "start": 4294979584,
+          "end": 4294983680
+        }
+      ],
+      "file": "info.elf",
+      "path": "bin/info",
+      "sha256": "d5d23b71868d4b5e1acae46a61ef4458d5f4f8283c5b822e72b1368308c1bd8d"
+    },
+    "echo": {
+      "entry": 4294967296,
+      "pages": 3,
+      "symbols": {
+        "message": 4294971392,
+        "native_start": 4294967296,
+        "write_svc": 4294967328,
+        "newline_svc": 4294967356,
+        "exit_svc": 4294967384,
+        "loop_start": 4294967412,
+        "fault": 4294967404,
+        "loop_end": 4294967416
+      },
+      "segments": [
+        {
+          "flags": 5,
+          "offset": 4096,
+          "va": 4294967296,
+          "filesz": 556,
+          "memsz": 556,
+          "align": 4096,
+          "start": 4294967296,
+          "end": 4294971392
+        },
+        {
+          "flags": 4,
+          "offset": 8192,
+          "va": 4294971392,
+          "filesz": 16,
+          "memsz": 16,
+          "align": 4096,
+          "start": 4294971392,
+          "end": 4294975488
+        },
+        {
+          "flags": 6,
+          "offset": 12288,
+          "va": 4294975488,
+          "filesz": 1,
+          "memsz": 1,
+          "align": 4096,
+          "start": 4294975488,
+          "end": 4294979584
+        }
+      ],
+      "file": "echo.elf",
+      "path": "bin/echo",
+      "sha256": "8ae2a718620a9fb4c5942814a46a07cad066399e061aefdba9a35e95cb58a409"
+    },
+    "fault": {
+      "entry": 4294967296,
+      "pages": 3,
+      "symbols": {
+        "message": 4294971392,
+        "native_start": 4294967296,
+        "write_svc": 4294967328,
+        "newline_svc": 4294967356,
+        "exit_svc": 4294967384,
+        "loop_start": 4294967412,
+        "fault": 4294967404,
+        "loop_end": 4294967416
+      },
+      "segments": [
+        {
+          "flags": 5,
+          "offset": 4096,
+          "va": 4294967296,
+          "filesz": 292,
+          "memsz": 292,
+          "align": 4096,
+          "start": 4294967296,
+          "end": 4294971392
+        },
+        {
+          "flags": 4,
+          "offset": 8192,
+          "va": 4294971392,
+          "filesz": 16,
+          "memsz": 16,
+          "align": 4096,
+          "start": 4294971392,
+          "end": 4294975488
+        },
+        {
+          "flags": 6,
+          "offset": 12288,
+          "va": 4294975488,
+          "filesz": 1,
+          "memsz": 1,
+          "align": 4096,
+          "start": 4294975488,
+          "end": 4294979584
+        }
+      ],
+      "file": "fault.elf",
+      "path": "demo/fault",
+      "sha256": "4dcca64eb52cac001bb88f8ce7b020daf3a524eae011e7c9a8b2870039271c2d"
+    },
+    "loop": {
+      "entry": 4294967296,
+      "pages": 3,
+      "symbols": {
+        "message": 4294971392,
+        "native_start": 4294967296,
+        "write_svc": 4294967328,
+        "newline_svc": 4294967356,
+        "exit_svc": 4294967384,
+        "loop_start": 4294967412,
+        "fault": 4294967404,
+        "loop_end": 4294967416
+      },
+      "segments": [
+        {
+          "flags": 5,
+          "offset": 4096,
+          "va": 4294967296,
+          "filesz": 292,
+          "memsz": 292,
+          "align": 4096,
+          "start": 4294967296,
+          "end": 4294971392
+        },
+        {
+          "flags": 4,
+          "offset": 8192,
+          "va": 4294971392,
+          "filesz": 16,
+          "memsz": 16,
+          "align": 4096,
+          "start": 4294971392,
+          "end": 4294975488
+        },
+        {
+          "flags": 6,
+          "offset": 12288,
+          "va": 4294975488,
+          "filesz": 1,
+          "memsz": 1,
+          "align": 4096,
+          "start": 4294975488,
+          "end": 4294979584
+        }
+      ],
+      "file": "loop.elf",
+      "path": "demo/loop",
+      "sha256": "bf8fcc427dd8f2400c09fb764c7028fc587ed1e57634150503cbbed8eadf85d5"
+    }
+  },
+  "archive": {
+    "bytes": 743936,
+    "sha256": "ea708fb72cd2e9cd277de319bd6e9697c54872472eaa1e3cc4a8f13ca4a9169d",
+    "entries": 7,
+    "files": 5,
+    "kernel_file_offset": 371352
+  },
+  "symbols": {
+    "__kernel_end": 1077702656,
+    "arm_vectors": 1075841024,
+    "arm_process_vectors": 1075849216,
+    "arm_timer_window_begin": 1075845284,
+    "arm_timer_window_end": 1075845360,
+    "arm_fault_fixups": 1076137984,
+    "__stack_guard": 1076965376,
+    "__exception_stack_guard": 1077035008,
+    "arm_probe_ro_datum": 1076138236,
+    "arm_probe_nx_target": 1076138240
+  },
+  "fixups": [
+    [
+      1075843384,
+      1075843396,
+      0,
+      2516582406
+    ],
+    [
+      1075843408,
+      1075843420,
+      1076965376,
+      2516582407
+    ],
+    [
+      1075843432,
+      1075843444,
+      1077035008,
+      2516582407
+    ],
+    [
+      1075843460,
+      1075843472,
+      1076138236,
+      2516582479
+    ],
+    [
+      1076138240,
+      1075843512,
+      1076138240,
+      2248146959
+    ],
+    [
+      1075843996,
+      1075844004,
+      0,
+      2516582406
+    ]
+  ],
+  "sources": {
+    "test_launcher.py": "77a770b0d9f35fb47f99694970769ccd6bfa98c59367fa3c13f40aad69fcd3c0",
+    "build_apps.py": "b9ed4e5b01b1d0823df0bf13727715451a404768f6c75083c2e48a5f76d17862",
+    "build_initramfs.py": "3ef54b0f1caa7a35eb554532abffe3cc9b87fc687119600621c77903ec3cb116",
+    "test_process.py": "d1d761a06ce8da518243c0d6e4453a9c2af803d34ff92c2f626b8a9bf6991d6e",
+    "test_boot_profiles.py": "78034ae1f79678e25bf19e3d541ead4e4271e551db4216c85f2435ed30593627",
+    "test_kernel.py": "64b8bdb54a51bb290ef5f1e4e7a38e937308a1a26f14bb1382c42df668a18fa1"
+  }
+}

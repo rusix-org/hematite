@@ -1,0 +1,5 @@
+{
+  "kernel_sha256": "c200f6955bda17e1a4d244749c7700f46b110b3d0a3703b9daf9ff4373230b91",
+  "ram_mb": 128,
+  "timeout_seconds": 60
+}

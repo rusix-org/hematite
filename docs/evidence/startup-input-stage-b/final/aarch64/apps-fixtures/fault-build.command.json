@@ -1,0 +1,42 @@
+{
+  "argv": [
+    "rustc",
+    "--edition=2024",
+    "--crate-name",
+    "native_apps",
+    "--crate-type=bin",
+    "--target",
+    "aarch64-unknown-none",
+    "--cfg",
+    "app=\"fault\"",
+    "-C",
+    "panic=abort",
+    "-C",
+    "opt-level=2",
+    "-C",
+    "codegen-units=1",
+    "-C",
+    "relocation-model=static",
+    "-C",
+    "link-arg=-T/workspace/crates/hm-core/fixtures/native-elf.ld",
+    "-C",
+    "link-arg=--build-id=none",
+    "-C",
+    "link-arg=-z",
+    "-C",
+    "link-arg=max-page-size=4096",
+    "-C",
+    "link-arg=--no-dynamic-linker",
+    "/workspace/crates/hm-core/fixtures/apps.rs",
+    "-o",
+    "/workspace/target/evidence/20261026T203629-555187113-aarch64/apps-fixtures/fault.elf"
+  ],
+  "cwd": "/workspace",
+  "stdin_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout": "/workspace/target/evidence/20261026T203629-555187113-aarch64/apps-fixtures/fault-build.stdout.log",
+  "env": {
+    "LC_ALL": "C",
+    "TZ": "UTC"
+  },
+  "timeout_seconds": 20
+}

@@ -1,0 +1,14 @@
+{
+  "argv": [
+    "cpio",
+    "--version"
+  ],
+  "cwd": "/workspace",
+  "stdin_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout": "/workspace/target/evidence/20261026T203629-555187113-aarch64/process-archive/cpio-version.stdout.log",
+  "env": {
+    "LC_ALL": "C",
+    "TZ": "UTC"
+  },
+  "timeout_seconds": 20
+}

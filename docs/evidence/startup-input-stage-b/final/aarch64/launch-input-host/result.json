@@ -1,0 +1,57 @@
+{
+  "passed": true,
+  "checks": {
+    "exit_success": true,
+    "within_deadline": true,
+    "launched": true,
+    "complete_report": true,
+    "bounded_logs": true
+  },
+  "execution": {
+    "started_utc": "2026-10-26T20:37:29.939657+00:00",
+    "timeout_seconds": 60,
+    "returncode": 0,
+    "timed_out": false,
+    "launch_error": null,
+    "elapsed_seconds": 0.11494878493249416
+  },
+  "artifacts": {
+    "stdout": {
+      "bytes": 368,
+      "within_limit": true,
+      "sha256": "7a826b4dacb64805be45feaa2c19cc65c93dbbf01af9d98373cdc5b3d8421927"
+    },
+    "stderr": {
+      "bytes": 201,
+      "within_limit": true,
+      "sha256": "8fee2020432676df73be98f647ae5318242683411c0b4bb2012d0f22f00bade2"
+    }
+  },
+  "report": {
+    "passed": true,
+    "errors": [],
+    "expected_cases": [
+      "absent_dispatch",
+      "core_errors_are_reported",
+      "empty_dispatch",
+      "empty_or_whitespace_path_rejected",
+      "maximum_payload",
+      "oversize_rejected",
+      "spaces_preserved",
+      "unsupported_input"
+    ],
+    "observed_lines": [
+      "running 8 tests",
+      "test absent_dispatch ... ok",
+      "test core_errors_are_reported ... ok",
+      "test empty_dispatch ... ok",
+      "test empty_or_whitespace_path_rejected ... ok",
+      "test maximum_payload ... ok",
+      "test oversize_rejected ... ok",
+      "test spaces_preserved ... ok",
+      "test unsupported_input ... ok",
+      "test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s"
+    ]
+  },
+  "scope": "actual actual monitor command parsing and dispatch with effect recorder; real Platform and hardware checked separately"
+}

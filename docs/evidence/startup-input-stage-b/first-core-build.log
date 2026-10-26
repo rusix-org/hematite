@@ -1,0 +1,38 @@
+PASS: safe crate roots, dependency-free lockfile, core SAFETY-comment hygiene
+Scope: structural hygiene only; compile all targets and review core soundness separately
+    Checking hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+    Checking hm-core v0.1.0 (/workspace/crates/hm-core)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 1.27s
+{
+  "passed": true,
+  "archive": {
+    "bytes": 743936,
+    "sha256": "ea708fb72cd2e9cd277de319bd6e9697c54872472eaa1e3cc4a8f13ca4a9169d",
+    "entries": 7,
+    "files": 5
+  },
+  "scope": "kernel-independent native apps, GNU exact archive listing/extraction; no execution"
+}
+{
+  "passed": true,
+  "archive": {
+    "bytes": 114176,
+    "sha256": "8585f4de0f690effd2074a449dd46a17954555c55953d984a93b3284f1cc5798",
+    "entries": 9,
+    "files": 8
+  },
+  "scope": "kernel-independent startup probes, GNU exact archive listing/extraction; no execution"
+}
+aarch64-monitor compiled; no guest executed
+aarch64-boot-test compiled; no guest executed
+aarch64-fault-test compiled; no guest executed
+aarch64-nested-test compiled; no guest executed
+aarch64-thread-overflow-test compiled; no guest executed
+aarch64-preemption-test compiled; no guest executed
+aarch64-preemption-boundary-test compiled; no guest executed
+aarch64-preemption-no-timer-test compiled; no guest executed
+aarch64-preemption-overflow-test compiled; no guest executed
+aarch64-wait-all-blocked-test compiled; no guest executed
+aarch64-space-test compiled; no guest executed
+aarch64-process-test compiled; no guest executed
+aarch64-startup-input-test build failed

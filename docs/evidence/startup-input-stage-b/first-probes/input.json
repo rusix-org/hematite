@@ -1,0 +1,13 @@
+{
+  "sources": {
+    "crates/hm-core/fixtures/startup-input.rs": "85315727c6b03f5bc0b24296673489ab29f1f074ff21240fd72532f944d1aacc",
+    "crates/hm-core/fixtures/startup-input.S": "9c3c93c40759a7fc1b56d8c8b56b432c35dc81418af06d025b98e89b6ec2410a",
+    "crates/hm-core/fixtures/native-elf.ld": "20a9ff90960aaaad9f0c680c8bcef4e155038888ff3afbbd207c1b0fe28528f1",
+    "crates/hm-kernel/src/startup_input.rs": "78f6593de5ff4dcdaab66b58bc807e04dcf78008955b6295e98479cb8bbce059",
+    "tools/build_startup_probes.py": "8ab88ffda135a88e39a6e0cbbd137a68e1d048e320c308cd0bf36d3ca7643276",
+    "tools/build_initramfs.py": "3ef54b0f1caa7a35eb554532abffe3cc9b87fc687119600621c77903ec3cb116",
+    "tools/test_process.py": "d1d761a06ce8da518243c0d6e4453a9c2af803d34ff92c2f626b8a9bf6991d6e",
+    "docs/design/0027-native-startup-input.md": "b9e4e60ce39d5b1045f9f337d1230140c2a1fdf7c0d65b5090386221170d6e2c"
+  },
+  "update": true
+}

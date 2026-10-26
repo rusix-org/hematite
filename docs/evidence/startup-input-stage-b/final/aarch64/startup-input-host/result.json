@@ -1,0 +1,69 @@
+{
+  "passed": true,
+  "checks": {
+    "exit_success": true,
+    "within_deadline": true,
+    "launched": true,
+    "complete_report": true,
+    "bounded_logs": true
+  },
+  "execution": {
+    "started_utc": "2026-10-26T20:37:27.139216+00:00",
+    "timeout_seconds": 60,
+    "returncode": 0,
+    "timed_out": false,
+    "launch_error": null,
+    "elapsed_seconds": 0.8662671650527045
+  },
+  "artifacts": {
+    "stdout": {
+      "bytes": 579,
+      "within_limit": true,
+      "sha256": "102fd4fa7423a18e0e011286de594e0a583f6492145e6c25a01a0c9209f51b0c"
+    },
+    "stderr": {
+      "bytes": 264,
+      "within_limit": true,
+      "sha256": "3b07b2296ce09d5c629ac68231144268030981fe6c7ab6d928a78d623a7f06df"
+    }
+  },
+  "report": {
+    "passed": true,
+    "errors": [],
+    "expected_cases": [
+      "absent_canonical",
+      "all_input_lengths",
+      "deterministic_mutations",
+      "exact_decode_extent",
+      "legacy_prefix_unchanged",
+      "malformed_header",
+      "malformed_lengths",
+      "malformed_tail",
+      "maximum_and_over_limit",
+      "opaque_round_trip",
+      "owns_input_copy",
+      "present_empty_distinct",
+      "reencoding_clears_stale_bytes",
+      "wrong_destination_size_unchanged"
+    ],
+    "observed_lines": [
+      "running 14 tests",
+      "test absent_canonical ... ok",
+      "test all_input_lengths ... ok",
+      "test deterministic_mutations ... ok",
+      "test exact_decode_extent ... ok",
+      "test legacy_prefix_unchanged ... ok",
+      "test malformed_header ... ok",
+      "test malformed_lengths ... ok",
+      "test malformed_tail ... ok",
+      "test maximum_and_over_limit ... ok",
+      "test opaque_round_trip ... ok",
+      "test owns_input_copy ... ok",
+      "test present_empty_distinct ... ok",
+      "test reencoding_clears_stale_bytes ... ok",
+      "test wrong_destination_size_unchanged ... ok",
+      "test result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.21s"
+    ]
+  },
+  "scope": "actual safe startup-input codec and ownership; no runtime extension or execution"
+}

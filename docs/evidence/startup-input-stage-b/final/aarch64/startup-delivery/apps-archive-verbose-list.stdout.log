@@ -1,0 +1,9 @@
+drwxr-xr-x   2 0        0               0 Jan  1  1970 bin
+-rwxr-xr-x   1 0        0           14144 Jan  1  1970 bin/absent
+-rwxr-xr-x   1 0        0           14144 Jan  1  1970 bin/empty
+-rwxr-xr-x   1 0        0           14144 Jan  1  1970 bin/one
+-rwxr-xr-x   1 0        0           14144 Jan  1  1970 bin/bytes255
+-rwxr-xr-x   1 0        0           14144 Jan  1  1970 bin/binary256
+-rwxr-xr-x   1 0        0           14056 Jan  1  1970 bin/payload_write
+-rwxr-xr-x   1 0        0           14056 Jan  1  1970 bin/payload_execute
+-rwxr-xr-x   1 0        0           14056 Jan  1  1970 bin/input_loop

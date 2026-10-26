@@ -1,0 +1,98 @@
+{
+  "passed": true,
+  "archive": {
+    "bytes": 743936,
+    "sha256": "ea708fb72cd2e9cd277de319bd6e9697c54872472eaa1e3cc4a8f13ca4a9169d",
+    "entries": 7,
+    "files": 5
+  },
+  "scope": "kernel-independent native apps, GNU exact archive listing/extraction; no execution"
+}
+{
+  "passed": true,
+  "archive": {
+    "bytes": 114176,
+    "sha256": "8585f4de0f690effd2074a449dd46a17954555c55953d984a93b3284f1cc5798",
+    "entries": 9,
+    "files": 8
+  },
+  "scope": "kernel-independent native apps, GNU exact archive listing/extraction; no execution"
+}
+{
+  "passed": true,
+  "checks": {
+    "exit_success": true,
+    "within_deadline": true,
+    "launched": true,
+    "complete_report": true,
+    "bounded_logs": true
+  },
+  "execution": {
+    "started_utc": "2026-10-26T20:22:19.364553+00:00",
+    "timeout_seconds": 60,
+    "returncode": 0,
+    "timed_out": false,
+    "launch_error": null,
+    "elapsed_seconds": 2.1200636440189555
+  },
+  "artifacts": {
+    "stdout": {
+      "bytes": 368,
+      "within_limit": true,
+      "sha256": "7a826b4dacb64805be45feaa2c19cc65c93dbbf01af9d98373cdc5b3d8421927"
+    },
+    "stderr": {
+      "bytes": 261,
+      "within_limit": true,
+      "sha256": "5d1a51fc61870d4fe67d9144880edd4b032851bc7b006e762d1ba751be31ffd9"
+    }
+  },
+  "report": {
+    "passed": true,
+    "errors": [],
+    "expected_cases": [
+      "absent_dispatch",
+      "core_errors_are_reported",
+      "empty_dispatch",
+      "empty_or_whitespace_path_rejected",
+      "maximum_payload",
+      "oversize_rejected",
+      "spaces_preserved",
+      "unsupported_input"
+    ],
+    "observed_lines": [
+      "running 8 tests",
+      "test absent_dispatch ... ok",
+      "test core_errors_are_reported ... ok",
+      "test empty_dispatch ... ok",
+      "test empty_or_whitespace_path_rejected ... ok",
+      "test maximum_payload ... ok",
+      "test oversize_rejected ... ok",
+      "test spaces_preserved ... ok",
+      "test unsupported_input ... ok",
+      "test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s"
+    ]
+  },
+  "scope": "actual actual monitor command parsing and dispatch with effect recorder; real Platform and hardware checked separately"
+}
+.F..F
+======================================================================
+FAIL: test_exact_host_inventory (__main__.LaunchInputHarnessTests.test_exact_host_inventory)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/tools/test_test_launch_input.py", line 20, in test_exact_host_inventory
+    self.assertIn('canonical_native_image', harness.CASES)
+AssertionError: 'canonical_native_image' not found in ('absent_dispatch', 'core_errors_are_reported', 'empty_dispatch', 'empty_or_whitespace_path_rejected', 'maximum_payload', 'oversize_rejected', 'spaces_preserved', 'unsupported_input')
+
+======================================================================
+FAIL: test_skip_filter_wrong_summary_and_wrong_test_module (__main__.LaunchInputHarnessTests.test_skip_filter_wrong_summary_and_wrong_test_module)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/tools/test_test_launch_input.py", line 37, in test_skip_filter_wrong_summary_and_wrong_test_module
+    self.assertFalse(harness.validate(raw.replace(old, new, 1))['passed'])
+AssertionError: True is not false
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.015s
+
+FAILED (failures=2)

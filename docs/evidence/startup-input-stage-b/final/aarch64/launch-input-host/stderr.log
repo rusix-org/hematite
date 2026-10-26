@@ -1,0 +1,2 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.07s
+     Running tests/launch_input.rs (target/host-launch-input/x86_64-unknown-linux-gnu/debug/deps/launch_input-f89ba8ae19bf8662)

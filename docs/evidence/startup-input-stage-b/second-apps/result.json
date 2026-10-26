@@ -1,0 +1,10 @@
+{
+  "passed": true,
+  "archive": {
+    "bytes": 743936,
+    "sha256": "ea708fb72cd2e9cd277de319bd6e9697c54872472eaa1e3cc4a8f13ca4a9169d",
+    "entries": 7,
+    "files": 5
+  },
+  "scope": "kernel-independent native apps, GNU exact archive listing/extraction; no execution"
+}

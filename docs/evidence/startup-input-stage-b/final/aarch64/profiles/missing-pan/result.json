@@ -1,0 +1,19 @@
+{
+  "scope": "bootstrap rejects CPU without pan",
+  "arch": "aarch64",
+  "started_utc": "2026-10-26T20:37:44.408792+00:00",
+  "timeout_seconds": 20,
+  "returncode": 1,
+  "timed_out": false,
+  "launch_error": null,
+  "checks": {
+    "explicit_boot_rejection_exit": true,
+    "no_test_report": true,
+    "within_deadline": true,
+    "launched": true,
+    "explicit_pan_rejection_marker": true
+  },
+  "errors": [],
+  "passed": true,
+  "elapsed_seconds": 0.06458967109210789
+}

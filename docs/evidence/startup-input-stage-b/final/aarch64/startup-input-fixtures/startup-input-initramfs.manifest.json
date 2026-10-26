@@ -1,0 +1,72 @@
+{
+  "version": 1,
+  "archive": "startup-input-initramfs.cpio",
+  "sha256": "8585f4de0f690effd2074a449dd46a17954555c55953d984a93b3284f1cc5798",
+  "bytes": 114176,
+  "entries": [
+    {
+      "path": "bin",
+      "kind": "directory",
+      "mode": 16877,
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "bin/absent",
+      "kind": "file",
+      "mode": 33261,
+      "size": 14144,
+      "sha256": "1df05f57b89fd66b23a6261dcc2538ca4b55a8603289f2be3d1f247f1e1e037a"
+    },
+    {
+      "path": "bin/empty",
+      "kind": "file",
+      "mode": 33261,
+      "size": 14144,
+      "sha256": "e9afaf1727eeaaa01ee6885359630bd200727808cc98580539cd1217da00a61b"
+    },
+    {
+      "path": "bin/one",
+      "kind": "file",
+      "mode": 33261,
+      "size": 14144,
+      "sha256": "e46f49a5a3b05efaed2d894147a42a29a8e1566f55607b9691b4414b49d7fbf4"
+    },
+    {
+      "path": "bin/bytes255",
+      "kind": "file",
+      "mode": 33261,
+      "size": 14144,
+      "sha256": "5a7bad3294105c6e3cd6bf3af6445149155852e32d35c8b4f4645c3652a528e0"
+    },
+    {
+      "path": "bin/binary256",
+      "kind": "file",
+      "mode": 33261,
+      "size": 14144,
+      "sha256": "92dbf27ff37cc0355795cb037c6b82fc68020bc35adca205f113e0d4d43c6cc3"
+    },
+    {
+      "path": "bin/payload_write",
+      "kind": "file",
+      "mode": 33261,
+      "size": 14056,
+      "sha256": "0e65688c4d83dfd6d0362b7a0c6785a4f3730d47b0b811ff93a856b87cd66a5b"
+    },
+    {
+      "path": "bin/payload_execute",
+      "kind": "file",
+      "mode": 33261,
+      "size": 14056,
+      "sha256": "283ee9704ada762af60c594dff6987e24375fae9a29e9df50a0f24c9f9c49627"
+    },
+    {
+      "path": "bin/input_loop",
+      "kind": "file",
+      "mode": 33261,
+      "size": 14056,
+      "sha256": "908cc22d18a917a16367381921f842f49ee680203f1bcb9bbe5c3e9e09dc9215"
+    }
+  ],
+  "probes_manifest_sha256": "68f712fcdb1f4390c55cefe6c90a27dbf9751396973864d7556159f7c8d34ea2"
+}

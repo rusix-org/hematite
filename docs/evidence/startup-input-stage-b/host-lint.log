@@ -1,0 +1,18 @@
+    Checking hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 1.00s
+..........
+----------------------------------------------------------------------
+Ran 10 tests in 1.163s
+
+OK
+............
+----------------------------------------------------------------------
+Ran 12 tests in 0.093s
+
+OK
+.....
+----------------------------------------------------------------------
+Ran 5 tests in 0.013s
+
+OK
+crates/hm-core/fixtures/apps.rs:127: missing nearby explanatory SAFETY comment

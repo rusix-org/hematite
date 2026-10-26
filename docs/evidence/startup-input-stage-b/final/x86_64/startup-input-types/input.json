@@ -1,0 +1,25 @@
+{
+  "library": "/workspace/target/x86_64/boot-test/x86_64-unknown-none/release/libhm_kernel.rlib",
+  "library_sha256": "2721f0e6754d22f7d2ddb3f8022ce1d036f3a0e794523ba9c1965fdaa794b47d",
+  "target": "x86_64-unknown-none",
+  "sources": {
+    "crates/hm-kernel/src/startup_input.rs": "78f6593de5ff4dcdaab66b58bc807e04dcf78008955b6295e98479cb8bbce059",
+    "tools/check_startup_input_types.py": "ac86205b980c55df7b66bab69a82916247062127d9dede8ea273289e4b7db145"
+  },
+  "expected_probes": [
+    "owned_source_independence",
+    "move_encode_drop_then_decode",
+    "view_copy_and_payload_borrow",
+    "constants_absent_and_errors",
+    "forge_input",
+    "forge_view",
+    "clone_input",
+    "copy_input",
+    "input_bytes_escape_owner",
+    "view_escape_extension",
+    "view_bytes_escape_extension",
+    "mutate_input_while_borrowed",
+    "mutate_extension_while_view_live",
+    "mutate_view_payload"
+  ]
+}

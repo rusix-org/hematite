@@ -1,0 +1,287 @@
+hematite: ARM64 Rust kernel entered at EL1
+Boot RAM bytes: 0x0000000008000000 (discovered RAM)
+Frame pool pages: 0x0000000000000cd0 (4 KiB each; boot reservations excluded)
+HMINPUT REJECT phase=before error=length initialized=0 generation=0 before=3280 after=3280
+HMINPUT PREFLIGHT checks=15 irqs=8
+HMINPUT BEGIN 24
+HMINPUT INFO wire=1 extension=1 max_input=256 cpus=1 timer_frequency=62500000 timer_ticks=6250000
+HMINPUT RUN index=0 pass=0 case=absent fixture=absent present=0 length=0 generation=1 entry=4294967296 root=1077084160 before=3280 during=3248 owned=32
+HMINPUT READBACK index=0 base=1 extension=1 zero_tail=1 source_detached=1
+HMPROC CALL index=0 ordinal=1 pc=4294967332 version=1 operation=1 arg1=4294967297 arg2=4296015960 arg3=0
+HMPROC RESULT index=0 ordinal=1 status=0 bytes=0
+HMPROC CALL index=0 ordinal=2 pc=4294967360 version=1 operation=1 arg1=4294967297 arg2=4294971392 arg3=1
+HMPROC OUTPUT index=0 ordinal=2 length=1 hex=0a
+HMPROC RESULT index=0 ordinal=2 status=0 bytes=1
+HMPROC CALL index=0 ordinal=3 pc=4294967388 version=1 operation=2 arg1=10 arg2=0 arg3=0
+HMINPUT STOP index=0 reason=exit code=10 calls=3 written=1 esr=1442840576 far=0 elr=4294967388 spsr=1614807872 irqs=0
+HMINPUT RESTORE index=0 root=1076277248 vbar=1075841024 controls=1 inactive=1 before=3280 after=3280
+HMINPUT PASS index=0 pass=0 case=absent
+HMINPUT RUN index=1 pass=0 case=empty fixture=empty present=1 length=0 generation=2 entry=4294967296 root=1077084160 before=3280 during=3248 owned=32
+HMINPUT READBACK index=1 base=1 extension=1 zero_tail=1 source_detached=1
+HMPROC CALL index=1 ordinal=1 pc=4294967332 version=1 operation=1 arg1=8589934593 arg2=4296015960 arg3=0
+HMPROC RESULT index=1 ordinal=1 status=0 bytes=0
+HMPROC CALL index=1 ordinal=2 pc=4294967360 version=1 operation=1 arg1=8589934593 arg2=4294971392 arg3=1
+HMPROC OUTPUT index=1 ordinal=2 length=1 hex=0a
+HMPROC RESULT index=1 ordinal=2 status=0 bytes=1
+HMPROC CALL index=1 ordinal=3 pc=4294967388 version=1 operation=2 arg1=11 arg2=0 arg3=0
+HMINPUT STOP index=1 reason=exit code=11 calls=3 written=1 esr=1442840576 far=0 elr=4294967388 spsr=1614807872 irqs=0
+HMINPUT RESTORE index=1 root=1076277248 vbar=1075841024 controls=1 inactive=1 before=3280 after=3280
+HMINPUT PASS index=1 pass=0 case=empty
+HMINPUT RUN index=2 pass=0 case=one fixture=one present=1 length=1 generation=3 entry=4294967296 root=1077084160 before=3280 during=3248 owned=32
+HMINPUT READBACK index=2 base=1 extension=1 zero_tail=1 source_detached=1
+HMPROC CALL index=2 ordinal=1 pc=4294967332 version=1 operation=1 arg1=12884901889 arg2=4296015960 arg3=1
+HMPROC OUTPUT index=2 ordinal=1 length=1 hex=41
+HMPROC RESULT index=2 ordinal=1 status=0 bytes=1
+HMPROC CALL index=2 ordinal=2 pc=4294967360 version=1 operation=1 arg1=12884901889 arg2=4294971392 arg3=1
+HMPROC OUTPUT index=2 ordinal=2 length=1 hex=0a
+HMPROC RESULT index=2 ordinal=2 status=0 bytes=1
+HMPROC CALL index=2 ordinal=3 pc=4294967388 version=1 operation=2 arg1=12 arg2=0 arg3=0
+HMINPUT STOP index=2 reason=exit code=12 calls=3 written=2 esr=1442840576 far=0 elr=4294967388 spsr=1614807872 irqs=0
+HMINPUT RESTORE index=2 root=1076277248 vbar=1075841024 controls=1 inactive=1 before=3280 after=3280
+HMINPUT PASS index=2 pass=0 case=one
+HMINPUT RUN index=3 pass=0 case=bytes255 fixture=bytes255 present=1 length=255 generation=4 entry=4294967296 root=1077084160 before=3280 during=3248 owned=32
+HMINPUT READBACK index=3 base=1 extension=1 zero_tail=1 source_detached=1
+HMPROC CALL index=3 ordinal=1 pc=4294967332 version=1 operation=1 arg1=17179869185 arg2=4296015960 arg3=255
+HMPROC OUTPUT index=3 ordinal=1 length=255 hex=000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f404142434445464748494a4b4c4d4e4f505152535455565758595a5b5c5d5e5f606162636465666768696a6b6c6d6e6f707172737475767778797a7b7c7d7e7f808182838485868788898a8b8c8d8e8f909192939495969798999a9b9c9d9e9fa0a1a2a3a4a5a6a7a8a9aaabacadaeafb0b1b2b3b4b5b6b7b8b9babbbcbdbebfc0c1c2c3c4c5c6c7c8c9cacbcccdcecfd0d1d2d3d4d5d6d7d8d9dadbdcdddedfe0e1e2e3e4e5e6e7e8e9eaebecedeeeff0f1f2f3f4f5f6f7f8f9fafbfcfdfe
+HMPROC RESULT index=3 ordinal=1 status=0 bytes=255
+HMPROC CALL index=3 ordinal=2 pc=4294967360 version=1 operation=1 arg1=17179869185 arg2=4294971392 arg3=1
+HMPROC OUTPUT index=3 ordinal=2 length=1 hex=0a
+HMPROC RESULT index=3 ordinal=2 status=0 bytes=1
+HMPROC CALL index=3 ordinal=3 pc=4294967388 version=1 operation=2 arg1=12 arg2=0 arg3=0
+HMINPUT STOP index=3 reason=exit code=12 calls=3 written=256 esr=1442840576 far=0 elr=4294967388 spsr=1614807872 irqs=0
+HMINPUT RESTORE index=3 root=1076277248 vbar=1075841024 controls=1 inactive=1 before=3280 after=3280
+HMINPUT PASS index=3 pass=0 case=bytes255
+HMINPUT RUN index=4 pass=0 case=binary256 fixture=binary256 present=1 length=256 generation=5 entry=4294967296 root=1077084160 before=3280 during=3248 owned=32
+HMINPUT READBACK index=4 base=1 extension=1 zero_tail=1 source_detached=1
+HMPROC CALL index=4 ordinal=1 pc=4294967332 version=1 operation=1 arg1=21474836481 arg2=4296015960 arg3=256
+HMPROC OUTPUT index=4 ordinal=1 length=256 hex=000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f404142434445464748494a4b4c4d4e4f505152535455565758595a5b5c5d5e5f606162636465666768696a6b6c6d6e6f707172737475767778797a7b7c7d7e7f808182838485868788898a8b8c8d8e8f909192939495969798999a9b9c9d9e9fa0a1a2a3a4a5a6a7a8a9aaabacadaeafb0b1b2b3b4b5b6b7b8b9babbbcbdbebfc0c1c2c3c4c5c6c7c8c9cacbcccdcecfd0d1d2d3d4d5d6d7d8d9dadbdcdddedfe0e1e2e3e4e5e6e7e8e9eaebecedeeeff0f1f2f3f4f5f6f7f8f9fafbfcfdfeff
+HMPROC RESULT index=4 ordinal=1 status=0 bytes=256
+HMPROC CALL index=4 ordinal=2 pc=4294967360 version=1 operation=1 arg1=21474836481 arg2=4294971392 arg3=1
+HMPROC OUTPUT index=4 ordinal=2 length=1 hex=0a
+HMPROC RESULT index=4 ordinal=2 status=0 bytes=1
+HMPROC CALL index=4 ordinal=3 pc=4294967388 version=1 operation=2 arg1=12 arg2=0 arg3=0
+HMINPUT STOP index=4 reason=exit code=12 calls=3 written=257 esr=1442840576 far=0 elr=4294967388 spsr=1614807872 irqs=0
+HMINPUT RESTORE index=4 root=1076277248 vbar=1075841024 controls=1 inactive=1 before=3280 after=3280
+HMINPUT PASS index=4 pass=0 case=binary256
+HMINPUT RUN index=5 pass=0 case=after_binary_absent fixture=absent present=0 length=0 generation=6 entry=4294967296 root=1077084160 before=3280 during=3248 owned=32
+HMINPUT READBACK index=5 base=1 extension=1 zero_tail=1 source_detached=1
+HMPROC CALL index=5 ordinal=1 pc=4294967332 version=1 operation=1 arg1=25769803777 arg2=4296015960 arg3=0
+HMPROC RESULT index=5 ordinal=1 status=0 bytes=0
+HMPROC CALL index=5 ordinal=2 pc=4294967360 version=1 operation=1 arg1=25769803777 arg2=4294971392 arg3=1
+HMPROC OUTPUT index=5 ordinal=2 length=1 hex=0a
+HMPROC RESULT index=5 ordinal=2 status=0 bytes=1
+HMPROC CALL index=5 ordinal=3 pc=4294967388 version=1 operation=2 arg1=10 arg2=0 arg3=0
+HMINPUT STOP index=5 reason=exit code=10 calls=3 written=1 esr=1442840576 far=0 elr=4294967388 spsr=1614807872 irqs=0
+HMINPUT RESTORE index=5 root=1076277248 vbar=1075841024 controls=1 inactive=1 before=3280 after=3280
+HMINPUT PASS index=5 pass=0 case=after_binary_absent
+HMINPUT RUN index=6 pass=0 case=payload_write fixture=payload_write present=1 length=1 generation=7 entry=4294967296 root=1077084160 before=3280 during=3248 owned=32
+HMINPUT READBACK index=6 base=1 extension=1 zero_tail=1 source_detached=1
+HMINPUT STOP index=6 reason=fault code=0 calls=0 written=0 esr=2449473615 far=4296015960 elr=4294967432 spsr=4195136 irqs=0
+HMINPUT RESTORE index=6 root=1076277248 vbar=1075841024 controls=1 inactive=1 before=3280 after=3280
+HMINPUT PASS index=6 pass=0 case=payload_write
+HMINPUT RUN index=7 pass=0 case=after_write_absent fixture=absent present=0 length=0 generation=8 entry=4294967296 root=1077084160 before=3280 during=3248 owned=32
+HMINPUT READBACK index=7 base=1 extension=1 zero_tail=1 source_detached=1
+HMPROC CALL index=7 ordinal=1 pc=4294967332 version=1 operation=1 arg1=34359738369 arg2=4296015960 arg3=0
+HMPROC RESULT index=7 ordinal=1 status=0 bytes=0
+HMPROC CALL index=7 ordinal=2 pc=4294967360 version=1 operation=1 arg1=34359738369 arg2=4294971392 arg3=1
+HMPROC OUTPUT index=7 ordinal=2 length=1 hex=0a
+HMPROC RESULT index=7 ordinal=2 status=0 bytes=1
+HMPROC CALL index=7 ordinal=3 pc=4294967388 version=1 operation=2 arg1=10 arg2=0 arg3=0
+HMINPUT STOP index=7 reason=exit code=10 calls=3 written=1 esr=1442840576 far=0 elr=4294967388 spsr=1614807872 irqs=0
+HMINPUT RESTORE index=7 root=1076277248 vbar=1075841024 controls=1 inactive=1 before=3280 after=3280
+HMINPUT PASS index=7 pass=0 case=after_write_absent
+HMINPUT RUN index=8 pass=0 case=payload_execute fixture=payload_execute present=1 length=4 generation=9 entry=4294967296 root=1077084160 before=3280 during=3248 owned=32
+HMINPUT READBACK index=8 base=1 extension=1 zero_tail=1 source_detached=1
+HMINPUT STOP index=8 reason=fault code=0 calls=0 written=0 esr=2181038095 far=4296015960 elr=4296015960 spsr=4196160 irqs=0
+HMINPUT RESTORE index=8 root=1076277248 vbar=1075841024 controls=1 inactive=1 before=3280 after=3280
+HMINPUT PASS index=8 pass=0 case=payload_execute
+HMINPUT RUN index=9 pass=0 case=after_execute_absent fixture=absent present=0 length=0 generation=10 entry=4294967296 root=1077084160 before=3280 during=3248 owned=32
+HMINPUT READBACK index=9 base=1 extension=1 zero_tail=1 source_detached=1
+HMPROC CALL index=9 ordinal=1 pc=4294967332 version=1 operation=1 arg1=42949672961 arg2=4296015960 arg3=0
+HMPROC RESULT index=9 ordinal=1 status=0 bytes=0
+HMPROC CALL index=9 ordinal=2 pc=4294967360 version=1 operation=1 arg1=42949672961 arg2=4294971392 arg3=1
+HMPROC OUTPUT index=9 ordinal=2 length=1 hex=0a
+HMPROC RESULT index=9 ordinal=2 status=0 bytes=1
+HMPROC CALL index=9 ordinal=3 pc=4294967388 version=1 operation=2 arg1=10 arg2=0 arg3=0
+HMINPUT STOP index=9 reason=exit code=10 calls=3 written=1 esr=1442840576 far=0 elr=4294967388 spsr=1614807872 irqs=0
+HMINPUT RESTORE index=9 root=1076277248 vbar=1075841024 controls=1 inactive=1 before=3280 after=3280
+HMINPUT PASS index=9 pass=0 case=after_execute_absent
+HMINPUT RUN index=10 pass=0 case=input_loop fixture=input_loop present=1 length=1 generation=11 entry=4294967296 root=1077084160 before=3280 during=3248 owned=32
+HMINPUT READBACK index=10 base=1 extension=1 zero_tail=1 source_detached=1
+HMINPUT STOP index=10 reason=deadline code=0 calls=0 written=0 esr=0 far=0 elr=4294967448 spsr=4195136 irqs=1
+HMINPUT RESTORE index=10 root=1076277248 vbar=1075841024 controls=1 inactive=1 before=3280 after=3280
+HMINPUT PASS index=10 pass=0 case=input_loop
+HMINPUT RUN index=11 pass=0 case=after_loop_absent fixture=absent present=0 length=0 generation=12 entry=4294967296 root=1077084160 before=3280 during=3248 owned=32
+HMINPUT READBACK index=11 base=1 extension=1 zero_tail=1 source_detached=1
+HMPROC CALL index=11 ordinal=1 pc=4294967332 version=1 operation=1 arg1=51539607553 arg2=4296015960 arg3=0
+HMPROC RESULT index=11 ordinal=1 status=0 bytes=0
+HMPROC CALL index=11 ordinal=2 pc=4294967360 version=1 operation=1 arg1=51539607553 arg2=4294971392 arg3=1
+HMPROC OUTPUT index=11 ordinal=2 length=1 hex=0a
+HMPROC RESULT index=11 ordinal=2 status=0 bytes=1
+HMPROC CALL index=11 ordinal=3 pc=4294967388 version=1 operation=2 arg1=10 arg2=0 arg3=0
+HMINPUT STOP index=11 reason=exit code=10 calls=3 written=1 esr=1442840576 far=0 elr=4294967388 spsr=1614807872 irqs=0
+HMINPUT RESTORE index=11 root=1076277248 vbar=1075841024 controls=1 inactive=1 before=3280 after=3280
+HMINPUT PASS index=11 pass=0 case=after_loop_absent
+HMINPUT RUN index=12 pass=1 case=absent fixture=absent present=0 length=0 generation=13 entry=4294967296 root=1077084160 before=3280 during=3248 owned=32
+HMINPUT READBACK index=12 base=1 extension=1 zero_tail=1 source_detached=1
+HMPROC CALL index=12 ordinal=1 pc=4294967332 version=1 operation=1 arg1=55834574849 arg2=4296015960 arg3=0
+HMPROC RESULT index=12 ordinal=1 status=0 bytes=0
+HMPROC CALL index=12 ordinal=2 pc=4294967360 version=1 operation=1 arg1=55834574849 arg2=4294971392 arg3=1
+HMPROC OUTPUT index=12 ordinal=2 length=1 hex=0a
+HMPROC RESULT index=12 ordinal=2 status=0 bytes=1
+HMPROC CALL index=12 ordinal=3 pc=4294967388 version=1 operation=2 arg1=10 arg2=0 arg3=0
+HMINPUT STOP index=12 reason=exit code=10 calls=3 written=1 esr=1442840576 far=0 elr=4294967388 spsr=1614807872 irqs=0
+HMINPUT RESTORE index=12 root=1076277248 vbar=1075841024 controls=1 inactive=1 before=3280 after=3280
+HMINPUT PASS index=12 pass=1 case=absent
+HMINPUT RUN index=13 pass=1 case=empty fixture=empty present=1 length=0 generation=14 entry=4294967296 root=1077084160 before=3280 during=3248 owned=32
+HMINPUT READBACK index=13 base=1 extension=1 zero_tail=1 source_detached=1
+HMPROC CALL index=13 ordinal=1 pc=4294967332 version=1 operation=1 arg1=60129542145 arg2=4296015960 arg3=0
+HMPROC RESULT index=13 ordinal=1 status=0 bytes=0
+HMPROC CALL index=13 ordinal=2 pc=4294967360 version=1 operation=1 arg1=60129542145 arg2=4294971392 arg3=1
+HMPROC OUTPUT index=13 ordinal=2 length=1 hex=0a
+HMPROC RESULT index=13 ordinal=2 status=0 bytes=1
+HMPROC CALL index=13 ordinal=3 pc=4294967388 version=1 operation=2 arg1=11 arg2=0 arg3=0
+HMINPUT STOP index=13 reason=exit code=11 calls=3 written=1 esr=1442840576 far=0 elr=4294967388 spsr=1614807872 irqs=0
+HMINPUT RESTORE index=13 root=1076277248 vbar=1075841024 controls=1 inactive=1 before=3280 after=3280
+HMINPUT PASS index=13 pass=1 case=empty
+HMINPUT RUN index=14 pass=1 case=one fixture=one present=1 length=1 generation=15 entry=4294967296 root=1077084160 before=3280 during=3248 owned=32
+HMINPUT READBACK index=14 base=1 extension=1 zero_tail=1 source_detached=1
+HMPROC CALL index=14 ordinal=1 pc=4294967332 version=1 operation=1 arg1=64424509441 arg2=4296015960 arg3=1
+HMPROC OUTPUT index=14 ordinal=1 length=1 hex=41
+HMPROC RESULT index=14 ordinal=1 status=0 bytes=1
+HMPROC CALL index=14 ordinal=2 pc=4294967360 version=1 operation=1 arg1=64424509441 arg2=4294971392 arg3=1
+HMPROC OUTPUT index=14 ordinal=2 length=1 hex=0a
+HMPROC RESULT index=14 ordinal=2 status=0 bytes=1
+HMPROC CALL index=14 ordinal=3 pc=4294967388 version=1 operation=2 arg1=12 arg2=0 arg3=0
+HMINPUT STOP index=14 reason=exit code=12 calls=3 written=2 esr=1442840576 far=0 elr=4294967388 spsr=1614807872 irqs=0
+HMINPUT RESTORE index=14 root=1076277248 vbar=1075841024 controls=1 inactive=1 before=3280 after=3280
+HMINPUT PASS index=14 pass=1 case=one
+HMINPUT RUN index=15 pass=1 case=bytes255 fixture=bytes255 present=1 length=255 generation=16 entry=4294967296 root=1077084160 before=3280 during=3248 owned=32
+HMINPUT READBACK index=15 base=1 extension=1 zero_tail=1 source_detached=1
+HMPROC CALL index=15 ordinal=1 pc=4294967332 version=1 operation=1 arg1=68719476737 arg2=4296015960 arg3=255
+HMPROC OUTPUT index=15 ordinal=1 length=255 hex=000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f404142434445464748494a4b4c4d4e4f505152535455565758595a5b5c5d5e5f606162636465666768696a6b6c6d6e6f707172737475767778797a7b7c7d7e7f808182838485868788898a8b8c8d8e8f909192939495969798999a9b9c9d9e9fa0a1a2a3a4a5a6a7a8a9aaabacadaeafb0b1b2b3b4b5b6b7b8b9babbbcbdbebfc0c1c2c3c4c5c6c7c8c9cacbcccdcecfd0d1d2d3d4d5d6d7d8d9dadbdcdddedfe0e1e2e3e4e5e6e7e8e9eaebecedeeeff0f1f2f3f4f5f6f7f8f9fafbfcfdfe
+HMPROC RESULT index=15 ordinal=1 status=0 bytes=255
+HMPROC CALL index=15 ordinal=2 pc=4294967360 version=1 operation=1 arg1=68719476737 arg2=4294971392 arg3=1
+HMPROC OUTPUT index=15 ordinal=2 length=1 hex=0a
+HMPROC RESULT index=15 ordinal=2 status=0 bytes=1
+HMPROC CALL index=15 ordinal=3 pc=4294967388 version=1 operation=2 arg1=12 arg2=0 arg3=0
+HMINPUT STOP index=15 reason=exit code=12 calls=3 written=256 esr=1442840576 far=0 elr=4294967388 spsr=1614807872 irqs=0
+HMINPUT RESTORE index=15 root=1076277248 vbar=1075841024 controls=1 inactive=1 before=3280 after=3280
+HMINPUT PASS index=15 pass=1 case=bytes255
+HMINPUT RUN index=16 pass=1 case=binary256 fixture=binary256 present=1 length=256 generation=17 entry=4294967296 root=1077084160 before=3280 during=3248 owned=32
+HMINPUT READBACK index=16 base=1 extension=1 zero_tail=1 source_detached=1
+HMPROC CALL index=16 ordinal=1 pc=4294967332 version=1 operation=1 arg1=73014444033 arg2=4296015960 arg3=256
+HMPROC OUTPUT index=16 ordinal=1 length=256 hex=000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f404142434445464748494a4b4c4d4e4f505152535455565758595a5b5c5d5e5f606162636465666768696a6b6c6d6e6f707172737475767778797a7b7c7d7e7f808182838485868788898a8b8c8d8e8f909192939495969798999a9b9c9d9e9fa0a1a2a3a4a5a6a7a8a9aaabacadaeafb0b1b2b3b4b5b6b7b8b9babbbcbdbebfc0c1c2c3c4c5c6c7c8c9cacbcccdcecfd0d1d2d3d4d5d6d7d8d9dadbdcdddedfe0e1e2e3e4e5e6e7e8e9eaebecedeeeff0f1f2f3f4f5f6f7f8f9fafbfcfdfeff
+HMPROC RESULT index=16 ordinal=1 status=0 bytes=256
+HMPROC CALL index=16 ordinal=2 pc=4294967360 version=1 operation=1 arg1=73014444033 arg2=4294971392 arg3=1
+HMPROC OUTPUT index=16 ordinal=2 length=1 hex=0a
+HMPROC RESULT index=16 ordinal=2 status=0 bytes=1
+HMPROC CALL index=16 ordinal=3 pc=4294967388 version=1 operation=2 arg1=12 arg2=0 arg3=0
+HMINPUT STOP index=16 reason=exit code=12 calls=3 written=257 esr=1442840576 far=0 elr=4294967388 spsr=1614807872 irqs=0
+HMINPUT RESTORE index=16 root=1076277248 vbar=1075841024 controls=1 inactive=1 before=3280 after=3280
+HMINPUT PASS index=16 pass=1 case=binary256
+HMINPUT RUN index=17 pass=1 case=after_binary_absent fixture=absent present=0 length=0 generation=18 entry=4294967296 root=1077084160 before=3280 during=3248 owned=32
+HMINPUT READBACK index=17 base=1 extension=1 zero_tail=1 source_detached=1
+HMPROC CALL index=17 ordinal=1 pc=4294967332 version=1 operation=1 arg1=77309411329 arg2=4296015960 arg3=0
+HMPROC RESULT index=17 ordinal=1 status=0 bytes=0
+HMPROC CALL index=17 ordinal=2 pc=4294967360 version=1 operation=1 arg1=77309411329 arg2=4294971392 arg3=1
+HMPROC OUTPUT index=17 ordinal=2 length=1 hex=0a
+HMPROC RESULT index=17 ordinal=2 status=0 bytes=1
+HMPROC CALL index=17 ordinal=3 pc=4294967388 version=1 operation=2 arg1=10 arg2=0 arg3=0
+HMINPUT STOP index=17 reason=exit code=10 calls=3 written=1 esr=1442840576 far=0 elr=4294967388 spsr=1614807872 irqs=0
+HMINPUT RESTORE index=17 root=1076277248 vbar=1075841024 controls=1 inactive=1 before=3280 after=3280
+HMINPUT PASS index=17 pass=1 case=after_binary_absent
+HMINPUT RUN index=18 pass=1 case=payload_write fixture=payload_write present=1 length=1 generation=19 entry=4294967296 root=1077084160 before=3280 during=3248 owned=32
+HMINPUT READBACK index=18 base=1 extension=1 zero_tail=1 source_detached=1
+HMINPUT STOP index=18 reason=fault code=0 calls=0 written=0 esr=2449473615 far=4296015960 elr=4294967432 spsr=4195136 irqs=0
+HMINPUT RESTORE index=18 root=1076277248 vbar=1075841024 controls=1 inactive=1 before=3280 after=3280
+HMINPUT PASS index=18 pass=1 case=payload_write
+HMINPUT RUN index=19 pass=1 case=after_write_absent fixture=absent present=0 length=0 generation=20 entry=4294967296 root=1077084160 before=3280 during=3248 owned=32
+HMINPUT READBACK index=19 base=1 extension=1 zero_tail=1 source_detached=1
+HMPROC CALL index=19 ordinal=1 pc=4294967332 version=1 operation=1 arg1=85899345921 arg2=4296015960 arg3=0
+HMPROC RESULT index=19 ordinal=1 status=0 bytes=0
+HMPROC CALL index=19 ordinal=2 pc=4294967360 version=1 operation=1 arg1=85899345921 arg2=4294971392 arg3=1
+HMPROC OUTPUT index=19 ordinal=2 length=1 hex=0a
+HMPROC RESULT index=19 ordinal=2 status=0 bytes=1
+HMPROC CALL index=19 ordinal=3 pc=4294967388 version=1 operation=2 arg1=10 arg2=0 arg3=0
+HMINPUT STOP index=19 reason=exit code=10 calls=3 written=1 esr=1442840576 far=0 elr=4294967388 spsr=1614807872 irqs=0
+HMINPUT RESTORE index=19 root=1076277248 vbar=1075841024 controls=1 inactive=1 before=3280 after=3280
+HMINPUT PASS index=19 pass=1 case=after_write_absent
+HMINPUT RUN index=20 pass=1 case=payload_execute fixture=payload_execute present=1 length=4 generation=21 entry=4294967296 root=1077084160 before=3280 during=3248 owned=32
+HMINPUT READBACK index=20 base=1 extension=1 zero_tail=1 source_detached=1
+HMINPUT STOP index=20 reason=fault code=0 calls=0 written=0 esr=2181038095 far=4296015960 elr=4296015960 spsr=4196160 irqs=0
+HMINPUT RESTORE index=20 root=1076277248 vbar=1075841024 controls=1 inactive=1 before=3280 after=3280
+HMINPUT PASS index=20 pass=1 case=payload_execute
+HMINPUT RUN index=21 pass=1 case=after_execute_absent fixture=absent present=0 length=0 generation=22 entry=4294967296 root=1077084160 before=3280 during=3248 owned=32
+HMINPUT READBACK index=21 base=1 extension=1 zero_tail=1 source_detached=1
+HMPROC CALL index=21 ordinal=1 pc=4294967332 version=1 operation=1 arg1=94489280513 arg2=4296015960 arg3=0
+HMPROC RESULT index=21 ordinal=1 status=0 bytes=0
+HMPROC CALL index=21 ordinal=2 pc=4294967360 version=1 operation=1 arg1=94489280513 arg2=4294971392 arg3=1
+HMPROC OUTPUT index=21 ordinal=2 length=1 hex=0a
+HMPROC RESULT index=21 ordinal=2 status=0 bytes=1
+HMPROC CALL index=21 ordinal=3 pc=4294967388 version=1 operation=2 arg1=10 arg2=0 arg3=0
+HMINPUT STOP index=21 reason=exit code=10 calls=3 written=1 esr=1442840576 far=0 elr=4294967388 spsr=1614807872 irqs=0
+HMINPUT RESTORE index=21 root=1076277248 vbar=1075841024 controls=1 inactive=1 before=3280 after=3280
+HMINPUT PASS index=21 pass=1 case=after_execute_absent
+HMINPUT RUN index=22 pass=1 case=input_loop fixture=input_loop present=1 length=1 generation=23 entry=4294967296 root=1077084160 before=3280 during=3248 owned=32
+HMINPUT READBACK index=22 base=1 extension=1 zero_tail=1 source_detached=1
+HMINPUT STOP index=22 reason=deadline code=0 calls=0 written=0 esr=0 far=0 elr=4294967448 spsr=4195136 irqs=1
+HMINPUT RESTORE index=22 root=1076277248 vbar=1075841024 controls=1 inactive=1 before=3280 after=3280
+HMINPUT PASS index=22 pass=1 case=input_loop
+HMINPUT RUN index=23 pass=1 case=after_loop_absent fixture=absent present=0 length=0 generation=24 entry=4294967296 root=1077084160 before=3280 during=3248 owned=32
+HMINPUT READBACK index=23 base=1 extension=1 zero_tail=1 source_detached=1
+HMPROC CALL index=23 ordinal=1 pc=4294967332 version=1 operation=1 arg1=103079215105 arg2=4296015960 arg3=0
+HMPROC RESULT index=23 ordinal=1 status=0 bytes=0
+HMPROC CALL index=23 ordinal=2 pc=4294967360 version=1 operation=1 arg1=103079215105 arg2=4294971392 arg3=1
+HMPROC OUTPUT index=23 ordinal=2 length=1 hex=0a
+HMPROC RESULT index=23 ordinal=2 status=0 bytes=1
+HMPROC CALL index=23 ordinal=3 pc=4294967388 version=1 operation=2 arg1=10 arg2=0 arg3=0
+HMINPUT STOP index=23 reason=exit code=10 calls=3 written=1 esr=1442840576 far=0 elr=4294967388 spsr=1614807872 irqs=0
+HMINPUT RESTORE index=23 root=1076277248 vbar=1075841024 controls=1 inactive=1 before=3280 after=3280
+HMINPUT PASS index=23 pass=1 case=after_loop_absent
+HMINPUT REJECT phase=after error=length initialized=1 generation=24 before=3280 after=3280
+HMINPUT PREPARE budget=1 exhausted=1 drop=1 generation=27 before=3280 after=3280
+HMINPUT END 24
+HMTEST BEGIN 41
+HMTEST PASS write_protect
+HMTEST PASS nx
+HMTEST PASS user_execute_protect
+HMTEST PASS user_access_protect
+HMTEST PASS wx
+HMTEST PASS stack_guard
+HMTEST PASS null_guard
+HMTEST PASS checked_range
+HMTEST PASS monitor_bounds
+HMTEST PASS cap_authority
+HMTEST PASS cap_limits
+HMTEST PASS cap_lifetime
+HMTEST PASS cap_generation
+HMTEST PASS boot_memory_valid
+HMTEST PASS boot_memory_malformed
+HMTEST PASS cpu_topology_valid
+HMTEST PASS cpu_topology_malformed
+HMTEST PASS cpu_topology_live
+HMTEST PASS elf_valid
+HMTEST PASS elf_malformed
+HMTEST PASS frame_ranges
+HMTEST PASS frame_boundaries
+HMTEST PASS frame_contract
+HMTEST PASS heap_blocks
+HMTEST PASS heap_values
+HMTEST PASS event_contract
+HMTEST PASS mutex_contract
+HMTEST PASS mutex_lifetime
+HMTEST PASS mutex_workers
+HMTEST PASS thread_contract
+HMTEST PASS thread_limits
+HMTEST PASS thread_core
+HMTEST PASS timer_contract
+HMTEST PASS fault_contract
+HMTEST PASS mapping_contract
+HMTEST PASS mapping_limits
+HMTEST PASS mapping_hardware
+HMTEST PASS cpu_local_state
+HMTEST PASS gic_ownership
+HMTEST PASS secondary_memory
+HMTEST PASS cap_orderings
+HMTEST END 41

@@ -1,0 +1,10 @@
+warning: function `call_newline` is never used
+  --> /workspace/crates/hm-core/fixtures/apps.rs:35:8
+   |
+35 |     fn call_newline(handle: u64) -> Reply;
+   |        ^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: 1 warning emitted
+

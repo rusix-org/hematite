@@ -1,0 +1,5 @@
+[
+  "readelf",
+  "-sW",
+  "/workspace/crates/hm-core/fixtures/process/badopcode.elf"
+]

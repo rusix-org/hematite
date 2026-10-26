@@ -1,0 +1,175 @@
+PASS: safe crate roots, dependency-free lockfile, core SAFETY-comment hygiene
+Scope: structural hygiene only; compile all targets and review core soundness separately
+aarch64-monitor compiled; no guest executed
+aarch64-boot-test compiled; no guest executed
+aarch64-fault-test compiled; no guest executed
+aarch64-nested-test compiled; no guest executed
+aarch64-thread-overflow-test compiled; no guest executed
+aarch64-preemption-test compiled; no guest executed
+aarch64-preemption-boundary-test compiled; no guest executed
+aarch64-preemption-no-timer-test compiled; no guest executed
+aarch64-preemption-overflow-test compiled; no guest executed
+aarch64-wait-all-blocked-test compiled; no guest executed
+aarch64-space-test compiled; no guest executed
+aarch64-process-test compiled; no guest executed
+aarch64-startup-input-test compiled; no guest executed
+aarch64-secondary-test compiled; no guest executed
+aarch64-secondary-stale-test compiled; no guest executed
+aarch64-secondary-off-return-test compiled; no guest executed
+aarch64-smp-test compiled; no guest executed
+aarch64-smp-no-peer-timer-test compiled; no guest executed
+aarch64-smp-peer-overflow-test compiled; no guest executed
+aarch64-smp-all-blocked-test compiled; no guest executed
+x86_64-monitor compiled; no guest executed
+x86_64-boot-test compiled; no guest executed
+    Finished `release` profile [optimized] target(s) in 0.01s
+{
+  "passed": true,
+  "probes": {
+    "library": {
+      "passed": true,
+      "returncode": 0
+    },
+    "valid_prepare_run": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "valid_input_released": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "valid_startup_input_released": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "startup_input_wrong_type": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0308"
+    },
+    "startup_input_forge": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0451"
+    },
+    "private_startup_observer": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0624"
+    },
+    "startup_pool_lifetime": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0515"
+    },
+    "valid_forget_inactive": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "valid_owned_report": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "private_terminal_constructor": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0624"
+    },
+    "private_output_mode": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0616"
+    },
+    "private_constructor": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0624"
+    },
+    "private_context": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0616"
+    },
+    "private_space": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0616"
+    },
+    "private_session": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0616"
+    },
+    "private_issuer": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0616"
+    },
+    "process_clone": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "executor_clone": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "process_send": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "process_sync": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "executor_send": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "executor_sync": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "process_consumed_once": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0382"
+    },
+    "no_callback": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0061"
+    },
+    "pool_lifetime": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0515"
+    },
+    "forge_process": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0451"
+    }
+  },
+  "scope": "actual native-process safe-client authority and lifetime boundaries; execution tested separately"
+}
+{
+  "passed": true,
+  "archive": {
+    "bytes": 114176,
+    "sha256": "8585f4de0f690effd2074a449dd46a17954555c55953d984a93b3284f1cc5798",
+    "entries": 9,
+    "files": 8
+  },
+  "scope": "kernel-independent startup probes, GNU exact archive listing/extraction; no execution"
+}

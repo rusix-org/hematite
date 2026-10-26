@@ -1,0 +1,58 @@
+{
+  "passed": true,
+  "checks": {
+    "launched": true,
+    "within_deadline": true,
+    "no_fatal_serial": true,
+    "no_other_scheduling_report": true,
+    "coordinator_hvc_presence": true,
+    "exact_peer_hvc_count": true,
+    "only_admitted_exception_events": true,
+    "trace_complete_and_bounded": true,
+    "exact_terminal_cpu": true,
+    "terminal_semihost_exit": true,
+    "no_unexpected_peer_fault_or_irq": true,
+    "expected_exit": true,
+    "topology_rejection_inventory": true,
+    "no_success_or_baseline": true,
+    "strict_serial_records": true,
+    "artifacts_present_and_bounded": true,
+    "symbols_extracted": true
+  },
+  "errors": [],
+  "observed_records": [
+    "HMSMP REJECT TOPOLOGY"
+  ],
+  "sessions": [],
+  "hvc_counts": {
+    "0": 0,
+    "1": 0
+  },
+  "post_shutdown": null,
+  "scope": "secondary CPU lifecycle and post-shutdown regression; no SMP scheduling claim",
+  "started_utc": "2026-10-26T20:38:17.286462+00:00",
+  "timeout_seconds": 20,
+  "returncode": 1,
+  "timed_out": false,
+  "launch_error": null,
+  "elapsed_seconds": 0.06424784800037742,
+  "artifacts": {
+    "serial": {
+      "exists": true,
+      "bytes": 199,
+      "sha256": "3755d8f75ec16e53d842df9f011adeefdc603e72c6e2bd21118a7c8f3b4d6583",
+      "within_size_limit": true
+    },
+    "exceptions": {
+      "exists": true,
+      "bytes": 104,
+      "sha256": "c5d6d91e51d1c71900522372f492ab7961dc7f18545b52a43038f5e134ba302a",
+      "within_size_limit": true
+    }
+  },
+  "symbols": {
+    "arm_secondary_root": 1076125696,
+    "__secondary_stack_guard": 1076559872,
+    "__secondary_stack_top": 1076629504
+  }
+}

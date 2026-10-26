@@ -1,0 +1,18 @@
+{
+  "library": "/workspace/target/x86_64/boot-test/x86_64-unknown-none/release/libhm_kernel.rlib",
+  "sha256": "2721f0e6754d22f7d2ddb3f8022ce1d036f3a0e794523ba9c1965fdaa794b47d",
+  "target": "x86_64-unknown-none",
+  "expected_probes": [
+    "valid_parse_use",
+    "valid_segment_copy",
+    "valid_bytes_after_image_drop",
+    "forge_image",
+    "forge_segment",
+    "private_image_entry",
+    "private_segment_permissions",
+    "image_outlive_input",
+    "mutate_input_while_image_live",
+    "file_bytes_outlive_input",
+    "mutate_file_bytes"
+  ]
+}

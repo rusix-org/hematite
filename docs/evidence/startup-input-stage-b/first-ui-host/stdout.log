@@ -1,0 +1,13 @@
+
+running 8 tests
+test absent_dispatch ... ok
+test core_errors_are_reported ... ok
+test empty_dispatch ... ok
+test empty_or_whitespace_path_rejected ... ok
+test maximum_payload ... ok
+test oversize_rejected ... ok
+test spaces_preserved ... ok
+test unsupported_input ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

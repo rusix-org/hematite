@@ -1,0 +1,16 @@
+{
+  "returncode": 0,
+  "error": null,
+  "values": {
+    "arm_root": [
+      1076166656
+    ],
+    "__text_start": [
+      1075838976
+    ],
+    "__bss_start": [
+      1076166656
+    ]
+  },
+  "passed": true
+}

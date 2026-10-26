@@ -1,0 +1,19 @@
+[
+  "rustc",
+  "--edition=2024",
+  "--crate-type=lib",
+  "--target",
+  "aarch64-unknown-none",
+  "-C",
+  "panic=abort",
+  "-C",
+  "opt-level=3",
+  "-C",
+  "codegen-units=1",
+  "-C",
+  "lto=yes",
+  "-C",
+  "relocation-model=static",
+  "--emit=llvm-ir=/workspace/target/evidence/20261026T203629-555187113-aarch64/thread-types/large-frame.ll,asm=/workspace/target/evidence/20261026T203629-555187113-aarch64/thread-types/large-frame.s",
+  "/workspace/tools/fixtures/thread-large-frame.rs"
+]
