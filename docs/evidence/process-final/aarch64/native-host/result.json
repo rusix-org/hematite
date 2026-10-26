@@ -1,0 +1,61 @@
+{
+  "passed": true,
+  "checks": {
+    "exit_success": true,
+    "within_deadline": true,
+    "launched": true,
+    "complete_report": true,
+    "bounded_logs": true
+  },
+  "execution": {
+    "started_utc": "2026-10-26T18:52:50.680089+00:00",
+    "timeout_seconds": 60,
+    "returncode": 0,
+    "timed_out": false,
+    "launch_error": null,
+    "elapsed_seconds": 0.06449992198031396
+  },
+  "artifacts": {
+    "stdout": {
+      "bytes": 791,
+      "within_limit": true,
+      "sha256": "6d40b075a4026129b0bc5d1436708952ed6f174a19f90906b47f15258aee2d8a"
+    },
+    "stderr": {
+      "bytes": 191,
+      "within_limit": true,
+      "sha256": "3a3ad87a787b38931a1a209cbc363541ee151d1a4f641db81a0bd189c9bbdd39"
+    }
+  },
+  "report": {
+    "passed": true,
+    "errors": [],
+    "expected_cases": [
+      "byte_budget_exhaustion_is_independent_of_calls",
+      "failed_copy_never_emits_or_charges",
+      "generations_retire_without_wrap",
+      "invalid_exit_is_recoverable_but_success_revokes_execution",
+      "invalid_storm_exhausts_calls_and_stops_effects",
+      "last_call_can_exit_and_terminal_result_is_stable",
+      "stale_foreign_absent_and_wrong_slot_handles",
+      "startup_bytes_and_scope",
+      "validation_precedence_has_no_effects",
+      "zero_and_maximum_write_are_exact"
+    ],
+    "observed_lines": [
+      "running 10 tests",
+      "test native::tests::byte_budget_exhaustion_is_independent_of_calls ... ok",
+      "test native::tests::failed_copy_never_emits_or_charges ... ok",
+      "test native::tests::generations_retire_without_wrap ... ok",
+      "test native::tests::invalid_exit_is_recoverable_but_success_revokes_execution ... ok",
+      "test native::tests::invalid_storm_exhausts_calls_and_stops_effects ... ok",
+      "test native::tests::last_call_can_exit_and_terminal_result_is_stable ... ok",
+      "test native::tests::stale_foreign_absent_and_wrong_slot_handles ... ok",
+      "test native::tests::startup_bytes_and_scope ... ok",
+      "test native::tests::validation_precedence_has_no_effects ... ok",
+      "test native::tests::zero_and_maximum_write_are_exact ... ok",
+      "test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s"
+    ]
+  },
+  "scope": "actual safe native policy host tests; no user-memory adapter or EL0 execution evidence"
+}

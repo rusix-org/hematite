@@ -1,0 +1,5 @@
+[
+  "aarch64-linux-gnu-objdump",
+  "-d",
+  "/workspace/target/evidence/20261026T185151-632749004-aarch64/process-fixtures/maxwrite.elf"
+]

@@ -1,0 +1,5 @@
+[
+  "llvm-objdump",
+  "-d",
+  "/workspace/docs/evidence/process-fixtures-second/hello/hello.elf"
+]

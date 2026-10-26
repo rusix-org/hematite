@@ -1,0 +1,1736 @@
+{
+  "version": 1,
+  "kernel_text": 1075838976,
+  "kernel_data": 1077469184,
+  "fixtures": {
+    "hello": {
+      "entry": 4294967296,
+      "pages": 5,
+      "symbols": {
+        "data": 4294979584,
+        "message": 4294975488,
+        "native_start": 4294967296,
+        "write_svc": 4294967320,
+        "exit_svc": 4294967348,
+        "loop_start": 4294967652,
+        "loop_end": 4294967656,
+        "register_svc_1": 4294969076,
+        "register_svc_2": 4294970468,
+        "register_svc_3": 4294971860,
+        "kernel_text": 1075838976,
+        "kernel_data": 1077469184
+      },
+      "segments": [
+        {
+          "flags": 5,
+          "offset": 4096,
+          "va": 4294967296,
+          "filesz": 5688,
+          "memsz": 5688,
+          "align": 4096,
+          "start": 4294967296,
+          "end": 4294975488
+        },
+        {
+          "flags": 4,
+          "offset": 12288,
+          "va": 4294975488,
+          "filesz": 96,
+          "memsz": 96,
+          "align": 4096,
+          "start": 4294975488,
+          "end": 4294979584
+        },
+        {
+          "flags": 6,
+          "offset": 16384,
+          "va": 4294979584,
+          "filesz": 256,
+          "memsz": 4352,
+          "align": 4096,
+          "start": 4294979584,
+          "end": 4294987776
+        }
+      ],
+      "file": "hello.elf",
+      "sha256": "f31cf8f926fa84010d66e89e2e41166e0a3bba6b2d84d3ab7c000f4dd14a6b0a"
+    },
+    "badptr_null": {
+      "entry": 4294967296,
+      "pages": 5,
+      "symbols": {
+        "data": 4294979584,
+        "message": 4294975488,
+        "native_start": 4294967296,
+        "write_svc": 4294967320,
+        "exit_svc": 4294967348,
+        "loop_start": 4294967652,
+        "loop_end": 4294967656,
+        "register_svc_1": 4294969076,
+        "register_svc_2": 4294970468,
+        "register_svc_3": 4294971860,
+        "kernel_text": 1075838976,
+        "kernel_data": 1077469184
+      },
+      "segments": [
+        {
+          "flags": 5,
+          "offset": 4096,
+          "va": 4294967296,
+          "filesz": 5488,
+          "memsz": 5488,
+          "align": 4096,
+          "start": 4294967296,
+          "end": 4294975488
+        },
+        {
+          "flags": 4,
+          "offset": 12288,
+          "va": 4294975488,
+          "filesz": 96,
+          "memsz": 96,
+          "align": 4096,
+          "start": 4294975488,
+          "end": 4294979584
+        },
+        {
+          "flags": 6,
+          "offset": 16384,
+          "va": 4294979584,
+          "filesz": 256,
+          "memsz": 4352,
+          "align": 4096,
+          "start": 4294979584,
+          "end": 4294987776
+        }
+      ],
+      "file": "badptr_null.elf",
+      "sha256": "1dcd59fa2efa9e8ca980722565300c9cb4a13e2c1d88d4976d170b97434aa234"
+    },
+    "badptr_overflow": {
+      "entry": 4294967296,
+      "pages": 5,
+      "symbols": {
+        "data": 4294979584,
+        "message": 4294975488,
+        "native_start": 4294967296,
+        "write_svc": 4294967320,
+        "exit_svc": 4294967348,
+        "loop_start": 4294967652,
+        "loop_end": 4294967656,
+        "register_svc_1": 4294969076,
+        "register_svc_2": 4294970468,
+        "register_svc_3": 4294971860,
+        "kernel_text": 1075838976,
+        "kernel_data": 1077469184
+      },
+      "segments": [
+        {
+          "flags": 5,
+          "offset": 4096,
+          "va": 4294967296,
+          "filesz": 5488,
+          "memsz": 5488,
+          "align": 4096,
+          "start": 4294967296,
+          "end": 4294975488
+        },
+        {
+          "flags": 4,
+          "offset": 12288,
+          "va": 4294975488,
+          "filesz": 96,
+          "memsz": 96,
+          "align": 4096,
+          "start": 4294975488,
+          "end": 4294979584
+        },
+        {
+          "flags": 6,
+          "offset": 16384,
+          "va": 4294979584,
+          "filesz": 256,
+          "memsz": 4352,
+          "align": 4096,
+          "start": 4294979584,
+          "end": 4294987776
+        }
+      ],
+      "file": "badptr_overflow.elf",
+      "sha256": "7c9cf8b7198ecdffa15ba7d8f7f1c525cb7360fc8c3df165916b27776835b51e"
+    },
+    "badptr_crossing": {
+      "entry": 4294967296,
+      "pages": 5,
+      "symbols": {
+        "data": 4294979584,
+        "message": 4294975488,
+        "native_start": 4294967296,
+        "write_svc": 4294967320,
+        "exit_svc": 4294967348,
+        "loop_start": 4294967652,
+        "loop_end": 4294967656,
+        "register_svc_1": 4294969076,
+        "register_svc_2": 4294970468,
+        "register_svc_3": 4294971860,
+        "kernel_text": 1075838976,
+        "kernel_data": 1077469184
+      },
+      "segments": [
+        {
+          "flags": 5,
+          "offset": 4096,
+          "va": 4294967296,
+          "filesz": 5492,
+          "memsz": 5492,
+          "align": 4096,
+          "start": 4294967296,
+          "end": 4294975488
+        },
+        {
+          "flags": 4,
+          "offset": 12288,
+          "va": 4294975488,
+          "filesz": 96,
+          "memsz": 96,
+          "align": 4096,
+          "start": 4294975488,
+          "end": 4294979584
+        },
+        {
+          "flags": 6,
+          "offset": 16384,
+          "va": 4294979584,
+          "filesz": 256,
+          "memsz": 4352,
+          "align": 4096,
+          "start": 4294979584,
+          "end": 4294987776
+        }
+      ],
+      "file": "badptr_crossing.elf",
+      "sha256": "fbfa29431019b9b50b7a371a9b5c692cc6c1116535be51a1dff07f9bfff39358"
+    },
+    "oversize": {
+      "entry": 4294967296,
+      "pages": 5,
+      "symbols": {
+        "data": 4294979584,
+        "message": 4294975488,
+        "native_start": 4294967296,
+        "write_svc": 4294967320,
+        "exit_svc": 4294967348,
+        "loop_start": 4294967652,
+        "loop_end": 4294967656,
+        "register_svc_1": 4294969076,
+        "register_svc_2": 4294970468,
+        "register_svc_3": 4294971860,
+        "kernel_text": 1075838976,
+        "kernel_data": 1077469184
+      },
+      "segments": [
+        {
+          "flags": 5,
+          "offset": 4096,
+          "va": 4294967296,
+          "filesz": 5492,
+          "memsz": 5492,
+          "align": 4096,
+          "start": 4294967296,
+          "end": 4294975488
+        },
+        {
+          "flags": 4,
+          "offset": 12288,
+          "va": 4294975488,
+          "filesz": 96,
+          "memsz": 96,
+          "align": 4096,
+          "start": 4294975488,
+          "end": 4294979584
+        },
+        {
+          "flags": 6,
+          "offset": 16384,
+          "va": 4294979584,
+          "filesz": 256,
+          "memsz": 4352,
+          "align": 4096,
+          "start": 4294979584,
+          "end": 4294987776
+        }
+      ],
+      "file": "oversize.elf",
+      "sha256": "9beccbe4aa4d056b8132cdcb15b63dd31ab61bbeba8b2f5182bfa32f2d4f9b33"
+    },
+    "badhandle": {
+      "entry": 4294967296,
+      "pages": 5,
+      "symbols": {
+        "data": 4294979584,
+        "message": 4294975488,
+        "native_start": 4294967296,
+        "write_svc": 4294967320,
+        "exit_svc": 4294967348,
+        "loop_start": 4294967652,
+        "loop_end": 4294967656,
+        "register_svc_1": 4294969076,
+        "register_svc_2": 4294970468,
+        "register_svc_3": 4294971860,
+        "kernel_text": 1075838976,
+        "kernel_data": 1077469184
+      },
+      "segments": [
+        {
+          "flags": 5,
+          "offset": 4096,
+          "va": 4294967296,
+          "filesz": 5492,
+          "memsz": 5492,
+          "align": 4096,
+          "start": 4294967296,
+          "end": 4294975488
+        },
+        {
+          "flags": 4,
+          "offset": 12288,
+          "va": 4294975488,
+          "filesz": 96,
+          "memsz": 96,
+          "align": 4096,
+          "start": 4294975488,
+          "end": 4294979584
+        },
+        {
+          "flags": 6,
+          "offset": 16384,
+          "va": 4294979584,
+          "filesz": 256,
+          "memsz": 4352,
+          "align": 4096,
+          "start": 4294979584,
+          "end": 4294987776
+        }
+      ],
+      "file": "badhandle.elf",
+      "sha256": "7cc7501add8ef2c0fef271dcf60d22eec17061b9fe75a2ed70c6c78990c99f95"
+    },
+    "badversion": {
+      "entry": 4294967296,
+      "pages": 5,
+      "symbols": {
+        "data": 4294979584,
+        "message": 4294975488,
+        "native_start": 4294967296,
+        "write_svc": 4294967320,
+        "exit_svc": 4294967348,
+        "loop_start": 4294967652,
+        "loop_end": 4294967656,
+        "register_svc_1": 4294969076,
+        "register_svc_2": 4294970468,
+        "register_svc_3": 4294971860,
+        "kernel_text": 1075838976,
+        "kernel_data": 1077469184
+      },
+      "segments": [
+        {
+          "flags": 5,
+          "offset": 4096,
+          "va": 4294967296,
+          "filesz": 5488,
+          "memsz": 5488,
+          "align": 4096,
+          "start": 4294967296,
+          "end": 4294975488
+        },
+        {
+          "flags": 4,
+          "offset": 12288,
+          "va": 4294975488,
+          "filesz": 96,
+          "memsz": 96,
+          "align": 4096,
+          "start": 4294975488,
+          "end": 4294979584
+        },
+        {
+          "flags": 6,
+          "offset": 16384,
+          "va": 4294979584,
+          "filesz": 256,
+          "memsz": 4352,
+          "align": 4096,
+          "start": 4294979584,
+          "end": 4294987776
+        }
+      ],
+      "file": "badversion.elf",
+      "sha256": "659598a1635d02dac0e25417cbe1f934c2739a098cce3617bd15bd2fd341b949"
+    },
+    "badopcode": {
+      "entry": 4294967296,
+      "pages": 5,
+      "symbols": {
+        "data": 4294979584,
+        "message": 4294975488,
+        "native_start": 4294967296,
+        "write_svc": 4294967320,
+        "exit_svc": 4294967348,
+        "loop_start": 4294967652,
+        "loop_end": 4294967656,
+        "register_svc_1": 4294969076,
+        "register_svc_2": 4294970468,
+        "register_svc_3": 4294971860,
+        "kernel_text": 1075838976,
+        "kernel_data": 1077469184
+      },
+      "segments": [
+        {
+          "flags": 5,
+          "offset": 4096,
+          "va": 4294967296,
+          "filesz": 5488,
+          "memsz": 5488,
+          "align": 4096,
+          "start": 4294967296,
+          "end": 4294975488
+        },
+        {
+          "flags": 4,
+          "offset": 12288,
+          "va": 4294975488,
+          "filesz": 96,
+          "memsz": 96,
+          "align": 4096,
+          "start": 4294975488,
+          "end": 4294979584
+        },
+        {
+          "flags": 6,
+          "offset": 16384,
+          "va": 4294979584,
+          "filesz": 256,
+          "memsz": 4352,
+          "align": 4096,
+          "start": 4294979584,
+          "end": 4294987776
+        }
+      ],
+      "file": "badopcode.elf",
+      "sha256": "6458a48ebf20b05dd0f5c3352d792bb75dac9b979d7954b9ed1d636e0b1a8bf1"
+    },
+    "rxwrite": {
+      "entry": 4294967296,
+      "pages": 5,
+      "symbols": {
+        "data": 4294979584,
+        "message": 4294975488,
+        "native_start": 4294967296,
+        "write_svc": 4294967320,
+        "exit_svc": 4294967348,
+        "loop_start": 4294967652,
+        "loop_end": 4294967656,
+        "fault": 4294967500,
+        "register_svc_1": 4294969076,
+        "register_svc_2": 4294970468,
+        "register_svc_3": 4294971860,
+        "kernel_text": 1075838976,
+        "kernel_data": 1077469184
+      },
+      "segments": [
+        {
+          "flags": 5,
+          "offset": 4096,
+          "va": 4294967296,
+          "filesz": 5444,
+          "memsz": 5444,
+          "align": 4096,
+          "start": 4294967296,
+          "end": 4294975488
+        },
+        {
+          "flags": 4,
+          "offset": 12288,
+          "va": 4294975488,
+          "filesz": 96,
+          "memsz": 96,
+          "align": 4096,
+          "start": 4294975488,
+          "end": 4294979584
+        },
+        {
+          "flags": 6,
+          "offset": 16384,
+          "va": 4294979584,
+          "filesz": 256,
+          "memsz": 4352,
+          "align": 4096,
+          "start": 4294979584,
+          "end": 4294987776
+        }
+      ],
+      "file": "rxwrite.elf",
+      "sha256": "569b6c21b5ac36f726b14bd6720534920e9219df25017b6bca326742502c758d"
+    },
+    "rwexecute": {
+      "entry": 4294967296,
+      "pages": 5,
+      "symbols": {
+        "data": 4294979584,
+        "message": 4294975488,
+        "native_start": 4294967296,
+        "write_svc": 4294967320,
+        "exit_svc": 4294967348,
+        "loop_start": 4294967652,
+        "loop_end": 4294967656,
+        "fault": 4294967512,
+        "register_svc_1": 4294969076,
+        "register_svc_2": 4294970468,
+        "register_svc_3": 4294971860,
+        "kernel_text": 1075838976,
+        "kernel_data": 1077469184
+      },
+      "segments": [
+        {
+          "flags": 5,
+          "offset": 4096,
+          "va": 4294967296,
+          "filesz": 5444,
+          "memsz": 5444,
+          "align": 4096,
+          "start": 4294967296,
+          "end": 4294975488
+        },
+        {
+          "flags": 4,
+          "offset": 12288,
+          "va": 4294975488,
+          "filesz": 96,
+          "memsz": 96,
+          "align": 4096,
+          "start": 4294975488,
+          "end": 4294979584
+        },
+        {
+          "flags": 6,
+          "offset": 16384,
+          "va": 4294979584,
+          "filesz": 256,
+          "memsz": 4352,
+          "align": 4096,
+          "start": 4294979584,
+          "end": 4294987776
+        }
+      ],
+      "file": "rwexecute.elf",
+      "sha256": "5e600f7be4b186329e91a5713d44721a02645ab1346e44e373aae87245636725"
+    },
+    "stackexecute": {
+      "entry": 4294967296,
+      "pages": 5,
+      "symbols": {
+        "data": 4294979584,
+        "message": 4294975488,
+        "native_start": 4294967296,
+        "write_svc": 4294967320,
+        "exit_svc": 4294967348,
+        "loop_start": 4294967652,
+        "loop_end": 4294967656,
+        "fault": 4294967524,
+        "register_svc_1": 4294969076,
+        "register_svc_2": 4294970468,
+        "register_svc_3": 4294971860,
+        "kernel_text": 1075838976,
+        "kernel_data": 1077469184
+      },
+      "segments": [
+        {
+          "flags": 5,
+          "offset": 4096,
+          "va": 4294967296,
+          "filesz": 5444,
+          "memsz": 5444,
+          "align": 4096,
+          "start": 4294967296,
+          "end": 4294975488
+        },
+        {
+          "flags": 4,
+          "offset": 12288,
+          "va": 4294975488,
+          "filesz": 96,
+          "memsz": 96,
+          "align": 4096,
+          "start": 4294975488,
+          "end": 4294979584
+        },
+        {
+          "flags": 6,
+          "offset": 16384,
+          "va": 4294979584,
+          "filesz": 256,
+          "memsz": 4352,
+          "align": 4096,
+          "start": 4294979584,
+          "end": 4294987776
+        }
+      ],
+      "file": "stackexecute.elf",
+      "sha256": "b2f69935d4bfb5522b916f732f8d5f2f1efc41862b16e5e7f027af869d95032a"
+    },
+    "kernelread": {
+      "entry": 4294967296,
+      "pages": 5,
+      "symbols": {
+        "data": 4294979584,
+        "message": 4294975488,
+        "native_start": 4294967296,
+        "write_svc": 4294967320,
+        "exit_svc": 4294967348,
+        "loop_start": 4294967652,
+        "loop_end": 4294967656,
+        "fault": 4294967536,
+        "register_svc_1": 4294969076,
+        "register_svc_2": 4294970468,
+        "register_svc_3": 4294971860,
+        "kernel_text": 1075838976,
+        "kernel_data": 1077469184
+      },
+      "segments": [
+        {
+          "flags": 5,
+          "offset": 4096,
+          "va": 4294967296,
+          "filesz": 5444,
+          "memsz": 5444,
+          "align": 4096,
+          "start": 4294967296,
+          "end": 4294975488
+        },
+        {
+          "flags": 4,
+          "offset": 12288,
+          "va": 4294975488,
+          "filesz": 96,
+          "memsz": 96,
+          "align": 4096,
+          "start": 4294975488,
+          "end": 4294979584
+        },
+        {
+          "flags": 6,
+          "offset": 16384,
+          "va": 4294979584,
+          "filesz": 256,
+          "memsz": 4352,
+          "align": 4096,
+          "start": 4294979584,
+          "end": 4294987776
+        }
+      ],
+      "file": "kernelread.elf",
+      "sha256": "a1da48b0da4322a226f37a7d5a12751ef927c5d9315bcfefc6c200a802ee2a3f"
+    },
+    "kernelwrite": {
+      "entry": 4294967296,
+      "pages": 5,
+      "symbols": {
+        "data": 4294979584,
+        "message": 4294975488,
+        "native_start": 4294967296,
+        "write_svc": 4294967320,
+        "exit_svc": 4294967348,
+        "loop_start": 4294967652,
+        "loop_end": 4294967656,
+        "fault": 4294967548,
+        "register_svc_1": 4294969076,
+        "register_svc_2": 4294970468,
+        "register_svc_3": 4294971860,
+        "kernel_text": 1075838976,
+        "kernel_data": 1077469184
+      },
+      "segments": [
+        {
+          "flags": 5,
+          "offset": 4096,
+          "va": 4294967296,
+          "filesz": 5444,
+          "memsz": 5444,
+          "align": 4096,
+          "start": 4294967296,
+          "end": 4294975488
+        },
+        {
+          "flags": 4,
+          "offset": 12288,
+          "va": 4294975488,
+          "filesz": 96,
+          "memsz": 96,
+          "align": 4096,
+          "start": 4294975488,
+          "end": 4294979584
+        },
+        {
+          "flags": 6,
+          "offset": 16384,
+          "va": 4294979584,
+          "filesz": 256,
+          "memsz": 4352,
+          "align": 4096,
+          "start": 4294979584,
+          "end": 4294987776
+        }
+      ],
+      "file": "kernelwrite.elf",
+      "sha256": "fb9d018b2c5c284a32090926b6d1c06ec52c4b0dec46098dfd909f0e9d994c77"
+    },
+    "uartread": {
+      "entry": 4294967296,
+      "pages": 5,
+      "symbols": {
+        "data": 4294979584,
+        "message": 4294975488,
+        "native_start": 4294967296,
+        "write_svc": 4294967320,
+        "exit_svc": 4294967348,
+        "loop_start": 4294967652,
+        "loop_end": 4294967656,
+        "fault": 4294967560,
+        "register_svc_1": 4294969076,
+        "register_svc_2": 4294970468,
+        "register_svc_3": 4294971860,
+        "kernel_text": 1075838976,
+        "kernel_data": 1077469184
+      },
+      "segments": [
+        {
+          "flags": 5,
+          "offset": 4096,
+          "va": 4294967296,
+          "filesz": 5444,
+          "memsz": 5444,
+          "align": 4096,
+          "start": 4294967296,
+          "end": 4294975488
+        },
+        {
+          "flags": 4,
+          "offset": 12288,
+          "va": 4294975488,
+          "filesz": 96,
+          "memsz": 96,
+          "align": 4096,
+          "start": 4294975488,
+          "end": 4294979584
+        },
+        {
+          "flags": 6,
+          "offset": 16384,
+          "va": 4294979584,
+          "filesz": 256,
+          "memsz": 4352,
+          "align": 4096,
+          "start": 4294979584,
+          "end": 4294987776
+        }
+      ],
+      "file": "uartread.elf",
+      "sha256": "ffbc3023892f487aec43301170cd4557641288a5149bb026f16bcc7d813e8eef"
+    },
+    "gicread": {
+      "entry": 4294967296,
+      "pages": 5,
+      "symbols": {
+        "data": 4294979584,
+        "message": 4294975488,
+        "native_start": 4294967296,
+        "write_svc": 4294967320,
+        "exit_svc": 4294967348,
+        "loop_start": 4294967652,
+        "loop_end": 4294967656,
+        "fault": 4294967572,
+        "register_svc_1": 4294969076,
+        "register_svc_2": 4294970468,
+        "register_svc_3": 4294971860,
+        "kernel_text": 1075838976,
+        "kernel_data": 1077469184
+      },
+      "segments": [
+        {
+          "flags": 5,
+          "offset": 4096,
+          "va": 4294967296,
+          "filesz": 5444,
+          "memsz": 5444,
+          "align": 4096,
+          "start": 4294967296,
+          "end": 4294975488
+        },
+        {
+          "flags": 4,
+          "offset": 12288,
+          "va": 4294975488,
+          "filesz": 96,
+          "memsz": 96,
+          "align": 4096,
+          "start": 4294975488,
+          "end": 4294979584
+        },
+        {
+          "flags": 6,
+          "offset": 16384,
+          "va": 4294979584,
+          "filesz": 256,
+          "memsz": 4352,
+          "align": 4096,
+          "start": 4294979584,
+          "end": 4294987776
+        }
+      ],
+      "file": "gicread.elf",
+      "sha256": "091544c0a0d016a9921d3d076b95b90d1576bcee83d77f9dab72ad2df817c8a5"
+    },
+    "cntpdisable": {
+      "entry": 4294967296,
+      "pages": 5,
+      "symbols": {
+        "data": 4294979584,
+        "message": 4294975488,
+        "native_start": 4294967296,
+        "write_svc": 4294967320,
+        "exit_svc": 4294967348,
+        "loop_start": 4294967652,
+        "loop_end": 4294967656,
+        "fault": 4294967584,
+        "register_svc_1": 4294969076,
+        "register_svc_2": 4294970468,
+        "register_svc_3": 4294971860,
+        "kernel_text": 1075838976,
+        "kernel_data": 1077469184
+      },
+      "segments": [
+        {
+          "flags": 5,
+          "offset": 4096,
+          "va": 4294967296,
+          "filesz": 5444,
+          "memsz": 5444,
+          "align": 4096,
+          "start": 4294967296,
+          "end": 4294975488
+        },
+        {
+          "flags": 4,
+          "offset": 12288,
+          "va": 4294975488,
+          "filesz": 96,
+          "memsz": 96,
+          "align": 4096,
+          "start": 4294975488,
+          "end": 4294979584
+        },
+        {
+          "flags": 6,
+          "offset": 16384,
+          "va": 4294979584,
+          "filesz": 256,
+          "memsz": 4352,
+          "align": 4096,
+          "start": 4294979584,
+          "end": 4294987776
+        }
+      ],
+      "file": "cntpdisable.elf",
+      "sha256": "10b543a89506b9142b211280b29969696193de16356054639ccdedb39c4a4762"
+    },
+    "daifmask": {
+      "entry": 4294967296,
+      "pages": 5,
+      "symbols": {
+        "data": 4294979584,
+        "message": 4294975488,
+        "native_start": 4294967296,
+        "write_svc": 4294967320,
+        "exit_svc": 4294967348,
+        "loop_start": 4294967652,
+        "loop_end": 4294967656,
+        "fault": 4294967596,
+        "register_svc_1": 4294969076,
+        "register_svc_2": 4294970468,
+        "register_svc_3": 4294971860,
+        "kernel_text": 1075838976,
+        "kernel_data": 1077469184
+      },
+      "segments": [
+        {
+          "flags": 5,
+          "offset": 4096,
+          "va": 4294967296,
+          "filesz": 5444,
+          "memsz": 5444,
+          "align": 4096,
+          "start": 4294967296,
+          "end": 4294975488
+        },
+        {
+          "flags": 4,
+          "offset": 12288,
+          "va": 4294975488,
+          "filesz": 96,
+          "memsz": 96,
+          "align": 4096,
+          "start": 4294975488,
+          "end": 4294979584
+        },
+        {
+          "flags": 6,
+          "offset": 16384,
+          "va": 4294979584,
+          "filesz": 256,
+          "memsz": 4352,
+          "align": 4096,
+          "start": 4294979584,
+          "end": 4294987776
+        }
+      ],
+      "file": "daifmask.elf",
+      "sha256": "97abe799542114911511feb987aba2d3c78f66aa6bcc3644a5c63fa0d96a85b1"
+    },
+    "stackguard": {
+      "entry": 4294967296,
+      "pages": 5,
+      "symbols": {
+        "data": 4294979584,
+        "message": 4294975488,
+        "native_start": 4294967296,
+        "write_svc": 4294967320,
+        "exit_svc": 4294967348,
+        "loop_start": 4294967652,
+        "loop_end": 4294967656,
+        "fault": 4294967608,
+        "register_svc_1": 4294969076,
+        "register_svc_2": 4294970468,
+        "register_svc_3": 4294971860,
+        "kernel_text": 1075838976,
+        "kernel_data": 1077469184
+      },
+      "segments": [
+        {
+          "flags": 5,
+          "offset": 4096,
+          "va": 4294967296,
+          "filesz": 5444,
+          "memsz": 5444,
+          "align": 4096,
+          "start": 4294967296,
+          "end": 4294975488
+        },
+        {
+          "flags": 4,
+          "offset": 12288,
+          "va": 4294975488,
+          "filesz": 96,
+          "memsz": 96,
+          "align": 4096,
+          "start": 4294975488,
+          "end": 4294979584
+        },
+        {
+          "flags": 6,
+          "offset": 16384,
+          "va": 4294979584,
+          "filesz": 256,
+          "memsz": 4352,
+          "align": 4096,
+          "start": 4294979584,
+          "end": 4294987776
+        }
+      ],
+      "file": "stackguard.elf",
+      "sha256": "217188638a162c3fd02f574b4bcc2406083ba314819dae91eaea71260949594a"
+    },
+    "loop": {
+      "entry": 4294967296,
+      "pages": 5,
+      "symbols": {
+        "data": 4294979584,
+        "message": 4294975488,
+        "native_start": 4294967296,
+        "write_svc": 4294967320,
+        "exit_svc": 4294967348,
+        "loop_start": 4294967652,
+        "loop_end": 4294967656,
+        "register_svc_1": 4294969076,
+        "register_svc_2": 4294970468,
+        "register_svc_3": 4294971860,
+        "kernel_text": 1075838976,
+        "kernel_data": 1077469184
+      },
+      "segments": [
+        {
+          "flags": 5,
+          "offset": 4096,
+          "va": 4294967296,
+          "filesz": 5444,
+          "memsz": 5444,
+          "align": 4096,
+          "start": 4294967296,
+          "end": 4294975488
+        },
+        {
+          "flags": 4,
+          "offset": 12288,
+          "va": 4294975488,
+          "filesz": 96,
+          "memsz": 96,
+          "align": 4096,
+          "start": 4294975488,
+          "end": 4294979584
+        },
+        {
+          "flags": 6,
+          "offset": 16384,
+          "va": 4294979584,
+          "filesz": 256,
+          "memsz": 4352,
+          "align": 4096,
+          "start": 4294979584,
+          "end": 4294987776
+        }
+      ],
+      "file": "loop.elf",
+      "sha256": "5e3c893cbe9b972ac22f950029132e736bcd5ff93a87774a9b70a40182b03ca4"
+    },
+    "zerowrite": {
+      "entry": 4294967296,
+      "pages": 5,
+      "symbols": {
+        "data": 4294979584,
+        "message": 4294975488,
+        "native_start": 4294967296,
+        "write_svc": 4294967320,
+        "exit_svc": 4294967348,
+        "loop_start": 4294967652,
+        "loop_end": 4294967656,
+        "register_svc_1": 4294969076,
+        "register_svc_2": 4294970468,
+        "register_svc_3": 4294971860,
+        "kernel_text": 1075838976,
+        "kernel_data": 1077469184
+      },
+      "segments": [
+        {
+          "flags": 5,
+          "offset": 4096,
+          "va": 4294967296,
+          "filesz": 5484,
+          "memsz": 5484,
+          "align": 4096,
+          "start": 4294967296,
+          "end": 4294975488
+        },
+        {
+          "flags": 4,
+          "offset": 12288,
+          "va": 4294975488,
+          "filesz": 96,
+          "memsz": 96,
+          "align": 4096,
+          "start": 4294975488,
+          "end": 4294979584
+        },
+        {
+          "flags": 6,
+          "offset": 16384,
+          "va": 4294979584,
+          "filesz": 256,
+          "memsz": 4352,
+          "align": 4096,
+          "start": 4294979584,
+          "end": 4294987776
+        }
+      ],
+      "file": "zerowrite.elf",
+      "sha256": "3cb5fa41c0cefe94134ef736c15006bf2ec6840748116cf5e402d517a6c79ff1"
+    },
+    "maxwrite": {
+      "entry": 4294967296,
+      "pages": 5,
+      "symbols": {
+        "data": 4294979584,
+        "message": 4294975488,
+        "native_start": 4294967296,
+        "write_svc": 4294967320,
+        "exit_svc": 4294967348,
+        "loop_start": 4294967652,
+        "loop_end": 4294967656,
+        "register_svc_1": 4294969076,
+        "register_svc_2": 4294970468,
+        "register_svc_3": 4294971860,
+        "kernel_text": 1075838976,
+        "kernel_data": 1077469184
+      },
+      "segments": [
+        {
+          "flags": 5,
+          "offset": 4096,
+          "va": 4294967296,
+          "filesz": 5492,
+          "memsz": 5492,
+          "align": 4096,
+          "start": 4294967296,
+          "end": 4294975488
+        },
+        {
+          "flags": 4,
+          "offset": 12288,
+          "va": 4294975488,
+          "filesz": 96,
+          "memsz": 96,
+          "align": 4096,
+          "start": 4294975488,
+          "end": 4294979584
+        },
+        {
+          "flags": 6,
+          "offset": 16384,
+          "va": 4294979584,
+          "filesz": 256,
+          "memsz": 4352,
+          "align": 4096,
+          "start": 4294979584,
+          "end": 4294987776
+        }
+      ],
+      "file": "maxwrite.elf",
+      "sha256": "f82436e819fb1771b94ad0a1dda4d4f60b41976a7ba4cfd7e4ad11d794e604f1"
+    },
+    "bytebudget": {
+      "entry": 4294967296,
+      "pages": 5,
+      "symbols": {
+        "data": 4294979584,
+        "message": 4294975488,
+        "native_start": 4294967296,
+        "write_svc": 4294967320,
+        "exit_svc": 4294967348,
+        "loop_start": 4294967652,
+        "loop_end": 4294967656,
+        "register_svc_1": 4294969076,
+        "register_svc_2": 4294970468,
+        "register_svc_3": 4294971860,
+        "kernel_text": 1075838976,
+        "kernel_data": 1077469184
+      },
+      "segments": [
+        {
+          "flags": 5,
+          "offset": 4096,
+          "va": 4294967296,
+          "filesz": 5588,
+          "memsz": 5588,
+          "align": 4096,
+          "start": 4294967296,
+          "end": 4294975488
+        },
+        {
+          "flags": 4,
+          "offset": 12288,
+          "va": 4294975488,
+          "filesz": 96,
+          "memsz": 96,
+          "align": 4096,
+          "start": 4294975488,
+          "end": 4294979584
+        },
+        {
+          "flags": 6,
+          "offset": 16384,
+          "va": 4294979584,
+          "filesz": 256,
+          "memsz": 4352,
+          "align": 4096,
+          "start": 4294979584,
+          "end": 4294987776
+        }
+      ],
+      "file": "bytebudget.elf",
+      "sha256": "d7f737c7e6662301a7f89583b7c3ded6b526c658733acc8161454c7eea827de3"
+    },
+    "calllimit": {
+      "entry": 4294967296,
+      "pages": 5,
+      "symbols": {
+        "data": 4294979584,
+        "message": 4294975488,
+        "native_start": 4294967296,
+        "write_svc": 4294967320,
+        "exit_svc": 4294967348,
+        "loop_start": 4294967652,
+        "loop_end": 4294967656,
+        "register_svc_1": 4294969076,
+        "register_svc_2": 4294970468,
+        "register_svc_3": 4294971860,
+        "kernel_text": 1075838976,
+        "kernel_data": 1077469184
+      },
+      "segments": [
+        {
+          "flags": 5,
+          "offset": 4096,
+          "va": 4294967296,
+          "filesz": 5504,
+          "memsz": 5504,
+          "align": 4096,
+          "start": 4294967296,
+          "end": 4294975488
+        },
+        {
+          "flags": 4,
+          "offset": 12288,
+          "va": 4294975488,
+          "filesz": 96,
+          "memsz": 96,
+          "align": 4096,
+          "start": 4294975488,
+          "end": 4294979584
+        },
+        {
+          "flags": 6,
+          "offset": 16384,
+          "va": 4294979584,
+          "filesz": 256,
+          "memsz": 4352,
+          "align": 4096,
+          "start": 4294979584,
+          "end": 4294987776
+        }
+      ],
+      "file": "calllimit.elf",
+      "sha256": "a3cded1ae8ec257da79f7cc3ac5746217efae0b9b1ed10de1bfab45b8b17a87f"
+    },
+    "invalidstorm": {
+      "entry": 4294967296,
+      "pages": 5,
+      "symbols": {
+        "data": 4294979584,
+        "message": 4294975488,
+        "native_start": 4294967296,
+        "write_svc": 4294967320,
+        "exit_svc": 4294967348,
+        "loop_start": 4294967652,
+        "loop_end": 4294967656,
+        "register_svc_1": 4294969076,
+        "register_svc_2": 4294970468,
+        "register_svc_3": 4294971860,
+        "kernel_text": 1075838976,
+        "kernel_data": 1077469184
+      },
+      "segments": [
+        {
+          "flags": 5,
+          "offset": 4096,
+          "va": 4294967296,
+          "filesz": 5508,
+          "memsz": 5508,
+          "align": 4096,
+          "start": 4294967296,
+          "end": 4294975488
+        },
+        {
+          "flags": 4,
+          "offset": 12288,
+          "va": 4294975488,
+          "filesz": 96,
+          "memsz": 96,
+          "align": 4096,
+          "start": 4294975488,
+          "end": 4294979584
+        },
+        {
+          "flags": 6,
+          "offset": 16384,
+          "va": 4294979584,
+          "filesz": 256,
+          "memsz": 4352,
+          "align": 4096,
+          "start": 4294979584,
+          "end": 4294987776
+        }
+      ],
+      "file": "invalidstorm.elf",
+      "sha256": "7163853fcb9415ced2cd44c26bd75f4f61c077368c38283bf3ffb77e609dc030"
+    },
+    "exit64": {
+      "entry": 4294967296,
+      "pages": 5,
+      "symbols": {
+        "data": 4294979584,
+        "message": 4294975488,
+        "native_start": 4294967296,
+        "write_svc": 4294967320,
+        "exit_svc": 4294967348,
+        "loop_start": 4294967652,
+        "loop_end": 4294967656,
+        "register_svc_1": 4294969076,
+        "register_svc_2": 4294970468,
+        "register_svc_3": 4294971860,
+        "kernel_text": 1075838976,
+        "kernel_data": 1077469184
+      },
+      "segments": [
+        {
+          "flags": 5,
+          "offset": 4096,
+          "va": 4294967296,
+          "filesz": 5504,
+          "memsz": 5504,
+          "align": 4096,
+          "start": 4294967296,
+          "end": 4294975488
+        },
+        {
+          "flags": 4,
+          "offset": 12288,
+          "va": 4294975488,
+          "filesz": 96,
+          "memsz": 96,
+          "align": 4096,
+          "start": 4294975488,
+          "end": 4294979584
+        },
+        {
+          "flags": 6,
+          "offset": 16384,
+          "va": 4294979584,
+          "filesz": 256,
+          "memsz": 4352,
+          "align": 4096,
+          "start": 4294979584,
+          "end": 4294987776
+        }
+      ],
+      "file": "exit64.elf",
+      "sha256": "c88417e6123af489b2d52771f9aab49b148f890b6c515003c6e8ef68da900fc9"
+    },
+    "invalidexit": {
+      "entry": 4294967296,
+      "pages": 5,
+      "symbols": {
+        "data": 4294979584,
+        "message": 4294975488,
+        "native_start": 4294967296,
+        "write_svc": 4294967320,
+        "exit_svc": 4294967348,
+        "loop_start": 4294967652,
+        "loop_end": 4294967656,
+        "register_svc_1": 4294969076,
+        "register_svc_2": 4294970468,
+        "register_svc_3": 4294971860,
+        "kernel_text": 1075838976,
+        "kernel_data": 1077469184
+      },
+      "segments": [
+        {
+          "flags": 5,
+          "offset": 4096,
+          "va": 4294967296,
+          "filesz": 5528,
+          "memsz": 5528,
+          "align": 4096,
+          "start": 4294967296,
+          "end": 4294975488
+        },
+        {
+          "flags": 4,
+          "offset": 12288,
+          "va": 4294975488,
+          "filesz": 96,
+          "memsz": 96,
+          "align": 4096,
+          "start": 4294975488,
+          "end": 4294979584
+        },
+        {
+          "flags": 6,
+          "offset": 16384,
+          "va": 4294979584,
+          "filesz": 256,
+          "memsz": 4352,
+          "align": 4096,
+          "start": 4294979584,
+          "end": 4294987776
+        }
+      ],
+      "file": "invalidexit.elf",
+      "sha256": "d92e2f1ce77fc9a4604b67c83bb73ac5abfc8993bf940737b3c0250f3ccd8392"
+    },
+    "stalehandle": {
+      "entry": 4294967296,
+      "pages": 5,
+      "symbols": {
+        "data": 4294979584,
+        "message": 4294975488,
+        "native_start": 4294967296,
+        "write_svc": 4294967320,
+        "exit_svc": 4294967348,
+        "loop_start": 4294967652,
+        "loop_end": 4294967656,
+        "register_svc_1": 4294969076,
+        "register_svc_2": 4294970468,
+        "register_svc_3": 4294971860,
+        "kernel_text": 1075838976,
+        "kernel_data": 1077469184
+      },
+      "segments": [
+        {
+          "flags": 5,
+          "offset": 4096,
+          "va": 4294967296,
+          "filesz": 5616,
+          "memsz": 5616,
+          "align": 4096,
+          "start": 4294967296,
+          "end": 4294975488
+        },
+        {
+          "flags": 4,
+          "offset": 12288,
+          "va": 4294975488,
+          "filesz": 211,
+          "memsz": 211,
+          "align": 4096,
+          "start": 4294975488,
+          "end": 4294979584
+        },
+        {
+          "flags": 6,
+          "offset": 16384,
+          "va": 4294979584,
+          "filesz": 256,
+          "memsz": 4352,
+          "align": 4096,
+          "start": 4294979584,
+          "end": 4294987776
+        }
+      ],
+      "file": "stalehandle.elf",
+      "sha256": "0dc11ad40a9f43b542799a8d1202d2dd538746f452fa320c4d1d5cd2f12a0c50"
+    },
+    "nogrant": {
+      "entry": 4294967296,
+      "pages": 5,
+      "symbols": {
+        "data": 4294979584,
+        "message": 4294975488,
+        "native_start": 4294967296,
+        "write_svc": 4294967320,
+        "exit_svc": 4294967348,
+        "loop_start": 4294967652,
+        "loop_end": 4294967656,
+        "register_svc_1": 4294969076,
+        "register_svc_2": 4294970468,
+        "register_svc_3": 4294971860,
+        "kernel_text": 1075838976,
+        "kernel_data": 1077469184
+      },
+      "segments": [
+        {
+          "flags": 5,
+          "offset": 4096,
+          "va": 4294967296,
+          "filesz": 5504,
+          "memsz": 5504,
+          "align": 4096,
+          "start": 4294967296,
+          "end": 4294975488
+        },
+        {
+          "flags": 4,
+          "offset": 12288,
+          "va": 4294975488,
+          "filesz": 96,
+          "memsz": 96,
+          "align": 4096,
+          "start": 4294975488,
+          "end": 4294979584
+        },
+        {
+          "flags": 6,
+          "offset": 16384,
+          "va": 4294979584,
+          "filesz": 256,
+          "memsz": 4352,
+          "align": 4096,
+          "start": 4294979584,
+          "end": 4294987776
+        }
+      ],
+      "file": "nogrant.elf",
+      "sha256": "a5c7a0dbef3c010080c3692d4f377878a682c0dfb66ebea72c60dd547763b983"
+    },
+    "svcimm": {
+      "entry": 4294967296,
+      "pages": 5,
+      "symbols": {
+        "data": 4294979584,
+        "message": 4294975488,
+        "native_start": 4294967296,
+        "write_svc": 4294967320,
+        "exit_svc": 4294967348,
+        "loop_start": 4294967652,
+        "loop_end": 4294967656,
+        "fault": 4294967644,
+        "register_svc_1": 4294969076,
+        "register_svc_2": 4294970468,
+        "register_svc_3": 4294971860,
+        "kernel_text": 1075838976,
+        "kernel_data": 1077469184
+      },
+      "segments": [
+        {
+          "flags": 5,
+          "offset": 4096,
+          "va": 4294967296,
+          "filesz": 5444,
+          "memsz": 5444,
+          "align": 4096,
+          "start": 4294967296,
+          "end": 4294975488
+        },
+        {
+          "flags": 4,
+          "offset": 12288,
+          "va": 4294975488,
+          "filesz": 96,
+          "memsz": 96,
+          "align": 4096,
+          "start": 4294975488,
+          "end": 4294979584
+        },
+        {
+          "flags": 6,
+          "offset": 16384,
+          "va": 4294979584,
+          "filesz": 256,
+          "memsz": 4352,
+          "align": 4096,
+          "start": 4294979584,
+          "end": 4294987776
+        }
+      ],
+      "file": "svcimm.elf",
+      "sha256": "39a0a1a116967ff23a33581ab9b2a3581f49a2c2e6187115ecb3bad57bf3208a"
+    },
+    "registers": {
+      "entry": 4294967296,
+      "pages": 5,
+      "symbols": {
+        "data": 4294979584,
+        "message": 4294975488,
+        "native_start": 4294967296,
+        "write_svc": 4294967316,
+        "exit_svc": 4294967344,
+        "loop_start": 4294967648,
+        "loop_end": 4294967652,
+        "register_svc_1": 4294969072,
+        "register_svc_2": 4294970464,
+        "register_svc_3": 4294971856,
+        "kernel_text": 1075838976,
+        "kernel_data": 1077469184
+      },
+      "segments": [
+        {
+          "flags": 5,
+          "offset": 4096,
+          "va": 4294967296,
+          "filesz": 5372,
+          "memsz": 5372,
+          "align": 4096,
+          "start": 4294967296,
+          "end": 4294975488
+        },
+        {
+          "flags": 4,
+          "offset": 12288,
+          "va": 4294975488,
+          "filesz": 96,
+          "memsz": 96,
+          "align": 4096,
+          "start": 4294975488,
+          "end": 4294979584
+        },
+        {
+          "flags": 6,
+          "offset": 16384,
+          "va": 4294979584,
+          "filesz": 256,
+          "memsz": 4352,
+          "align": 4096,
+          "start": 4294979584,
+          "end": 4294987776
+        }
+      ],
+      "file": "registers.elf",
+      "sha256": "b64155a3f38e2df709489f7c04c5be8b0d76de58ab0da194d7ceddbc65171707"
+    },
+    "badsp": {
+      "entry": 4294967296,
+      "pages": 5,
+      "symbols": {
+        "data": 4294979584,
+        "message": 4294975488,
+        "native_start": 4294967296,
+        "write_svc": 4294967320,
+        "exit_svc": 4294967348,
+        "loop_start": 4294967652,
+        "loop_end": 4294967656,
+        "register_svc_1": 4294969076,
+        "register_svc_2": 4294970468,
+        "register_svc_3": 4294971860,
+        "kernel_text": 1075838976,
+        "kernel_data": 1077469184
+      },
+      "segments": [
+        {
+          "flags": 5,
+          "offset": 4096,
+          "va": 4294967296,
+          "filesz": 5444,
+          "memsz": 5444,
+          "align": 4096,
+          "start": 4294967296,
+          "end": 4294975488
+        },
+        {
+          "flags": 4,
+          "offset": 12288,
+          "va": 4294975488,
+          "filesz": 96,
+          "memsz": 96,
+          "align": 4096,
+          "start": 4294975488,
+          "end": 4294979584
+        },
+        {
+          "flags": 6,
+          "offset": 16384,
+          "va": 4294979584,
+          "filesz": 256,
+          "memsz": 4352,
+          "align": 4096,
+          "start": 4294979584,
+          "end": 4294987776
+        }
+      ],
+      "file": "badsp.elf",
+      "sha256": "20bfc1a5aff8528d35ea2ea9be2b78690c442afa069bd2c31f88100e316cf125"
+    },
+    "startupwrite": {
+      "entry": 4294967296,
+      "pages": 5,
+      "symbols": {
+        "data": 4294979584,
+        "message": 4294975488,
+        "native_start": 4294967296,
+        "write_svc": 4294967320,
+        "exit_svc": 4294967348,
+        "loop_start": 4294967652,
+        "loop_end": 4294967656,
+        "fault": 4294967620,
+        "register_svc_1": 4294969076,
+        "register_svc_2": 4294970468,
+        "register_svc_3": 4294971860,
+        "kernel_text": 1075838976,
+        "kernel_data": 1077469184
+      },
+      "segments": [
+        {
+          "flags": 5,
+          "offset": 4096,
+          "va": 4294967296,
+          "filesz": 5444,
+          "memsz": 5444,
+          "align": 4096,
+          "start": 4294967296,
+          "end": 4294975488
+        },
+        {
+          "flags": 4,
+          "offset": 12288,
+          "va": 4294975488,
+          "filesz": 96,
+          "memsz": 96,
+          "align": 4096,
+          "start": 4294975488,
+          "end": 4294979584
+        },
+        {
+          "flags": 6,
+          "offset": 16384,
+          "va": 4294979584,
+          "filesz": 256,
+          "memsz": 4352,
+          "align": 4096,
+          "start": 4294979584,
+          "end": 4294987776
+        }
+      ],
+      "file": "startupwrite.elf",
+      "sha256": "5503f6baea4116beccf3703702e904f5268aea703c5f9792f120c831c204618c"
+    },
+    "semihost": {
+      "entry": 4294967296,
+      "pages": 5,
+      "symbols": {
+        "data": 4294979584,
+        "message": 4294975488,
+        "native_start": 4294967296,
+        "write_svc": 4294967320,
+        "exit_svc": 4294967348,
+        "loop_start": 4294967652,
+        "loop_end": 4294967656,
+        "fault": 4294967632,
+        "register_svc_1": 4294969076,
+        "register_svc_2": 4294970468,
+        "register_svc_3": 4294971860,
+        "kernel_text": 1075838976,
+        "kernel_data": 1077469184
+      },
+      "segments": [
+        {
+          "flags": 5,
+          "offset": 4096,
+          "va": 4294967296,
+          "filesz": 5444,
+          "memsz": 5444,
+          "align": 4096,
+          "start": 4294967296,
+          "end": 4294975488
+        },
+        {
+          "flags": 4,
+          "offset": 12288,
+          "va": 4294975488,
+          "filesz": 96,
+          "memsz": 96,
+          "align": 4096,
+          "start": 4294975488,
+          "end": 4294979584
+        },
+        {
+          "flags": 6,
+          "offset": 16384,
+          "va": 4294979584,
+          "filesz": 256,
+          "memsz": 4352,
+          "align": 4096,
+          "start": 4294979584,
+          "end": 4294987776
+        }
+      ],
+      "file": "semihost.elf",
+      "sha256": "d196b2cf2f89006eb6afdfcda9399b70849e06a102c97521394377cb29ef3cac"
+    }
+  }
+}

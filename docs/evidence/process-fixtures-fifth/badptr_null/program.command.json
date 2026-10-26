@@ -1,0 +1,5 @@
+[
+  "readelf",
+  "-lW",
+  "/workspace/docs/evidence/process-fixtures-fifth/badptr_null/badptr_null.elf"
+]

@@ -1,0 +1,11 @@
+{
+  "sources": {
+    "crates/hm-core/fixtures/process.rs": "0e1e96342fafab3a106752c3567ce6e4375fdba5ee3073afab88ed7b06b6f8e4",
+    "crates/hm-core/fixtures/process.S": "eebfcf935327ad9ef3069275a2f30d5b9fe6d3e4761fa5435c327e1f187e5da8",
+    "crates/hm-core/fixtures/process-case.rs": "b31d860244ad23eb7a5179eb5a7889781f8370f6dd75c165e12188e980edad26",
+    "crates/hm-core/fixtures/native-elf.ld": "20a9ff90960aaaad9f0c680c8bcef4e155038888ff3afbbd207c1b0fe28528f1",
+    "tools/build_process_fixtures.py": "5025fd01c5857a59a3499bfc672b63875787ce6aae7dd4e0fbe2cdbf42d2e1af"
+  },
+  "kernel_data": 1077469184,
+  "update": true
+}

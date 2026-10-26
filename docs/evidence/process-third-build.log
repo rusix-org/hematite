@@ -1,0 +1,485 @@
+   Compiling hm-core v0.1.0 (/workspace/crates/hm-core)
+    Finished `release` profile [optimized] target(s) in 6.84s
+    Checking hm-core v0.1.0 (/workspace/crates/hm-core)
+error: duplicated attribute
+  --> crates/hm-core/src/main.rs:85:45
+   |
+85 | #[cfg_attr(feature = "process-tests", allow(dead_code))]
+   |                                             ^^^^^^^^^
+   |
+note: first defined here
+  --> crates/hm-core/src/main.rs:82:11
+   |
+82 |     allow(dead_code)
+   |           ^^^^^^^^^
+help: remove this attribute
+  --> crates/hm-core/src/main.rs:85:45
+   |
+85 | #[cfg_attr(feature = "process-tests", allow(dead_code))]
+   |                                             ^^^^^^^^^
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#duplicated_attributes
+   = note: `-D clippy::duplicated-attributes` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(clippy::duplicated_attributes)]`
+
+error: manual implementation of `.is_multiple_of()`
+  --> crates/hm-core/src/process_layout.rs:61:13
+   |
+61 |     assert!(USER_Q % 16 == 0 && USER_Q + 32 * 16 == USER_FPCR);
+   |             ^^^^^^^^^^^^^^^^ help: replace with: `USER_Q.is_multiple_of(16)`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#manual_is_multiple_of
+   = note: `-D clippy::manual-is-multiple-of` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(clippy::manual_is_multiple_of)]`
+
+error: manual implementation of `.is_multiple_of()`
+  --> crates/hm-core/src/process_layout.rs:63:39
+   |
+63 |     assert!(K_GPRS + 13 * 8 <= K_Q && K_Q % 16 == 0);
+   |                                       ^^^^^^^^^^^^^ help: replace with: `K_Q.is_multiple_of(16)`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#manual_is_multiple_of
+
+error: manual implementation of `.is_multiple_of()`
+  --> crates/hm-core/src/process_layout.rs:65:41
+   |
+65 |     assert!(K_SSBS + 8 <= FRAME_SIZE && FRAME_SIZE % 16 == 0);
+   |                                         ^^^^^^^^^^^^^^^^^^^^ help: replace with: `FRAME_SIZE.is_multiple_of(16)`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#manual_is_multiple_of
+
+error: manual implementation of `.is_multiple_of()`
+  --> crates/hm-core/src/process_layout.rs:66:13
+   |
+66 |     assert!(USER_GPRS % 8 == 0);
+   |             ^^^^^^^^^^^^^^^^^^ help: replace with: `USER_GPRS.is_multiple_of(8)`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#manual_is_multiple_of
+
+error: manual implementation of `.is_multiple_of()`
+  --> crates/hm-core/src/process_layout.rs:67:13
+   |
+67 |     assert!(USER_SP % 8 == 0);
+   |             ^^^^^^^^^^^^^^^^ help: replace with: `USER_SP.is_multiple_of(8)`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#manual_is_multiple_of
+
+error: manual implementation of `.is_multiple_of()`
+  --> crates/hm-core/src/process_layout.rs:68:13
+   |
+68 |     assert!(USER_PC % 8 == 0);
+   |             ^^^^^^^^^^^^^^^^ help: replace with: `USER_PC.is_multiple_of(8)`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#manual_is_multiple_of
+
+error: manual implementation of `.is_multiple_of()`
+  --> crates/hm-core/src/process_layout.rs:69:13
+   |
+69 |     assert!(USER_PSTATE % 8 == 0);
+   |             ^^^^^^^^^^^^^^^^^^^^ help: replace with: `USER_PSTATE.is_multiple_of(8)`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#manual_is_multiple_of
+
+error: manual implementation of `.is_multiple_of()`
+  --> crates/hm-core/src/process_layout.rs:70:13
+   |
+70 |     assert!(USER_Q % 8 == 0);
+   |             ^^^^^^^^^^^^^^^ help: replace with: `USER_Q.is_multiple_of(8)`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#manual_is_multiple_of
+
+error: manual implementation of `.is_multiple_of()`
+  --> crates/hm-core/src/process_layout.rs:71:13
+   |
+71 |     assert!(USER_FPCR % 8 == 0);
+   |             ^^^^^^^^^^^^^^^^^^ help: replace with: `USER_FPCR.is_multiple_of(8)`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#manual_is_multiple_of
+
+error: manual implementation of `.is_multiple_of()`
+  --> crates/hm-core/src/process_layout.rs:72:13
+   |
+72 |     assert!(USER_FPSR % 8 == 0);
+   |             ^^^^^^^^^^^^^^^^^^ help: replace with: `USER_FPSR.is_multiple_of(8)`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#manual_is_multiple_of
+
+error: manual implementation of `.is_multiple_of()`
+  --> crates/hm-core/src/process_layout.rs:73:13
+   |
+73 |     assert!(USER_TLS % 8 == 0);
+   |             ^^^^^^^^^^^^^^^^^ help: replace with: `USER_TLS.is_multiple_of(8)`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#manual_is_multiple_of
+
+error: manual implementation of `.is_multiple_of()`
+  --> crates/hm-core/src/process_layout.rs:74:13
+   |
+74 |     assert!(USER_ESR % 8 == 0);
+   |             ^^^^^^^^^^^^^^^^^ help: replace with: `USER_ESR.is_multiple_of(8)`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#manual_is_multiple_of
+
+error: manual implementation of `.is_multiple_of()`
+  --> crates/hm-core/src/process_layout.rs:75:13
+   |
+75 |     assert!(USER_FAR % 8 == 0);
+   |             ^^^^^^^^^^^^^^^^^ help: replace with: `USER_FAR.is_multiple_of(8)`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#manual_is_multiple_of
+
+error: manual implementation of `.is_multiple_of()`
+  --> crates/hm-core/src/process_layout.rs:76:13
+   |
+76 |     assert!(USER_KIND % 8 == 0);
+   |             ^^^^^^^^^^^^^^^^^^ help: replace with: `USER_KIND.is_multiple_of(8)`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#manual_is_multiple_of
+
+error: manual implementation of `.is_multiple_of()`
+  --> crates/hm-core/src/process_layout.rs:77:13
+   |
+77 |     assert!(USER_IAR % 8 == 0);
+   |             ^^^^^^^^^^^^^^^^^ help: replace with: `USER_IAR.is_multiple_of(8)`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#manual_is_multiple_of
+
+error: manual implementation of `.is_multiple_of()`
+  --> crates/hm-core/src/process_layout.rs:78:13
+   |
+78 |     assert!(USER_FAR_VALID % 8 == 0);
+   |             ^^^^^^^^^^^^^^^^^^^^^^^ help: replace with: `USER_FAR_VALID.is_multiple_of(8)`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#manual_is_multiple_of
+
+error: manual implementation of `.is_multiple_of()`
+  --> crates/hm-core/src/process_layout.rs:79:13
+   |
+79 |     assert!(USER_SIZE % 8 == 0);
+   |             ^^^^^^^^^^^^^^^^^^ help: replace with: `USER_SIZE.is_multiple_of(8)`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#manual_is_multiple_of
+
+error: manual implementation of `.is_multiple_of()`
+  --> crates/hm-core/src/process_layout.rs:80:13
+   |
+80 |     assert!(K_TTBR0 % 8 == 0);
+   |             ^^^^^^^^^^^^^^^^ help: replace with: `K_TTBR0.is_multiple_of(8)`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#manual_is_multiple_of
+
+error: manual implementation of `.is_multiple_of()`
+  --> crates/hm-core/src/process_layout.rs:81:13
+   |
+81 |     assert!(K_TTBR1 % 8 == 0);
+   |             ^^^^^^^^^^^^^^^^ help: replace with: `K_TTBR1.is_multiple_of(8)`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#manual_is_multiple_of
+
+error: manual implementation of `.is_multiple_of()`
+  --> crates/hm-core/src/process_layout.rs:82:13
+   |
+82 |     assert!(K_PAR % 8 == 0);
+   |             ^^^^^^^^^^^^^^ help: replace with: `K_PAR.is_multiple_of(8)`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#manual_is_multiple_of
+
+error: manual implementation of `.is_multiple_of()`
+  --> crates/hm-core/src/process_layout.rs:83:13
+   |
+83 |     assert!(K_VBAR % 8 == 0);
+   |             ^^^^^^^^^^^^^^^ help: replace with: `K_VBAR.is_multiple_of(8)`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#manual_is_multiple_of
+
+error: manual implementation of `.is_multiple_of()`
+  --> crates/hm-core/src/process_layout.rs:84:13
+   |
+84 |     assert!(K_SP0 % 8 == 0);
+   |             ^^^^^^^^^^^^^^ help: replace with: `K_SP0.is_multiple_of(8)`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#manual_is_multiple_of
+
+error: manual implementation of `.is_multiple_of()`
+  --> crates/hm-core/src/process_layout.rs:85:13
+   |
+85 |     assert!(K_DAIF % 8 == 0);
+   |             ^^^^^^^^^^^^^^^ help: replace with: `K_DAIF.is_multiple_of(8)`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#manual_is_multiple_of
+
+error: manual implementation of `.is_multiple_of()`
+  --> crates/hm-core/src/process_layout.rs:86:13
+   |
+86 |     assert!(K_ELR % 8 == 0);
+   |             ^^^^^^^^^^^^^^ help: replace with: `K_ELR.is_multiple_of(8)`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#manual_is_multiple_of
+
+error: manual implementation of `.is_multiple_of()`
+  --> crates/hm-core/src/process_layout.rs:87:13
+   |
+87 |     assert!(K_SPSR % 8 == 0);
+   |             ^^^^^^^^^^^^^^^ help: replace with: `K_SPSR.is_multiple_of(8)`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#manual_is_multiple_of
+
+error: manual implementation of `.is_multiple_of()`
+  --> crates/hm-core/src/process_layout.rs:88:13
+   |
+88 |     assert!(K_ESR % 8 == 0);
+   |             ^^^^^^^^^^^^^^ help: replace with: `K_ESR.is_multiple_of(8)`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#manual_is_multiple_of
+
+error: manual implementation of `.is_multiple_of()`
+  --> crates/hm-core/src/process_layout.rs:89:13
+   |
+89 |     assert!(K_FAR % 8 == 0);
+   |             ^^^^^^^^^^^^^^ help: replace with: `K_FAR.is_multiple_of(8)`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#manual_is_multiple_of
+
+error: manual implementation of `.is_multiple_of()`
+  --> crates/hm-core/src/process_layout.rs:90:13
+   |
+90 |     assert!(K_CNTKCTL % 8 == 0);
+   |             ^^^^^^^^^^^^^^^^^^ help: replace with: `K_CNTKCTL.is_multiple_of(8)`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#manual_is_multiple_of
+
+error: manual implementation of `.is_multiple_of()`
+  --> crates/hm-core/src/process_layout.rs:91:13
+   |
+91 |     assert!(K_CPACR % 8 == 0);
+   |             ^^^^^^^^^^^^^^^^ help: replace with: `K_CPACR.is_multiple_of(8)`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#manual_is_multiple_of
+
+error: manual implementation of `.is_multiple_of()`
+  --> crates/hm-core/src/process_layout.rs:92:13
+   |
+92 |     assert!(K_TLS % 8 == 0);
+   |             ^^^^^^^^^^^^^^ help: replace with: `K_TLS.is_multiple_of(8)`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#manual_is_multiple_of
+
+error: manual implementation of `.is_multiple_of()`
+  --> crates/hm-core/src/process_layout.rs:93:13
+   |
+93 |     assert!(K_TLSRO % 8 == 0);
+   |             ^^^^^^^^^^^^^^^^ help: replace with: `K_TLSRO.is_multiple_of(8)`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#manual_is_multiple_of
+
+error: manual implementation of `.is_multiple_of()`
+  --> crates/hm-core/src/process_layout.rs:94:13
+   |
+94 |     assert!(K_CVAL % 8 == 0);
+   |             ^^^^^^^^^^^^^^^ help: replace with: `K_CVAL.is_multiple_of(8)`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#manual_is_multiple_of
+
+error: manual implementation of `.is_multiple_of()`
+  --> crates/hm-core/src/process_layout.rs:95:13
+   |
+95 |     assert!(K_CTL % 8 == 0);
+   |             ^^^^^^^^^^^^^^ help: replace with: `K_CTL.is_multiple_of(8)`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#manual_is_multiple_of
+
+error: manual implementation of `.is_multiple_of()`
+  --> crates/hm-core/src/process_layout.rs:96:13
+   |
+96 |     assert!(K_SP % 8 == 0);
+   |             ^^^^^^^^^^^^^ help: replace with: `K_SP.is_multiple_of(8)`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#manual_is_multiple_of
+
+error: manual implementation of `.is_multiple_of()`
+  --> crates/hm-core/src/process_layout.rs:97:13
+   |
+97 |     assert!(K_CONTEXT % 8 == 0);
+   |             ^^^^^^^^^^^^^^^^^^ help: replace with: `K_CONTEXT.is_multiple_of(8)`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#manual_is_multiple_of
+
+error: manual implementation of `.is_multiple_of()`
+  --> crates/hm-core/src/process_layout.rs:98:13
+   |
+98 |     assert!(K_GPRS % 8 == 0);
+   |             ^^^^^^^^^^^^^^^ help: replace with: `K_GPRS.is_multiple_of(8)`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#manual_is_multiple_of
+
+error: manual implementation of `.is_multiple_of()`
+  --> crates/hm-core/src/process_layout.rs:99:13
+   |
+99 |     assert!(K_Q % 8 == 0);
+   |             ^^^^^^^^^^^^ help: replace with: `K_Q.is_multiple_of(8)`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#manual_is_multiple_of
+
+error: manual implementation of `.is_multiple_of()`
+   --> crates/hm-core/src/process_layout.rs:100:13
+    |
+100 |     assert!(K_FPCR % 8 == 0);
+    |             ^^^^^^^^^^^^^^^ help: replace with: `K_FPCR.is_multiple_of(8)`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#manual_is_multiple_of
+
+error: manual implementation of `.is_multiple_of()`
+   --> crates/hm-core/src/process_layout.rs:101:13
+    |
+101 |     assert!(K_FPSR % 8 == 0);
+    |             ^^^^^^^^^^^^^^^ help: replace with: `K_FPSR.is_multiple_of(8)`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#manual_is_multiple_of
+
+error: manual implementation of `.is_multiple_of()`
+   --> crates/hm-core/src/process_layout.rs:102:13
+    |
+102 |     assert!(DEADLINE % 8 == 0);
+    |             ^^^^^^^^^^^^^^^^^ help: replace with: `DEADLINE.is_multiple_of(8)`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#manual_is_multiple_of
+
+error: manual implementation of `.is_multiple_of()`
+   --> crates/hm-core/src/process_layout.rs:103:13
+    |
+103 |     assert!(ACTIVE % 8 == 0);
+    |             ^^^^^^^^^^^^^^^ help: replace with: `ACTIVE.is_multiple_of(8)`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#manual_is_multiple_of
+
+error: manual implementation of `.is_multiple_of()`
+   --> crates/hm-core/src/process_layout.rs:104:13
+    |
+104 |     assert!(RETURNED_KIND % 8 == 0);
+    |             ^^^^^^^^^^^^^^^^^^^^^^ help: replace with: `RETURNED_KIND.is_multiple_of(8)`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#manual_is_multiple_of
+
+error: manual implementation of `.is_multiple_of()`
+   --> crates/hm-core/src/process_layout.rs:105:13
+    |
+105 |     assert!(GICD_CTL % 8 == 0);
+    |             ^^^^^^^^^^^^^^^^^ help: replace with: `GICD_CTL.is_multiple_of(8)`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#manual_is_multiple_of
+
+error: manual implementation of `.is_multiple_of()`
+   --> crates/hm-core/src/process_layout.rs:106:13
+    |
+106 |     assert!(GICC_CTL % 8 == 0);
+    |             ^^^^^^^^^^^^^^^^^ help: replace with: `GICC_CTL.is_multiple_of(8)`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#manual_is_multiple_of
+
+error: manual implementation of `.is_multiple_of()`
+   --> crates/hm-core/src/process_layout.rs:107:13
+    |
+107 |     assert!(GIC_PMR % 8 == 0);
+    |             ^^^^^^^^^^^^^^^^ help: replace with: `GIC_PMR.is_multiple_of(8)`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#manual_is_multiple_of
+
+error: manual implementation of `.is_multiple_of()`
+   --> crates/hm-core/src/process_layout.rs:108:13
+    |
+108 |     assert!(GIC_BPR % 8 == 0);
+    |             ^^^^^^^^^^^^^^^^ help: replace with: `GIC_BPR.is_multiple_of(8)`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#manual_is_multiple_of
+
+error: manual implementation of `.is_multiple_of()`
+   --> crates/hm-core/src/process_layout.rs:109:13
+    |
+109 |     assert!(GIC_GROUP % 8 == 0);
+    |             ^^^^^^^^^^^^^^^^^^ help: replace with: `GIC_GROUP.is_multiple_of(8)`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#manual_is_multiple_of
+
+error: manual implementation of `.is_multiple_of()`
+   --> crates/hm-core/src/process_layout.rs:110:13
+    |
+110 |     assert!(GIC_CONFIG % 8 == 0);
+    |             ^^^^^^^^^^^^^^^^^^^ help: replace with: `GIC_CONFIG.is_multiple_of(8)`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#manual_is_multiple_of
+
+error: manual implementation of `.is_multiple_of()`
+   --> crates/hm-core/src/process_layout.rs:111:13
+    |
+111 |     assert!(GIC_PRIORITY % 8 == 0);
+    |             ^^^^^^^^^^^^^^^^^^^^^ help: replace with: `GIC_PRIORITY.is_multiple_of(8)`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#manual_is_multiple_of
+
+error: manual implementation of `.is_multiple_of()`
+   --> crates/hm-core/src/process_layout.rs:112:13
+    |
+112 |     assert!(GIC_ENABLE % 8 == 0);
+    |             ^^^^^^^^^^^^^^^^^^^ help: replace with: `GIC_ENABLE.is_multiple_of(8)`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#manual_is_multiple_of
+
+error: manual implementation of `.is_multiple_of()`
+   --> crates/hm-core/src/process_layout.rs:113:13
+    |
+113 |     assert!(TIMER_STATUS % 8 == 0);
+    |             ^^^^^^^^^^^^^^^^^^^^^ help: replace with: `TIMER_STATUS.is_multiple_of(8)`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#manual_is_multiple_of
+
+error: manual implementation of `.is_multiple_of()`
+   --> crates/hm-core/src/process_layout.rs:114:13
+    |
+114 |     assert!(TRAP_COUNT % 8 == 0);
+    |             ^^^^^^^^^^^^^^^^^^^ help: replace with: `TRAP_COUNT.is_multiple_of(8)`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#manual_is_multiple_of
+
+error: manual implementation of `.is_multiple_of()`
+   --> crates/hm-core/src/process_layout.rs:115:13
+    |
+115 |     assert!(K_TCR % 8 == 0);
+    |             ^^^^^^^^^^^^^^ help: replace with: `K_TCR.is_multiple_of(8)`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#manual_is_multiple_of
+
+error: manual implementation of `.is_multiple_of()`
+   --> crates/hm-core/src/process_layout.rs:116:13
+    |
+116 |     assert!(K_MAIR % 8 == 0);
+    |             ^^^^^^^^^^^^^^^ help: replace with: `K_MAIR.is_multiple_of(8)`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#manual_is_multiple_of
+
+error: manual implementation of `.is_multiple_of()`
+   --> crates/hm-core/src/process_layout.rs:117:13
+    |
+117 |     assert!(ROOT % 8 == 0);
+    |             ^^^^^^^^^^^^^ help: replace with: `ROOT.is_multiple_of(8)`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#manual_is_multiple_of
+
+error: manual implementation of `.is_multiple_of()`
+   --> crates/hm-core/src/process_layout.rs:119:13
+    |
+119 |     assert!(FRAME_SIZE % 8 == 0);
+    |             ^^^^^^^^^^^^^^^^^^^ help: replace with: `FRAME_SIZE.is_multiple_of(8)`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#manual_is_multiple_of
+
+error: the `Err`-variant returned from this function is very large
+   --> crates/hm-core/src/process.rs:171:10
+    |
+171 |     ) -> Result<Process<'p>, (Error, Space<'p>)> {
+    |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the `Err`-variant is at least 8944 bytes
+    |
+    = help: try reducing the size of `(process::Error, user_space::Space<'_>)`, for example by boxing large elements or replacing it with `Box<(process::Error, user_space::Space<'_>)>`
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#result_large_err
+    = note: `-D clippy::result-large-err` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::result_large_err)]`
+
+error: could not compile `hm-core` (bin "hematite") due to 58 previous errors

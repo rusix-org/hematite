@@ -1,0 +1,83 @@
+   Compiling hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+   Compiling hm-core v0.1.0 (/workspace/crates/hm-core)
+warning: constant `MAX_PROBES` is never used
+  --> crates/hm-core/src/user_space.rs:15:11
+   |
+15 | pub const MAX_PROBES: usize = 16;
+   |           ^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: variants `Busy` and `Peer` are never constructed
+  --> crates/hm-core/src/user_space.rs:21:5
+   |
+18 | pub enum Error {
+   |          ----- variants in this enum
+...
+21 |     Busy,
+   |     ^^^^
+22 |     Peer,
+   |     ^^^^
+   |
+   = note: `Error` has derived impls for the traits `Debug` and `Clone`, but these are intentionally ignored during dead code analysis
+
+warning: variants `El0Read`, `El0Write`, `El1Read`, and `El1Write` are never constructed
+  --> crates/hm-core/src/user_space.rs:36:5
+   |
+35 | pub enum Access {
+   |          ------ variants in this enum
+36 |     El0Read,
+   |     ^^^^^^^
+37 |     El0Write,
+   |     ^^^^^^^^
+38 |     El1Read,
+   |     ^^^^^^^
+39 |     El1Write,
+   |     ^^^^^^^^
+   |
+   = note: `Access` has derived impls for the traits `Debug` and `Clone`, but these are intentionally ignored during dead code analysis
+
+warning: struct `ProbeBatch` is never constructed
+  --> crates/hm-core/src/user_space.rs:55:12
+   |
+55 | pub struct ProbeBatch {
+   |            ^^^^^^^^^^
+
+warning: methods `buffer_visible` and `probe` are never used
+   --> crates/hm-core/src/user_space.rs:413:8
+    |
+176 | impl Space<'_> {
+    | -------------- methods in this implementation
+...
+413 |     fn buffer_visible(&self, start: u64, bytes: usize) -> bool {
+    |        ^^^^^^^^^^^^^^
+...
+428 |     pub fn probe(&mut self, queries: &[Probe]) -> Result<ProbeBatch, Error> {
+    |            ^^^^^
+
+warning: struct `Lease` is never constructed
+   --> crates/hm-core/src/user_space.rs:492:8
+    |
+492 | struct Lease;
+    |        ^^^^^
+
+warning: function `hvc` is never used
+   --> crates/hm-core/src/user_space.rs:560:4
+    |
+560 | fn hvc(function: u64, a: u64, b: u64) -> u64 {
+    |    ^^^
+
+warning: function `fatal` is never used
+   --> crates/hm-core/src/user_space.rs:571:4
+    |
+571 | fn fatal() -> ! {
+    |    ^^^^^
+
+warning: function `arm_space_probe` is never used
+  --> crates/hm-core/src/user_space.rs:69:8
+   |
+69 |     fn arm_space_probe(
+   |        ^^^^^^^^^^^^^^^
+
+warning: `hm-core` (bin "hematite") generated 9 warnings
+    Finished `release` profile [optimized] target(s) in 7.96s

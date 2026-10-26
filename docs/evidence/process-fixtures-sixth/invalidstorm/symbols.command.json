@@ -1,0 +1,5 @@
+[
+  "readelf",
+  "-sW",
+  "/workspace/docs/evidence/process-fixtures-sixth/invalidstorm.elf"
+]

@@ -1,0 +1,5 @@
+[
+  "readelf",
+  "-hW",
+  "/workspace/docs/evidence/process-fixtures-third/exit64/exit64.elf"
+]

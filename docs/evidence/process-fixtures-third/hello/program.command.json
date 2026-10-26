@@ -1,0 +1,5 @@
+[
+  "readelf",
+  "-lW",
+  "/workspace/docs/evidence/process-fixtures-third/hello/hello.elf"
+]

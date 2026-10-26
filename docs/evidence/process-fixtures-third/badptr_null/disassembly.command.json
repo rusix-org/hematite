@@ -1,0 +1,5 @@
+[
+  "aarch64-linux-gnu-objdump",
+  "-d",
+  "/workspace/docs/evidence/process-fixtures-third/badptr_null/badptr_null.elf"
+]

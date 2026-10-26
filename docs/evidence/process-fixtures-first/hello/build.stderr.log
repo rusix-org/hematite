@@ -1,0 +1,242 @@
+error: index must be a multiple of 8 in range [-512, 504].
+   |
+note: instantiated into assembly here
+  --> <inline asm>:49:24
+   |
+49 |     stp xzr, xzr, [sp, #808]
+   |                        ^
+
+note: while in macro instantiation
+    |
+note: instantiated into assembly here
+   --> <inline asm>:539:5
+    |
+539 |     capture 1
+    |     ^
+
+error: index must be a multiple of 8 in range [-512, 504].
+   |
+note: instantiated into assembly here
+  --> <inline asm>:50:24
+   |
+50 |     stp xzr, xzr, [sp, #824]
+   |                        ^
+
+error: index must be a multiple of 8 in range [-512, 504].
+   |
+note: instantiated into assembly here
+  --> <inline asm>:51:24
+   |
+51 |     stp xzr, xzr, [sp, #840]
+   |                        ^
+
+error: index must be a multiple of 8 in range [-512, 504].
+   |
+note: instantiated into assembly here
+  --> <inline asm>:52:24
+   |
+52 |     stp xzr, xzr, [sp, #856]
+   |                        ^
+
+error: index must be a multiple of 8 in range [-512, 504].
+   |
+note: instantiated into assembly here
+  --> <inline asm>:53:24
+   |
+53 |     stp xzr, xzr, [sp, #872]
+   |                        ^
+
+error: index must be a multiple of 8 in range [-512, 504].
+   |
+note: instantiated into assembly here
+  --> <inline asm>:54:24
+   |
+54 |     stp xzr, xzr, [sp, #888]
+   |                        ^
+
+error: index must be a multiple of 8 in range [-512, 504].
+   |
+note: instantiated into assembly here
+  --> <inline asm>:55:24
+   |
+55 |     stp xzr, xzr, [sp, #904]
+   |                        ^
+
+error: index must be a multiple of 8 in range [-512, 504].
+   |
+note: instantiated into assembly here
+  --> <inline asm>:56:24
+   |
+56 |     stp xzr, xzr, [sp, #920]
+   |                        ^
+
+error: index must be a multiple of 8 in range [-512, 504].
+   |
+note: instantiated into assembly here
+  --> <inline asm>:57:24
+   |
+57 |     stp xzr, xzr, [sp, #936]
+   |                        ^
+
+error: index must be a multiple of 8 in range [-512, 504].
+   |
+note: instantiated into assembly here
+  --> <inline asm>:58:24
+   |
+58 |     stp xzr, xzr, [sp, #952]
+   |                        ^
+
+error: index must be a multiple of 8 in range [-512, 504].
+   |
+note: instantiated into assembly here
+  --> <inline asm>:59:24
+   |
+59 |     stp xzr, xzr, [sp, #968]
+   |                        ^
+
+error: index must be a multiple of 8 in range [-512, 504].
+   |
+note: instantiated into assembly here
+  --> <inline asm>:60:24
+   |
+60 |     stp xzr, xzr, [sp, #984]
+   |                        ^
+
+error: index must be a multiple of 8 in range [-512, 504].
+   |
+note: instantiated into assembly here
+  --> <inline asm>:61:24
+   |
+61 |     stp xzr, xzr, [sp, #1000]
+   |                        ^
+
+error: index must be a multiple of 8 in range [-512, 504].
+   |
+note: instantiated into assembly here
+  --> <inline asm>:49:24
+   |
+49 |     stp xzr, xzr, [sp, #808]
+   |                        ^
+
+note: while in macro instantiation
+    |
+note: instantiated into assembly here
+   --> <inline asm>:548:5
+    |
+548 |     capture 0
+    |     ^
+
+error: index must be a multiple of 8 in range [-512, 504].
+   |
+note: instantiated into assembly here
+  --> <inline asm>:50:24
+   |
+50 |     stp xzr, xzr, [sp, #824]
+   |                        ^
+
+error: index must be a multiple of 8 in range [-512, 504].
+   |
+note: instantiated into assembly here
+  --> <inline asm>:51:24
+   |
+51 |     stp xzr, xzr, [sp, #840]
+   |                        ^
+
+error: index must be a multiple of 8 in range [-512, 504].
+   |
+note: instantiated into assembly here
+  --> <inline asm>:52:24
+   |
+52 |     stp xzr, xzr, [sp, #856]
+   |                        ^
+
+error: index must be a multiple of 8 in range [-512, 504].
+   |
+note: instantiated into assembly here
+  --> <inline asm>:53:24
+   |
+53 |     stp xzr, xzr, [sp, #872]
+   |                        ^
+
+error: index must be a multiple of 8 in range [-512, 504].
+   |
+note: instantiated into assembly here
+  --> <inline asm>:54:24
+   |
+54 |     stp xzr, xzr, [sp, #888]
+   |                        ^
+
+error: index must be a multiple of 8 in range [-512, 504].
+   |
+note: instantiated into assembly here
+  --> <inline asm>:55:24
+   |
+55 |     stp xzr, xzr, [sp, #904]
+   |                        ^
+
+error: index must be a multiple of 8 in range [-512, 504].
+   |
+note: instantiated into assembly here
+  --> <inline asm>:56:24
+   |
+56 |     stp xzr, xzr, [sp, #920]
+   |                        ^
+
+error: index must be a multiple of 8 in range [-512, 504].
+   |
+note: instantiated into assembly here
+  --> <inline asm>:57:24
+   |
+57 |     stp xzr, xzr, [sp, #936]
+   |                        ^
+
+error: index must be a multiple of 8 in range [-512, 504].
+   |
+note: instantiated into assembly here
+  --> <inline asm>:58:24
+   |
+58 |     stp xzr, xzr, [sp, #952]
+   |                        ^
+
+error: index must be a multiple of 8 in range [-512, 504].
+   |
+note: instantiated into assembly here
+  --> <inline asm>:59:24
+   |
+59 |     stp xzr, xzr, [sp, #968]
+   |                        ^
+
+error: index must be a multiple of 8 in range [-512, 504].
+   |
+note: instantiated into assembly here
+  --> <inline asm>:60:24
+   |
+60 |     stp xzr, xzr, [sp, #984]
+   |                        ^
+
+error: index must be a multiple of 8 in range [-512, 504].
+   |
+note: instantiated into assembly here
+  --> <inline asm>:61:24
+   |
+61 |     stp xzr, xzr, [sp, #1000]
+   |                        ^
+
+note: while in macro instantiation
+    |
+note: instantiated into assembly here
+   --> <inline asm>:557:5
+    |
+557 |     capture 0
+    |     ^
+
+note: while in macro instantiation
+    |
+note: instantiated into assembly here
+   --> <inline asm>:566:5
+    |
+566 |     capture 0
+    |     ^
+
+error: aborting due to 26 previous errors
+

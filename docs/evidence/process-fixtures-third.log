@@ -1,0 +1,171 @@
+{
+  "passed": true,
+  "fixtures": {
+    "hello": {
+      "passed": true,
+      "sha256": "5b1258c202bfe9538aa932c1121e669917b55f3c658d058c5d63bcb7b795e722",
+      "pages": 5
+    },
+    "badptr_null": {
+      "passed": true,
+      "sha256": "f4eb14d0c49650ff71fdce56c64cd51d73c37f4c82ca363a82cfce92b4c9e0a4",
+      "pages": 5
+    },
+    "badptr_overflow": {
+      "passed": true,
+      "sha256": "fbaf6789e84014d514f1ad9d00bb739d91aea8e762fda7edb3eeba7ee3b9254d",
+      "pages": 5
+    },
+    "badptr_crossing": {
+      "passed": true,
+      "sha256": "9c412ac7a893db52dca497b2c0a7db30df03dc5e1602aad6735a629a75ce38a7",
+      "pages": 5
+    },
+    "oversize": {
+      "passed": true,
+      "sha256": "594a33890719a7e5f7dfd2f2ac336c1b7c49b366be0a51dfef34507d59fb58aa",
+      "pages": 5
+    },
+    "badhandle": {
+      "passed": true,
+      "sha256": "c41e88f72d8bbaf5bd61b1ee5cefe4d4fbafd4cfa1cd61a340c02ec0113196d7",
+      "pages": 5
+    },
+    "badversion": {
+      "passed": true,
+      "sha256": "577be9d4413123de0a9868e7bca1c4f9a69fdb5fe38b660dcf2abb90af95db50",
+      "pages": 5
+    },
+    "badopcode": {
+      "passed": true,
+      "sha256": "19080ef48ce7554b5d0beb3b32f611f8547d6837b1c69b097b82d14be07b36a1",
+      "pages": 5
+    },
+    "rxwrite": {
+      "passed": true,
+      "sha256": "5dab029c1b319877929de1267e814d08c570af4b20d8286abd3ca769c62891f4",
+      "pages": 5
+    },
+    "rwexecute": {
+      "passed": true,
+      "sha256": "4cda8a933a09ac71ec1cdfe8e0db930e302f4da0f4d86d8c4f4657bd8e3856e4",
+      "pages": 5
+    },
+    "stackexecute": {
+      "passed": true,
+      "sha256": "27620b0950ab27dc637bd9a895f8528a308ccaba213668ae4214dedbd8d5f316",
+      "pages": 5
+    },
+    "kernelread": {
+      "passed": true,
+      "sha256": "007dea4804691dfa3ca90a6e35c6e3fb17b7c02f00491b38c8c6f132c084b806",
+      "pages": 5
+    },
+    "kernelwrite": {
+      "passed": true,
+      "sha256": "927fa66f8f12977f50cd72e824e30be1d0f29b415ed7781c84e3568ef421d1ec",
+      "pages": 5
+    },
+    "uartread": {
+      "passed": true,
+      "sha256": "6f162f005664820fcf317746a517e6355191b1172bc071c5fb8516a2ded5e598",
+      "pages": 5
+    },
+    "gicread": {
+      "passed": true,
+      "sha256": "52aeda7af17c29b2fcfe52ef6fbf0afb32a70556bc2f76d6758105d716a54df7",
+      "pages": 5
+    },
+    "cntpdisable": {
+      "passed": true,
+      "sha256": "5b37020fd92352c39b49e51c2518326be8ab40c28f10a32c7ee1cf312b1a2a29",
+      "pages": 5
+    },
+    "daifmask": {
+      "passed": true,
+      "sha256": "b7d65563db17056ebf79e3ee26f20046e6a8b6f9b5177d9e6824f818afa933b2",
+      "pages": 5
+    },
+    "stackguard": {
+      "passed": true,
+      "sha256": "4f86367876b762ff3fc4083f4fd1b5676a9494a6eb3a5d379535af9799dbe208",
+      "pages": 5
+    },
+    "loop": {
+      "passed": true,
+      "sha256": "4c34efb348ec7242bef07269d4afe8e6899ec1db7b77c24992ff9e28d8dd870a",
+      "pages": 5
+    },
+    "zerowrite": {
+      "passed": true,
+      "sha256": "86771894b41ca129cdd5f1935554ef713a2a22a456bd2b20ba6605cce572636b",
+      "pages": 5
+    },
+    "maxwrite": {
+      "passed": true,
+      "sha256": "82d6bac4e173aa93000e2bb14d1ed3dab25bc3fa514d95c287e6624a3da9bdc8",
+      "pages": 5
+    },
+    "bytebudget": {
+      "passed": true,
+      "sha256": "64848becf7f02e34dd948797f176a7172294dc13b017d0e1f3f079c9567a08e0",
+      "pages": 5
+    },
+    "calllimit": {
+      "passed": true,
+      "sha256": "f3ebb6395f33cafccbcbfa509d753330536617008d04ea5b9450c49efc2393ce",
+      "pages": 5
+    },
+    "invalidstorm": {
+      "passed": true,
+      "sha256": "251316c92f552953dbb36414d10956342c2cd2dd859219ff0aa7d7750f916d1b",
+      "pages": 5
+    },
+    "exit64": {
+      "passed": true,
+      "sha256": "c6a1f73378d975a766c10043fb0dcbfff8a7efbbb2f9bd89b78ce56acbad1f58",
+      "pages": 5
+    },
+    "invalidexit": {
+      "passed": true,
+      "sha256": "97cf215d6400dcdbeebb59b7895bdad8475b595e71f02946675242cc19fbe001",
+      "pages": 5
+    },
+    "stalehandle": {
+      "passed": true,
+      "sha256": "76709f17814b8b52cc7e9a2c966b22a87afdf2cd83483fdf5a543b9279dfc658",
+      "pages": 5
+    },
+    "nogrant": {
+      "passed": true,
+      "sha256": "9d6da3de2e844d2bec1f7d6a2092db07477923ae563ea64fdd6579f23a62388d",
+      "pages": 5
+    },
+    "svcimm": {
+      "passed": true,
+      "sha256": "0a6c93cbf3655284f38f91dbae3c2cd3e5ef164e824953fe534709376de9a976",
+      "pages": 5
+    },
+    "registers": {
+      "passed": true,
+      "sha256": "ab4248899ab3806fada84f2088c768389bcc005c31b399d5f26000261ab89e38",
+      "pages": 5
+    },
+    "badsp": {
+      "passed": true,
+      "sha256": "105f6f2c5e49c1fd26751d70409ea5f09c0f923133bcd10b89479bf8851b3b82",
+      "pages": 5
+    },
+    "startupwrite": {
+      "passed": true,
+      "sha256": "3f7f2f33453ed1d74c44856bdd1e3cc883dfc7666ed97a71da36825ba1f2a59a",
+      "pages": 5
+    },
+    "semihost": {
+      "passed": true,
+      "sha256": "7b21910b5a18d7dfc5ec8104a7c860fbdfcc3d85d909743fc56237b68fee2e03",
+      "pages": 5
+    }
+  },
+  "scope": "reproducible ELF bytes, symbols and instruction inspection; not execution"
+}

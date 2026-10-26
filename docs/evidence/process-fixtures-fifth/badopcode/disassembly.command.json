@@ -1,0 +1,5 @@
+[
+  "aarch64-linux-gnu-objdump",
+  "-d",
+  "/workspace/docs/evidence/process-fixtures-fifth/badopcode/badopcode.elf"
+]

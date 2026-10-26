@@ -1,0 +1,5 @@
+[
+  "readelf",
+  "-sW",
+  "/workspace/docs/evidence/process-fixtures-fifth/badptr_overflow/badptr_overflow.elf"
+]
