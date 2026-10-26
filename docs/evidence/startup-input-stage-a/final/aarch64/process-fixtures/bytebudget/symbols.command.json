@@ -1,0 +1,5 @@
+[
+  "readelf",
+  "-sW",
+  "/workspace/target/evidence/20261026T201039-525539473-aarch64/process-fixtures/bytebudget.elf"
+]

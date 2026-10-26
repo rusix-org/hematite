@@ -1,0 +1,20 @@
+{
+  "passed": true,
+  "command": "make test-all",
+  "exit_code": 0,
+  "parent_commit": "b918abb",
+  "result_counts": {
+    "aarch64": 61,
+    "x86_64": 14
+  },
+  "python_harness_cases_per_target": 147,
+  "startup_input_host_cases": 14,
+  "startup_input_compiler_clients_per_target": 14,
+  "all_21_runtime_elfs_identical_to_verified_launcher": true,
+  "evidence_source_directories": [
+    "target/evidence/20261026T201039-525539473-aarch64",
+    "target/evidence/20261026T201249-849324127-x86_64"
+  ],
+  "scope": "safe startup input codec only; runtime delivery remains unimplemented",
+  "implementation_commit": "409e76e"
+}

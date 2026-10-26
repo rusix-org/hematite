@@ -1,0 +1,18 @@
+[
+  "rustc",
+  "--edition=2024",
+  "--crate-type=lib",
+  "--emit=metadata",
+  "--error-format=json",
+  "--target",
+  "x86_64-unknown-none",
+  "-C",
+  "panic=abort",
+  "--extern",
+  "hm_kernel=/workspace/target/x86_64/boot-test/x86_64-unknown-none/release/libhm_kernel.rlib",
+  "-L",
+  "dependency=/workspace/target/x86_64/boot-test/x86_64-unknown-none/release/deps",
+  "-o",
+  "/workspace/target/evidence/20261026T201249-849324127-x86_64/elf-types/forge_segment.rmeta",
+  "/workspace/target/evidence/20261026T201249-849324127-x86_64/elf-types/forge_segment.rs"
+]

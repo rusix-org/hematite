@@ -1,0 +1,37 @@
+{
+  "cwd": "/workspace",
+  "expected_cases": [
+    "alignment_and_hex_fields",
+    "borrowed_data_exact",
+    "canonical_payload_and_elf",
+    "complete_admission_no_prefix",
+    "descriptive_metadata_not_authority",
+    "empty_and_zero_length_files",
+    "entry_capacity",
+    "file_and_archive_capacity",
+    "gnu_reference_payload_and_elf",
+    "header_field_rejection",
+    "hierarchy_and_duplicates",
+    "metadata_and_types",
+    "mutations_are_total",
+    "padding_and_trailer",
+    "path_capacity_and_alphabet",
+    "truncation_all_prefixes"
+  ],
+  "env": {
+    "HM_INITRAMFS_REFERENCE": "/workspace/target/evidence/20261026T201039-525539473-aarch64/initramfs-fixture/gnu-reference.cpio"
+  },
+  "reference_sha256": "dff9f9e015c94a0623a51070cc4609100b6c5f7fcea3271d4d757e04ee875331",
+  "sources": {
+    "rust-toolchain.toml": "da55df283f88667ec7a31b7392d493f574a36c88467b955d467c3a3cbe2e9fb1",
+    "Cargo.lock": "383e08e95bee956a6cc81d5ee51e1b4dca8355d92c80473228e2c1413b7b177b",
+    "Cargo.toml": "b5ce112343302244db423f588b44e1c4da81b030bf2a3b2d66c7552a94bec1d8",
+    "crates/hm-kernel/Cargo.toml": "5b738f47733eb9c7ff18b1a4a635da1f747595796e3f68ba812379f03c694b9c",
+    "crates/hm-kernel/src/lib.rs": "65f60d680064f953c9cb1195e2bb3bb3510e561a843f6dd72d4f05e7e69555fa",
+    "crates/hm-kernel/src/initramfs.rs": "4ed94918c48c0ef554b0dd361cbe7f0f95d4a321c87f1f6ffcc5b8f7a56c1773",
+    "crates/hm-kernel/tests/initramfs.rs": "3c0e9f58fa25f16774016b5ecf38960b57475237f1f4ab312a62fba058983f7e",
+    "tools/check_initramfs.py": "d4ca90aed59f5d75c9a9e6e61a699111fc8395cdf84ca080093e1df25e8e3229",
+    "crates/hm-core/fixtures/initramfs.cpio": "b912d0090fc5d4315cc721271fb054f1fccd60867fed0b93b94ba8890d898797",
+    "crates/hm-core/fixtures/process/hello.elf": "ff2e501c58a3aacf376045d496d3313d6f8872e763e27e8bb04451e33b2b4e52"
+  }
+}

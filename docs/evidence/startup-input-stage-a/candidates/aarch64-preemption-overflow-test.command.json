@@ -1,0 +1,17 @@
+[
+  "cargo",
+  "rustc",
+  "--locked",
+  "--offline",
+  "-p",
+  "hm-core",
+  "--release",
+  "--target",
+  "aarch64-unknown-none",
+  "--target-dir",
+  "target/aarch64/preemption-overflow-test",
+  "--features",
+  "preemption-overflow-test",
+  "--",
+  "--emit=link,asm"
+]

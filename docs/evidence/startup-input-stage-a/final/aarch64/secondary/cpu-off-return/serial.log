@@ -1,0 +1,6 @@
+hematite: ARM64 Rust kernel entered at EL1
+Boot RAM bytes: 0x0000000008000000 (discovered RAM)
+Frame pool pages: 0x0000000000000cf6 (4 KiB each; boot reservations excluded)
+HMSMP BEGIN 2
+HMSMP INFO version=65537 cpu_on=0 cpu_off=0 affinity_info=0
+HMSMP EXPECT CPU-OFF-RETURN

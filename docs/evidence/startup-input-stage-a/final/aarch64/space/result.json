@@ -1,0 +1,8 @@
+{
+  "passed": true,
+  "profiles": {
+    "space-64m-1cpu": true,
+    "space-128m-1cpu": true,
+    "space-128m-2cpu": true
+  }
+}

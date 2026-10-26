@@ -1,0 +1,57 @@
+{
+  "passed": true,
+  "checks": {
+    "exit_success": true,
+    "within_deadline": true,
+    "launched": true,
+    "complete_report": true,
+    "bounded_logs": true
+  },
+  "execution": {
+    "started_utc": "2026-10-26T20:11:50.727933+00:00",
+    "timeout_seconds": 60,
+    "returncode": 0,
+    "timed_out": false,
+    "launch_error": null,
+    "elapsed_seconds": 1.1676749780308455
+  },
+  "artifacts": {
+    "stdout": {
+      "bytes": 398,
+      "within_limit": true,
+      "sha256": "6b49c036e027ad32c499e6f49021cc8861bbfb969bc5e5295740fa452571e1f4"
+    },
+    "stderr": {
+      "bytes": 255,
+      "within_limit": true,
+      "sha256": "22d55040e54efddca2f41f7937fc69bdfd3fecdab0f25feccfdcbd0e744eb330"
+    }
+  },
+  "report": {
+    "passed": true,
+    "errors": [],
+    "expected_cases": [
+      "canonical_native_image",
+      "corrupt_suffix_precedes_missing",
+      "corrupt_suffix_rejects_existing_image",
+      "directory_entry",
+      "exact_lookup_only",
+      "image_outlives_temporary_path",
+      "invalid_elf_entry",
+      "missing_entry"
+    ],
+    "observed_lines": [
+      "running 8 tests",
+      "test canonical_native_image ... ok",
+      "test corrupt_suffix_precedes_missing ... ok",
+      "test corrupt_suffix_rejects_existing_image ... ok",
+      "test directory_entry ... ok",
+      "test exact_lookup_only ... ok",
+      "test image_outlives_temporary_path ... ok",
+      "test invalid_elf_entry ... ok",
+      "test missing_entry ... ok",
+      "test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s"
+    ]
+  },
+  "scope": "actual safe complete-archive admission and ELF composition; no execution"
+}

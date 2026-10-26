@@ -1,0 +1,10 @@
+{
+  "passed": true,
+  "profiles": {
+    "lifecycle-128m": true,
+    "lifecycle-64m": true,
+    "topology": true,
+    "stale-generation": true,
+    "cpu-off-return": true
+  }
+}
