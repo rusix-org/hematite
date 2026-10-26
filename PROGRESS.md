@@ -1,56 +1,66 @@
 # Progress
 
-Current phase: **0 — evaluation and proposed decisions**. No approval recorded;
-no hematite kernel code implemented. Phase 0 exit gate has not passed.
+Current phase: **runnable local bootstrap; native-first research begins**.
+Aaron approved scratch implementation and then changed the primary objective
+from strict Linux parity to native OS design with selective compatibility.
+[ADR 0005](docs/adr/0005-native-first-design.md) records the new direction.
 
-## State and evidence
+## Implemented and verified locally
 
-| Item | State | Evidence / remaining work |
-| --- | --- | --- |
-| Existing-project assessment | Implemented, documentation scope | [ADR 0001](docs/adr/0001-project-direction.md); baseline build/boot verified; workload evaluation outstanding |
-| License | Proposed, awaiting approval | [ADR 0002](docs/adr/0002-license.md); no LICENSE adopted |
-| Name | Blocked for public use | [ADR 0003](docs/adr/0003-name.md); collisions found; candidate needed |
-| Core architecture | Proposed; initial AI review done, approval pending | [ADR 0004](docs/adr/0004-core-architecture.md) |
-| Repository CI | Verified locally (record presence only); unverified in GitHub | `.github/workflows/checks.yml`; records check only, not a phase exit gate |
-| Asterinas build/boot | Verified locally: upstream build and boot smoke only | [Evaluation record](docs/evidence/asterinas-evaluation.md) |
-| Kernel, Cargo workspace, pinned build environment, QEMU harness | Planned after decisions | Phase 0 implementation gate in [AGENTS.md](AGENTS.md) |
-| Phases 1–7 | Planned | [AGENTS.md](AGENTS.md); no compatibility claims |
+- Stable Rust 1.99.0 workspace, no external kernel crates, locked dependencies.
+- Original PVH 32-bit entry into 64-bit Rust, fixed microvm profile, guarded
+  stack, supervisor-only 4 KiB mappings, W^X, NX, SMEP, SMAP and CR0.WP.
+- Audited boundary structure: `hm-core` owns unsafe operations; `hm-kernel`
+  forbids unsafe code. Independent AI design/source review and fixes recorded;
+  this is not a human or complete soundness audit.
+- Serial monitor: `make run`, then `help`, `status`, `test`; Ctrl-C exits.
+- `make test`: formatting, Clippy, safety-boundary checks, 8 host harness tests,
+  9 guest tests, 3 missing-feature rejection profiles, and live monitor command,
+  oversized-input/recovery and complete-test-report checks. All passed locally.
+- Final environment is 1.59 GB uncompressed, pinned Rust base and Debian package
+  snapshot, QEMU 7.2.22. One CPU/128 MiB guest; no attached disks or networking.
+
+Evidence: [bootstrap verification](docs/evidence/hematite-bootstrap.md),
+[final guest results](docs/evidence/hematite-final-suite/boot/result.json),
+[profile results](docs/evidence/hematite-final-suite/profiles/result.json).
+The earlier [Asterinas baseline](docs/evidence/asterinas-evaluation.md) remains
+an evaluation only; it is not this kernel's implementation.
+
+## Limits and gates
+
+No userspace, syscall ABI, allocator, interrupts/exceptions, SMP, storage,
+virtio drivers or networking exists. Page-guard tests inspect mappings; there
+is no recoverable page-fault handler. No Linux compatibility claim exists.
+The native capability/cancellation proposals are not yet implemented.
+
+CI runs the same command and retains raw evidence, but has not run remotely:
+no remote was created or pushed. Therefore the formal CI phase-exit gate is
+not claimed passed. License selection remains pending (ADR 0002); Hematite
+remains a local codename (ADR 0003). These do not revoke Aaron's authorization
+to continue local kernel work; they prevent claiming a licensed/public release.
 
 ## Next actions
 
-1. Review the completed upstream build/boot baseline and its limited scope.
-2. Review the evidence and obtain Aaron's direction, license, name, and core
-   architecture decisions. Record approvals explicitly in the ADRs.
-3. For the approved direction, declare target workload and Linux LTS oracle;
-   obtain independent core-design review before implementation.
-4. Implement and verify the Phase 0 skeleton only after its approval gate.
+1. Implement and test ADR 0005's safe capability/resource-lifetime model:
+   stale handles, rights attenuation, budgets, cancellation and reclamation.
+2. Design/review boot-memory discovery, frame allocation, exceptions and
+   scheduling before integrating the model with real resources (Phase 1).
+3. Define the native userspace wire contract from those experiments; select
+   compatibility workloads and pin a Linux oracle when the adapter exists.
+4. Resolve licensing/public naming before distribution; run remote CI only
+   after explicit permission to publish/push.
 
-## Local checks
+## Session ledger
 
-- `python3 tools/check_repository.py`: exit 0 on 2026-10-25; required records
-  present. Does not validate approval, technical correctness, or runtime gates.
-
-## Sessions
-
-- 2026-10-25: Inspected empty Git history and sole founding file. Created
-  proposed ADRs, repository checks, and evidence ledger. Started unmodified
-  Asterinas evaluation on disk with bounded build/VM resources. No public
-  remote, push, host-kernel change, or kernel implementation.
-
-- 2026-10-25 continuation: Revalidated image pull session `48065` as live;
-  no build/boot result yet. Independent AI architecture review recorded in
-  `docs/reviews/0004-core-architecture.md`; strengthened DMA authority,
-  forgotten-guard and user-copy permission contracts in ADR 0004. Local
-  record checks pass; upstream checkout remains unmodified.
-
-- 2026-10-25 continuation: Image pull completed (exit 0); digest recorded.
-  Started bounded unmodified upstream build in session `93650`, container
-  `hematite-asterinas-eval-20261025`. Initramfs and OSDK completed; kernel
-  compilation remains live. Recorded upstream unlocked OSDK dependency
-  resolution as a reproducibility limitation. No boot result yet.
-
-- 2026-10-25 continuation: Upstream build completed (exit 0). Bounded QEMU/KVM
-  boot completed with one native boot marker and exit 33; host harness exit 0.
-  Raw commands, logs, hashes and limitations are in the evaluation record.
-  Updated ADR 0001 with measured evidence. No hematite kernel or approved
-  direction/license/name/architecture exists yet.
+- 2026-10-25: Evaluated Asterinas, recorded proposed decisions and initial CI;
+  upstream build/boot baseline committed as `2492ebb`.
+- 2026-10-25: Aaron selected scratch and requested a runnable kernel. Wrote and
+  independently reviewed bootstrap design. Fixed hardware-mutated page-table
+  declarations and strengthened alias checks before boot. Preserved initial
+  code-model/LTO build failure; corrected target configuration.
+- 2026-10-25: Original kernel booted, then passed the complete suite in the
+  smaller pinned environment. Exercised `make run` interactively and exited
+  cleanly. No host boot configuration or kernel changed.
+- 2026-10-25: Aaron revised the objective to explore native Rust OS designs
+  with best-effort Linux compatibility. Updated AGENTS/ADRs and proposed a
+  measurable capability/lifetime experiment. No performance advantage claimed.

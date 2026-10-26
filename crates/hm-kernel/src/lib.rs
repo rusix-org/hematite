@@ -10,8 +10,12 @@ use core::ops::Range;
 pub struct BootChecks {
     pub write_protect: bool,
     pub nx: bool,
-    pub smep: bool,
-    pub smap: bool,
+    /// Architecture-specific observation: x86 SMEP; ARM bootstrap
+    /// privileged-only mappings with UXN preventing execution by userspace.
+    pub user_execute_protect: bool,
+    /// Architecture-specific observation: x86 SMAP; ARM PAN together with
+    /// the bootstrap's privileged-only mappings.
+    pub user_access_protect: bool,
     pub wx: bool,
     pub stack_guard: bool,
     pub null_guard: bool,
@@ -171,8 +175,8 @@ pub fn run_tests(platform: &mut impl Platform) -> bool {
     let cases = [
         ("write_protect", checks.write_protect),
         ("nx", checks.nx),
-        ("smep", checks.smep),
-        ("smap", checks.smap),
+        ("user_execute_protect", checks.user_execute_protect),
+        ("user_access_protect", checks.user_access_protect),
         ("wx", checks.wx),
         ("stack_guard", checks.stack_guard),
         ("null_guard", checks.null_guard),
@@ -200,8 +204,8 @@ fn status(platform: &mut impl Platform) {
     for (name, enabled) in [
         ("write protection", checks.write_protect),
         ("NX", checks.nx),
-        ("SMEP", checks.smep),
-        ("SMAP", checks.smap),
+        ("user execution protection", checks.user_execute_protect),
+        ("user access protection", checks.user_access_protect),
         ("W^X mappings", checks.wx),
         ("stack guard", checks.stack_guard),
         ("null guard", checks.null_guard),

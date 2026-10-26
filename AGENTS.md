@@ -21,9 +21,11 @@ without inheriting Linux's internal design or every historical ABI constraint.
   reference for supported interfaces, not as a universal conformance mandate.
   Document deliberate differences and missing features. Do not label a native
   or ported program as an unmodified Linux workload.
-- Initial deployment target: an **x86_64 virtio guest** (QEMU/KVM microVM
-  class): virtio-blk, virtio-net, virtio-console/serial, no legacy hardware.
-  arm64 virtio guest is the second target. Nothing else until those work.
+- Primary deployment target: an **ARM64 virtio guest** (QEMU `virt`, then
+  native ARM/KVM). Keep the existing x86_64 microvm as a regression target;
+  ADR 0006 records Aaron's priority change. Planned devices are virtio-blk,
+  virtio-net and virtio-console/serial. No broad physical hardware support;
+  bootstrap UARTs and test exits are explicit bring-up instrumentation.
 - "Useful" means: a declared real service workload runs end to end, with every
   userspace-reachable path in memory-safe Rust and `unsafe` confined to an
   audited core. State whether each workload is native, ported, or an unmodified
@@ -76,8 +78,10 @@ Decision records:
   and handle faults; never by raw pointer in syscall code.
 - Kernel paths must not panic on userspace input. Errors become errno values.
   Integer overflow behavior is explicit (`checked_`/`wrapping_`/`saturating_`).
-- Hardening from early on: SMEP/SMAP, NX, W^X kernel mappings, guard pages on
-  kernel stacks. KASLR later.
+- Hardening from early on: architecture-appropriate privilege/access controls
+  (x86 SMEP/SMAP; ARM AP/PXN/UXN/PAN), NX, W^X kernel mappings and guarded
+  kernel stacks. Record the actual tested mechanism, not an assumed cross-ISA
+  equivalence. KASLR later.
 
 ### Clean-room and provenance
 
@@ -97,7 +101,8 @@ Decision records:
 - Cargo workspace. Pin the exact toolchain in `rust-toolchain.toml`. Prefer
   stable Rust; each nightly feature used is listed with its reason and an exit
   plan.
-- Target `x86_64-unknown-none` (custom target JSON only if required).
+- Default target `aarch64-unknown-none`; regression target
+  `x86_64-unknown-none` (custom target JSON only if required).
 - Boot protocol: choose and record one (e.g. Limine, Multiboot2, or PVH for
   direct QEMU/Firecracker kernel boot).
 - A pinned container image (Dockerfile) defines the build/test environment:
@@ -194,9 +199,10 @@ and known-gaps list.
 **Exit:** the "useful" definition in Objective is met and independently
 reproducible from a fresh clone.
 
-### Phase 7: arm64 and widening
-arm64 virtio guest at parity with x86_64 test results. Then widen the
-workload/ABI target by recorded decision.
+### Phase 7: cross-architecture parity and widening
+ARM64 is primary from bootstrap onward, with x86_64 regression coverage.
+Establish workload/device parity and native ARM/KVM measurements, then widen
+the workload/ABI target by recorded decision.
 
 ## Working rules for agents
 

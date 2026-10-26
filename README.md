@@ -1,13 +1,38 @@
 # hematite (working name)
 
-A proposed Rust kernel implementing a declared subset of the Linux userspace
-ABI. The project is in **Phase 0: evaluation and decisions**; no kernel is
-implemented, and the name and license are not approved.
+A from-scratch Rust-native OS exploring explicit ownership, capability-based
+access, and better resource lifecycles. Linux compatibility is a selective
+adapter, not the definition of the native interfaces. It currently boots on
+an ARM64 QEMU `virt` guest into a serial monitor, with x86_64 microvm
+retained as a regression target. **There is no Linux userspace support yet.**
 
-Start with [AGENTS.md](AGENTS.md), [PROGRESS.md](PROGRESS.md), and the
-[decision records](docs/adr/). Proposed decisions are not authorization to
-implement them. Evaluation checkouts and build artifacts live in `.work/`.
+With Docker running and Make installed:
 
-Repository checks: `python3 tools/check_repository.py`. These checks validate
-decision-record structure only; they do not establish kernel compatibility or
-satisfy the Phase 0 boot gate.
+```sh
+make run    # build and open the ARM64 monitor; Ctrl-C exits
+```
+
+Type `help`, `status`, or `test`. `status` reports the active memory protections;
+`test` runs the nine bootstrap checks. This is a kernel monitor, not a shell.
+
+```sh
+make build                  # ARM64 image under target/aarch64/monitor/
+make test                   # ARM64 lint, host and QEMU checks
+make test-all               # both architectures, run sequentially
+make run ARCH=x86_64        # optional x86_64 monitor
+```
+
+The first command builds the digest-pinned container environment. Subsequent
+builds use its cache. QEMU uses software emulation, one CPU and 128 MiB of RAM;
+KVM and host boot changes are not required. Builds use two CPUs and at most
+4 GiB container RAM. No disks or networking are attached to the guest.
+
+Test runs preserve serial output, input hash, expanded QEMU command and results
+under `target/evidence/`. Missing/duplicate/failed cases, unexpected exit status
+and timeouts fail the command. GitHub CI runs the same `make test-all` command;
+remote CI has not been executed because no remote has been published.
+
+See [PROGRESS.md](PROGRESS.md), [the bootstrap design](docs/design/0001-bootstrap.md),
+[decision records](docs/adr/), and [AGENTS.md](AGENTS.md). The name remains local
+and provisional, and the proposed license has not been adopted. The evaluated
+Asterinas code in ignored `.work/` is not part of this kernel.

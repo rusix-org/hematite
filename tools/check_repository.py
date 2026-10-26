@@ -9,6 +9,7 @@ REQUIRED = (
     "docs/adr/0001-project-direction.md", "docs/adr/0002-license.md",
     "docs/adr/0003-name.md", "docs/adr/0004-core-architecture.md",
     "docs/adr/0005-native-first-design.md", "docs/design/0001-bootstrap.md",
+    "docs/adr/0006-arm64-priority.md", "docs/design/0002-arm64-bootstrap.md",
 )
 
 

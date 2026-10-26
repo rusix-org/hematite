@@ -1,0 +1,113 @@
+docker build --tag hematite-build:phase0 .
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 764B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/rust:1.99.0-slim-bookworm@sha256:2c3a22f0a5533ea2dd5a16627bc841228151faa2d4de2644ac9987e4a2f1f2fa
+#2 DONE 0.0s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 54B done
+#3 DONE 0.0s
+
+#4 [1/4] FROM docker.io/library/rust:1.99.0-slim-bookworm@sha256:2c3a22f0a5533ea2dd5a16627bc841228151faa2d4de2644ac9987e4a2f1f2fa
+#4 resolve docker.io/library/rust:1.99.0-slim-bookworm@sha256:2c3a22f0a5533ea2dd5a16627bc841228151faa2d4de2644ac9987e4a2f1f2fa 0.0s done
+#4 DONE 0.0s
+
+#5 [2/4] RUN rm -f /etc/apt/sources.list.d/debian.sources     && printf 'deb [check-valid-until=no] https://snapshot.debian.org/archive/debian/20261025T000000Z/ bookworm main\n' > /etc/apt/sources.list     && apt-get update     && apt-get install -y --no-install-recommends qemu-system-x86 python3 make binutils     && rm -rf /var/lib/apt/lists/*
+#5 CACHED
+
+#6 [3/4] RUN rustup component add rustfmt clippy --toolchain 1.99.0     && rustup target add x86_64-unknown-none --toolchain 1.99.0
+#6 CACHED
+
+#7 [4/4] WORKDIR /workspace
+#7 CACHED
+
+#8 exporting to image
+#8 exporting layers done
+#8 exporting manifest sha256:df8beda2f54739577177f586498ee3ea377dd20d6f12b472268e2457e86af7f8 done
+#8 exporting config sha256:0da0e3f3d25a9db547e4beff338ddc6b0c7c0d9556b77bbdc31a7d9672932a80 done
+#8 exporting attestation manifest sha256:5f83f6c97138f508480d1a9093c21564ecfc9ec91a12105eb828338e56f17581
+#8 exporting attestation manifest sha256:5f83f6c97138f508480d1a9093c21564ecfc9ec91a12105eb828338e56f17581 0.0s done
+#8 exporting manifest list sha256:eb21a50823af078297d17dfde2e331bd9bba2b38d7fac2bf22c055b2eba637fe 0.0s done
+#8 naming to docker.io/library/hematite-build:phase0 done
+#8 unpacking to docker.io/library/hematite-build:phase0 done
+#8 DONE 0.1s
+bash tools/dev.sh bash -eu -c '\
+	evidence_dir="target/evidence/$(date -u +%Y%m%dT%H%M%S-%N)"; \
+	mkdir -p "$evidence_dir"; \
+	{ rustc --version; cargo --version; qemu-system-x86_64 --version; sha256sum /usr/share/qemu/bios-microvm.bin; } > "$evidence_dir/environment.log"; \
+	cargo fmt --all -- --check; \
+	cargo clippy --workspace --all-features --locked --offline -- -D warnings; \
+	python3 tools/test_test_kernel.py; \
+	python3 tools/check_repository.py; \
+	python3 tools/check_safety.py; \
+	cargo build --locked --offline -p hm-core --release --features boot-tests --target-dir target/boot-test; \
+	cargo build --locked --offline -p hm-core --release --target-dir target/monitor; \
+	python3 tools/test_kernel.py \
+		--kernel target/boot-test/x86_64-unknown-none/release/hematite \
+		--output "$evidence_dir/boot" --accel tcg; \
+	python3 tools/test_boot_profiles.py \
+		--test-kernel target/boot-test/x86_64-unknown-none/release/hematite \
+		--monitor-kernel target/monitor/x86_64-unknown-none/release/hematite \
+		--output "$evidence_dir/profiles"'
+    Checking hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+    Checking hm-core v0.1.0 (/workspace/crates/hm-core)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.32s
+........
+----------------------------------------------------------------------
+Ran 8 tests in 0.007s
+
+OK
+PASS: Phase 0 records present; approval and runtime gates not assessed
+PASS: safe crate roots, dependency-free lockfile, core SAFETY-comment hygiene
+Scope: structural hygiene only; compile all targets and review core soundness separately
+    Finished `release` profile [optimized] target(s) in 0.06s
+    Finished `release` profile [optimized] target(s) in 0.01s
+{
+  "passed": true,
+  "scope": "hematite bootstrap tests; no Linux ABI compatibility claim",
+  "expected_cases": [
+    "write_protect",
+    "nx",
+    "smep",
+    "smap",
+    "wx",
+    "stack_guard",
+    "null_guard",
+    "checked_range",
+    "monitor_bounds"
+  ],
+  "observed_records": [
+    "HMTEST BEGIN 9",
+    "HMTEST PASS write_protect",
+    "HMTEST PASS nx",
+    "HMTEST PASS smep",
+    "HMTEST PASS smap",
+    "HMTEST PASS wx",
+    "HMTEST PASS stack_guard",
+    "HMTEST PASS null_guard",
+    "HMTEST PASS checked_range",
+    "HMTEST PASS monitor_bounds",
+    "HMTEST END 9"
+  ],
+  "returncode": 33,
+  "timed_out": false,
+  "launch_error": null,
+  "errors": [],
+  "started_utc": "2026-10-26T05:28:34.074428+00:00",
+  "elapsed_seconds": 0.16515753499697894,
+  "timeout_seconds": 20
+}
+{
+  "passed": true,
+  "scope": "bootstrap CPU rejection and serial monitor; no Linux ABI claims",
+  "profiles": {
+    "missing-nx": true,
+    "missing-smep": true,
+    "missing-smap": true,
+    "monitor": true
+  }
+}

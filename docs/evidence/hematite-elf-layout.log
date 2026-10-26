@@ -1,0 +1,22 @@
+
+Elf file type is EXEC (Executable file)
+Entry point 0x100000
+There are 4 program headers, starting at offset 64
+
+Program Headers:
+  Type           Offset   VirtAddr           PhysAddr           FileSiz  MemSiz   Flg Align
+  LOAD           0x001000 0x0000000000100000 0x0000000000100000 0x001c30 0x001c30 R E 0x1000
+  LOAD           0x003000 0x0000000000102000 0x0000000000102000 0x0003a8 0x0003a8 R   0x1000
+  LOAD           0x004000 0x0000000000103000 0x0000000000103000 0x000000 0x01c000 RW  0x1000
+  NOTE           0x003394 0x0000000000102394 0x0000000000102394 0x000014 0x000014 R   0x4
+
+ Section to Segment mapping:
+  Segment Sections...
+   00     .text 
+   01     .rodata .note.Xen 
+   02     .bss .stack 
+   03     .note.Xen 
+
+Displaying notes found in: .note.Xen
+  Owner                Data size 	Description
+  Xen                  0x00000004	Unknown note type: (0x00000012)	   description data: 00 00 10 00 

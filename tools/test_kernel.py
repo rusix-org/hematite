@@ -12,15 +12,19 @@ import time
 
 
 CASES = (
-    "write_protect", "nx", "smep", "smap", "wx", "stack_guard", "null_guard",
+    "write_protect", "nx", "user_execute_protect", "user_access_protect",
+    "wx", "stack_guard", "null_guard",
     "checked_range", "monitor_bounds",
 )
-SUCCESS_EXIT = 33
+SUCCESS_EXITS = {"aarch64": 0, "x86_64": 33}
 TIMEOUT_SECONDS = 20
 
 
-def validate_run(console, returncode, *, timed_out=False, launch_error=None):
+def validate_run(console, returncode, *, arch="aarch64", timed_out=False, launch_error=None):
     """Require an exact ordered inventory, delimiters, and debug-exit status."""
+    if arch not in SUCCESS_EXITS:
+        raise ValueError(f"Unsupported architecture: {arch}")
+    success_exit = SUCCESS_EXITS[arch]
     expected = [f"HMTEST BEGIN {len(CASES)}"]
     expected += [f"HMTEST PASS {name}" for name in CASES]
     expected += [f"HMTEST END {len(CASES)}"]
@@ -49,14 +53,16 @@ def validate_run(console, returncode, *, timed_out=False, launch_error=None):
             errors.append(f"Unexpected output inside test report at line {number}")
     if observed != expected:
         errors.append("Test records do not match the exact expected inventory and order")
-    if returncode != SUCCESS_EXIT:
-        errors.append(f"Expected QEMU debug-exit {SUCCESS_EXIT}, got {returncode}")
+    if returncode != success_exit:
+        errors.append(f"Expected {arch} QEMU success exit {success_exit}, got {returncode}")
     if timed_out:
         errors.append(f"QEMU exceeded {TIMEOUT_SECONDS}-second deadline")
     if launch_error is not None:
         errors.append(f"QEMU could not launch: {launch_error}")
     return {
         "passed": not errors,
+        "arch": arch,
+        "expected_exit": success_exit,
         "scope": "hematite bootstrap tests; no Linux ABI compatibility claim",
         "expected_cases": list(CASES),
         "observed_records": observed,
@@ -67,7 +73,19 @@ def validate_run(console, returncode, *, timed_out=False, launch_error=None):
     }
 
 
-def qemu_command(kernel, accel):
+def qemu_command(kernel, accel, arch="aarch64"):
+    if arch == "aarch64":
+        if accel != "tcg":
+            raise ValueError("The aarch64 bootstrap profile currently requires TCG")
+        return [
+            "qemu-system-aarch64", "-machine", "virt,virtualization=off,secure=off",
+            "-cpu", "max", "-accel", "tcg", "-m", "128M", "-smp", "1",
+            "-nodefaults", "-no-user-config", "-display", "none",
+            "-monitor", "none", "-serial", "stdio", "-no-reboot",
+            "-semihosting-config", "enable=on,target=native", "-kernel", str(kernel),
+        ]
+    if arch != "x86_64" or accel not in ("tcg", "kvm"):
+        raise ValueError(f"Unsupported architecture/accelerator: {arch}/{accel}")
     return [
         "qemu-system-x86_64",
         "-machine", "microvm,pic=off,pit=off,rtc=off,isa-serial=on",
@@ -79,7 +97,7 @@ def qemu_command(kernel, accel):
     ]
 
 
-def run_qemu(command, output):
+def run_qemu(command, output, arch="aarch64"):
     """Capture failure evidence as well as success; callers supply a fresh dir."""
     (output / "command.json").write_text(json.dumps(command, indent=2) + "\n")
     started = datetime.now(timezone.utc).isoformat()
@@ -99,7 +117,7 @@ def run_qemu(command, output):
             launch_error = str(error)
     result = validate_run(
         (output / "serial.log").read_bytes(), returncode,
-        timed_out=timed_out, launch_error=launch_error,
+        arch=arch, timed_out=timed_out, launch_error=launch_error,
     )
     result.update(started_utc=started, elapsed_seconds=time.monotonic() - start,
                   timeout_seconds=TIMEOUT_SECONDS)
@@ -112,8 +130,11 @@ def main():
     parser.add_argument("--kernel", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--accel", choices=("tcg", "kvm"), default="tcg")
+    parser.add_argument("--arch", choices=("aarch64", "x86_64"), default="aarch64")
     args = parser.parse_args()
     kernel, output = args.kernel.resolve(), args.output.resolve()
+    if args.arch == "aarch64" and args.accel != "tcg":
+        parser.error("aarch64 currently requires --accel tcg")
     if not kernel.is_file():
         parser.error(f"kernel ELF not found: {kernel}")
     if output.exists() and (not output.is_dir() or any(output.iterdir())):
@@ -122,9 +143,9 @@ def main():
     (output / "input.json").write_text(json.dumps({
         "kernel": str(kernel),
         "sha256": hashlib.sha256(kernel.read_bytes()).hexdigest(),
-        "accel": args.accel,
+        "accel": args.accel, "arch": args.arch,
     }, indent=2) + "\n")
-    result = run_qemu(qemu_command(kernel, args.accel), output)
+    result = run_qemu(qemu_command(kernel, args.accel, args.arch), output, args.arch)
     print(json.dumps(result, indent=2))
     return 0 if result["passed"] else 1
 

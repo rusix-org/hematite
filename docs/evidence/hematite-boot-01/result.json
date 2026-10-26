@@ -1,0 +1,35 @@
+{
+  "passed": true,
+  "scope": "hematite bootstrap tests; no Linux ABI compatibility claim",
+  "expected_cases": [
+    "write_protect",
+    "nx",
+    "smep",
+    "smap",
+    "wx",
+    "stack_guard",
+    "null_guard",
+    "checked_range",
+    "monitor_bounds"
+  ],
+  "observed_records": [
+    "HMTEST BEGIN 9",
+    "HMTEST PASS write_protect",
+    "HMTEST PASS nx",
+    "HMTEST PASS smep",
+    "HMTEST PASS smap",
+    "HMTEST PASS wx",
+    "HMTEST PASS stack_guard",
+    "HMTEST PASS null_guard",
+    "HMTEST PASS checked_range",
+    "HMTEST PASS monitor_bounds",
+    "HMTEST END 9"
+  ],
+  "returncode": 33,
+  "timed_out": false,
+  "launch_error": null,
+  "errors": [],
+  "started_utc": "2026-10-26T05:23:03.945000+00:00",
+  "elapsed_seconds": 0.1661702999845147,
+  "timeout_seconds": 20
+}

@@ -1,0 +1,182 @@
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 457B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/asterinas/dev@sha256:6a62f4eb57337e23733f3b40036bbbea5b022c972f21ed9557ad9a4437848306
+#2 DONE 1.4s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 54B done
+#3 DONE 0.1s
+
+#4 [1/3] FROM docker.io/asterinas/dev@sha256:6a62f4eb57337e23733f3b40036bbbea5b022c972f21ed9557ad9a4437848306
+#4 resolve docker.io/asterinas/dev@sha256:6a62f4eb57337e23733f3b40036bbbea5b022c972f21ed9557ad9a4437848306 0.1s done
+#4 DONE 1.8s
+
+#4 [1/3] FROM docker.io/asterinas/dev@sha256:6a62f4eb57337e23733f3b40036bbbea5b022c972f21ed9557ad9a4437848306
+#4 extracting sha256:a60ef8ec184edb5ed91f5983f00261359fb2fe20f603e8d488b9477d32fcad70
+#4 extracting sha256:a60ef8ec184edb5ed91f5983f00261359fb2fe20f603e8d488b9477d32fcad70 1.1s done
+#4 DONE 3.0s
+
+#4 [1/3] FROM docker.io/asterinas/dev@sha256:6a62f4eb57337e23733f3b40036bbbea5b022c972f21ed9557ad9a4437848306
+#4 extracting sha256:b984565fba4c967dd6614fd3cfa3301e291921c634e28e081e0e3523f8075040
+#4 extracting sha256:b984565fba4c967dd6614fd3cfa3301e291921c634e28e081e0e3523f8075040 4.7s done
+#4 DONE 7.7s
+
+#4 [1/3] FROM docker.io/asterinas/dev@sha256:6a62f4eb57337e23733f3b40036bbbea5b022c972f21ed9557ad9a4437848306
+#4 extracting sha256:4f4fb700ef54461cfa02571ae0db9a0dc1e0cdb5577484a6d75e68dc38e8acc1 0.0s done
+#4 extracting sha256:c6163111cf3c00b295b2fe8648f62df60396af51c7cafa4bdba2368dac689c9b
+#4 extracting sha256:c6163111cf3c00b295b2fe8648f62df60396af51c7cafa4bdba2368dac689c9b 3.2s done
+#4 DONE 10.9s
+
+#4 [1/3] FROM docker.io/asterinas/dev@sha256:6a62f4eb57337e23733f3b40036bbbea5b022c972f21ed9557ad9a4437848306
+#4 extracting sha256:305d758063f934d6789b828b9e6c8363d9e6b8a19b0d93290876ed565b86796d
+#4 extracting sha256:305d758063f934d6789b828b9e6c8363d9e6b8a19b0d93290876ed565b86796d 27.2s done
+#4 DONE 38.1s
+
+#4 [1/3] FROM docker.io/asterinas/dev@sha256:6a62f4eb57337e23733f3b40036bbbea5b022c972f21ed9557ad9a4437848306
+#4 extracting sha256:db50453767b1076f466bd173d320692384e3dfabb378af29583a0761b234a78f 0.0s done
+#4 extracting sha256:e3f28e32b09e5c4dae7ff2f2210b9c34958cc3768351070a8d0b6026105502c6
+#4 extracting sha256:e3f28e32b09e5c4dae7ff2f2210b9c34958cc3768351070a8d0b6026105502c6 11.5s done
+#4 DONE 49.6s
+
+#4 [1/3] FROM docker.io/asterinas/dev@sha256:6a62f4eb57337e23733f3b40036bbbea5b022c972f21ed9557ad9a4437848306
+#4 extracting sha256:a4d04c9fcaa9b7575461a72b0cc9a4a9e53d5b2f6fa8d72e499cc6b9407b1401
+#4 extracting sha256:a4d04c9fcaa9b7575461a72b0cc9a4a9e53d5b2f6fa8d72e499cc6b9407b1401 0.6s done
+#4 DONE 50.2s
+
+#4 [1/3] FROM docker.io/asterinas/dev@sha256:6a62f4eb57337e23733f3b40036bbbea5b022c972f21ed9557ad9a4437848306
+#4 extracting sha256:fae9d0e9965d0e7a9a7ee5c4962cfc4cf87ce56b4e589de7154b35bd6a5c4248
+#4 extracting sha256:fae9d0e9965d0e7a9a7ee5c4962cfc4cf87ce56b4e589de7154b35bd6a5c4248 3.8s done
+#4 DONE 54.1s
+
+#4 [1/3] FROM docker.io/asterinas/dev@sha256:6a62f4eb57337e23733f3b40036bbbea5b022c972f21ed9557ad9a4437848306
+#4 extracting sha256:4f2b202b7aea89173fb99342e8241957955fb59cc4f2c3eef5b57a8902fb23d9 0.1s done
+#4 extracting sha256:39cd2c59658921b3e8eb98d4e2f36fb66774e3c7a5781aae3b7f01a14f2eaf83
+#4 extracting sha256:39cd2c59658921b3e8eb98d4e2f36fb66774e3c7a5781aae3b7f01a14f2eaf83 0.6s done
+#4 DONE 54.7s
+
+#4 [1/3] FROM docker.io/asterinas/dev@sha256:6a62f4eb57337e23733f3b40036bbbea5b022c972f21ed9557ad9a4437848306
+#4 extracting sha256:77b88103366e2512f6a06501d75c60c443493cc69059aa1ae915f94c7eadc6fd
+#4 extracting sha256:77b88103366e2512f6a06501d75c60c443493cc69059aa1ae915f94c7eadc6fd 0.6s done
+#4 DONE 55.3s
+
+#4 [1/3] FROM docker.io/asterinas/dev@sha256:6a62f4eb57337e23733f3b40036bbbea5b022c972f21ed9557ad9a4437848306
+#4 extracting sha256:5971e9e2f8c2bd0f7dab0041ae307b6a19e7992550255d05ec60dd602630bf94
+#4 extracting sha256:5971e9e2f8c2bd0f7dab0041ae307b6a19e7992550255d05ec60dd602630bf94 0.4s done
+#4 DONE 55.7s
+
+#4 [1/3] FROM docker.io/asterinas/dev@sha256:6a62f4eb57337e23733f3b40036bbbea5b022c972f21ed9557ad9a4437848306
+#4 extracting sha256:240e42436269c53c8099a2a341c936dfa7741dc1275d8e5ab250ca3d3e0e6c6d 0.1s done
+#4 extracting sha256:aab3e03d8dfcfd359981a851baf46439783ca3513e25e81f46b5981e3b44522a 0.1s done
+#4 DONE 55.9s
+
+#4 [1/3] FROM docker.io/asterinas/dev@sha256:6a62f4eb57337e23733f3b40036bbbea5b022c972f21ed9557ad9a4437848306
+#4 extracting sha256:a56f125d96d2418f861771facf57b1109722fe3f8785c69e98ceba63548ca723 0.1s done
+#4 extracting sha256:01d24228b756c14220494471bb11220359f6815385449cdb01653bb4dd96777b
+#4 extracting sha256:01d24228b756c14220494471bb11220359f6815385449cdb01653bb4dd96777b 34.0s done
+#4 DONE 89.9s
+
+#4 [1/3] FROM docker.io/asterinas/dev@sha256:6a62f4eb57337e23733f3b40036bbbea5b022c972f21ed9557ad9a4437848306
+#4 extracting sha256:45a3c0a6aae898e1c9d86d652ad40d07af750959796e8e09b89715ab2df901b8
+#4 extracting sha256:45a3c0a6aae898e1c9d86d652ad40d07af750959796e8e09b89715ab2df901b8 0.2s done
+#4 DONE 90.1s
+
+#4 [1/3] FROM docker.io/asterinas/dev@sha256:6a62f4eb57337e23733f3b40036bbbea5b022c972f21ed9557ad9a4437848306
+#4 extracting sha256:4f4fb700ef54461cfa02571ae0db9a0dc1e0cdb5577484a6d75e68dc38e8acc1 0.0s done
+#4 extracting sha256:84e033f1915a02132cd007ac12b952faf3ee3e6c2c49a43e09ea956c3a190b88 0.0s done
+#4 extracting sha256:10f29182c91eaece55bd91eaa536dc13c8071110eda57d6cfbd4e380154f0ee3
+#4 extracting sha256:10f29182c91eaece55bd91eaa536dc13c8071110eda57d6cfbd4e380154f0ee3 9.6s done
+#4 extracting sha256:a79b98ae13c4864160920f2fb8065e29eb4a2f878ec39a39f2d544b0891ea1f7
+#4 extracting sha256:a79b98ae13c4864160920f2fb8065e29eb4a2f878ec39a39f2d544b0891ea1f7 8.9s done
+#4 DONE 108.6s
+
+#4 [1/3] FROM docker.io/asterinas/dev@sha256:6a62f4eb57337e23733f3b40036bbbea5b022c972f21ed9557ad9a4437848306
+#4 extracting sha256:eb910b314bcfdf986e8bb9108c3888f829436e08eab6652d68b7347dfb28fcc0
+#4 extracting sha256:eb910b314bcfdf986e8bb9108c3888f829436e08eab6652d68b7347dfb28fcc0 14.0s done
+#4 DONE 122.6s
+
+#4 [1/3] FROM docker.io/asterinas/dev@sha256:6a62f4eb57337e23733f3b40036bbbea5b022c972f21ed9557ad9a4437848306
+#4 extracting sha256:df6ba62e26f79129249fc41e7de780cf8aebe8231c774c44b1cb98e862b63c08
+#4 extracting sha256:df6ba62e26f79129249fc41e7de780cf8aebe8231c774c44b1cb98e862b63c08 0.4s done
+#4 DONE 123.0s
+
+#4 [1/3] FROM docker.io/asterinas/dev@sha256:6a62f4eb57337e23733f3b40036bbbea5b022c972f21ed9557ad9a4437848306
+#4 extracting sha256:d7842a83eaf4a99d3e251f48df1bd923432d5bf02848fe344aaa81d85ca35572
+#4 extracting sha256:d7842a83eaf4a99d3e251f48df1bd923432d5bf02848fe344aaa81d85ca35572 14.0s done
+#4 DONE 137.0s
+
+#4 [1/3] FROM docker.io/asterinas/dev@sha256:6a62f4eb57337e23733f3b40036bbbea5b022c972f21ed9557ad9a4437848306
+#4 extracting sha256:4f4fb700ef54461cfa02571ae0db9a0dc1e0cdb5577484a6d75e68dc38e8acc1 0.0s done
+#4 extracting sha256:6e018db842d81893f2fd39fdcb9f670f9b352ba3c2a002e701eb27994ce30430 0.0s done
+#4 extracting sha256:59899b3bd2a32dea127cd4428af79b351db946522a3105a49a1d06dd051f34a6 0.0s done
+#4 extracting sha256:8fb4cb1fc5ec14942be28cb5a0b27b94d3bf9cfa27c8e1bce8a340310ea21454 0.0s done
+#4 extracting sha256:02a9973aff3454f714cd5dee3c71af918e053660829fe82204e28656e5f3ce77 0.1s done
+#4 DONE 137.2s
+
+#4 [1/3] FROM docker.io/asterinas/dev@sha256:6a62f4eb57337e23733f3b40036bbbea5b022c972f21ed9557ad9a4437848306
+#4 extracting sha256:4f4fb700ef54461cfa02571ae0db9a0dc1e0cdb5577484a6d75e68dc38e8acc1 0.0s done
+#4 extracting sha256:8937682c48853f1901be220c74a13698018607f8fbfa8675a40fc1393106235d 0.0s done
+#4 extracting sha256:deee7fc90f6d44ab12eea545b97a75eb82e1bf43cd96e05159252ce5c65d21a0
+#4 extracting sha256:deee7fc90f6d44ab12eea545b97a75eb82e1bf43cd96e05159252ce5c65d21a0 1.1s done
+#4 DONE 138.4s
+
+#4 [1/3] FROM docker.io/asterinas/dev@sha256:6a62f4eb57337e23733f3b40036bbbea5b022c972f21ed9557ad9a4437848306
+#4 extracting sha256:12fb51c345bb10dc20f95cdb8d9e73df0b681eb187746684a0e8412ac3b87dfc
+#4 extracting sha256:12fb51c345bb10dc20f95cdb8d9e73df0b681eb187746684a0e8412ac3b87dfc 0.3s done
+#4 DONE 138.7s
+
+#4 [1/3] FROM docker.io/asterinas/dev@sha256:6a62f4eb57337e23733f3b40036bbbea5b022c972f21ed9557ad9a4437848306
+#4 extracting sha256:36566a5f173603e5e214e6fff77b267dd8deee7df2844c1241ca040b6089d84f 0.0s done
+#4 extracting sha256:200d1f0b3d37f61a21f9247ebafdd6f96e2a562c13f6e86dafe38d91310a9d83 0.0s done
+#4 extracting sha256:fb1f4c4fe98a3b2c73e251ba8633204185144550f519910b31b81fb6fcbb5a54
+#4 extracting sha256:fb1f4c4fe98a3b2c73e251ba8633204185144550f519910b31b81fb6fcbb5a54 6.9s done
+#4 DONE 145.7s
+
+#4 [1/3] FROM docker.io/asterinas/dev@sha256:6a62f4eb57337e23733f3b40036bbbea5b022c972f21ed9557ad9a4437848306
+#4 extracting sha256:4f4fb700ef54461cfa02571ae0db9a0dc1e0cdb5577484a6d75e68dc38e8acc1 0.0s done
+#4 extracting sha256:ee021e0a44fa90a0dac0cc9267f5ff22e328052e470cd84197270d3cffa3a8f9
+#4 extracting sha256:ee021e0a44fa90a0dac0cc9267f5ff22e328052e470cd84197270d3cffa3a8f9 0.3s done
+#4 DONE 146.0s
+
+#4 [1/3] FROM docker.io/asterinas/dev@sha256:6a62f4eb57337e23733f3b40036bbbea5b022c972f21ed9557ad9a4437848306
+#4 extracting sha256:21a7c59334925745036a6dfdf768facffb76f2eef353e10e009bc6589d3b7f72
+#4 extracting sha256:21a7c59334925745036a6dfdf768facffb76f2eef353e10e009bc6589d3b7f72 1.9s done
+#4 DONE 148.0s
+
+#4 [1/3] FROM docker.io/asterinas/dev@sha256:6a62f4eb57337e23733f3b40036bbbea5b022c972f21ed9557ad9a4437848306
+#4 extracting sha256:b363e930a0644805f6afc153fa26a53346b0a15f34adf56454f04ccc3fad291a
+#4 extracting sha256:b363e930a0644805f6afc153fa26a53346b0a15f34adf56454f04ccc3fad291a 3.5s done
+#4 DONE 151.4s
+
+#4 [1/3] FROM docker.io/asterinas/dev@sha256:6a62f4eb57337e23733f3b40036bbbea5b022c972f21ed9557ad9a4437848306
+#4 extracting sha256:4f4fb700ef54461cfa02571ae0db9a0dc1e0cdb5577484a6d75e68dc38e8acc1 0.1s done
+#4 DONE 151.5s
+
+#5 [2/3] RUN rustup toolchain install 1.99.0 --profile minimal --component rustfmt --component clippy --target x86_64-unknown-none
+#5 0.471 info: syncing channel updates for 1.99.0-x86_64-unknown-linux-gnu
+#5 0.795 info: latest update on 2026-10-01 for version 1.99.0 (b940084d7 2026-09-28)
+#5 0.795 info: downloading 6 components
+#5 18.75 
+#5 18.85   1.99.0-x86_64-unknown-linux-gnu installed - rustc 1.99.0 (b940084d7 2026-09-28)
+#5 18.85 
+#5 18.85 info: checking for self-update (current version: 1.29.1)
+#5 18.91 info: downloading self-update (new version: 1.29.2)
+#5 DONE 20.8s
+
+#6 [3/3] WORKDIR /workspace
+#6 DONE 0.2s
+
+#7 exporting to image
+#7 exporting layers
+#7 exporting layers 15.8s done
+#7 exporting manifest sha256:a676233ba5a44c44ee28ce7d88ab05eba70e9478f6898aea3ad3452f51f8a52b 0.0s done
+#7 exporting config sha256:a5076e96641fbb18945b4726d28560a304cd6f9b6cebaae515bfb9585b749d69 0.0s done
+#7 exporting attestation manifest sha256:ecab71de61c20919b24e9b9f97e1e1413fc24ce4df6298e83f2839c8f8f9d80e 0.0s done
+#7 exporting manifest list sha256:9ba666066a8184e95350ff672469a9f239eeab57a4e1f3f3d80ad6dcbe3e2bbb 0.0s done
+#7 naming to docker.io/library/hematite-build:rust1.99-qemu10.2.1 done
+#7 unpacking to docker.io/library/hematite-build:rust1.99-qemu10.2.1
+#7 unpacking to docker.io/library/hematite-build:rust1.99-qemu10.2.1 5.3s done
+#7 DONE 21.3s

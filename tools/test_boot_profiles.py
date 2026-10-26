@@ -16,7 +16,7 @@ from test_kernel import CASES, qemu_command
 
 
 DEADLINE_SECONDS = 20
-REJECT_EXIT = 35
+REJECT_EXITS = {"aarch64": 1, "x86_64": 35}
 PROMPT = b"hm> "
 
 
@@ -24,24 +24,41 @@ def write_json(path, value):
     path.write_text(json.dumps(value, indent=2) + "\n")
 
 
-def prepare(output, kernel, cpu):
+def prepare(output, kernel, cpu, arch="aarch64"):
     output.mkdir()
-    command = qemu_command(kernel, "tcg")
+    command = qemu_command(kernel, "tcg", arch)
     command[command.index("-cpu") + 1] = cpu
     write_json(output / "command.json", command)
     write_json(output / "input.json", {
         "kernel": str(kernel),
         "sha256": hashlib.sha256(kernel.read_bytes()).hexdigest(),
-        "accel": "tcg", "cpu": cpu,
+        "accel": "tcg", "cpu": cpu, "arch": arch,
     })
     return command
 
 
-def run_rejected_cpu(output, kernel, feature):
-    command = prepare(output, kernel, f"max,-{feature}")
+def rejection_checks(console, result, arch="aarch64"):
+    checks = {
+        "explicit_boot_rejection_exit": result["returncode"] == REJECT_EXITS[arch],
+        "no_test_report": b"HMTEST" not in console,
+        "within_deadline": not result["timed_out"],
+        "launched": result["launch_error"] is None,
+    }
+    if arch == "aarch64":
+        # QEMU itself exits 1 on invalid configuration. Require a complete
+        # guest-issued marker so a launch/configuration failure cannot pass.
+        lines = [line.removesuffix(b"\r") for line in console.split(b"\n")[:-1]]
+        checks["explicit_pan_rejection_marker"] = lines.count(b"HMBOOT REJECT PAN") == 1
+    return checks
+
+
+def run_rejected_cpu(output, kernel, feature, arch="aarch64"):
+    cpu = "cortex-a72" if arch == "aarch64" else f"max,-{feature}"
+    command = prepare(output, kernel, cpu, arch)
     started = time.monotonic()
     result = {
         "scope": f"bootstrap rejects CPU without {feature}",
+        "arch": arch,
         "started_utc": datetime.now(timezone.utc).isoformat(),
         "timeout_seconds": DEADLINE_SECONDS,
         "returncode": None, "timed_out": False, "launch_error": None,
@@ -61,12 +78,7 @@ def run_rejected_cpu(output, kernel, feature):
         except OSError as error:
             result["launch_error"] = str(error)
     console = (output / "serial.log").read_bytes()
-    result["checks"] = {
-        "explicit_boot_rejection_exit": result["returncode"] == REJECT_EXIT,
-        "no_test_report": b"HMTEST" not in console,
-        "within_deadline": not result["timed_out"],
-        "launched": result["launch_error"] is None,
-    }
+    result["checks"] = rejection_checks(console, result, arch)
     result["errors"] = [name for name, passed in result["checks"].items() if not passed]
     result["passed"] = not result["errors"]
     result["elapsed_seconds"] = time.monotonic() - started
@@ -78,7 +90,8 @@ def monitor_steps():
     help_body = (b"help   - show commands\nstatus - inspect boot protections\n"
                  b"test   - run bootstrap tests\n")
     status_body = b"".join(name + b": OK\n" for name in (
-        b"write protection", b"NX", b"SMEP", b"SMAP", b"W^X mappings",
+        b"write protection", b"NX", b"user execution protection",
+        b"user access protection", b"W^X mappings",
         b"stack guard", b"null guard",
     )) + b"Bootstrap only: one CPU; no userspace, storage, or networking.\n"
     test_lines = [f"HMTEST BEGIN {len(CASES)}"]
@@ -96,12 +109,13 @@ def monitor_steps():
     )
 
 
-def run_monitor(output, kernel):
-    command = prepare(output, kernel, "max")
+def run_monitor(output, kernel, arch="aarch64"):
+    command = prepare(output, kernel, "max", arch)
     started = time.monotonic()
     deadline = started + DEADLINE_SECONDS
     result = {
         "scope": "live bootstrap monitor; host stops VM after serial interactions",
+        "arch": arch,
         "started_utc": datetime.now(timezone.utc).isoformat(),
         "timeout_seconds": DEADLINE_SECONDS,
         "returncode": None, "timed_out": False, "launch_error": None,
@@ -204,6 +218,7 @@ def main():
     parser.add_argument("--test-kernel", type=Path, required=True)
     parser.add_argument("--monitor-kernel", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--arch", choices=("aarch64", "x86_64"), default="aarch64")
     args = parser.parse_args()
     test_kernel, monitor_kernel = args.test_kernel.resolve(), args.monitor_kernel.resolve()
     output = args.output.resolve()
@@ -214,14 +229,16 @@ def main():
         parser.error("output must be new or empty; preserve earlier evidence")
     output.mkdir(parents=True, exist_ok=True)
     results = {}
-    for feature in ("nx", "smep", "smap"):
+    features = ("pan",) if args.arch == "aarch64" else ("nx", "smep", "smap")
+    for feature in features:
         name = f"missing-{feature}"
-        results[name] = run_rejected_cpu(output / name, test_kernel, feature)
-    results["monitor"] = run_monitor(output / "monitor", monitor_kernel)
+        results[name] = run_rejected_cpu(output / name, test_kernel, feature, args.arch)
+    results["monitor"] = run_monitor(output / "monitor", monitor_kernel, args.arch)
     summary = {
         "passed": all(result["passed"] for result in results.values()),
         "scope": "bootstrap CPU rejection and serial monitor; no Linux ABI claims",
         "profiles": {name: result["passed"] for name, result in results.items()},
+        "arch": args.arch,
     }
     write_json(output / "result.json", summary)
     print(json.dumps(summary, indent=2))

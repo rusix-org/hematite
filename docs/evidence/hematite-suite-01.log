@@ -1,0 +1,87 @@
+docker build --tag hematite-build:rust1.99-qemu10.2.1 .
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 457B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/asterinas/dev@sha256:6a62f4eb57337e23733f3b40036bbbea5b022c972f21ed9557ad9a4437848306
+#2 DONE 0.0s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 54B done
+#3 DONE 0.0s
+
+#4 [1/3] FROM docker.io/asterinas/dev@sha256:6a62f4eb57337e23733f3b40036bbbea5b022c972f21ed9557ad9a4437848306
+#4 resolve docker.io/asterinas/dev@sha256:6a62f4eb57337e23733f3b40036bbbea5b022c972f21ed9557ad9a4437848306 0.0s done
+#4 DONE 0.0s
+
+#5 [2/3] RUN rustup toolchain install 1.99.0 --profile minimal --component rustfmt --component clippy --target x86_64-unknown-none
+#5 CACHED
+
+#6 [3/3] WORKDIR /workspace
+#6 CACHED
+
+#7 exporting to image
+#7 exporting layers 0.0s done
+#7 exporting manifest sha256:a676233ba5a44c44ee28ce7d88ab05eba70e9478f6898aea3ad3452f51f8a52b done
+#7 exporting config sha256:a5076e96641fbb18945b4726d28560a304cd6f9b6cebaae515bfb9585b749d69 done
+#7 exporting attestation manifest sha256:f35b299a249d5109eb4e564d9f65ea7b7fd91bf342eaf9a71a4882c3447d025a 0.0s done
+#7 exporting manifest list sha256:e550587dbbba4f862316e9a0de614c6b59ac9670f9d05eaa7907f63b2789fc93 0.0s done
+#7 naming to docker.io/library/hematite-build:rust1.99-qemu10.2.1 done
+#7 unpacking to docker.io/library/hematite-build:rust1.99-qemu10.2.1 done
+#7 DONE 0.1s
+bash tools/dev.sh bash -eu -c '\
+	cargo fmt --all -- --check; \
+	cargo clippy --workspace --all-features --locked --offline -- -D warnings; \
+	python3 tools/test_test_kernel.py; \
+	python3 tools/check_repository.py; \
+	cargo build --locked --offline -p hm-core --release --features boot-tests --target-dir target/boot-test; \
+	python3 tools/test_kernel.py \
+		--kernel target/boot-test/x86_64-unknown-none/release/hematite \
+		--output "target/evidence/$(date -u +%Y%m%dT%H%M%S-%N)" --accel tcg'
+    Checking hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+    Checking hm-core v0.1.0 (/workspace/crates/hm-core)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.34s
+........
+----------------------------------------------------------------------
+Ran 8 tests in 0.007s
+
+OK
+PASS: Phase 0 records present; approval and runtime gates not assessed
+    Finished `release` profile [optimized] target(s) in 0.00s
+{
+  "passed": true,
+  "scope": "hematite bootstrap tests; no Linux ABI compatibility claim",
+  "expected_cases": [
+    "write_protect",
+    "nx",
+    "smep",
+    "smap",
+    "wx",
+    "stack_guard",
+    "null_guard",
+    "checked_range",
+    "monitor_bounds"
+  ],
+  "observed_records": [
+    "HMTEST BEGIN 9",
+    "HMTEST PASS write_protect",
+    "HMTEST PASS nx",
+    "HMTEST PASS smep",
+    "HMTEST PASS smap",
+    "HMTEST PASS wx",
+    "HMTEST PASS stack_guard",
+    "HMTEST PASS null_guard",
+    "HMTEST PASS checked_range",
+    "HMTEST PASS monitor_bounds",
+    "HMTEST END 9"
+  ],
+  "returncode": 33,
+  "timed_out": false,
+  "launch_error": null,
+  "errors": [],
+  "started_utc": "2026-10-26T05:23:54.996107+00:00",
+  "elapsed_seconds": 0.11466719093732536,
+  "timeout_seconds": 20
+}

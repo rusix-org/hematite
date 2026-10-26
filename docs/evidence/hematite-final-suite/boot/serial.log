@@ -1,0 +1,12 @@
+hematite: Rust kernel entered via PVH
+HMTEST BEGIN 9
+HMTEST PASS write_protect
+HMTEST PASS nx
+HMTEST PASS smep
+HMTEST PASS smap
+HMTEST PASS wx
+HMTEST PASS stack_guard
+HMTEST PASS null_guard
+HMTEST PASS checked_range
+HMTEST PASS monitor_bounds
+HMTEST END 9

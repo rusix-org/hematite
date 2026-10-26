@@ -12,7 +12,7 @@ jobs:
         run: |
           mkdir -p target/evidence
           set -o pipefail
-          make test 2>&1 | tee target/evidence/checks.log
+          make test-all 2>&1 | tee target/evidence/checks.log
       - name: Preserve verification evidence
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
