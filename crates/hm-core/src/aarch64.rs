@@ -79,6 +79,7 @@ impl Platform for BootPlatform {
             super::preempt_checks::checks(runner)
                 && super::preempt::context_checks(runner)
                 && super::preempt::control_checks()
+                && super::preempt::wait_boundary_check()
         })
     }
     fn preemption_irq_count(&self) -> Option<u64> {
@@ -444,6 +445,29 @@ pub(super) fn preemption_overflow(platform: &BootPlatform) -> ! {
     match platform.runner.as_ref() {
         Some(runner) => super::preempt::overflow(runner),
         None => exit(false),
+    }
+}
+
+#[cfg(all(
+    feature = "wait-all-blocked-test",
+    not(any(
+        feature = "nested-fault-test",
+        feature = "unhandled-fault-test",
+        feature = "thread-overflow-test",
+        feature = "preemption-overflow-test"
+    ))
+))]
+pub(super) fn wait_all_blocked(platform: &BootPlatform) -> ! {
+    match platform.runner.as_ref() {
+        Some(runner) => super::preempt::all_blocked(runner),
+        None => exit(false),
+    }
+}
+
+#[cfg(feature = "wait-all-blocked-test")]
+pub(super) fn wait_blocked_marker() {
+    for byte in b"HMWAIT BLOCKED\n" {
+        serial_byte(*byte);
     }
 }
 

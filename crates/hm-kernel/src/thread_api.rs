@@ -9,6 +9,15 @@ pub const TRACE_CAPACITY: usize = 64;
 pub trait ThreadContext {
     fn id(&self) -> usize;
     fn yield_now(&mut self);
+    /// Deschedule until this event differs from the supplied observation.
+    /// Observe before checking the predicate; always recheck after returning.
+    fn wait(
+        &mut self,
+        _event: &crate::wait_api::Event,
+        _observed: u64,
+    ) -> Result<(), crate::wait_api::WaitError> {
+        Err(crate::wait_api::WaitError::Unsupported)
+    }
 }
 
 pub type ThreadEntry = for<'a> fn(&'a mut (dyn ThreadContext + 'a), u64) -> u64;
@@ -60,6 +69,7 @@ pub enum DispatchCause {
     Initial,
     Yield,
     Timer,
+    Wake,
 }
 
 /// `causes` uses the same indices and truncation boundary as `run.trace`.
@@ -68,6 +78,7 @@ pub enum DispatchCause {
 pub struct PreemptReport {
     pub run: RunReport,
     pub preemptions: [u64; MAX_THREADS],
+    pub parks: [u64; MAX_THREADS],
     pub causes: [DispatchCause; TRACE_CAPACITY],
 }
 
@@ -76,6 +87,7 @@ impl PreemptReport {
         Self {
             run: RunReport::empty(),
             preemptions: [0; MAX_THREADS],
+            parks: [0; MAX_THREADS],
             causes: [DispatchCause::Initial; TRACE_CAPACITY],
         }
     }

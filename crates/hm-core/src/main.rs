@@ -62,13 +62,25 @@ extern "C" fn boot_main(_boot_info: u64) -> ! {
         platform.write("HMPREEMPT EXPECT OVERFLOW\n");
         arch::preemption_overflow(&platform);
     }
+    #[cfg(all(
+        target_arch = "aarch64",
+        feature = "wait-all-blocked-test",
+        not(any(
+            feature = "nested-fault-test",
+            feature = "unhandled-fault-test",
+            feature = "thread-overflow-test",
+            feature = "preemption-overflow-test"
+        ))
+    ))]
+    arch::wait_all_blocked(&platform);
     #[cfg(not(all(
         target_arch = "aarch64",
         any(
             feature = "unhandled-fault-test",
             feature = "nested-fault-test",
             feature = "thread-overflow-test",
-            feature = "preemption-overflow-test"
+            feature = "preemption-overflow-test",
+            feature = "wait-all-blocked-test"
         )
     )))]
     {

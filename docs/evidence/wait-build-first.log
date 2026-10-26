@@ -1,0 +1,17 @@
+   Compiling hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+warning: use of deprecated method `core::sync::atomic::Atomic::<u64>::fetch_update`: renamed to `try_update` for consistency
+  --> crates/hm-kernel/src/wait_api.rs:36:14
+   |
+36 |             .fetch_update(Ordering::AcqRel, Ordering::Acquire, |value| value.checked_add(1))
+   |              ^^^^^^^^^^^^
+   |
+   = note: `#[warn(deprecated)]` on by default
+help: replace the use of the deprecated method
+   |
+36 -             .fetch_update(Ordering::AcqRel, Ordering::Acquire, |value| value.checked_add(1))
+36 +             .try_update(Ordering::AcqRel, Ordering::Acquire, |value| value.checked_add(1))
+   |
+
+warning: `hm-kernel` (lib) generated 1 warning (run `cargo fix --lib -p hm-kernel` to apply 1 suggestion)
+   Compiling hm-core v0.1.0 (/workspace/crates/hm-core)
+    Finished `release` profile [optimized] target(s) in 4.61s

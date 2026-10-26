@@ -6,9 +6,9 @@ from check_preemption_boundaries import validate
 class Boundaries(unittest.TestCase):
     def test_observed_delivery_required(self):
         ranges = {"start": (0x100, 0x110), "yield": (0x200, 0x210),
-                  "complete": (0x300, 0x310)}
+                  "complete": (0x300, 0x310), "park": (0x400, 0x410)}
         trace = b"".join(f"Taking exception 5 [IRQ] on CPU 0\n...with ELR {pc:#x}\n".encode()
-                         for pc in (0x100, 0x204, 0x308))
+                         for pc in (0x100, 0x204, 0x308, 0x404))
         self.assertTrue(validate(trace, ranges)["passed"])
         for damaged in (trace.replace(b"0x308", b"0x310"),
                         trace.replace(b"...with ELR 0x204\n", b""),

@@ -7,7 +7,7 @@ import subprocess
 from check_timer_trace import PREFIX
 
 
-NAMES = ("start", "yield", "complete")
+NAMES = ("start", "yield", "complete", "park")
 
 
 def validate(raw, ranges):

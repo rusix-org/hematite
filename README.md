@@ -13,7 +13,7 @@ make run    # build and open the ARM64 monitor; Ctrl-C exits
 ```
 
 Type `help`, `status`, or `test`. `status` reports the active memory protections;
-`test` runs 32 bootstrap, capability, memory, mutex, thread, timer, exception and mapping checks. The ARM boot banner reports discovered RAM and usable frame capacity.
+`test` runs 33 bootstrap, capability, memory, event, mutex, thread, timer, exception and mapping checks. The ARM boot banner reports discovered RAM and usable frame capacity.
 Memory tests exercise real frame, heap and mapping ownership. Three pages are deliberately
 retained once per boot to verify that forgotten owners cannot cause reuse.
 This is a kernel monitor, not a shell.
@@ -63,6 +63,12 @@ Shared kernel values can use an owned mutex whose guard controls access.
 Contended cooperative workers yield while waiting. Tests cover real kernel
 contention and parallel host threads using the same implementation; interrupt
 handlers do not acquire these mutexes.
+
+Preemptive ARM workers can wait on monotonic events. Waiting workers stop being
+dispatched until notification changes their observation; notifications wake all
+matching waiters. Snapshot before checking the synchronized predicate, then
+wait if needed. This does not yet provide device wakeups, cancellation or CPU
+idle: an all-blocked run retains its stacks while the coordinator spins.
 
 The safe capability experiment checks rights attenuation, bounded accounting,
 stale handles, revocation and cancellation/completion lifetimes. It models

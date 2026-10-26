@@ -16,6 +16,24 @@ use hm_threads::Runner;
 use hm_kernel::thread_api::{ThreadContext, ThreadJob, RunReport, ThreadError};
 '''
 PROBES = {
+    "valid_local_event_wait": ('''pub fn client(context: &mut dyn ThreadContext) {
+        let event = hm_kernel::wait_api::Event::new();
+        let observed = event.snapshot();
+        let _ = context.wait(&event, observed);
+        let _ = event.notify();
+    }''', None),
+    "event_send_sync": ('''fn shared<T: Send + Sync>() {}
+        pub fn client() { shared::<hm_kernel::wait_api::Event>(); }
+    ''', None),
+    "event_clone": ('''pub fn client(event: &hm_kernel::wait_api::Event) {
+        let _ = <hm_kernel::wait_api::Event as Clone>::clone(event);
+    }''', "E0277"),
+    "event_private_sequence": ('''pub fn client(event: &hm_kernel::wait_api::Event) {
+        event.sequence.store(0, core::sync::atomic::Ordering::Relaxed);
+    }''', "E0616"),
+    "event_local_escape": ('''pub fn client() -> &'static hm_kernel::wait_api::Event {
+        let event = hm_kernel::wait_api::Event::new(); &event
+    }''', "E0515"),
     "valid_callback_run": ('''fn task(context: &mut dyn ThreadContext, input: u64) -> u64 {
         let id = context.id(); context.yield_now(); input.wrapping_add(id as u64)
     }

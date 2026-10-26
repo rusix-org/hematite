@@ -6,6 +6,7 @@ use core::sync::atomic::Ordering;
 use hm_kernel::thread_api::{
     DispatchCause, MAX_THREADS, PreemptReport, ThreadContext, ThreadError, ThreadJob,
 };
+use hm_kernel::wait_api::{Event, WaitError};
 
 // SAFETY: Private assembly saves full interrupted state in task-owned storage,
 // releases the emergency stack, and resumes only live scheduler continuations.
@@ -52,6 +53,9 @@ struct Task {
     image: Image,
     preemptions: u64,
     job: ThreadJob,
+    wait_event: *const Event,
+    wait_observed: u64,
+    parks: u64,
 }
 struct State {
     host: Context,
@@ -77,12 +81,16 @@ const _: () = {
 // live aligned context records under the global execution lease and masked IRQ.
 unsafe extern "C" {
     static arm_preempt_irq_count: u64;
+    #[cfg(feature = "preemption-boundary-test")]
+    static arm_wait_masked_expiries: u64;
     static __exception_stack_top: [u8; 0];
     fn arm_preempt_context_probe(seed: u64) -> u64;
     fn arm_preempt_setup() -> u64;
     fn arm_preempt_stop() -> u64;
     fn arm_preempt_dispatch(host: *mut Context, task: *mut core::ffi::c_void, interval: u64);
     fn arm_preempt_yield(task: *mut core::ffi::c_void, host: *const Context);
+    fn arm_preempt_park(task: *mut core::ffi::c_void, host: *const Context);
+    fn arm_preempt_wait_mask() -> u64;
     fn arm_preempt_start();
     fn arm_exception_fail() -> !;
 }
@@ -121,6 +129,9 @@ pub(super) fn run(jobs: &[ThreadJob]) -> Result<PreemptReport, ThreadError> {
                 entry: empty,
                 input: 0,
             }),
+            wait_event: core::ptr::null(),
+            wait_observed: 0,
+            parks: 0,
         }),
     });
     let state = state.get();
@@ -144,7 +155,45 @@ pub(super) fn run(jobs: &[ThreadJob]) -> Result<PreemptReport, ThreadError> {
             (*image).gpr[22] = id as u64;
         }
         let mut next = 0;
+        #[cfg(feature = "wait-all-blocked-test")]
+        let mut announced_blocked = false;
         while report.run.completed < jobs.len() {
+            let mut blocked = 0;
+            for waiting in 0..jobs.len() {
+                let waiting = task(state, waiting);
+                if core::ptr::addr_of!((*waiting).status).read() != 3 {
+                    continue;
+                }
+                let event = core::ptr::addr_of!((*waiting).wait_event).read();
+                if event.is_null() {
+                    arm_exception_fail();
+                }
+                // The BLOCKED worker's live wait call retains this immutable
+                // Event borrow. No reference to Task survives dispatch; Event
+                // reads touch only its atomic sequence. Clear the pointer
+                // before RUNNABLE so the borrow may end after resumption.
+                let observed = core::ptr::addr_of!((*waiting).wait_observed).read();
+                if (&*event).snapshot() != observed {
+                    core::ptr::addr_of_mut!((*waiting).wait_event).write(core::ptr::null());
+                    core::ptr::addr_of_mut!((*waiting).wait_observed).write(0);
+                    core::ptr::addr_of_mut!((*waiting).kind).write(3);
+                    core::ptr::addr_of_mut!((*waiting).status).write(0);
+                } else {
+                    blocked += 1;
+                }
+            }
+            if blocked == jobs.len() - report.run.completed {
+                #[cfg(feature = "wait-all-blocked-test")]
+                if !announced_blocked {
+                    super::arch::wait_blocked_marker();
+                    announced_blocked = true;
+                }
+                // No current external producer exists. Keep every suspended
+                // stack/borrow and the lease live; do not return or fake a wake.
+                // This spins the coordinator CPU rather than claiming idle.
+                core::hint::spin_loop();
+                continue;
+            }
             let id = next;
             next = (next + 1) % jobs.len();
             let task = task(state, id);
@@ -154,7 +203,9 @@ pub(super) fn run(jobs: &[ThreadJob]) -> Result<PreemptReport, ThreadError> {
             let cause = match core::ptr::addr_of!((*task).kind).read() {
                 0 => DispatchCause::Initial,
                 1 => DispatchCause::Yield,
-                _ => DispatchCause::Timer,
+                2 => DispatchCause::Timer,
+                3 => DispatchCause::Wake,
+                _ => arm_exception_fail(),
             };
             report.run.dispatches = report.run.dispatches.saturating_add(1);
             if report.run.trace_len < report.run.trace.len() {
@@ -171,10 +222,14 @@ pub(super) fn run(jobs: &[ThreadJob]) -> Result<PreemptReport, ThreadError> {
                 interval,
             );
             if core::ptr::addr_of!((*task).status).read() == 2 {
+                if !core::ptr::addr_of!((*task).wait_event).read().is_null() {
+                    arm_exception_fail();
+                }
                 report.run.completed += 1;
                 report.run.results[id] = core::ptr::addr_of!((*task).result).read();
                 report.run.yields[id] = core::ptr::addr_of!((*task).yields).read();
                 report.preemptions[id] = core::ptr::addr_of!((*task).preemptions).read();
+                report.parks[id] = core::ptr::addr_of!((*task).parks).read();
             }
         }
         // Quiesce source/controller before publication withdrawal and wiping
@@ -221,6 +276,59 @@ impl ThreadContext for Token {
             );
         }
     }
+    fn wait(&mut self, event: &Event, observed: u64) -> Result<(), WaitError> {
+        // SAFETY: This private token is a running worker on the sole CPU.
+        // The compiler memory barrier and IRQ mask serialize the last check
+        // with registration. No public mask token or arbitrary callback escapes.
+        let saved_daif = unsafe { arm_preempt_wait_mask() };
+        let current = event.snapshot();
+        let outcome = if current != observed {
+            Ok(())
+        } else if current == u64::MAX {
+            Err(WaitError::Exhausted)
+        } else {
+            // SAFETY: The masked worker alone owns this RUNNING task. The
+            // event reference remains borrowed through the resumed snapshot
+            // below; a blocked callback never drops or loses its stack. Only
+            // the masked coordinator reads this pointer and clears it before
+            // making this continuation runnable. Raw projections avoid whole-
+            // task references across the assembly context switch.
+            unsafe {
+                let task = task(self.state, self.id);
+                if core::ptr::addr_of!((*task).status).read() != 1
+                    || !core::ptr::addr_of!((*task).wait_event).read().is_null()
+                {
+                    arm_exception_fail();
+                }
+                core::ptr::addr_of_mut!((*task).wait_event).write(event as *const Event);
+                core::ptr::addr_of_mut!((*task).wait_observed).write(observed);
+                let parks = core::ptr::addr_of!((*task).parks).read();
+                core::ptr::addr_of_mut!((*task).parks).write(parks.saturating_add(1));
+                core::ptr::addr_of_mut!((*task).kind).write(3);
+                core::ptr::addr_of_mut!((*task).status).write(3);
+                arm_preempt_park(task.cast(), core::ptr::addr_of!((*self.state).host));
+                if !core::ptr::addr_of!((*task).wait_event).read().is_null() {
+                    arm_exception_fail();
+                }
+            }
+            // This Acquire is the returning worker's publication observation,
+            // and keeps its original Event borrow live through suspension.
+            if event.snapshot() == observed {
+                // SAFETY: The sequence cannot reset or wrap, so a resumed wait
+                // with its original observation is an internal scheduler fault.
+                unsafe { arm_exception_fail() }
+            }
+            Ok(())
+        };
+        // SAFETY: All task metadata is stable and any parked registration has
+        // been withdrawn. Restore the exact saved mask for every return path;
+        // this local value cannot be forgotten by arbitrary safe callers.
+        unsafe {
+            asm!("msr daif, {saved}", "isb", saved=in(reg) saved_daif,
+                options(nostack, preserves_flags));
+        }
+        outcome
+    }
 }
 // SAFETY: Only first-entry assembly supplies this private stable state pointer
 // and admitted task ID. All scheduler metadata reads finish before policy runs.
@@ -241,6 +349,53 @@ pub(super) fn irq_count() -> u64 {
     // SAFETY: Called only by the masked platform coordinator on the sole CPU.
     // The assembly handler is the sole writer and no reference is constructed.
     unsafe { core::ptr::addr_of!(arm_preempt_irq_count).read_volatile() }
+}
+
+/// Require that the boundary image actually executed its masked-expiry path.
+/// Ordinary builds have no such instrumentation or claim.
+pub(super) fn wait_boundary_check() -> bool {
+    #[cfg(feature = "preemption-boundary-test")]
+    {
+        // SAFETY: Only masked park assembly writes this private diagnostic;
+        // the platform reads it outside a running worker lease on the sole CPU.
+        unsafe { core::ptr::addr_of!(arm_wait_masked_expiries).read_volatile() != 0 }
+    }
+    #[cfg(not(feature = "preemption-boundary-test"))]
+    true
+}
+
+#[cfg(all(
+    feature = "wait-all-blocked-test",
+    not(any(
+        feature = "nested-fault-test",
+        feature = "unhandled-fault-test",
+        feature = "thread-overflow-test",
+        feature = "preemption-overflow-test"
+    ))
+))]
+pub(super) fn all_blocked(runner: &super::threads::Runner) -> ! {
+    struct Witness;
+    impl Drop for Witness {
+        fn drop(&mut self) {
+            // SAFETY: A suspended negative worker must never drop its frame.
+            // Any unexpected destruction takes a fatal route rejected by host.
+            unsafe { arm_exception_fail() }
+        }
+    }
+    fn park_local(context: &mut dyn ThreadContext, _: u64) -> u64 {
+        let _witness = Witness;
+        let event = Event::new();
+        let observed = event.snapshot();
+        let _ = context.wait(&event, observed);
+        0
+    }
+    let _ = runner.run_preemptive(&[ThreadJob {
+        entry: park_local,
+        input: 0,
+    }]);
+    // SAFETY: There is no notifier for this callback-local Event; normal return
+    // would violate this diagnostic's required retained blocked continuation.
+    unsafe { arm_exception_fail() }
 }
 
 #[cfg(all(

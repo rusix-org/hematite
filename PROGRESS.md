@@ -1,6 +1,6 @@
 # Progress
 
-Current phase: **Phase 1 underway: single-CPU ARM timer preemption verified locally**.
+Current phase: **Phase 1 underway: ARM event waits and wakeups verified locally**.
 Aaron approved scratch implementation and then changed the primary objective
 from strict Linux parity to native OS design with selective compatibility.
 [ADR 0005](docs/adr/0005-native-first-design.md) records the native direction;
@@ -19,21 +19,21 @@ from strict Linux parity to native OS design with selective compatibility.
 - Serial monitor: `make run` defaults to ARM64; `ARCH=x86_64` selects the
   regression port. Commands `help`, `status`, `test`; Ctrl-C exits.
 - `make test-all`: formatting, Clippy and safety checks for both targets,
-  40 host harness tests, 32 guest tests per architecture, ARM no-PAN rejection,
+  41 host harness tests, 33 guest tests per architecture, ARM no-PAN rejection,
   x86 missing-NX/SMEP/SMAP rejection, and live monitor recovery tests on both.
   ARM discovery matches both 128 MiB and 64 MiB guest configurations.
-  Separate ARM images run four preemption cases at both memory sizes, then
-  repeat the 32 existing cases in the same guest. Forced-transition, withheld
-  timer delivery and preemptible stack-overflow profiles also pass.
+  Separate ARM images run five scheduling/wait cases at both memory sizes, then
+  repeat the 33 baseline cases in the same guest. Forced-transition, withheld
+  timer delivery, stack-overflow and all-blocked retention profiles also pass.
   All passed locally; CI at `d13b032` covers the preceding thread milestone.
   `make test` tests ARM64 alone by default.
 - Pinned Rust base and Debian package snapshot, QEMU 7.2.22. One CPU/128 MiB
   guest by default; ARM discovery also tests 64 MiB; no attached disks or networking. Both targets use TCG.
 
-Latest evidence: [preemption verification](docs/evidence/arm-preemption.md),
-[ARM scheduling results](docs/evidence/preemption-final/aarch64/preemption-128m/result.json),
-[ARM profiles](docs/evidence/preemption-final/aarch64/profiles/result.json),
-and matching x86 results under `docs/evidence/preemption-final/x86_64/`.
+Latest evidence: [wait/wake verification](docs/evidence/arm-wait-wake.md),
+[ARM scheduling results](docs/evidence/wait-final/aarch64/preemption-128m/result.json),
+[ARM profiles](docs/evidence/wait-final/aarch64/profiles/result.json),
+and matching x86 results under `docs/evidence/wait-final/x86_64/`.
 Earlier [bootstrap verification](docs/evidence/hematite-bootstrap.md) is retained.
 The earlier [Asterinas baseline](docs/evidence/asterinas-evaluation.md) remains
 an evaluation only; it is not this kernel's implementation.
@@ -167,7 +167,7 @@ Tests verify dispatch order, locals and destructors across yields, completion,
 capacity rejection before callbacks, trace truncation, repeated runs and
 unchanged frame/mapping ownership. Core diagnostics check register sentinels,
 actual SP identity on all four stacks, guard translations and Busy rejection.
-Fourteen compiler probes enforce the public authority/lifetime boundary.
+Nineteen compiler probes now enforce thread/event authority and lifetime boundaries.
 The pinned compiler's page probing is checked in emitted IR/assembly; an actual
 128 KiB callback frame faults in worker zero's guard and exits fatally.
 See [design](docs/design/0010-arm-kernel-threads.md),
@@ -195,6 +195,25 @@ This is host concurrency evidence, not guest SMP. See
 [evidence](docs/evidence/kernel-mutex.md). IRQ-safe locking, wait queues,
 preemption-disable ownership and fairness guarantees remain unimplemented.
 
+## Event waits and wakeups verified locally
+
+Preemptive workers can register a borrowed Event and become BLOCKED, excluded
+from dispatch until its monotonic sequence changes. Final observation and
+registration are IRQ-masked; the scheduler clears its pointer before making the
+worker runnable, and the returning worker performs its own Acquire observation.
+Notification wakes all matching waiters; exhausted sequences never wrap or admit
+another indefinite wait. The cooperative context explicitly returns Unsupported.
+
+Tests cover immediate/stale/terminal observations, multiple waiters, unrelated
+events, notifier completion, repeated producer/consumer waits, preserved locals
+and destructors, and exact park/Wake dispatch accounting. Forced timer expiry
+before registration and while registration is masked passes. A callback-local
+event in a separate all-blocked guest retains its stack/borrow until host timeout.
+This is not CPU idle, cancellation, device notification, mutex queue integration
+or SMP. See [design](docs/design/0013-arm-wait-wake.md),
+[source review](docs/reviews/0013-arm-wait-wake-source.md) and
+[evidence](docs/evidence/arm-wait-wake.md).
+
 ## Limits and gates
 
 ARM's separate preemptive runner now suspends arbitrary safe function-pointer
@@ -207,7 +226,7 @@ is exposed; allocator/mapping capabilities remain unavailable to workers.
 See [design](docs/design/0012-arm-preemption.md),
 [source review](docs/reviews/0012-arm-preemption-source.md) and
 [evidence](docs/evidence/arm-preemption.md). This does not satisfy Phase 1's
-multi-CPU gate; wait queues, SMP-safe resource ownership and SMP remain ahead.
+multi-CPU gate; general wait queues, SMP-safe resource ownership and SMP remain ahead.
 
 No userspace, syscall ABI, general interrupt/exception handling, SMP, storage,
 virtio drivers or networking exists. ARM recovery is restricted to the fixed
@@ -236,7 +255,7 @@ publication awaits Aaron's response. Local kernel development remains authorized
 
 ## Next actions
 
-1. Design/review wait/wake queues and SMP-safe resource/scheduler ownership before
+1. Design/review SMP-safe resource/scheduler ownership before
    enabling additional CPUs. Preserve the restricted allocator/mapping capability
    boundary until its synchronization is implemented. Extend recovery to fault-aware user operations only with
    address-space and lifetime proofs. Add interrupt/SMP-safe ownership before concurrency;
@@ -346,3 +365,10 @@ publication awaits Aaron's response. Local kernel development remains authorized
   same-guest regressions, forced-transition delivery and both negative profiles.
   Preserved failures, exact source/ELF hashes and full traces. Remote publication
   remains pending approval; no push retry occurred.
+- 2026-10-26: Implemented independently reviewed borrowed Event waits and actual
+  BLOCKED/Wake scheduling. First guest and full suites passed; initial compilation
+  warned about an atomic API renamed in the pinned compiler, corrected before
+  strict lint verification. Final suite passes 41 host/33 baseline guest cases,
+  five ARM scheduling cases, park-boundary pressure and all-blocked retention.
+  Added five actual-type compiler clients (19 thread/event total). Archived exact
+  source/ELF identities and full logs; no remote publication attempted.

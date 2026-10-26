@@ -15,7 +15,7 @@ from test_kernel import qemu_command, validate_run
 from check_timer_trace import ACK, IRQ, PREFIX, VECTOR, WRITE, RETURN, MAX_TRACE_BYTES
 
 
-CASES = ("preempt_progress", "preempt_mixed", "preempt_limits", "preempt_core")
+CASES = ("preempt_progress", "preempt_mixed", "preempt_limits", "wait_workers", "preempt_core")
 TIMEOUT_SECONDS = 20
 DIAGNOSTIC_IRQS = 16
 

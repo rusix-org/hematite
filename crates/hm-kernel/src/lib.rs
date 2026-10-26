@@ -19,6 +19,8 @@ mod mutex_tests;
 mod preemption_tests;
 pub mod thread_api;
 mod thread_tests;
+pub mod wait_api;
+mod wait_tests;
 
 use core::ops::Range;
 
@@ -472,6 +474,7 @@ pub fn run_tests(platform: &mut impl Platform) -> bool {
         ("frame_contract", frame_api::contract(platform)),
         ("heap_blocks", heap_tests::blocks(platform)),
         ("heap_values", heap_tests::values(platform)),
+        ("event_contract", wait_tests::events()),
         ("mutex_contract", mutex_tests::contract(platform)),
         ("mutex_lifetime", mutex_tests::lifetime(platform)),
         ("mutex_workers", mutex_workers(platform)),
@@ -488,7 +491,7 @@ pub fn run_tests(platform: &mut impl Platform) -> bool {
             capability_tests::orderings(|message| platform.write(message)),
         ),
     ];
-    platform.write("HMTEST BEGIN 32\n");
+    platform.write("HMTEST BEGIN 33\n");
     let mut passed = true;
     for (name, success) in cases {
         platform.write(if success {
@@ -500,7 +503,7 @@ pub fn run_tests(platform: &mut impl Platform) -> bool {
         platform.write("\n");
         passed &= success;
     }
-    platform.write("HMTEST END 32\n");
+    platform.write("HMTEST END 33\n");
     passed
 }
 
@@ -513,6 +516,7 @@ pub fn run_preemption_tests(platform: &mut impl Platform) -> bool {
         ("preempt_progress", preemption_tests::progress(platform)),
         ("preempt_mixed", preemption_tests::mixed(platform)),
         ("preempt_limits", preemption_tests::limits(platform)),
+        ("wait_workers", wait_tests::workers(platform)),
         (
             "preempt_core",
             platform
@@ -520,7 +524,7 @@ pub fn run_preemption_tests(platform: &mut impl Platform) -> bool {
                 .unwrap_or(cfg!(target_arch = "x86_64")),
         ),
     ];
-    platform.write("HMPREEMPT BEGIN 4\n");
+    platform.write("HMPREEMPT BEGIN 5\n");
     let mut passed = true;
     for (name, success) in cases {
         platform.write(if success {
@@ -532,7 +536,7 @@ pub fn run_preemption_tests(platform: &mut impl Platform) -> bool {
         platform.write("\n");
         passed &= success;
     }
-    platform.write("HMPREEMPT END 4\n");
+    platform.write("HMPREEMPT END 5\n");
     if let (Some(before), Some(after)) = (before, platform.preemption_irq_count()) {
         platform.write("HMPREEMPT IRQ ");
         write_hex(platform, after.wrapping_sub(before));

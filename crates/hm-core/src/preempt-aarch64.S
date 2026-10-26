@@ -41,6 +41,8 @@ arm_preempt_boundary_\name\()_end:
 
 .global arm_preempt_setup, arm_preempt_stop, arm_preempt_dispatch
 .global arm_preempt_yield, arm_preempt_start, arm_preempt_irq
+.global arm_preempt_park
+.global arm_preempt_wait_mask
 arm_preempt_setup:
     mrs x0, daif
     cmp x0, #0x3c0
@@ -212,6 +214,8 @@ arm_preempt_dispatch:
     ldr x3, [x1, #280]
     cmp x3, #1
     b.eq .Lrestore_cooperative
+    cmp x3, #3
+    b.eq .Lrestore_cooperative
     add x0, x1, #288
     b .Lrestore_image
 .Ldispatch_return:
@@ -241,6 +245,47 @@ arm_preempt_yield:
     msr daif, x9
     isb
     ret
+// Ordinary ABI call is a compiler barrier; return the actual prior mask.
+arm_preempt_wait_mask:
+    preempt_boundary 8, park
+    mrs x0, daif
+    msr daifset, #2
+    isb
+    ret
+
+// Caller has masked IRQ, published BLOCKED and retained its Event borrow.
+// Keep that state and its distinct counter; this is not a voluntary yield.
+arm_preempt_park:
+    stp x29, x30, [sp, #-16]!
+.if {boundary}
+    // The timer can become pending during registration but must not execute
+    // an IRQ handler against a BLOCKED task. No unmask occurs in this window.
+    mrs x2, daif
+    tbz x2, #7, arm_exception_fatal
+    ldr x2, =arm_preempt_boundary_flags
+    ldr x3, [x2]
+    tbnz x3, #4, .Lpark_expiry_done
+    orr x3, x3, #16
+    str x3, [x2]
+    msr cntp_cval_el0, xzr
+    isb
+    mrs x2, cntp_ctl_el0
+    tbz x2, #2, arm_exception_fatal
+    ldr x2, =arm_wait_masked_expiries
+    ldr x3, [x2]
+    adds x4, x3, #1
+    csel x3, x3, x4, cs
+    str x3, [x2]
+.Lpark_expiry_done:
+.endif
+    mov x2, #2
+    msr cntp_ctl_el0, x2
+    isb
+    clrex
+    bl arm_context_switch
+    ldp x29, x30, [sp], #16
+    ret
+
 arm_preempt_start:
     preempt_boundary 1, start
     mov x0, x21
@@ -442,4 +487,9 @@ arm_preempt_irq_count:
 
 .balign 8
 arm_preempt_boundary_flags:
+    .skip 8
+
+.balign 8
+.global arm_wait_masked_expiries
+arm_wait_masked_expiries:
     .skip 8

@@ -144,12 +144,13 @@ fn protections(platform: &impl Platform) -> bool {
 
 /// Cross-check all recorded causes and their counters. Truncated traces are
 /// prefixes, so their per-worker counts may be lower than the complete totals.
-fn report_valid(report: &PreemptReport, jobs: usize) -> bool {
+pub(super) fn report_valid(report: &PreemptReport, jobs: usize) -> bool {
     let run = &report.run;
     let Some(suspensions) = run
         .yields
         .iter()
         .chain(&report.preemptions)
+        .chain(&report.parks)
         .try_fold(0u64, |total, count| total.checked_add(*count))
     else {
         return false;
@@ -162,12 +163,14 @@ fn report_valid(report: &PreemptReport, jobs: usize) -> bool {
         || run.results[jobs..].iter().any(|v| *v != 0)
         || run.yields[jobs..].iter().any(|v| *v != 0)
         || report.preemptions[jobs..].iter().any(|v| *v != 0)
+        || report.parks[jobs..].iter().any(|v| *v != 0)
     {
         return false;
     }
     let mut initial = [0usize; MAX_THREADS];
     let mut yields = [0u64; MAX_THREADS];
     let mut timers = [0u64; MAX_THREADS];
+    let mut wakes = [0u64; MAX_THREADS];
     for index in 0..run.trace_len {
         let id = run.trace[index];
         if id >= jobs {
@@ -177,19 +180,25 @@ fn report_valid(report: &PreemptReport, jobs: usize) -> bool {
             DispatchCause::Initial => initial[id] += 1,
             DispatchCause::Yield => yields[id] += 1,
             DispatchCause::Timer => timers[id] += 1,
+            DispatchCause::Wake => wakes[id] += 1,
         }
         if initial[id] != 1 {
             return false;
         }
     }
     for id in 0..jobs {
-        if initial[id] > 1 || yields[id] > run.yields[id] || timers[id] > report.preemptions[id] {
+        if initial[id] > 1
+            || yields[id] > run.yields[id]
+            || timers[id] > report.preemptions[id]
+            || wakes[id] > report.parks[id]
+        {
             return false;
         }
         if !run.truncated
             && (initial[id] != 1
                 || yields[id] != run.yields[id]
-                || timers[id] != report.preemptions[id])
+                || timers[id] != report.preemptions[id]
+                || wakes[id] != report.parks[id])
         {
             return false;
         }

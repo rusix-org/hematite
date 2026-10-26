@@ -16,6 +16,7 @@ preemption-tests = []
 preemption-no-timer-test = ["preemption-tests"]
 preemption-boundary-test = ["preemption-tests"]
 preemption-overflow-test = []
+wait-all-blocked-test = []
 
 [[bin]]
 name = "hematite"
