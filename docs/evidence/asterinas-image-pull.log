@@ -1,0 +1,125 @@
+0.19.0-20261012: Pulling from asterinas/dev
+a60ef8ec184e: Pulling fs layer
+fae9d0e9965d: Pulling fs layer
+01d24228b756: Pulling fs layer
+45a3c0a6aae8: Pulling fs layer
+ee021e0a44fa: Pulling fs layer
+21a7c5933492: Pulling fs layer
+b984565fba4c: Pulling fs layer
+12fb51c345bb: Pulling fs layer
+deee7fc90f6d: Pulling fs layer
+59899b3bd2a3: Pulling fs layer
+4f4fb700ef54: Pulling fs layer
+6e018db842d8: Pulling fs layer
+c6163111cf3c: Pulling fs layer
+36566a5f1736: Pulling fs layer
+8937682c4885: Pulling fs layer
+4f4fb700ef54: Pulling fs layer
+305d758063f9: Pulling fs layer
+77b88103366e: Pulling fs layer
+4f4fb700ef54: Pulling fs layer
+240e42436269: Pulling fs layer
+4f4fb700ef54: Pulling fs layer
+a56f125d96d2: Pulling fs layer
+a4d04c9fcaa9: Pulling fs layer
+aab3e03d8dfc: Pulling fs layer
+fb1f4c4fe98a: Pulling fs layer
+e3f28e32b09e: Pulling fs layer
+4f4fb700ef54: Pulling fs layer
+4f4fb700ef54: Pulling fs layer
+10f29182c91e: Pulling fs layer
+eb910b314bcf: Pulling fs layer
+5971e9e2f8c2: Pulling fs layer
+a79b98ae13c4: Pulling fs layer
+4f2b202b7aea: Pulling fs layer
+b363e930a064: Pulling fs layer
+39cd2c596589: Pulling fs layer
+df6ba62e26f7: Pulling fs layer
+d7842a83eaf4: Pulling fs layer
+8fb4cb1fc5ec: Pulling fs layer
+200d1f0b3d37: Pulling fs layer
+02a9973aff34: Pulling fs layer
+db50453767b1: Pulling fs layer
+4f4fb700ef54: Pulling fs layer
+84e033f1915a: Pulling fs layer
+4f4fb700ef54: Already exists
+44136fa355b3: Already exists
+59899b3bd2a3: Download complete
+8937682c4885: Download complete
+12fb51c345bb: Download complete
+b984565fba4c: Download complete
+21a7c5933492: Download complete
+45a3c0a6aae8: Download complete
+a60ef8ec184e: Download complete
+240e42436269: Download complete
+a60ef8ec184e: Pull complete
+ee021e0a44fa: Download complete
+b984565fba4c: Pull complete
+deee7fc90f6d: Download complete
+fae9d0e9965d: Download complete
+77b88103366e: Download complete
+aab3e03d8dfc: Download complete
+01d24228b756: Download complete
+36566a5f1736: Download complete
+6e018db842d8: Download complete
+fb1f4c4fe98a: Download complete
+a4d04c9fcaa9: Download complete
+a56f125d96d2: Download complete
+e3f28e32b09e: Download complete
+305d758063f9: Download complete
+c6163111cf3c: Download complete
+4f2b202b7aea: Download complete
+c6163111cf3c: Pull complete
+305d758063f9: Pull complete
+10f29182c91e: Download complete
+39cd2c596589: Download complete
+5971e9e2f8c2: Download complete
+a79b98ae13c4: Download complete
+b363e930a064: Download complete
+eb910b314bcf: Download complete
+200d1f0b3d37: Download complete
+8fb4cb1fc5ec: Download complete
+df6ba62e26f7: Download complete
+84e033f1915a: Download complete
+db50453767b1: Download complete
+db50453767b1: Pull complete
+652a67e10b9a: Download complete
+44136fa355b3: Already exists
+512fdd08b93d: Download complete
+02a9973aff34: Download complete
+d7842a83eaf4: Download complete
+e3f28e32b09e: Pull complete
+a4d04c9fcaa9: Pull complete
+4f2b202b7aea: Pull complete
+fae9d0e9965d: Pull complete
+39cd2c596589: Pull complete
+77b88103366e: Pull complete
+240e42436269: Pull complete
+aab3e03d8dfc: Pull complete
+a56f125d96d2: Pull complete
+5971e9e2f8c2: Pull complete
+01d24228b756: Pull complete
+45a3c0a6aae8: Pull complete
+84e033f1915a: Pull complete
+10f29182c91e: Pull complete
+a79b98ae13c4: Pull complete
+eb910b314bcf: Pull complete
+df6ba62e26f7: Pull complete
+d7842a83eaf4: Pull complete
+6e018db842d8: Pull complete
+59899b3bd2a3: Pull complete
+8fb4cb1fc5ec: Pull complete
+02a9973aff34: Pull complete
+8937682c4885: Pull complete
+deee7fc90f6d: Pull complete
+12fb51c345bb: Pull complete
+36566a5f1736: Pull complete
+200d1f0b3d37: Pull complete
+fb1f4c4fe98a: Pull complete
+ee021e0a44fa: Pull complete
+21a7c5933492: Pull complete
+b363e930a064: Pull complete
+4f4fb700ef54: Pull complete
+Digest: sha256:6a62f4eb57337e23733f3b40036bbbea5b022c972f21ed9557ad9a4437848306
+Status: Downloaded newer image for asterinas/dev:0.19.0-20261012
+docker.io/asterinas/dev:0.19.0-20261012

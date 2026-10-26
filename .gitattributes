@@ -1,0 +1,3 @@
+# Preserve raw evidence, including terminal CRLF and trailing whitespace.
+docs/evidence/*.log -text -whitespace
+docs/evidence/**/*.log -text -whitespace

@@ -1,0 +1,1 @@
+{"scope": "upstream Asterinas boot marker only", "passed": true, "timeout_seconds": 120, "timed_out": false, "returncode": 33, "boot_markers": 1}
