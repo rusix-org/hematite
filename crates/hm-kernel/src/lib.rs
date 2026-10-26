@@ -27,6 +27,7 @@ pub mod native_launch;
 mod preemption_tests;
 pub mod process_budget;
 pub mod startup_input;
+pub mod task_wire;
 pub mod thread_api;
 mod thread_tests;
 pub mod wait_api;
