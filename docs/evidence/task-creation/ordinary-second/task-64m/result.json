@@ -1,0 +1,71 @@
+{
+  "passed": true,
+  "errors": [],
+  "execution": {
+    "returncode": 0,
+    "timed_out": false,
+    "launch_error": null,
+    "host_terminated": true,
+    "host_killed": false,
+    "alive_after_last_prompt": true,
+    "elapsed_seconds": 1.1124930019723251
+  },
+  "serial": {
+    "commands": 12,
+    "completed": 7,
+    "generation": 7,
+    "free_frames": 3103
+  },
+  "trace": {
+    "supervisors": [
+      {
+        "calls": [
+          9,
+          6,
+          0
+        ],
+        "irqs": [
+          1,
+          1,
+          6
+        ],
+        "slices": 23
+      },
+      {
+        "calls": [
+          9,
+          6,
+          0
+        ],
+        "irqs": [
+          1,
+          1,
+          6
+        ],
+        "slices": 23
+      }
+    ],
+    "legacy_calls": 2,
+    "scope": "artifact-bound task SVC order and saved-PC resumption; private authority negatives use dedicated gate"
+  },
+  "artifacts": {
+    "serial.log": {
+      "exists": true,
+      "bytes": 3354,
+      "sha256": "b6c12b17f6ceab5d7b3786242e003e592aacb3e25fd1642b4b186bdb08753c2e",
+      "within_size_limit": true
+    },
+    "exceptions.log": {
+      "exists": true,
+      "bytes": 46072,
+      "sha256": "0ed43e9772a7674e5dccdd7358c6c7df2fec94b9d98b3a33e782fdb555391e85",
+      "within_size_limit": true
+    },
+    "stderr.log": {
+      "exists": true,
+      "bytes": 67,
+      "sha256": "de8394b3389168c7af886c5bdadf9b5b8118eed7df620db315d594d613bdec14",
+      "within_size_limit": true
+    }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "passed": false,
+  "profiles": {
+    "task-64m": true,
+    "task-128m": true,
+    "task-128m-fresh": true
+  },
+  "error": null,
+  "trace_grammar_reviewed": false,
+  "scope": "ordinary native task creation; detailed negative authority profiles separate"
+}

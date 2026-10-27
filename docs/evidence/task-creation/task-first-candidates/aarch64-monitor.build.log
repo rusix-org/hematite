@@ -1,0 +1,12 @@
+   Compiling hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+   Compiling hm-core v0.1.0 (/workspace/crates/hm-core)
+warning: unused imports: `Management`, `RootClosure`, `RootEvidence`, and `TaskCompletion`
+  --> crates/hm-core/src/process_group.rs:86:16
+   |
+86 | pub use task::{Management, RootClosure, RootEvidence, TaskCompletion, TaskTurn};
+   |                ^^^^^^^^^^  ^^^^^^^^^^^  ^^^^^^^^^^^^  ^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: `hm-core` (bin "hematite") generated 1 warning (run `cargo fix --bin "hematite" -p hm-core` to apply 1 suggestion)
+    Finished `release` profile [optimized] target(s) in 8.90s

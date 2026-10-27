@@ -1,0 +1,88 @@
+hematite: ARM64 Rust kernel entered at EL1
+Boot RAM bytes: 0x0000000008000000 (discovered RAM)
+Frame pool pages: 0x0000000000000c22 (4 KiB each; boot reservations excluded)
+Hematite bootstrap monitor (local working name)
+Commands: help, status, test, apps, run <path> [text], run-group <path1> <path2>, run-task <path>. This is not a Linux shell.
+hm> status
+write protection: OK
+NX: OK
+user execution protection: OK
+user access protection: OK
+W^X mappings: OK
+stack guard: OK
+null guard: OK
+No storage or networking.
+Native launcher: not initialized
+Native launches: 0
+Last prepared generation: none
+Free frames: 3106
+hm> run-task bin/supervisor
+worker complete
+supervisor complete
+bin/supervisor: exited (status 0).
+hm> status
+write protection: OK
+NX: OK
+user execution protection: OK
+user access protection: OK
+W^X mappings: OK
+stack guard: OK
+null guard: OK
+No storage or networking.
+Native launcher: ready
+Native launches: 3
+Last prepared generation: 3
+Free frames: 3106
+hm> run-task bin/supervisor
+worker complete
+supervisor complete
+bin/supervisor: exited (status 0).
+hm> status
+write protection: OK
+NX: OK
+user execution protection: OK
+user access protection: OK
+W^X mappings: OK
+stack guard: OK
+null guard: OK
+No storage or networking.
+Native launcher: ready
+Native launches: 6
+Last prepared generation: 6
+Free frames: 3106
+hm> run-task bin/missing
+Program not found.
+hm> run-task
+Usage: run-task <archive-path>.
+hm> run-task bin/supervisor extra
+Usage: run-task <archive-path>.
+hm> status
+write protection: OK
+NX: OK
+user execution protection: OK
+user access protection: OK
+W^X mappings: OK
+stack guard: OK
+null guard: OK
+No storage or networking.
+Native launcher: ready
+Native launches: 6
+Last prepared generation: 6
+Free frames: 3106
+hm> run bin/hello
+hello from EL0
+Program exited (status 0).
+hm> status
+write protection: OK
+NX: OK
+user execution protection: OK
+user access protection: OK
+W^X mappings: OK
+stack guard: OK
+null guard: OK
+No storage or networking.
+Native launcher: ready
+Native launches: 7
+Last prepared generation: 7
+Free frames: 3106
+hm> 

@@ -1,0 +1,31 @@
+{
+  "cwd": "/workspace",
+  "expected_cases": [
+    "absent_dispatch",
+    "core_errors_are_reported",
+    "empty_dispatch",
+    "empty_or_whitespace_path_rejected",
+    "group_completion_order",
+    "group_malformed_order_rejected",
+    "group_path_arity",
+    "group_paths_and_unsupported",
+    "maximum_payload",
+    "oversize_rejected",
+    "spaces_preserved",
+    "task_path_arity",
+    "task_setup_failure",
+    "task_terminal_results",
+    "unsupported_input"
+  ],
+  "sources": {
+    "rust-toolchain.toml": "da55df283f88667ec7a31b7392d493f574a36c88467b955d467c3a3cbe2e9fb1",
+    "Cargo.lock": "383e08e95bee956a6cc81d5ee51e1b4dca8355d92c80473228e2c1413b7b177b",
+    "Cargo.toml": "b5ce112343302244db423f588b44e1c4da81b030bf2a3b2d66c7552a94bec1d8",
+    "crates/hm-kernel/Cargo.toml": "5b738f47733eb9c7ff18b1a4a635da1f747595796e3f68ba812379f03c694b9c",
+    "crates/hm-kernel/src/lib.rs": "cdc1bee0fafd4b5bb7308d44939036324293d8809e6fe440f3860ee9e536666b",
+    "crates/hm-kernel/src/native_launch.rs": "0dd88c91b80a4291cb8f705485534fa9d4c8a1e6e8c76b99bd5370dab92a72a3",
+    "crates/hm-kernel/src/startup_input.rs": "78f6593de5ff4dcdaab66b58bc807e04dcf78008955b6295e98479cb8bbce059",
+    "crates/hm-kernel/tests/launch_input.rs": "1f2b078cc642f042439e6bd8e9f3934a2ed794e519823a245c2e5c98483d4825",
+    "tools/check_launch_input.py": "1c1ff217f274b82d9ac257b91b7db7fa30525ea87c1b961ff49b3dab2d57960a"
+  }
+}

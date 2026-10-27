@@ -8,11 +8,13 @@ from strict Linux parity to native OS design with selective compatibility.
 
 ## Implementation and verification
 
-- Native userspace task creation remains **planned**. Its wire codec and
-  owned Session admission policy are **implemented and verified locally**.
-  The latest stage passes 16 independent policy cases, 13 compiler clients per
+- Native userspace task creation is **verified locally for the ordinary demo**;
+  detailed negative authority coverage remains pending. Its wire codec and owned
+  Session admission policy are also **implemented and verified locally**.
+  The preceding Session stage passed 16 independent policy cases, 13 compiler clients per
   architecture and a full ARM/x86 rerun (210 Python validator cases per target).
-  All 23 kernels remain byte-identical to the reviewed process-group milestone.
+  Its 23 kernels were byte-identical to the reviewed process-group milestone;
+  the current core integration changes those binaries and needs fresh acceptance.
   The first full run failed an existing 64 MiB runtime expectation after one
   281.3 ms measured turn exhausted its remaining budget. That failure is
   preserved; isolated and full unchanged reruns pass, and the interval's cause
@@ -20,8 +22,10 @@ from strict Linux parity to native OS design with selective compatibility.
   and [codec evidence](docs/evidence/task-wire-codec.md).
   Core [dispatch](docs/design/0029-core-dispatch.md) and
   [authority](docs/design/0029-task-authority.md) designs prepare the actual
-  lifecycle integration. No SPAWN/WAIT/CANCEL syscall or new monitor command is
-  exposed yet; remote CI remains unverified.
+  lifecycle integration. SPAWN/WAIT/CANCEL and `run-task` now pass the ordinary
+  three-profile guest demo with independent raw trace review. The normal archive includes supervisor/worker programs. Full
+  ARM/x86 regressions pass; detailed negative authority tests and remote CI
+  remain unverified.
 
 - Stage B group runtime design and hardware protocol passed independent review.
   Core resumable turns, owned groups and ordinary launcher integration are
@@ -807,3 +811,94 @@ does not claim resumable execution or process-group support.
   preserving and diagnosing an earlier runtime budget failure without changing
   its assertions, deadlines or binary. Core ownership/finalization design is
   reviewed; actual capability/lifecycle/hardware integration remains next.
+
+- 2026-10-26: Added safe `run-task <path>` monitor parsing and copied root-result
+  reporting, with Unsupported as the platform default pending the ARM adapter.
+  All fifteen monitor policy cases pass, including task path arity, terminal
+  outcomes and setup failures; five strict-harness mutation tests pass. Raw
+  [host evidence](docs/evidence/task-monitor-policy/first/result.json) covers
+  parsing/dispatch only, not EL0 task creation. Core lifecycle source is in
+  progress and has not passed compile, stack or guest acceptance gates yet.
+
+- 2026-10-26: Wired the ARM task-launch adapter to the new Group APIs. Source
+  review accepted bounded driving, one count per child terminal/root publication,
+  console-generation preservation, and reporting after reap/drop/pool recovery.
+  Fixed catalog setup errors to remain nonretiring; retained image/group Results
+  avoid unnecessary large-owner moves. Compilation and compiled-stack review
+  remain pending while the core implementation is completed. Existing launcher
+  validator tests pass (21 cases). A unittest invocation of the boot-profile
+  executable found zero tests (exit 5); it supplies no boot verification.
+
+- 2026-10-26: First ordinary task-runtime ARM monitor candidate compiles;
+  [build evidence](docs/evidence/task-creation/task-first-candidates/inputs.json)
+  preserves emitted assembly and source hashes. Actual ARM layout remains
+  Process 9,832 bytes / Space 8,936 bytes / three Process box pages. The first
+  layout helper failed to resolve a library under Cargo's deps directory; fixed
+  its search path and preserved the failure alongside the
+  [passing measurement](docs/evidence/task-creation/task-second-layout/result.json).
+  Review requested a restored-root trace correction and explicit residual
+  dispatch rejection before entry. Neither stack acceptance nor guest execution
+  is claimed for this candidate; fixture and full-profile verification remain.
+
+- 2026-10-26: Normal archive now reproducibly includes bin/supervisor and
+  bin/worker while retaining the original demo/loop. Seven files pass ELF and
+  GNU archive checks ([evidence](docs/evidence/task-normal-archive/result.json)).
+  Corrected six recorded Clippy findings; both architecture all-feature Clippy,
+  formatting and safety hygiene pass. All 210 existing Python tests pass. Fixed
+  SAFETY-comment placement after formatting, without changing its invariant.
+  All 23 fresh kernel profiles are now compiling for independent linked stack
+  and ordering review; no task-runtime guest has been run yet.
+
+- 2026-10-26: All 23 fresh task-runtime profiles compile with unchanged captured
+  source hashes. Independent stack screening clears 22 profiles under the prior
+  helper allowance. The runtime-test ordinary cancellation/admission path reaches
+  65,168 bytes before that allowance, leaving only 368 bytes; its full stack gate
+  remains unresolved, so all new guest runs are held. Ordinary task launcher
+  harness is implemented with eight passing host mutation tests; raw-trace
+  acceptance remains explicitly disabled until actual execution is reviewed.
+
+- 2026-10-26: Extracted cancellation-boundary polling into a noinline safe test
+  helper so its large Turn temporaries do not overlap admission. The revised
+  runtime-test candidate compiles and both-architecture static gates pass again.
+  Extended the compiler layout witness with an exactly recorded reversible
+  module-copy transformation: Image 472 bytes, Authority 928 bytes, ordinary
+  Group 1,960 bytes, metadata three pages. Existing five layout fields remain
+  unchanged. Final stack acceptance is still pending. Added the task-launcher
+  host/guest gates to Makefile; its raw-trace gate remains disabled pending review.
+
+- 2026-10-26: All affected-profile stack gates now pass after the helper split:
+  tightest runtime bound 65,376/65,536 bytes including the unchanged allowance.
+  Ordinary QEMU diagnostics pass at 64 MiB, 128 MiB and fresh 128 MiB. Independent
+  raw trace review confirms actual parent/worker SVCs, parked WAIT/wake, loop
+  cancellation, full reclamation and later legacy hello. The first aggregate
+  failure records the intentionally disabled trace-review gate; after acceptance,
+  [the strict rerun passes](docs/evidence/task-creation/ordinary-second/result.json).
+  Full ARM/x86 regressions are running; no detailed task-negative or compatibility
+  claim is made. README now includes the runnable supervisor command and limits.
+
+- 2026-10-26: First full regression stopped before guests at the existing
+  forge_process compiler probe: its stale Session initializer produced E0308
+  instead of the required E0451 privacy rejection. Corrected the initializer to
+  Some(session), retained strict E0451 and added task-module provenance hashes.
+  Independent review accepted the correction; all 41 compiler probes now pass.
+  Full-second ARM/x86 regression rerun is active; first failure is preserved.
+
+- 2026-10-26: Full-second passed ordinary task guests, then stopped before
+  runtime guests because their validator still expected the old 40-byte layout
+  record. Updated it to validate all eleven values/88 bytes, exact hashes, task
+  page arithmetic and required task source identities. Malformed/missing-field
+  and missing-source mutation checks pass. Both unchanged runtime guest profiles
+  pass in the isolated corrected run. Full-third ARM/x86 rerun is active.
+
+- 2026-10-26: Full-third `make test-all` passes in 189.8 seconds on ARM/x86,
+  including the new ordinary task-launcher gate and unchanged runtime regressions.
+  All 264 captured source inputs remain identical. Earlier compiler-probe and
+  layout-consumer failures are preserved with their raw target archives. See
+  [task creation evidence](docs/evidence/native-task-creation.md). This verifies
+  the ordinary runnable demo and existing regressions, not the unimplemented
+  detailed task-negative matrix, shell, storage, networking or Linux adapter.
+
+- 2026-10-26: Created local implementation checkpoint `c59c6e07`; all 264
+  full-third source hashes match its committed blobs. Raw archives include
+  87 ARM and 17 x86 result records with no failed result in the passing run.
+  No remote push or new remote CI claim. Detailed task-negative tests remain next.

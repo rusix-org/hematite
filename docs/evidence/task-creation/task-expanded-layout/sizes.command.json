@@ -1,0 +1,35 @@
+{
+  "argv": [
+    "rustc",
+    "--edition=2024",
+    "--target",
+    "aarch64-unknown-none",
+    "-C",
+    "panic=abort",
+    "--cfg",
+    "feature=\"secondary-tests\"",
+    "--cfg",
+    "feature=\"smp-tests\"",
+    "--extern",
+    "hm_kernel=/workspace/target/group-stage-b/task-second-candidates/aarch64-monitor/aarch64-unknown-none/release/deps/libhm_kernel-2c2b86c1be3ad9ce.rlib",
+    "-L",
+    "dependency=/workspace/target/group-stage-b/task-second-candidates/aarch64-monitor/aarch64-unknown-none/release/deps",
+    "--crate-type=lib",
+    "--emit=asm",
+    "-C",
+    "opt-level=2",
+    "--extern",
+    "hm_layout=/workspace/docs/evidence/task-creation/task-expanded-layout/libhm_layout.rlib",
+    "/workspace/docs/evidence/task-creation/task-expanded-layout/sizes.rs",
+    "-o",
+    "/workspace/docs/evidence/task-creation/task-expanded-layout/sizes.s"
+  ],
+  "cwd": "/workspace",
+  "stdin_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout": "/workspace/docs/evidence/task-creation/task-expanded-layout/sizes.stdout.log",
+  "env": {
+    "LC_ALL": "C",
+    "TZ": "UTC"
+  },
+  "timeout_seconds": 20
+}

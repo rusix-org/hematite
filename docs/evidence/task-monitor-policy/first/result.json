@@ -1,0 +1,71 @@
+{
+  "passed": true,
+  "checks": {
+    "exit_success": true,
+    "within_deadline": true,
+    "launched": true,
+    "complete_report": true,
+    "bounded_logs": true
+  },
+  "execution": {
+    "started_utc": "2026-10-26T23:47:04.318158+00:00",
+    "timeout_seconds": 60,
+    "returncode": 0,
+    "timed_out": false,
+    "launch_error": null,
+    "elapsed_seconds": 2.0713511620415375
+  },
+  "artifacts": {
+    "stdout": {
+      "bytes": 610,
+      "within_limit": true,
+      "sha256": "98e6155783e430a46e13fb35ef8b4120ee5d9e53838d0d4aee7a05d46ce87ca3"
+    },
+    "stderr": {
+      "bytes": 261,
+      "within_limit": true,
+      "sha256": "a47c5ac9c844b1cf5b87f3c3f9d2eafc9e8387b0bbd12317ebc762ae585e28a2"
+    }
+  },
+  "report": {
+    "passed": true,
+    "errors": [],
+    "expected_cases": [
+      "absent_dispatch",
+      "core_errors_are_reported",
+      "empty_dispatch",
+      "empty_or_whitespace_path_rejected",
+      "group_completion_order",
+      "group_malformed_order_rejected",
+      "group_path_arity",
+      "group_paths_and_unsupported",
+      "maximum_payload",
+      "oversize_rejected",
+      "spaces_preserved",
+      "task_path_arity",
+      "task_setup_failure",
+      "task_terminal_results",
+      "unsupported_input"
+    ],
+    "observed_lines": [
+      "running 15 tests",
+      "test absent_dispatch ... ok",
+      "test core_errors_are_reported ... ok",
+      "test empty_dispatch ... ok",
+      "test empty_or_whitespace_path_rejected ... ok",
+      "test group_completion_order ... ok",
+      "test group_malformed_order_rejected ... ok",
+      "test group_path_arity ... ok",
+      "test group_paths_and_unsupported ... ok",
+      "test maximum_payload ... ok",
+      "test oversize_rejected ... ok",
+      "test spaces_preserved ... ok",
+      "test task_path_arity ... ok",
+      "test task_setup_failure ... ok",
+      "test task_terminal_results ... ok",
+      "test unsupported_input ... ok",
+      "test result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s"
+    ]
+  },
+  "scope": "actual monitor command parsing and dispatch with effect recorder; real Platform and hardware checked separately"
+}

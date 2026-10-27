@@ -1,0 +1,9 @@
+error[E0463]: can't find crate for `hm_layout`
+ --> /workspace/docs/evidence/task-creation/task-first-layout/sizes.rs:3:5
+  |
+3 | use hm_layout::{Process,Space,KernelBox};
+  |     ^^^^^^^^^ can't find crate
+
+error: aborting due to 1 previous error
+
+For more information about this error, try `rustc --explain E0463`.

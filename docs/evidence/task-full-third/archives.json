@@ -1,0 +1,432 @@
+[
+  {
+    "directory": "target/evidence/20261027T001941-682517136-aarch64",
+    "archive": "20261027T001941-682517136-aarch64.tar.gz",
+    "sha256": "9659327e1e7b10334df99324e1807a8cde051f2a3a888b48cc3798ac69a6b00c",
+    "results": [
+      {
+        "path": "type-boundary/result.json",
+        "passed": true
+      },
+      {
+        "path": "native-types/result.json",
+        "passed": true
+      },
+      {
+        "path": "startup-input-types/result.json",
+        "passed": true
+      },
+      {
+        "path": "task-wire-types/result.json",
+        "passed": true
+      },
+      {
+        "path": "task-admission-types/result.json",
+        "passed": true
+      },
+      {
+        "path": "process-budget-types/result.json",
+        "passed": true
+      },
+      {
+        "path": "boot-image-types/result.json",
+        "passed": true
+      },
+      {
+        "path": "initramfs-types/result.json",
+        "passed": true
+      },
+      {
+        "path": "elf-types/result.json",
+        "passed": true
+      },
+      {
+        "path": "frame-types/result.json",
+        "passed": true
+      },
+      {
+        "path": "native-host/result.json",
+        "passed": true
+      },
+      {
+        "path": "startup-input-host/result.json",
+        "passed": true
+      },
+      {
+        "path": "task-wire-host/result.json",
+        "passed": true
+      },
+      {
+        "path": "task-admission-host/result.json",
+        "passed": true
+      },
+      {
+        "path": "process-budget-host/result.json",
+        "passed": true
+      },
+      {
+        "path": "apps-fixtures/result.json",
+        "passed": true
+      },
+      {
+        "path": "startup-input-fixtures/result.json",
+        "passed": true
+      },
+      {
+        "path": "runtime-fixtures/result.json",
+        "passed": true
+      },
+      {
+        "path": "launch-input-host/result.json",
+        "passed": true
+      },
+      {
+        "path": "initramfs-fixture/result.json",
+        "passed": true
+      },
+      {
+        "path": "process-archive/result.json",
+        "passed": true
+      },
+      {
+        "path": "boot-image-host/result.json",
+        "passed": true
+      },
+      {
+        "path": "initramfs-host/result.json",
+        "passed": true
+      },
+      {
+        "path": "process-fixtures/result.json",
+        "passed": true
+      },
+      {
+        "path": "elf-host/result.json",
+        "passed": true
+      },
+      {
+        "path": "cpu-topology/result.json",
+        "passed": true
+      },
+      {
+        "path": "mutex-types/result.json",
+        "passed": true
+      },
+      {
+        "path": "process-types/result.json",
+        "passed": true
+      },
+      {
+        "path": "runtime-layout/result.json",
+        "passed": true
+      },
+      {
+        "path": "space-types/result.json",
+        "passed": true
+      },
+      {
+        "path": "mapping-types/result.json",
+        "passed": true
+      },
+      {
+        "path": "thread-types/result.json",
+        "passed": true
+      },
+      {
+        "path": "boot/result.json",
+        "passed": true
+      },
+      {
+        "path": "profiles/result.json",
+        "passed": true
+      },
+      {
+        "path": "preemption-128m/result.json",
+        "passed": true
+      },
+      {
+        "path": "preemption-64m/result.json",
+        "passed": true
+      },
+      {
+        "path": "preemption-boundaries/result.json",
+        "passed": true
+      },
+      {
+        "path": "preemption-negative/result.json",
+        "passed": true
+      },
+      {
+        "path": "wait-all-blocked/result.json",
+        "passed": true
+      },
+      {
+        "path": "process/result.json",
+        "passed": true
+      },
+      {
+        "path": "startup-delivery/result.json",
+        "passed": true
+      },
+      {
+        "path": "launcher/result.json",
+        "passed": true
+      },
+      {
+        "path": "group-launcher/result.json",
+        "passed": true
+      },
+      {
+        "path": "task-launcher/result.json",
+        "passed": true
+      },
+      {
+        "path": "runtime/result.json",
+        "passed": true
+      },
+      {
+        "path": "space/result.json",
+        "passed": true
+      },
+      {
+        "path": "secondary/result.json",
+        "passed": true
+      },
+      {
+        "path": "smp/result.json",
+        "passed": true
+      },
+      {
+        "path": "smp/smp-128m/result.json",
+        "passed": true
+      },
+      {
+        "path": "smp/smp-64m/result.json",
+        "passed": true
+      },
+      {
+        "path": "smp/no-peer-timer/result.json",
+        "passed": true
+      },
+      {
+        "path": "smp/peer-overflow/result.json",
+        "passed": true
+      },
+      {
+        "path": "smp/all-blocked/result.json",
+        "passed": true
+      },
+      {
+        "path": "secondary/lifecycle-128m/result.json",
+        "passed": true
+      },
+      {
+        "path": "secondary/lifecycle-64m/result.json",
+        "passed": true
+      },
+      {
+        "path": "secondary/topology/result.json",
+        "passed": true
+      },
+      {
+        "path": "secondary/stale-generation/result.json",
+        "passed": true
+      },
+      {
+        "path": "secondary/cpu-off-return/result.json",
+        "passed": true
+      },
+      {
+        "path": "space/space-64m-1cpu/result.json",
+        "passed": true
+      },
+      {
+        "path": "space/space-128m-1cpu/result.json",
+        "passed": true
+      },
+      {
+        "path": "space/space-128m-2cpu/result.json",
+        "passed": true
+      },
+      {
+        "path": "runtime/runtime-64m/result.json",
+        "passed": true
+      },
+      {
+        "path": "runtime/runtime-128m/result.json",
+        "passed": true
+      },
+      {
+        "path": "task-launcher/task-64m/result.json",
+        "passed": true
+      },
+      {
+        "path": "task-launcher/task-128m/result.json",
+        "passed": true
+      },
+      {
+        "path": "task-launcher/task-128m-fresh/result.json",
+        "passed": true
+      },
+      {
+        "path": "group-launcher/group-64m/result.json",
+        "passed": true
+      },
+      {
+        "path": "group-launcher/group-128m/result.json",
+        "passed": true
+      },
+      {
+        "path": "group-launcher/group-128m-fresh/result.json",
+        "passed": true
+      },
+      {
+        "path": "launcher/launcher-64m/result.json",
+        "passed": true
+      },
+      {
+        "path": "launcher/launcher-128m/result.json",
+        "passed": true
+      },
+      {
+        "path": "launcher/launcher-128m-fresh/result.json",
+        "passed": true
+      },
+      {
+        "path": "launcher/launcher-128m-fresh-input/result.json",
+        "passed": true
+      },
+      {
+        "path": "startup-delivery/startup-input-64m/result.json",
+        "passed": true
+      },
+      {
+        "path": "startup-delivery/startup-input-128m/result.json",
+        "passed": true
+      },
+      {
+        "path": "process/process-64m-1cpu/result.json",
+        "passed": true
+      },
+      {
+        "path": "process/process-128m-1cpu/result.json",
+        "passed": true
+      },
+      {
+        "path": "process/process-128m-2cpu/result.json",
+        "passed": true
+      },
+      {
+        "path": "preemption-negative/no-timer/result.json",
+        "passed": true
+      },
+      {
+        "path": "preemption-negative/overflow/result.json",
+        "passed": true
+      },
+      {
+        "path": "profiles/missing-pan/result.json",
+        "passed": true
+      },
+      {
+        "path": "profiles/monitor/result.json",
+        "passed": true
+      },
+      {
+        "path": "profiles/memory-64m/result.json",
+        "passed": true
+      },
+      {
+        "path": "profiles/unexpected-fault/result.json",
+        "passed": true
+      },
+      {
+        "path": "profiles/nested-fault/result.json",
+        "passed": true
+      },
+      {
+        "path": "profiles/thread-overflow/result.json",
+        "passed": true
+      },
+      {
+        "path": "apps-fixtures/tasks/result.json",
+        "passed": true
+      }
+    ]
+  },
+  {
+    "directory": "target/evidence/20261027T002158-748822570-x86_64",
+    "archive": "20261027T002158-748822570-x86_64.tar.gz",
+    "sha256": "376da27109c2f3b9139084d832c855dc5650bbb91c0646b4b764b90203b59ef6",
+    "results": [
+      {
+        "path": "type-boundary/result.json",
+        "passed": true
+      },
+      {
+        "path": "native-types/result.json",
+        "passed": true
+      },
+      {
+        "path": "startup-input-types/result.json",
+        "passed": true
+      },
+      {
+        "path": "task-wire-types/result.json",
+        "passed": true
+      },
+      {
+        "path": "task-admission-types/result.json",
+        "passed": true
+      },
+      {
+        "path": "process-budget-types/result.json",
+        "passed": true
+      },
+      {
+        "path": "boot-image-types/result.json",
+        "passed": true
+      },
+      {
+        "path": "initramfs-types/result.json",
+        "passed": true
+      },
+      {
+        "path": "elf-types/result.json",
+        "passed": true
+      },
+      {
+        "path": "frame-types/result.json",
+        "passed": true
+      },
+      {
+        "path": "mutex-types/result.json",
+        "passed": true
+      },
+      {
+        "path": "boot/result.json",
+        "passed": true
+      },
+      {
+        "path": "profiles/result.json",
+        "passed": true
+      },
+      {
+        "path": "profiles/missing-nx/result.json",
+        "passed": true
+      },
+      {
+        "path": "profiles/missing-smep/result.json",
+        "passed": true
+      },
+      {
+        "path": "profiles/missing-smap/result.json",
+        "passed": true
+      },
+      {
+        "path": "profiles/monitor/result.json",
+        "passed": true
+      }
+    ]
+  }
+]

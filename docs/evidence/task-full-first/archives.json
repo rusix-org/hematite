@@ -1,0 +1,125 @@
+[
+  {
+    "directory": "target/evidence/20261027T001022-442801830-aarch64",
+    "archive": "20261027T001022-442801830-aarch64.tar.gz",
+    "sha256": "cd3904fcd744864a4fd3cadfe028177bb1bff23ba970b90ea2d80ac3748eedf8",
+    "results": [
+      {
+        "path": "type-boundary/result.json",
+        "passed": true
+      },
+      {
+        "path": "native-types/result.json",
+        "passed": true
+      },
+      {
+        "path": "startup-input-types/result.json",
+        "passed": true
+      },
+      {
+        "path": "task-wire-types/result.json",
+        "passed": true
+      },
+      {
+        "path": "task-admission-types/result.json",
+        "passed": true
+      },
+      {
+        "path": "process-budget-types/result.json",
+        "passed": true
+      },
+      {
+        "path": "boot-image-types/result.json",
+        "passed": true
+      },
+      {
+        "path": "initramfs-types/result.json",
+        "passed": true
+      },
+      {
+        "path": "elf-types/result.json",
+        "passed": true
+      },
+      {
+        "path": "frame-types/result.json",
+        "passed": true
+      },
+      {
+        "path": "native-host/result.json",
+        "passed": true
+      },
+      {
+        "path": "startup-input-host/result.json",
+        "passed": true
+      },
+      {
+        "path": "task-wire-host/result.json",
+        "passed": true
+      },
+      {
+        "path": "task-admission-host/result.json",
+        "passed": true
+      },
+      {
+        "path": "process-budget-host/result.json",
+        "passed": true
+      },
+      {
+        "path": "apps-fixtures/result.json",
+        "passed": true
+      },
+      {
+        "path": "startup-input-fixtures/result.json",
+        "passed": true
+      },
+      {
+        "path": "runtime-fixtures/result.json",
+        "passed": true
+      },
+      {
+        "path": "launch-input-host/result.json",
+        "passed": true
+      },
+      {
+        "path": "initramfs-fixture/result.json",
+        "passed": true
+      },
+      {
+        "path": "process-archive/result.json",
+        "passed": true
+      },
+      {
+        "path": "boot-image-host/result.json",
+        "passed": true
+      },
+      {
+        "path": "initramfs-host/result.json",
+        "passed": true
+      },
+      {
+        "path": "process-fixtures/result.json",
+        "passed": true
+      },
+      {
+        "path": "elf-host/result.json",
+        "passed": true
+      },
+      {
+        "path": "cpu-topology/result.json",
+        "passed": true
+      },
+      {
+        "path": "mutex-types/result.json",
+        "passed": true
+      },
+      {
+        "path": "process-types/result.json",
+        "passed": false
+      },
+      {
+        "path": "apps-fixtures/tasks/result.json",
+        "passed": true
+      }
+    ]
+  }
+]

@@ -1,0 +1,9 @@
+{
+  "kernel": "/workspace/target/group-stage-b/task-second-candidates/aarch64-monitor/aarch64-unknown-none/release/hematite",
+  "kernel_sha256": "23b91da7052ad8043395364acfc913b5a00de6a93e5fe483b7df4bdafb7eea5f",
+  "ram_mb": 128,
+  "fresh": false,
+  "input_first": false,
+  "pages": 3106,
+  "timeout_seconds": 40
+}

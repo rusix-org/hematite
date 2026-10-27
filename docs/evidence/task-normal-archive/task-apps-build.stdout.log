@@ -1,0 +1,10 @@
+{
+  "passed": true,
+  "archive": {
+    "bytes": 52736,
+    "sha256": "350cc3833bf04cf0b87cb191458fbb1c63e8ebcf61cb79eed65e1ae553ad3851",
+    "entries": 5,
+    "files": 3
+  },
+  "scope": "ordinary task fixture artifacts and GNU archive verification only; no execution"
+}

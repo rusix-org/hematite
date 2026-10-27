@@ -1,0 +1,17 @@
+[
+  "cargo",
+  "rustc",
+  "--locked",
+  "--offline",
+  "-p",
+  "hm-core",
+  "--release",
+  "--target",
+  "x86_64-unknown-none",
+  "--target-dir",
+  "target/group-stage-b/task-second-candidates/x86_64-boot-test",
+  "--features",
+  "boot-tests",
+  "--",
+  "--emit=link,asm"
+]

@@ -1,0 +1,18 @@
+{
+  "sources": {
+    "crates/hm-core/fixtures/apps.rs": "8a8238481fc0d806dd8d6a475755923ade6ab513465bea6c45303b41caa65c51",
+    "crates/hm-core/fixtures/apps.S": "00fd8c048652955a101b510fad4569dfb5a672fc3ab3f8e353629a1bd013af6f",
+    "crates/hm-core/fixtures/native-elf.ld": "20a9ff90960aaaad9f0c680c8bcef4e155038888ff3afbbd207c1b0fe28528f1",
+    "crates/hm-kernel/src/startup_input.rs": "78f6593de5ff4dcdaab66b58bc807e04dcf78008955b6295e98479cb8bbce059",
+    "tools/build_apps.py": "a0f86453259b04debca675edb08091ea8472a49f35e418e480d7bb81d99b7958",
+    "tools/build_initramfs.py": "3ef54b0f1caa7a35eb554532abffe3cc9b87fc687119600621c77903ec3cb116",
+    "tools/test_process.py": "d1d761a06ce8da518243c0d6e4453a9c2af803d34ff92c2f626b8a9bf6991d6e",
+    "docs/design/0026-native-launcher.md": "07e390f943394cf71b6d085146c3369a7fe7e009e9e093a39690a6a3fb7bd2a5",
+    "crates/hm-core/fixtures/tasks.rs": "e38395aaa9a0863667c1694e42a6da398c4329327491e991b3c53f74a6071858",
+    "crates/hm-core/fixtures/tasks.S": "6ac705fab0c9266a6b02efbc1f9705d833abcfa3602035054171ef91151d7a7f",
+    "crates/hm-core/fixtures/tasks.ld": "20a9ff90960aaaad9f0c680c8bcef4e155038888ff3afbbd207c1b0fe28528f1",
+    "tools/build_tasks.py": "cb7be14de14b48c7cb7dfd2928f3bb31a9955c6c5698d264c05e10add11bad8d",
+    "crates/hm-kernel/src/task_wire.rs": "8b3b76438f013d06df43b6af89c20b72b1514a65194483739f028825d04dc711"
+  },
+  "update": true
+}

@@ -1,0 +1,127 @@
+    Checking hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+    Checking hm-core v0.1.0 (/workspace/crates/hm-core)
+error: call to `std::mem::drop` with a value that does not implement `Drop`. Dropping such a type only extends its contained lifetimes
+  --> crates/hm-core/src/process_task_turn.rs:45:9
+   |
+45 |         drop(self.authority_mut().waiting.take());
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+note: argument has type `core::option::Option<process_group::task::Waiting>`
+  --> crates/hm-core/src/process_task_turn.rs:45:14
+   |
+45 |         drop(self.authority_mut().waiting.take());
+   |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#drop_non_drop
+   = note: `-D clippy::drop-non-drop` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(clippy::drop_non_drop)]`
+
+error: this `if` statement can be collapsed
+   --> crates/hm-core/src/process_task_turn.rs:269:9
+    |
+269 | /         if end.is_none() {
+270 | |             if let Some(settlement) = work.settlement.take() {
+271 | |                 match settlement {
+272 | |                     Settlement::Reply { session, outcome } => {
+...   |
+296 | |         }
+    | |_________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#collapsible_if
+    = note: `-D clippy::collapsible-if` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::collapsible_if)]`
+help: collapse nested if block
+    |
+269 ~         if end.is_none()
+270 ~             && let Some(settlement) = work.settlement.take() {
+271 |                 match settlement {
+...
+294 |                 }
+295 ~             }
+    |
+
+error: call to `std::mem::drop` with a value that does not implement `Drop`. Dropping such a type only extends its contained lifetimes
+   --> crates/hm-core/src/process_task_turn.rs:297:9
+    |
+297 |         drop(work.settlement.take());
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+note: argument has type `core::option::Option<process_group::task::Settlement>`
+   --> crates/hm-core/src/process_task_turn.rs:297:14
+    |
+297 |         drop(work.settlement.take());
+    |              ^^^^^^^^^^^^^^^^^^^^^^
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#drop_non_drop
+
+error: this `if` statement can be collapsed
+   --> crates/hm-core/src/process_task_turn.rs:333:9
+    |
+333 | /         if let Some(mut closure) = management.closed_root {
+334 | |             if matches!(closure.evidence, RootEvidence::Executed(_)) {
+335 | |                 closure.evidence = RootEvidence::Executed(report);
+336 | |                 self.authority_mut().closing = Some(closure);
+...   |
+339 | |         }
+    | |_________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#collapsible_if
+help: collapse nested if block
+    |
+333 ~         if let Some(mut closure) = management.closed_root
+334 ~             && matches!(closure.evidence, RootEvidence::Executed(_)) {
+335 |                 closure.evidence = RootEvidence::Executed(report);
+336 |                 self.authority_mut().closing = Some(closure);
+337 |                 management.closed_root = Some(closure);
+338 ~             }
+    |
+
+error: large size difference between variants
+  --> crates/hm-core/src/process_task.rs:12:1
+   |
+12 | / pub enum RootEvidence {
+13 | |     Executed(StepReport),
+   | |     -------------------- the largest variant contains at least 240 bytes
+14 | |     Administrative { trigger: Option<TaskId> },
+   | |     ------------------------------------------ the second-largest variant contains at least 24 bytes
+15 | | }
+   | |_^ the entire enum is at least 240 bytes
+   |
+note: boxing a variant would require the type no longer be `Copy`
+  --> crates/hm-core/src/process_task.rs:12:10
+   |
+12 | pub enum RootEvidence {
+   |          ^^^^^^^^^^^^
+help: consider boxing the large fields or introducing indirection in some other way to reduce the total size of the enum
+  --> crates/hm-core/src/process_task.rs:13:5
+   |
+13 |     Executed(StepReport),
+   |     ^^^^^^^^^^^^^^^^^^^^
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#large_enum_variant
+   = note: `-D clippy::large-enum-variant` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(clippy::large_enum_variant)]`
+
+error: large size difference between variants
+   --> crates/hm-core/src/process_group.rs:139:1
+    |
+139 | / pub enum Turn {
+140 | |     Task(TaskTurn),
+    | |     -------------- the largest variant contains at least 720 bytes
+141 | |     Idle,
+142 | |     Progress(StepReport),
+143 | |     Completed(Completion),
+    | |     --------------------- the second-largest variant contains at least 248 bytes
+144 | | }
+    | |_^ the entire enum is at least 720 bytes
+    |
+note: boxing a variant would require the type no longer be `Copy`
+   --> crates/hm-core/src/process_group.rs:139:10
+    |
+139 | pub enum Turn {
+    |          ^^^^
+help: consider boxing the large fields or introducing indirection in some other way to reduce the total size of the enum
+   --> crates/hm-core/src/process_group.rs:140:5
+    |
+140 |     Task(TaskTurn),
+    |     ^^^^^^^^^^^^^^
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#large_enum_variant
+
+error: could not compile `hm-core` (bin "hematite") due to 6 previous errors
