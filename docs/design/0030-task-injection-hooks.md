@@ -45,6 +45,10 @@ an injection silently. Ordinary new_task does not mint provenance, even for
 byte-identical programs. No caller image, path, address, timestamp or mutable
 owner is accepted by the negative constructor. Slot-exhaustion's fixed mutation
 occurs after fresh empty Group construction and before any root publication.
+Consumption takes the authorization before validating unchanged fresh namespace
+state. Any ordinary preparation attempt clears it before validation or issuer
+use, including console-disabled and failed preparation. This prevents delayed
+consumption after an intervening preparation without exposing Issuer internals.
 
 A private cfg-only HookState inside the owned Authority stores the compiled case,
 Armed/Fired/ConsumedFailed state, and the actual first-child TaskId where required. The latter

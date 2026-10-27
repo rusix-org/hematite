@@ -101,11 +101,11 @@ impl Group<'_, '_> {
                     m.reaped += 1;
                     let reply = response(Status::Ok, completion_word(done.end));
                     let (session, _) = waiting.session.wake(reply);
-                    if self
-                        .selected_owner_mut(root.slot())
-                        .put_session(session)
-                        .is_err()
-                    {
+                    #[cfg(feature = "task-negative-tests")]
+                    let installed = self.negative_install_wake(root, pending, session);
+                    #[cfg(not(feature = "task-negative-tests"))]
+                    let installed = self.selected_owner_mut(root.slot()).put_session(session);
+                    if installed.is_err() {
                         return Err(Error::Unavailable);
                     }
                     self.selected_owner_mut(root.slot()).task_reply(reply);
@@ -330,6 +330,8 @@ impl Group<'_, '_> {
         if self.manage(&mut management).is_err() {
             self.fail_management(&mut management, Some(info.id));
         }
+        #[cfg(feature = "task-negative-tests")]
+        self.negative_take_wake(&mut capture);
         self.refresh_management(&mut management);
         report.live_frames = self.charged;
         // Freeze executed closure only after this Step's bounded management, so
@@ -473,6 +475,11 @@ impl Group<'_, '_> {
                     _ => process::fatal(),
                 }
             }
+        }
+        #[cfg(feature = "task-negative-tests")]
+        if !clock_failed && end.is_none() {
+            clock_failed |=
+                self.negative_final_boundary(index, report, work, capture, hard_end, &mut last);
         }
         let finish = process::task_counter(self, self.selected_owner(index), work, capture);
         let budget = self.slots[index]
@@ -692,6 +699,12 @@ impl Group<'_, '_> {
                 s.pending.map_or(0, |p| p.generation)
             );
         }
+        #[cfg(feature = "task-negative-tests")]
+        if let Some(fact) = capture.injection
+            && !matches!(fact, negative::Injection::WakeInstall)
+        {
+            fact.emit(group, turn);
+        }
         let state = r.task.budget;
         if let Some(t) = r.timing {
             let _ = writeln!(
@@ -730,6 +743,10 @@ impl Group<'_, '_> {
             r.vbar,
             self.factory.pool().stats().free
         );
+        #[cfg(feature = "task-negative-tests")]
+        if let Some(fact @ negative::Injection::WakeInstall) = capture.injection {
+            fact.emit(group, turn);
+        }
         if let Some(c) = m.closed_root {
             closure_record("CLOSE", group, c, None);
         }

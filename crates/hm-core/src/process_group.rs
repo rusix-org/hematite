@@ -85,6 +85,8 @@ macro_rules! getters { ($($name:ident:$ty:ty),* $(,)?) => {$ (pub fn $name(&self
 mod task;
 // Named copied report types are the public API even when this boot profile
 // consumes their getters through inferred return types rather than imports.
+#[cfg(feature = "task-negative-tests")]
+pub(crate) use task::{HookStatus, SeedKind};
 #[allow(unused_imports)]
 pub use task::{Management, RootClosure, RootEvidence, TaskCompletion, TaskTurn};
 

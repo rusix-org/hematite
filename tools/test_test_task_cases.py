@@ -412,6 +412,13 @@ class FullMatrixTests(unittest.TestCase):
         report=self.check(self.raw)
         self.assertEqual(len(report['cases']),50)
         self.assertEqual(len(report['groups']),54)
+    def test_user_root_cannot_alias_boot_root_in_coordinated_records(self):
+        for root in (0x40010000, 0x40011000):
+            original = f'root={root}'.encode()
+            replacement = f'root={SYMBOLS["arm_root"]}'.encode()
+            self.assertIn(original, self.raw)
+            with self.assertRaisesRegex(ValueError, 'Invalid/aliased live root'):
+                self.check(self.raw.replace(original, replacement))
     def test_missing_duplicate_and_reordered_envelope_actions(self):
         self.check(self.raw)
         for prefix in (b'HMTASK SETUP',b'HMTASK CASE',b'HMTASK GROUP',b'HMTASK ROOT',b'HMTASK PRESSURE',b'HMTASK GATE',

@@ -22,6 +22,8 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--library', type=Path, required=True)
     parser.add_argument('--output', type=Path, required=True)
+    parser.add_argument('--task-negative', action='store_true',
+                        help='Measure actual task-negative-tests feature layout')
     args = parser.parse_args()
     output, library = args.output.resolve(), args.library.resolve()
     if output.exists() or not library.is_file():
@@ -73,6 +75,10 @@ pub static LAYOUT: [usize;11] = [
               'process-aarch64.S', 'user-space-aarch64.S',
               'threads-aarch64.S', 'preempt-aarch64.S', 'preempt-probe-aarch64.S', 'secondary-aarch64.S')]
     paths += [wrapper, sizes, group_copy, library, ROOT / 'rust-toolchain.toml', ROOT / 'Cargo.lock', Path(__file__).resolve()]
+    if args.task_negative:
+        paths += [source / 'process_task_negative.rs',
+                  source.parent / 'fixtures/task-negative-initramfs.cpio',
+                  source.parent / 'fixtures/task-negative-cases/layout.rs']
     (output / 'input.json').write_text(json.dumps({'sources': {str(path): sha(path) for path in paths},
         'group_transformation': {'replace_once': [old_path, new_path], 'append': appendix},
         'scope': 'actual ARM compiler layout only; no stack or allocation execution'}, indent=2) + '\n')
@@ -83,6 +89,8 @@ pub static LAYOUT: [usize;11] = [
         base = ['rustc', '--edition=2024', '--target', 'aarch64-unknown-none', '-C', 'panic=abort',
                 '--cfg', 'feature="secondary-tests"', '--cfg', 'feature="smp-tests"',
                 '--extern', f'hm_kernel={library}', '-L', f'dependency={dependencies}']
+        if args.task_negative:
+            base += ['--cfg', 'feature="task-negative-tests"']
         compiled = output / 'libhm_layout.rlib'
         run(base + ['--crate-type=rlib', '--crate-name=hm_layout', str(wrapper), '-o', str(compiled)], output, 'library')
         assembly = output / 'sizes.s'
@@ -109,6 +117,8 @@ pub static LAYOUT: [usize;11] = [
                   'task_fields': dict(zip(('image_bytes', 'image_pages', 'authority_bytes',
                     'authority_pages', 'group_bytes', 'metadata_pages'), values[5:])), 'assembly_sha256': sha(assembly),
                   'bytes_sha256': sha(binary), 'scope': 'current ARM compiler layout constants only; not stack usage or runtime allocation proof'}
+        if args.task_negative:
+            result['feature'] = 'task-negative-tests'
     except (OSError, ValueError, RuntimeError) as error:
         result['error'] = str(error)
     (output / 'result.json').write_text(json.dumps(result, indent=2) + '\n')

@@ -16,6 +16,12 @@ use hm_process::{Group, TaskId};
 use hm_kernel::elf::Image;
 '''
 PROBES = {
+    "negative_no_production_constructor": ('''pub fn client(e: &mut Executor, f: Factory<'_>) { let _ = Group::new_negative_task(e, f); }''', "E0599"),
+    "negative_no_production_observer": ('''pub fn client(g: &Group<'_, '_>) { let _ = g.negative_observation(); }''', "E0599"),
+    "negative_no_production_archive": ('''pub fn client() { let _ = Group::negative_archive(); }''', "E0599"),
+    "negative_no_production_case": ('''pub fn client(e: &Executor) { let _ = e.negative_case(); }''', "E0599"),
+    "negative_no_production_mark": ('''pub fn client(e: &mut Executor) { let _ = e.mark_negative_profile(); }''', "E0599"),
+    "negative_no_production_consume": ('''pub fn client(e: &mut Executor) { let _ = e.take_negative_profile(); }''', "E0599"),
     "valid_task_owned_root": ('''pub fn client<'e, 'p>(e: &'e mut Executor, f: Factory<'p>, bytes: &mut [u8], archive: &'static [u8]) -> Option<Group<'e, 'p>> {
         let image = Image::parse(bytes).ok()?;
         let group = hm_process::task_group(e, f, &image, archive).ok()?;

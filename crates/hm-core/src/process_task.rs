@@ -5,8 +5,13 @@ use hm_kernel::native::{
     TaskOperation,
 };
 use hm_kernel::task_wire::{self, Rights, WaitMode};
+#[cfg(feature = "task-negative-tests")]
+#[path = "process_task_negative.rs"]
+mod negative;
 #[path = "process_task_turn.rs"]
 mod turn;
+#[cfg(feature = "task-negative-tests")]
+pub(crate) use negative::{HookStatus, SeedKind};
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 // Fixed copied reports remain valid after owner teardown without allocating.
@@ -88,6 +93,8 @@ pub(super) struct Authority<'p> {
     waiting: Option<Waiting>,
     dispatching: Option<TaskId>,
     sequence: u64,
+    #[cfg(feature = "task-negative-tests")]
+    negative: Option<negative::HookState>,
 }
 const IMAGE_FRAMES: usize = core::mem::size_of::<Image<'static>>().div_ceil(4096);
 const AUTHORITY_FRAMES: usize = core::mem::size_of::<Authority<'static>>().div_ceil(4096);
@@ -148,13 +155,33 @@ fn populate<'p>(
     slot.last_event = Event::None;
 }
 impl<'e, 'p> Group<'e, 'p> {
-    #[inline(never)]
+    // Preserve the original single constructor frame in ordinary profiles.
+    #[inline(always)]
     pub(crate) fn new_task(
         executor: &'e mut Executor,
         factory: Factory<'p>,
         root_image: &Image<'_>,
         archive: &'static [u8],
         console_allowed: bool,
+    ) -> Result<Self, Error> {
+        Self::new_task_inner(
+            executor,
+            factory,
+            root_image,
+            archive,
+            console_allowed,
+            #[cfg(feature = "task-negative-tests")]
+            None,
+        )
+    }
+    #[inline(never)]
+    fn new_task_inner(
+        executor: &'e mut Executor,
+        factory: Factory<'p>,
+        root_image: &Image<'_>,
+        archive: &'static [u8],
+        console_allowed: bool,
+        #[cfg(feature = "task-negative-tests")] negative: Option<process::NegativeCase>,
     ) -> Result<Self, Error> {
         if executor.retired() {
             return Err(Error::Unavailable);
@@ -179,6 +206,13 @@ impl<'e, 'p> Group<'e, 'p> {
             return Err(Error::Resources);
         }
         let mut group = Self::empty_under_lease(executor, factory, MAX_FRAMES, &lease)?;
+        #[cfg(feature = "task-negative-tests")]
+        if negative == Some(process::NegativeCase::SlotExhaustion) {
+            for slot in &mut group.slots[1..] {
+                slot.next = u32::MAX;
+            }
+            let _ = writeln!(Uart, "HMTASK SEED kind=child_slots_max value=4294967295");
+        }
         let before = group.factory.pool().stats().free;
         let first = catalog_image(group.factory.pool(), archive, "bin/worker")?;
         let second = catalog_image(group.factory.pool(), archive, "demo/loop")?;
@@ -224,6 +258,8 @@ impl<'e, 'p> Group<'e, 'p> {
                 waiting: None,
                 dispatching: None,
                 sequence: 0,
+                #[cfg(feature = "task-negative-tests")]
+                negative: negative.map(negative::HookState::new),
             },
         )?;
         if before.checked_sub(group.factory.pool().stats().free) != Some(total) {
@@ -239,12 +275,12 @@ impl<'e, 'p> Group<'e, 'p> {
         self.task.as_ref().map(|a| a.root).ok_or(Error::Mode)
     }
     /// Read-only test observation, also available after task metadata is reaped.
-    #[cfg(feature = "task-tests")]
+    #[cfg(any(feature = "task-tests", feature = "task-negative-tests"))]
     pub(crate) fn task_issuance_snapshot(&self) -> (u32, Option<u32>) {
         self.executor.task_issuance_snapshot()
     }
     /// Report only the currently stored launch grant, never reconstruct a revoked one.
-    #[cfg(feature = "task-tests")]
+    #[cfg(any(feature = "task-tests", feature = "task-negative-tests"))]
     pub(crate) fn task_launch_generation(&self) -> Result<u32, Error> {
         self.task
             .as_ref()
@@ -380,6 +416,8 @@ struct TaskCapture {
     descriptor_copied: bool,
     input_copied: usize,
     settle: Option<Settle>,
+    #[cfg(feature = "task-negative-tests")]
+    injection: Option<negative::Injection>,
 }
 impl TaskCapture {
     fn new() -> Self {
@@ -392,6 +430,8 @@ impl TaskCapture {
             descriptor_copied: false,
             input_copied: 0,
             settle: None,
+            #[cfg(feature = "task-negative-tests")]
+            injection: None,
         }
     }
 }
@@ -602,6 +642,8 @@ impl<'e, 'p> Group<'e, 'p> {
                 if capture.commit.replace(committed).is_some() {
                     process::fatal();
                 }
+                #[cfg(feature = "task-negative-tests")]
+                self.negative_commit(child, spawn.program());
                 Ok(reply(guard, Status::Ok, token))
             }
             TaskOperation::Wait | TaskOperation::Cancel => {
@@ -688,7 +730,17 @@ impl<'e, 'p> Group<'e, 'p> {
                     calls: guard.calls(),
                     written: guard.written(),
                 };
-                self.dispatch_owned(index, guard, capture, lease)
+                #[cfg(feature = "task-negative-tests")]
+                let abandon = self.negative_abandon(index, &guard, capture);
+                #[cfg(not(feature = "task-negative-tests"))]
+                let abandon = false;
+                if abandon {
+                    // Actual owned admission is consumed, preserving its copied counters.
+                    let _abandoned = guard;
+                    Err(Error::Unavailable)
+                } else {
+                    self.dispatch_owned(index, guard, capture, lease)
+                }
             }
         };
         match settlement {

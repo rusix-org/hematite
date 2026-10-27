@@ -54,6 +54,54 @@ enum OutputMode {
     Trace,
     Terminal,
 }
+#[cfg(feature = "task-negative-tests")]
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub(crate) enum NegativeCase {
+    FinalBudgetSpawn,
+    FinalBudgetPark,
+    PlatformReply,
+    PlatformPark,
+    AbandonDispatch,
+    WakeInstallFailure,
+    CapabilityExhaustion,
+    SlotExhaustion,
+    ChildRetireReady,
+    ChildRetireWaiting,
+}
+#[cfg(feature = "task-negative-tests")]
+impl NegativeCase {
+    pub(crate) fn name(self) -> &'static str {
+        match self {
+            Self::FinalBudgetSpawn => "final_budget_spawn",
+            Self::FinalBudgetPark => "final_budget_park",
+            Self::PlatformReply => "platform_reply",
+            Self::PlatformPark => "platform_park",
+            Self::AbandonDispatch => "abandon_dispatch",
+            Self::WakeInstallFailure => "wake_install_failure",
+            Self::CapabilityExhaustion => "capability_exhaustion",
+            Self::SlotExhaustion => "slot_exhaustion",
+            Self::ChildRetireReady => "child_retire_ready",
+            Self::ChildRetireWaiting => "child_retire_waiting",
+        }
+    }
+    fn selected() -> Option<Self> {
+        let name = option_env!("HM_TASK_NEGATIVE")?;
+        [
+            Self::FinalBudgetSpawn,
+            Self::FinalBudgetPark,
+            Self::PlatformReply,
+            Self::PlatformPark,
+            Self::AbandonDispatch,
+            Self::WakeInstallFailure,
+            Self::CapabilityExhaustion,
+            Self::SlotExhaustion,
+            Self::ChildRetireReady,
+            Self::ChildRetireWaiting,
+        ]
+        .into_iter()
+        .find(|case| case.name() == name)
+    }
+}
 pub struct Executor {
     issuer: Issuer,
     output: OutputMode,
@@ -64,6 +112,8 @@ pub struct Executor {
     next_group: u64,
     next_task_cap: u32,
     last_prepared: Option<u32>,
+    #[cfg(feature = "task-negative-tests")]
+    negative: Option<NegativeCase>,
     _local: PhantomData<*mut ()>,
 }
 pub struct Process<'pool> {
@@ -170,7 +220,7 @@ impl Executor {
         CLAIMED
             .compare_exchange(false, true, Ordering::AcqRel, Ordering::Acquire)
             .map_err(|_| Error::AlreadyInitialized)?;
-        Ok(Self {
+        let executor = Self {
             issuer: Issuer::new(),
             output,
             cpus,
@@ -180,8 +230,61 @@ impl Executor {
             next_group: 1,
             next_task_cap: 1,
             last_prepared: None,
+            #[cfg(feature = "task-negative-tests")]
+            negative: None,
             _local: PhantomData,
-        })
+        };
+        #[cfg(feature = "task-negative-tests")]
+        let executor = {
+            let mut executor = executor;
+            executor.mark_negative_profile()?;
+            executor
+        };
+        Ok(executor)
+    }
+    #[cfg(feature = "task-negative-tests")]
+    fn mark_negative_profile(&mut self) -> Result<(), Error> {
+        if self.index != 0
+            || self.next_group != 1
+            || self.next_task_cap != 1
+            || self.last_prepared.is_some()
+            || self.negative.is_some()
+            || self.retired
+            || self.output != OutputMode::Trace
+            || self.cpus != 1
+        {
+            return Err(Error::Platform);
+        }
+        let case = NegativeCase::selected().ok_or(Error::Platform)?;
+        self.negative = Some(case);
+        if case == NegativeCase::CapabilityExhaustion {
+            self.next_task_cap = u32::MAX;
+            let _ = writeln!(Uart, "HMTASK SEED kind=capability_max value=4294967295");
+        }
+        Ok(())
+    }
+    #[cfg(feature = "task-negative-tests")]
+    pub(crate) fn negative_case(&self) -> Option<NegativeCase> {
+        self.negative
+    }
+    #[cfg(feature = "task-negative-tests")]
+    pub(super) fn take_negative_profile(&mut self) -> Option<NegativeCase> {
+        // Consume before validation: intervening ordinary use cannot remint it.
+        let case = self.negative.take()?;
+        let expected = if case == NegativeCase::CapabilityExhaustion {
+            u32::MAX
+        } else {
+            1
+        };
+        if self.retired
+            || self.index != 0
+            || self.next_group != 1
+            || self.next_task_cap != expected
+            || self.last_prepared.is_some()
+        {
+            return None;
+        }
+        Some(case)
     }
     pub fn frequency(&self) -> u64 {
         self.frequency
@@ -224,6 +327,12 @@ impl Executor {
         budget: usize,
         input: Option<&hm_kernel::startup_input::Input>,
     ) -> Result<Process<'p>, (Error, Space<'p>)> {
+        // Even a failed or console-less preparation may consume issuer state.
+        // The canonical negative constructor already took its authorization.
+        #[cfg(feature = "task-negative-tests")]
+        {
+            self.negative = None;
+        }
         if self.retired {
             return Err((Error::Platform, space));
         }
@@ -425,7 +534,7 @@ impl Executor {
         self.last_prepared
     }
     /// Test observation only: the second value is not the console issuer's next value.
-    #[cfg(feature = "task-tests")]
+    #[cfg(any(feature = "task-tests", feature = "task-negative-tests"))]
     pub(super) fn task_issuance_snapshot(&self) -> (u32, Option<u32>) {
         (self.next_task_cap, self.last_prepared)
     }

@@ -162,6 +162,23 @@ mod runtime_inputs;
 mod task_checks;
 #[cfg(all(target_arch = "aarch64", feature = "task-tests"))]
 mod task_inputs;
+#[cfg(all(target_arch = "aarch64", feature = "task-negative-tests"))]
+#[cfg_attr(
+    any(
+        feature = "task-tests",
+        feature = "runtime-tests",
+        feature = "secondary-tests",
+        feature = "process-tests",
+        feature = "startup-input-tests",
+        feature = "nested-fault-test",
+        feature = "unhandled-fault-test",
+        feature = "thread-overflow-test",
+        feature = "preemption-overflow-test",
+        feature = "wait-all-blocked-test"
+    ),
+    allow(dead_code)
+)]
+mod task_negative_checks;
 
 #[cfg(all(target_arch = "aarch64", feature = "startup-input-tests"))]
 #[cfg_attr(
@@ -340,13 +357,31 @@ extern "C" fn boot_main(_boot_info: u64) -> ! {
         }
         #[cfg(all(
             target_arch = "aarch64",
-            feature = "space-tests",
+            feature = "task-negative-tests",
             not(any(
                 feature = "secondary-tests",
                 feature = "process-tests",
                 feature = "startup-input-tests",
                 feature = "runtime-tests",
                 feature = "task-tests"
+            ))
+        ))]
+        {
+            if !arch::task_negative_tests(&mut platform) {
+                arch::exit(false);
+            }
+            arch::exit(hm_kernel::run_tests(&mut platform));
+        }
+        #[cfg(all(
+            target_arch = "aarch64",
+            feature = "space-tests",
+            not(any(
+                feature = "secondary-tests",
+                feature = "process-tests",
+                feature = "startup-input-tests",
+                feature = "runtime-tests",
+                feature = "task-tests",
+                feature = "task-negative-tests"
             ))
         ))]
         {
@@ -365,7 +400,8 @@ extern "C" fn boot_main(_boot_info: u64) -> ! {
                     feature = "process-tests",
                     feature = "startup-input-tests",
                     feature = "runtime-tests",
-                    feature = "task-tests"
+                    feature = "task-tests",
+                    feature = "task-negative-tests"
                 )
             ))
         ))]
@@ -380,7 +416,8 @@ extern "C" fn boot_main(_boot_info: u64) -> ! {
                     feature = "process-tests",
                     feature = "startup-input-tests",
                     feature = "runtime-tests",
-                    feature = "task-tests"
+                    feature = "task-tests",
+                    feature = "task-negative-tests"
                 )
             ))
         ))]
@@ -400,7 +437,8 @@ extern "C" fn boot_main(_boot_info: u64) -> ! {
                     feature = "process-tests",
                     feature = "startup-input-tests",
                     feature = "runtime-tests",
-                    feature = "task-tests"
+                    feature = "task-tests",
+                    feature = "task-negative-tests"
                 )
             ))
         ))]
@@ -416,7 +454,8 @@ extern "C" fn boot_main(_boot_info: u64) -> ! {
                     feature = "process-tests",
                     feature = "startup-input-tests",
                     feature = "runtime-tests",
-                    feature = "task-tests"
+                    feature = "task-tests",
+                    feature = "task-negative-tests"
                 )
             )
         )))]

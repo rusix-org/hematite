@@ -266,7 +266,7 @@ class Model:
         require(row['group'] == self.group['id'] and row['slot'] == task['slot'] and row['generation'] == task['generation'], 'Wrong task identity')
     def new_task(self, name, slot, generation, root, console, payload, commands):
         f = self.fixture(name)
-        require(root % 4096 == 0 and 0x40000000 <= root < 0x41000000 and
+        require(root != self.symbols['arm_root'] and root % 4096 == 0 and 0x40000000 <= root < 0x41000000 and
                 all(not t['live'] or t['root'] != root for t in self.group['slots'].values()), 'Invalid/aliased live root')
         task = dict(fixture=name, slot=slot, generation=generation, root=root, console=console, payload=payload,
             frames=f['pages']+29+self.k, pc=f['entry'], elr=f['entry'], calls=0, written=0, irqs=0, remaining=self.info['total_ticks'],

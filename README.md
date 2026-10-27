@@ -6,6 +6,10 @@ adapter, not the definition of the native interfaces. It currently boots on
 an ARM64 QEMU `virt` guest into a serial monitor, with x86_64 microvm
 retained as a regression target. **There is no Linux userspace support yet.**
 
+Checkpoint status: the ten task-failure profiles pass strict VM tests. The latest
+full regression has an unresolved ordinary 128 MiB task-budget failure; see
+[the evidence and resume point](docs/evidence/task-negative.md).
+
 With Docker running and Make installed:
 
 ```sh
@@ -52,8 +56,9 @@ cancels the loop and exits after both children are reclaimed. It prints
 Repeated runs preserve free-frame counts, and ordinary programs still launch
 afterward. The three ordinary QEMU profiles pass with independently reviewed
 traces. The [ordinary authority/lifecycle matrix](docs/evidence/task-matrix.md)
-also passes 50 cases at each RAM size; dedicated failure-injection coverage
-remains pending.
+also passed 50 cases at each RAM size at its accepted checkpoint. Dedicated
+[failure-injection coverage](docs/evidence/task-negative.md) now passes its
+strict guests; the latest full-suite failure is recorded above.
 
 This first task interface uses a fixed two-program catalog and at most two
 outstanding children. Only the supervisor receives launch authority. A child

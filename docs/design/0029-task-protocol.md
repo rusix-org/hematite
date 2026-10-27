@@ -351,9 +351,13 @@ field only where the case/action specifies absence; it is never a wildcard.
 Record forms are conditional: SEED occurs only in its fixed exhaustion
 profile, once after PREFLIGHT and before any Group preparation. RETRY_SETUP and
 LEGACY_BEGIN/END occur only in capability_exhaustion after root reap/drop and
-before PASS. Between LEGACY_BEGIN/END permit exactly the real payload bytes
-`hello from EL0\n`, from the existing pinned native hello ELF; no other raw
-text or HMPROC diagnostic is accepted. Require its two real EL0 SVCs at the
+before PASS. The original raw-payload-only proposal is superseded by reviewed
+0030: preserve the existing Trace-mode Executor's exact HMPROC hello transcript
+inside these delimiters, including the real `hello from EL0\n` payload from the
+pinned native hello ELF. Validate the existing complete legacy record grammar;
+reject arbitrary diagnostics and HMPROC outside this capability-exhaustion
+interval. No mutable output-mode switch or replacement Executor is introduced.
+Require its two real EL0 SVCs at the
 independently bound WRITE/EXIT sites, correct restoration and original free
 frames. This is an actual legacy run using the same nonretired Executor, not a
 new instance or another boot. Include its exact ELF in the artifact inventory.
