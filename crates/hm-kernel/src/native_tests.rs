@@ -108,6 +108,15 @@ fn generations_retire_without_wrap() {
     for _ in 0..3 {
         assert!(matches!(issuer.issue(true), Err(GenerationExhausted)));
     }
+    let mut interactive = Issuer { next: u32::MAX };
+    let last = interactive.issue_interactive().unwrap();
+    assert_eq!(word(&last.startup(), 24), 0xffff_ffff_0000_0001);
+    assert_eq!(word(&last.startup(), 16), 3);
+    assert!(matches!(
+        interactive.issue_interactive(),
+        Err(GenerationExhausted)
+    ));
+    assert!(matches!(interactive.issue(true), Err(GenerationExhausted)));
 }
 #[test]
 fn stale_foreign_absent_and_wrong_slot_handles() {

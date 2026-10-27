@@ -29,7 +29,7 @@ PROBES = {
     }''', None),
     'valid_move_session': ('''pub fn client(mut issuer: Issuer) -> Option<Session> { issuer.issue(false).ok() }''', None),
     'forge_issuer': ('''pub fn client() { let _ = Issuer { next: 1 }; }''', 'E0451'),
-    'forge_session': ('''pub fn client() { let _ = Session { console: Some(1), calls: 0, written: 0, stopped: None }; }''', 'E0451'),
+    'forge_session': ('''pub fn client(session: Session) { let _ = Session { ..session }; }''', 'E0451'),
     'issuer_clone': ('''pub fn client(i:&Issuer) { let _ = <Issuer as Clone>::clone(i); }''', 'E0277'),
     'session_clone': ('''pub fn client(s:&Session) { let _ = <Session as Clone>::clone(s); }''', 'E0277'),
     'change_generation': ('''pub fn client(i:&mut Issuer) { i.next = 1; }''', 'E0616'),

@@ -77,6 +77,17 @@ impl Issuer {
         Self { next: 1 }
     }
     pub fn issue(&mut self, console: bool) -> Result<Session, GenerationExhausted> {
+        self.issue_profile(console, SessionProfile::Legacy)
+    }
+    /// Fixed safe policy metadata; actual input authority is issued by the core.
+    pub fn issue_interactive(&mut self) -> Result<Session, GenerationExhausted> {
+        self.issue_profile(true, SessionProfile::Interactive)
+    }
+    fn issue_profile(
+        &mut self,
+        console: bool,
+        profile: SessionProfile,
+    ) -> Result<Session, GenerationExhausted> {
         if self.next == 0 {
             return Err(GenerationExhausted);
         }
@@ -87,8 +98,15 @@ impl Issuer {
             calls: 0,
             written: 0,
             stopped: None,
+            profile,
         })
     }
+}
+
+#[derive(Clone, Copy, Eq, PartialEq)]
+enum SessionProfile {
+    Legacy,
+    Interactive,
 }
 
 pub struct Session {
@@ -96,6 +114,94 @@ pub struct Session {
     calls: usize,
     written: usize,
     stopped: Option<Stop>,
+    profile: SessionProfile,
+}
+
+/// Input policy has its own admission enum so legacy task callers retain their
+/// existing exhaustive interface. No real input handle or range is checked here.
+pub enum InputAdmission {
+    Complete { session: Session, outcome: Outcome },
+    Read(ReadAdmission),
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub enum ReadError {
+    Handle,
+    Length,
+    Address,
+}
+
+/// Owns the original accounted session, with no user/host borrow or wake right.
+pub struct ReadAdmission {
+    session: Session,
+    request: Request,
+}
+impl ReadAdmission {
+    pub fn request(&self) -> Request {
+        self.request
+    }
+    pub fn calls(&self) -> usize {
+        self.session.calls()
+    }
+    pub fn written(&self) -> usize {
+        self.session.written()
+    }
+    pub fn reject(self, error: ReadError) -> (Session, Outcome) {
+        let status = match error {
+            ReadError::Handle => Status::Handle,
+            ReadError::Length => Status::Length,
+            ReadError::Address => Status::Address,
+        };
+        (self.session, reply(status))
+    }
+    pub fn park(self) -> Result<ParkedRead, Self> {
+        if !valid_read_capacity(self.request.length) || !self.session.may_resume() {
+            return Err(self);
+        }
+        Ok(ParkedRead {
+            session: self.session,
+            request: self.request,
+        })
+    }
+}
+
+/// Core owns actual identity, destination validation, charged copying and wake
+/// authority. Finishing this safe value alone causes no device or memory effect.
+pub struct ParkedRead {
+    session: Session,
+    request: Request,
+}
+impl ParkedRead {
+    pub fn request(&self) -> Request {
+        self.request
+    }
+    pub fn calls(&self) -> usize {
+        self.session.calls()
+    }
+    pub fn written(&self) -> usize {
+        self.session.written()
+    }
+    pub fn finish(self, count: usize) -> Result<(Session, Outcome), Self> {
+        if count == 0
+            || count > crate::interactive_wire::MAX_READ
+            || !valid_read_capacity(self.request.length)
+            || count as u64 > self.request.length
+            || !self.session.may_resume()
+        {
+            return Err(self);
+        }
+        Ok((
+            self.session,
+            Outcome::Reply(Response {
+                status: Status::Ok,
+                written: count as u64,
+            }),
+        ))
+    }
+}
+
+fn valid_read_capacity(length: u64) -> bool {
+    length > 0 && length <= crate::interactive_wire::MAX_READ as u64
 }
 
 /// Safe policy metadata, not permission to operate on a real task.
@@ -173,7 +279,19 @@ impl Session {
         self.stopped
     }
     pub fn may_resume(&self) -> bool {
-        self.stopped.is_none() && self.calls < CALL_LIMIT
+        self.stopped.is_none() && self.calls < self.call_limit()
+    }
+    fn call_limit(&self) -> usize {
+        match self.profile {
+            SessionProfile::Legacy => CALL_LIMIT,
+            SessionProfile::Interactive => crate::interactive_wire::CALL_LIMIT,
+        }
+    }
+    fn byte_limit(&self) -> usize {
+        match self.profile {
+            SessionProfile::Legacy => BYTE_LIMIT,
+            SessionProfile::Interactive => crate::interactive_wire::BYTE_LIMIT,
+        }
     }
     pub fn startup(&self) -> [u8; STARTUP_SIZE] {
         let mut bytes = [0; STARTUP_SIZE];
@@ -181,11 +299,19 @@ impl Session {
         bytes[8..12].copy_from_slice(&(VERSION as u32).to_le_bytes());
         bytes[12..16].copy_from_slice(&(STARTUP_SIZE as u32).to_le_bytes());
         for (offset, value) in [
-            (16, u64::from(self.console.is_some())),
+            (
+                16,
+                u64::from(self.console.is_some())
+                    | if self.profile == SessionProfile::Interactive && self.stopped.is_none() {
+                        2
+                    } else {
+                        0
+                    },
+            ),
             (24, self.console.unwrap_or(0)),
             (32, MAX_WRITE as u64),
-            (40, BYTE_LIMIT as u64),
-            (48, CALL_LIMIT as u64),
+            (40, self.byte_limit() as u64),
+            (48, self.call_limit() as u64),
         ] {
             bytes[offset..offset + 8].copy_from_slice(&value.to_le_bytes());
         }
@@ -207,7 +333,7 @@ impl Session {
                 outcome: Outcome::Stop(stop),
             };
         }
-        let operation = if request.version == VERSION {
+        let operation = if self.profile == SessionProfile::Legacy && request.version == VERSION {
             match request.operation {
                 crate::task_wire::SPAWN => Some(TaskOperation::Spawn),
                 crate::task_wire::WAIT => Some(TaskOperation::Wait),
@@ -218,7 +344,7 @@ impl Session {
             None
         };
         if let Some(operation) = operation {
-            if self.calls == CALL_LIMIT {
+            if self.calls == self.call_limit() {
                 self.stop_calls();
                 return Admission::Complete {
                     session: self,
@@ -238,6 +364,38 @@ impl Session {
             outcome,
         }
     }
+    /// Only the fixed interactive profile recognizes READ. Its guard owns the
+    /// original allowance; address and actual authority checks remain in core.
+    pub fn admit_input(mut self, request: Request, host: &mut impl Host) -> InputAdmission {
+        if let Err(stop) = self.begin_call() {
+            return InputAdmission::Complete {
+                session: self,
+                outcome: Outcome::Stop(stop),
+            };
+        }
+        if self.profile == SessionProfile::Interactive
+            && request.version == VERSION
+            && request.operation == crate::interactive_wire::READ
+        {
+            if self.calls == self.call_limit() {
+                self.stop_calls();
+                return InputAdmission::Complete {
+                    session: self,
+                    outcome: Outcome::Stop(Stop::CallLimit),
+                };
+            }
+            return InputAdmission::Read(ReadAdmission {
+                session: self,
+                request,
+            });
+        }
+        let outcome = self.evaluate(request, host);
+        let outcome = self.finish_call(outcome);
+        InputAdmission::Complete {
+            session: self,
+            outcome,
+        }
+    }
     fn stop_calls(&mut self) {
         self.console = None;
         self.stopped = Some(Stop::CallLimit);
@@ -246,7 +404,7 @@ impl Session {
         if let Some(stop) = self.stopped {
             return Err(stop);
         }
-        if self.calls >= CALL_LIMIT {
+        if self.calls >= self.call_limit() {
             self.stop_calls();
             return Err(Stop::CallLimit);
         }
@@ -258,7 +416,7 @@ impl Session {
         Ok(())
     }
     fn finish_call(&mut self, outcome: Outcome) -> Outcome {
-        if self.calls == CALL_LIMIT && matches!(outcome, Outcome::Reply(_)) {
+        if self.calls == self.call_limit() && matches!(outcome, Outcome::Reply(_)) {
             self.stop_calls();
         }
         outcome
@@ -293,7 +451,7 @@ impl Session {
         let Some(total) = self
             .written
             .checked_add(length)
-            .filter(|n| *n <= BYTE_LIMIT)
+            .filter(|n| *n <= self.byte_limit())
         else {
             return reply(Status::Budget);
         };
