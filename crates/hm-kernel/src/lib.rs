@@ -18,6 +18,7 @@ mod frame_plan_tests;
 pub mod heap_api;
 mod heap_tests;
 pub mod initramfs;
+pub mod interactive_wire;
 pub mod mapping_api;
 pub mod mapping_audit;
 mod mapping_tests;
