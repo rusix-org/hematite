@@ -948,3 +948,20 @@ does not claim resumable execution or process-group support.
   task matrix. All 308 captured full-suite source inputs match its committed
   blobs, with zero mismatches. No push or remote CI claim. Remaining injected
   boundaries are being designed separately before any implementation.
+
+- 2026-10-26: Began the ten remaining fixed task-injection profiles. Independent
+  review approved the [final retirement guard](docs/design/0030-task-final-boundary.md):
+  after genuine final accounting, retired Executor selects Unavailable before
+  provisional Reply/Park installation. The three-line change is implemented,
+  with compiled ordering/stack and injected runtime verification still pending.
+  Hook constructors/triggers and dedicated negative fixtures are being designed
+  separately; no injected guest result is claimed.
+
+- 2026-10-26: Guard-only checkpoint `23b87c6f` passes both-architecture static
+  checks and all 24 compiled profiles. All 224 captured compiler inputs match
+  its committed blobs. Independent linked review accepts unchanged stack bounds
+  (monitor64,432, runtime65,376, task61,552 of65,536 including allowance), actual
+  post-accounting retirement load and pre-install Unavailable path. Ordinary
+  guest execution is eligible but not yet rerun; hook binaries need separate gates.
+  The exact revised ten-hook design is independently approved; implementation
+  and dedicated negative fixtures are now in progress.

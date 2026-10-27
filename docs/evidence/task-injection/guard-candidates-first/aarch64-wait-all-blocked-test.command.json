@@ -1,0 +1,17 @@
+[
+  "cargo",
+  "rustc",
+  "--locked",
+  "--offline",
+  "-p",
+  "hm-core",
+  "--release",
+  "--target",
+  "aarch64-unknown-none",
+  "--target-dir",
+  "target/group-stage-b/guard-candidates-first/aarch64-wait-all-blocked-test",
+  "--features",
+  "wait-all-blocked-test",
+  "--",
+  "--emit=link,asm"
+]
