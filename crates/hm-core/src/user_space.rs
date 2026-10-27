@@ -13,6 +13,8 @@ const RAM: u64 = 0x4000_0000;
 const RW: u64 = 0x0060_0000_0000_0703;
 const RO: u64 = 0x0060_0000_0000_0783;
 pub const MAX_PROBES: usize = 16;
+const MAX_RW_COPY: usize = hm_kernel::interactive_wire::MAX_READ;
+const _: () = assert!(MAX_RW_COPY == 256);
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum Error {
@@ -93,6 +95,17 @@ pub struct Space<'pool> {
     count: usize,
     cpus: usize,
     _local: PhantomData<*mut ()>,
+}
+
+#[derive(Clone, Copy)]
+struct WritablePart {
+    slot: usize,
+    offset: usize,
+    length: usize,
+}
+struct WritablePlan {
+    first: WritablePart,
+    second: Option<WritablePart>,
 }
 
 impl<'pool> Factory<'pool> {
@@ -329,6 +342,130 @@ impl Space<'_> {
         }
         Ok(())
     }
+    /// No borrowed/cached validity token escapes; a later copy validates again.
+    #[inline(never)]
+    pub(super) fn validate_rw(&self, address: u64, length: usize) -> Result<(), Error> {
+        self.writable_plan(address, length).map(|_| ())
+    }
+    /// Copy into retained RW backings only, with no raw user-pointer access.
+    /// Every fallible check and both mutable destinations resolve before stores.
+    #[inline(never)]
+    pub(super) fn copy_into_rw(&mut self, address: u64, input: &[u8]) -> Result<(), Error> {
+        let plan = self.writable_plan(address, input.len())?;
+        let first = plan.first;
+        let first_end = first
+            .offset
+            .checked_add(first.length)
+            .ok_or(Error::Corrupt)?;
+        if let Some(second) = plan.second {
+            let second_end = second
+                .offset
+                .checked_add(second.length)
+                .ok_or(Error::Corrupt)?;
+            let (source_first, source_second) =
+                input.split_at_checked(first.length).ok_or(Error::Corrupt)?;
+            if source_second.len() != second.length {
+                return Err(Error::Corrupt);
+            }
+            // The plan's strictly increasing slots make the owner borrows
+            // disjoint. No owner/permission mutation or callback intervenes.
+            let (earlier, later) = self
+                .pages
+                .split_at_mut_checked(second.slot)
+                .ok_or(Error::Corrupt)?;
+            let first_frame = earlier
+                .get_mut(first.slot)
+                .and_then(Option::as_mut)
+                .ok_or(Error::Corrupt)?;
+            let second_frame = later
+                .first_mut()
+                .and_then(Option::as_mut)
+                .ok_or(Error::Corrupt)?;
+            let target_first = first_frame
+                .bytes_mut()
+                .get_mut(first.offset..first_end)
+                .ok_or(Error::Corrupt)?;
+            let target_second = second_frame
+                .bytes_mut()
+                .get_mut(second.offset..second_end)
+                .ok_or(Error::Corrupt)?;
+            // Exact slice lengths and ownership were resolved before the first
+            // store; these copies cannot return an error after a partial write.
+            target_first.copy_from_slice(source_first);
+            target_second.copy_from_slice(source_second);
+        } else {
+            if first.length != input.len() {
+                return Err(Error::Corrupt);
+            }
+            let frame = self
+                .pages
+                .get_mut(first.slot)
+                .and_then(Option::as_mut)
+                .ok_or(Error::Corrupt)?;
+            let target = frame
+                .bytes_mut()
+                .get_mut(first.offset..first_end)
+                .ok_or(Error::Corrupt)?;
+            target.copy_from_slice(input);
+        }
+        Ok(())
+    }
+    #[inline(never)]
+    fn writable_plan(&self, address: u64, length: usize) -> Result<WritablePlan, Error> {
+        context()?;
+        if !(1..=MAX_RW_COPY).contains(&length) {
+            return Err(Error::Bounds);
+        }
+        let end = address.checked_add(length as u64).ok_or(Error::Bounds)?;
+        let last = end.checked_sub(1).ok_or(Error::Bounds)?;
+        slot(address).ok_or(Error::Bounds)?;
+        slot(last).ok_or(Error::Bounds)?;
+        let first = self.writable_part(address, length)?;
+        let second = if first.length == length {
+            None
+        } else {
+            let remaining = length.checked_sub(first.length).ok_or(Error::Corrupt)?;
+            let next = address
+                .checked_add(first.length as u64)
+                .ok_or(Error::Bounds)?;
+            let part = self.writable_part(next, remaining)?;
+            if part.slot <= first.slot || part.length != remaining {
+                return Err(Error::Corrupt);
+            }
+            Some(part)
+        };
+        Ok(WritablePlan { first, second })
+    }
+    fn writable_part(&self, address: u64, remaining: usize) -> Result<WritablePart, Error> {
+        let index = slot(address).ok_or(Error::Bounds)?;
+        let frame = match (&self.pages[index], self.permissions[index]) {
+            (Some(frame), Some(Permissions::ReadWrite)) => frame,
+            (None, None) | (Some(_), Some(_)) => return Err(Error::Bounds),
+            _ => return Err(Error::Corrupt),
+        };
+        // Validate retained table owners and boot aliases before word() forms
+        // any reference into the tables, then require the exact user path.
+        for table in [0, 10, 11] {
+            writable_identity(self.tables[table].as_ref().ok_or(Error::Corrupt)?)?;
+        }
+        if self.word(0, 4) != Some(self.table_address(10) | 3)
+            || self.word(10, 0) != Some(self.table_address(11) | 3)
+        {
+            return Err(Error::Corrupt);
+        }
+        writable_identity(frame)?;
+        if self.word(11, index)
+            != Some(frame.physical_address() | attributes(Permissions::ReadWrite))
+        {
+            return Err(Error::Corrupt);
+        }
+        let offset = (address % PAGE as u64) as usize;
+        Ok(WritablePart {
+            slot: index,
+            offset,
+            length: remaining.min(PAGE - offset),
+        })
+    }
     fn table_address(&self, i: usize) -> u64 {
         self.tables[i]
             .as_ref()
@@ -557,6 +694,14 @@ impl Drop for Lease {
 fn slot(va: u64) -> Option<usize> {
     let index = va.checked_sub(USER_IMAGE_START)? / PAGE as u64;
     (index < 512).then_some(index as usize)
+}
+fn writable_identity(frame: &Frame<'_>) -> Result<(), Error> {
+    let physical = frame.physical_address();
+    let index = ram_index(physical).ok_or(Error::Corrupt)?;
+    if boot_ram(index) != physical | RW {
+        return Err(Error::Corrupt);
+    }
+    Ok(())
 }
 fn ram_index(pa: u64) -> Option<usize> {
     let offset = pa.checked_sub(RAM)?;
