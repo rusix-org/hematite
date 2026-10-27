@@ -115,9 +115,10 @@ rejection requires source review of exact equality checks; do not claim a
 hardware corruption test without a separately approved fault-injection seam.
 Measure actual linked stack chains and inspect that whole-range validation
 precedes every backing store. Preserve existing process/space/ownership tests.
-No present document claims these tests have run or that interactive READ exists.
+The linked evidence records the executed inactive-copy tests. Interactive READ
+and eventual EL0 consumption remain separate integration requirements.
 
-## Dedicated inactive-copy profile (proposed exact adapter scope)
+## Dedicated inactive-copy profile
 
 Use a new `rw-copy-tests = ["boot-tests"]` feature and safe
 `rw_copy_checks.rs` with `#![forbid(unsafe_code)]`, rather than modifying

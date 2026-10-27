@@ -1,0 +1,12 @@
+[
+  {
+    "archive": "docs/evidence/rw-copy-full-first/20261027T044033-384121717-aarch64.tar.gz",
+    "result_records": 121,
+    "false_records": []
+  },
+  {
+    "archive": "docs/evidence/rw-copy-full-first/20261027T044541-872473874-x86_64.tar.gz",
+    "result_records": 18,
+    "false_records": []
+  }
+]

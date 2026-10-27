@@ -1,0 +1,17 @@
+{
+  "argv": [
+    "readelf",
+    "-hW",
+    "-lW",
+    "-sW",
+    "/workspace/crates/hm-core/fixtures/rw-copy.elf"
+  ],
+  "cwd": "/workspace",
+  "stdin_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout": "/workspace/docs/evidence/rw-copy/guest-first/fixture-readelf.stdout.log",
+  "env": {
+    "LC_ALL": "C",
+    "TZ": "UTC"
+  },
+  "timeout_seconds": 20
+}

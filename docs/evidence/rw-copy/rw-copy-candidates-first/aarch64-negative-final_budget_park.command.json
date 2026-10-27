@@ -1,0 +1,17 @@
+[
+  "cargo",
+  "rustc",
+  "--locked",
+  "--offline",
+  "-p",
+  "hm-core",
+  "--release",
+  "--target",
+  "aarch64-unknown-none",
+  "--target-dir",
+  "target/group-stage-b/rw-copy-candidates-first/aarch64-negative-final_budget_park",
+  "--features",
+  "task-negative-tests",
+  "--",
+  "--emit=link,asm"
+]

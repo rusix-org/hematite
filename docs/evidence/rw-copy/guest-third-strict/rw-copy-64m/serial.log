@@ -1,0 +1,148 @@
+hematite: ARM64 Rust kernel entered at EL1
+Boot RAM bytes: 0x0000000004000000 (discovered RAM)
+Frame pool pages: 0x0000000000000ceb (4 KiB each; boot reservations excluded)
+HMRWCOPY BEGIN passes=2 cases=12
+HMRWCOPY CASE pass=0 name=lengths before=3307
+HMRWCOPY PASS pass=0 name=lengths frames=35 during=3272 after=3307
+HMRWCOPY CASE pass=0 name=page_end before=3307
+HMRWCOPY PASS pass=0 name=page_end frames=35 during=3272 after=3307
+HMRWCOPY CASE pass=0 name=cross_rw before=3307
+HMRWCOPY PASS pass=0 name=cross_rw frames=35 during=3272 after=3307
+HMRWCOPY CASE pass=0 name=cross_stack before=3307
+HMRWCOPY PASS pass=0 name=cross_stack frames=35 during=3272 after=3307
+HMRWCOPY CASE pass=0 name=tail_ro before=3307
+HMRWCOPY PASS pass=0 name=tail_ro frames=35 during=3272 after=3307
+HMRWCOPY CASE pass=0 name=tail_rx before=3307
+HMRWCOPY PASS pass=0 name=tail_rx frames=35 during=3272 after=3307
+HMRWCOPY CASE pass=0 name=tail_absent before=3307
+HMRWCOPY PASS pass=0 name=tail_absent frames=35 during=3272 after=3307
+HMRWCOPY CASE pass=0 name=protected before=3307
+HMRWCOPY PASS pass=0 name=protected frames=35 during=3272 after=3307
+HMRWCOPY CASE pass=0 name=holes before=3307
+HMRWCOPY PASS pass=0 name=holes frames=35 during=3272 after=3307
+HMRWCOPY CASE pass=0 name=bounds before=3307
+HMRWCOPY PASS pass=0 name=bounds frames=35 during=3272 after=3307
+HMRWCOPY CASE pass=0 name=startup before=3307
+HMRWCOPY PASS pass=0 name=startup frames=35 during=3272 after=3307
+HMRWCOPY CASE pass=0 name=translations before=3307
+HMRWCOPY ROOT pass=0 stage=0 during=0x40315000 restored=0x40250000 controls=1
+HMRWCOPY PROBE pass=0 stage=0 index=0 va=0x100002000 access=r before=0x80b active=0xff00000040323b80 after=0x80b physical=0x40323000
+HMRWCOPY PROBE pass=0 stage=0 index=1 va=0x100002000 access=w before=0x80b active=0xff00000040323b80 after=0x80b physical=0x40323000
+HMRWCOPY PROBE pass=0 stage=0 index=2 va=0x100003000 access=r before=0x80b active=0xff00000040324b80 after=0x80b physical=0x40324000
+HMRWCOPY PROBE pass=0 stage=0 index=3 va=0x100003000 access=w before=0x80b active=0xff00000040324b80 after=0x80b physical=0x40324000
+HMRWCOPY PROBE pass=0 stage=0 index=4 va=0x100004000 access=r before=0x80b active=0xff00000040325b80 after=0x80b physical=0x40325000
+HMRWCOPY PROBE pass=0 stage=0 index=5 va=0x100004000 access=w before=0x80b active=0x81f after=0x80b physical=0x40325000
+HMRWCOPY PROBE pass=0 stage=0 index=6 va=0x100001000 access=r before=0x80b active=0xff00000040322b80 after=0x80b physical=0x40322000
+HMRWCOPY PROBE pass=0 stage=0 index=7 va=0x100001000 access=w before=0x80b active=0x81f after=0x80b physical=0x40322000
+HMRWCOPY PROBE pass=0 stage=0 index=8 va=0x100100000 access=r before=0x80b active=0xff00000040337b80 after=0x80b physical=0x40337000
+HMRWCOPY PROBE pass=0 stage=0 index=9 va=0x100100000 access=w before=0x80b active=0x81f after=0x80b physical=0x40337000
+HMRWCOPY PROBE pass=0 stage=0 index=10 va=0x1001ef000 access=r before=0x80b active=0x80f after=0x80b physical=0x0
+HMRWCOPY PROBE pass=0 stage=0 index=11 va=0x1001ef000 access=w before=0x80b active=0x80f after=0x80b physical=0x0
+HMRWCOPY ROOT pass=0 stage=1 during=0x40315000 restored=0x40250000 controls=1
+HMRWCOPY PROBE pass=0 stage=1 index=0 va=0x100002000 access=r before=0x80b active=0xff00000040323b80 after=0x80b physical=0x40323000
+HMRWCOPY PROBE pass=0 stage=1 index=1 va=0x100002000 access=w before=0x80b active=0xff00000040323b80 after=0x80b physical=0x40323000
+HMRWCOPY PROBE pass=0 stage=1 index=2 va=0x100003000 access=r before=0x80b active=0xff00000040324b80 after=0x80b physical=0x40324000
+HMRWCOPY PROBE pass=0 stage=1 index=3 va=0x100003000 access=w before=0x80b active=0xff00000040324b80 after=0x80b physical=0x40324000
+HMRWCOPY PROBE pass=0 stage=1 index=4 va=0x100004000 access=r before=0x80b active=0xff00000040325b80 after=0x80b physical=0x40325000
+HMRWCOPY PROBE pass=0 stage=1 index=5 va=0x100004000 access=w before=0x80b active=0x81f after=0x80b physical=0x40325000
+HMRWCOPY PROBE pass=0 stage=1 index=6 va=0x100001000 access=r before=0x80b active=0xff00000040322b80 after=0x80b physical=0x40322000
+HMRWCOPY PROBE pass=0 stage=1 index=7 va=0x100001000 access=w before=0x80b active=0x81f after=0x80b physical=0x40322000
+HMRWCOPY PROBE pass=0 stage=1 index=8 va=0x100100000 access=r before=0x80b active=0xff00000040337b80 after=0x80b physical=0x40337000
+HMRWCOPY PROBE pass=0 stage=1 index=9 va=0x100100000 access=w before=0x80b active=0x81f after=0x80b physical=0x40337000
+HMRWCOPY PROBE pass=0 stage=1 index=10 va=0x1001ef000 access=r before=0x80b active=0x80f after=0x80b physical=0x0
+HMRWCOPY PROBE pass=0 stage=1 index=11 va=0x1001ef000 access=w before=0x80b active=0x80f after=0x80b physical=0x0
+HMRWCOPY PASS pass=0 name=translations frames=35 during=3272 after=3307
+HMRWCOPY CASE pass=1 name=lengths before=3307
+HMRWCOPY PASS pass=1 name=lengths frames=35 during=3272 after=3307
+HMRWCOPY CASE pass=1 name=page_end before=3307
+HMRWCOPY PASS pass=1 name=page_end frames=35 during=3272 after=3307
+HMRWCOPY CASE pass=1 name=cross_rw before=3307
+HMRWCOPY PASS pass=1 name=cross_rw frames=35 during=3272 after=3307
+HMRWCOPY CASE pass=1 name=cross_stack before=3307
+HMRWCOPY PASS pass=1 name=cross_stack frames=35 during=3272 after=3307
+HMRWCOPY CASE pass=1 name=tail_ro before=3307
+HMRWCOPY PASS pass=1 name=tail_ro frames=35 during=3272 after=3307
+HMRWCOPY CASE pass=1 name=tail_rx before=3307
+HMRWCOPY PASS pass=1 name=tail_rx frames=35 during=3272 after=3307
+HMRWCOPY CASE pass=1 name=tail_absent before=3307
+HMRWCOPY PASS pass=1 name=tail_absent frames=35 during=3272 after=3307
+HMRWCOPY CASE pass=1 name=protected before=3307
+HMRWCOPY PASS pass=1 name=protected frames=35 during=3272 after=3307
+HMRWCOPY CASE pass=1 name=holes before=3307
+HMRWCOPY PASS pass=1 name=holes frames=35 during=3272 after=3307
+HMRWCOPY CASE pass=1 name=bounds before=3307
+HMRWCOPY PASS pass=1 name=bounds frames=35 during=3272 after=3307
+HMRWCOPY CASE pass=1 name=startup before=3307
+HMRWCOPY PASS pass=1 name=startup frames=35 during=3272 after=3307
+HMRWCOPY CASE pass=1 name=translations before=3307
+HMRWCOPY ROOT pass=1 stage=0 during=0x40315000 restored=0x40250000 controls=1
+HMRWCOPY PROBE pass=1 stage=0 index=0 va=0x100002000 access=r before=0x80b active=0xff00000040323b80 after=0x80b physical=0x40323000
+HMRWCOPY PROBE pass=1 stage=0 index=1 va=0x100002000 access=w before=0x80b active=0xff00000040323b80 after=0x80b physical=0x40323000
+HMRWCOPY PROBE pass=1 stage=0 index=2 va=0x100003000 access=r before=0x80b active=0xff00000040324b80 after=0x80b physical=0x40324000
+HMRWCOPY PROBE pass=1 stage=0 index=3 va=0x100003000 access=w before=0x80b active=0xff00000040324b80 after=0x80b physical=0x40324000
+HMRWCOPY PROBE pass=1 stage=0 index=4 va=0x100004000 access=r before=0x80b active=0xff00000040325b80 after=0x80b physical=0x40325000
+HMRWCOPY PROBE pass=1 stage=0 index=5 va=0x100004000 access=w before=0x80b active=0x81f after=0x80b physical=0x40325000
+HMRWCOPY PROBE pass=1 stage=0 index=6 va=0x100001000 access=r before=0x80b active=0xff00000040322b80 after=0x80b physical=0x40322000
+HMRWCOPY PROBE pass=1 stage=0 index=7 va=0x100001000 access=w before=0x80b active=0x81f after=0x80b physical=0x40322000
+HMRWCOPY PROBE pass=1 stage=0 index=8 va=0x100100000 access=r before=0x80b active=0xff00000040337b80 after=0x80b physical=0x40337000
+HMRWCOPY PROBE pass=1 stage=0 index=9 va=0x100100000 access=w before=0x80b active=0x81f after=0x80b physical=0x40337000
+HMRWCOPY PROBE pass=1 stage=0 index=10 va=0x1001ef000 access=r before=0x80b active=0x80f after=0x80b physical=0x0
+HMRWCOPY PROBE pass=1 stage=0 index=11 va=0x1001ef000 access=w before=0x80b active=0x80f after=0x80b physical=0x0
+HMRWCOPY ROOT pass=1 stage=1 during=0x40315000 restored=0x40250000 controls=1
+HMRWCOPY PROBE pass=1 stage=1 index=0 va=0x100002000 access=r before=0x80b active=0xff00000040323b80 after=0x80b physical=0x40323000
+HMRWCOPY PROBE pass=1 stage=1 index=1 va=0x100002000 access=w before=0x80b active=0xff00000040323b80 after=0x80b physical=0x40323000
+HMRWCOPY PROBE pass=1 stage=1 index=2 va=0x100003000 access=r before=0x80b active=0xff00000040324b80 after=0x80b physical=0x40324000
+HMRWCOPY PROBE pass=1 stage=1 index=3 va=0x100003000 access=w before=0x80b active=0xff00000040324b80 after=0x80b physical=0x40324000
+HMRWCOPY PROBE pass=1 stage=1 index=4 va=0x100004000 access=r before=0x80b active=0xff00000040325b80 after=0x80b physical=0x40325000
+HMRWCOPY PROBE pass=1 stage=1 index=5 va=0x100004000 access=w before=0x80b active=0x81f after=0x80b physical=0x40325000
+HMRWCOPY PROBE pass=1 stage=1 index=6 va=0x100001000 access=r before=0x80b active=0xff00000040322b80 after=0x80b physical=0x40322000
+HMRWCOPY PROBE pass=1 stage=1 index=7 va=0x100001000 access=w before=0x80b active=0x81f after=0x80b physical=0x40322000
+HMRWCOPY PROBE pass=1 stage=1 index=8 va=0x100100000 access=r before=0x80b active=0xff00000040337b80 after=0x80b physical=0x40337000
+HMRWCOPY PROBE pass=1 stage=1 index=9 va=0x100100000 access=w before=0x80b active=0x81f after=0x80b physical=0x40337000
+HMRWCOPY PROBE pass=1 stage=1 index=10 va=0x1001ef000 access=r before=0x80b active=0x80f after=0x80b physical=0x0
+HMRWCOPY PROBE pass=1 stage=1 index=11 va=0x1001ef000 access=w before=0x80b active=0x80f after=0x80b physical=0x0
+HMRWCOPY PASS pass=1 name=translations frames=35 during=3272 after=3307
+HMRWCOPY END cases=24
+HMTEST BEGIN 41
+HMTEST PASS write_protect
+HMTEST PASS nx
+HMTEST PASS user_execute_protect
+HMTEST PASS user_access_protect
+HMTEST PASS wx
+HMTEST PASS stack_guard
+HMTEST PASS null_guard
+HMTEST PASS checked_range
+HMTEST PASS monitor_bounds
+HMTEST PASS cap_authority
+HMTEST PASS cap_limits
+HMTEST PASS cap_lifetime
+HMTEST PASS cap_generation
+HMTEST PASS boot_memory_valid
+HMTEST PASS boot_memory_malformed
+HMTEST PASS cpu_topology_valid
+HMTEST PASS cpu_topology_malformed
+HMTEST PASS cpu_topology_live
+HMTEST PASS elf_valid
+HMTEST PASS elf_malformed
+HMTEST PASS frame_ranges
+HMTEST PASS frame_boundaries
+HMTEST PASS frame_contract
+HMTEST PASS heap_blocks
+HMTEST PASS heap_values
+HMTEST PASS event_contract
+HMTEST PASS mutex_contract
+HMTEST PASS mutex_lifetime
+HMTEST PASS mutex_workers
+HMTEST PASS thread_contract
+HMTEST PASS thread_limits
+HMTEST PASS thread_core
+HMTEST PASS timer_contract
+HMTEST PASS fault_contract
+HMTEST PASS mapping_contract
+HMTEST PASS mapping_limits
+HMTEST PASS mapping_hardware
+HMTEST PASS cpu_local_state
+HMTEST PASS gic_ownership
+HMTEST PASS secondary_memory
+HMTEST PASS cap_orderings
+HMTEST END 41

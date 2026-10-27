@@ -1,0 +1,943 @@
+{
+  "aarch64-monitor": {
+    "command": [
+      "cargo",
+      "rustc",
+      "--locked",
+      "--offline",
+      "-p",
+      "hm-core",
+      "--release",
+      "--target",
+      "aarch64-unknown-none",
+      "--target-dir",
+      "target/group-stage-b/rw-copy-candidates-first/aarch64-monitor",
+      "--",
+      "--emit=link,asm"
+    ],
+    "returncode": 0,
+    "profile_environment": {
+      "HM_TASK_NEGATIVE": null
+    },
+    "elf": "target/group-stage-b/rw-copy-candidates-first/aarch64-monitor/aarch64-unknown-none/release/hematite",
+    "elf_sha256": "99151256f79d8f122a0be2d8d8edee3584cc3a168735ccc83606ce58ff0c9008",
+    "asm": "target/group-stage-b/rw-copy-candidates-first/aarch64-monitor/aarch64-unknown-none/release/deps/hematite-0aefa6e86bca8961.s",
+    "asm_sha256": "d052fc960927df7ff1cf6c8d9dd8ec1e0610748c80dd5e0440829b1db7b02b37"
+  },
+  "aarch64-boot-test": {
+    "command": [
+      "cargo",
+      "rustc",
+      "--locked",
+      "--offline",
+      "-p",
+      "hm-core",
+      "--release",
+      "--target",
+      "aarch64-unknown-none",
+      "--target-dir",
+      "target/group-stage-b/rw-copy-candidates-first/aarch64-boot-test",
+      "--features",
+      "boot-tests",
+      "--",
+      "--emit=link,asm"
+    ],
+    "returncode": 0,
+    "profile_environment": {
+      "HM_TASK_NEGATIVE": null
+    },
+    "elf": "target/group-stage-b/rw-copy-candidates-first/aarch64-boot-test/aarch64-unknown-none/release/hematite",
+    "elf_sha256": "c61f0e8a4b1cac77c723ea2ae0e332ae6cba9bd7401a3f798f73ca2c8e85feeb",
+    "asm": "target/group-stage-b/rw-copy-candidates-first/aarch64-boot-test/aarch64-unknown-none/release/deps/hematite-a593a0c8c49a28cd.s",
+    "asm_sha256": "9ab9e5ad48cec488e527fb225228fe0690679da349b41a55b18a54bc240c91eb"
+  },
+  "aarch64-fault-test": {
+    "command": [
+      "cargo",
+      "rustc",
+      "--locked",
+      "--offline",
+      "-p",
+      "hm-core",
+      "--release",
+      "--target",
+      "aarch64-unknown-none",
+      "--target-dir",
+      "target/group-stage-b/rw-copy-candidates-first/aarch64-fault-test",
+      "--features",
+      "unhandled-fault-test",
+      "--",
+      "--emit=link,asm"
+    ],
+    "returncode": 0,
+    "profile_environment": {
+      "HM_TASK_NEGATIVE": null
+    },
+    "elf": "target/group-stage-b/rw-copy-candidates-first/aarch64-fault-test/aarch64-unknown-none/release/hematite",
+    "elf_sha256": "cc8c516523c4474ff9a5c41fa8a21171a148deed5c03b1f6bb5a39669c893082",
+    "asm": "target/group-stage-b/rw-copy-candidates-first/aarch64-fault-test/aarch64-unknown-none/release/deps/hematite-4e51b9d004e55757.s",
+    "asm_sha256": "40bd582747268c9e793707238bb145e773b17f6bc3b0f43e2a8ba5d832024891"
+  },
+  "aarch64-nested-test": {
+    "command": [
+      "cargo",
+      "rustc",
+      "--locked",
+      "--offline",
+      "-p",
+      "hm-core",
+      "--release",
+      "--target",
+      "aarch64-unknown-none",
+      "--target-dir",
+      "target/group-stage-b/rw-copy-candidates-first/aarch64-nested-test",
+      "--features",
+      "nested-fault-test",
+      "--",
+      "--emit=link,asm"
+    ],
+    "returncode": 0,
+    "profile_environment": {
+      "HM_TASK_NEGATIVE": null
+    },
+    "elf": "target/group-stage-b/rw-copy-candidates-first/aarch64-nested-test/aarch64-unknown-none/release/hematite",
+    "elf_sha256": "37b22932f656942e1184737e8e66091afa0b95d0116d24f748f4b34a8c7f0814",
+    "asm": "target/group-stage-b/rw-copy-candidates-first/aarch64-nested-test/aarch64-unknown-none/release/deps/hematite-b639530606043581.s",
+    "asm_sha256": "67561bc9970551c27135f537082b2e0fc5bcfc6eb53aa9f1c374504e9f452253"
+  },
+  "aarch64-thread-overflow-test": {
+    "command": [
+      "cargo",
+      "rustc",
+      "--locked",
+      "--offline",
+      "-p",
+      "hm-core",
+      "--release",
+      "--target",
+      "aarch64-unknown-none",
+      "--target-dir",
+      "target/group-stage-b/rw-copy-candidates-first/aarch64-thread-overflow-test",
+      "--features",
+      "thread-overflow-test",
+      "--",
+      "--emit=link,asm"
+    ],
+    "returncode": 0,
+    "profile_environment": {
+      "HM_TASK_NEGATIVE": null
+    },
+    "elf": "target/group-stage-b/rw-copy-candidates-first/aarch64-thread-overflow-test/aarch64-unknown-none/release/hematite",
+    "elf_sha256": "39ac3952b0810bf3504ae6a1d2fb9a648a57fea8f54cba773de139fb618d746e",
+    "asm": "target/group-stage-b/rw-copy-candidates-first/aarch64-thread-overflow-test/aarch64-unknown-none/release/deps/hematite-a27f4a784a391bd6.s",
+    "asm_sha256": "724358877ecb8edcec7ed5482936b360fe349dc639498a6905b036aba4ec5fb5"
+  },
+  "aarch64-preemption-test": {
+    "command": [
+      "cargo",
+      "rustc",
+      "--locked",
+      "--offline",
+      "-p",
+      "hm-core",
+      "--release",
+      "--target",
+      "aarch64-unknown-none",
+      "--target-dir",
+      "target/group-stage-b/rw-copy-candidates-first/aarch64-preemption-test",
+      "--features",
+      "preemption-tests",
+      "--",
+      "--emit=link,asm"
+    ],
+    "returncode": 0,
+    "profile_environment": {
+      "HM_TASK_NEGATIVE": null
+    },
+    "elf": "target/group-stage-b/rw-copy-candidates-first/aarch64-preemption-test/aarch64-unknown-none/release/hematite",
+    "elf_sha256": "eb7471905e053f7142f6ba66b726b9a9c812d599343f08f711da2de28b9e3002",
+    "asm": "target/group-stage-b/rw-copy-candidates-first/aarch64-preemption-test/aarch64-unknown-none/release/deps/hematite-19bf0ace1265b6fa.s",
+    "asm_sha256": "81bb759dbd02b9798b463d155be40938587a852c2b4b763464e50de31afc1d76"
+  },
+  "aarch64-preemption-boundary-test": {
+    "command": [
+      "cargo",
+      "rustc",
+      "--locked",
+      "--offline",
+      "-p",
+      "hm-core",
+      "--release",
+      "--target",
+      "aarch64-unknown-none",
+      "--target-dir",
+      "target/group-stage-b/rw-copy-candidates-first/aarch64-preemption-boundary-test",
+      "--features",
+      "preemption-boundary-test",
+      "--",
+      "--emit=link,asm"
+    ],
+    "returncode": 0,
+    "profile_environment": {
+      "HM_TASK_NEGATIVE": null
+    },
+    "elf": "target/group-stage-b/rw-copy-candidates-first/aarch64-preemption-boundary-test/aarch64-unknown-none/release/hematite",
+    "elf_sha256": "344f9e1ef7ece3e6ad58cc20461bed9a1876863acc6f5754b423b1c6575fae90",
+    "asm": "target/group-stage-b/rw-copy-candidates-first/aarch64-preemption-boundary-test/aarch64-unknown-none/release/deps/hematite-4236c3b0c997ea35.s",
+    "asm_sha256": "0930db5e975ffa419856f8d7f9f668628a9a4ac0ed39ffa734ca54f452dd27fa"
+  },
+  "aarch64-preemption-no-timer-test": {
+    "command": [
+      "cargo",
+      "rustc",
+      "--locked",
+      "--offline",
+      "-p",
+      "hm-core",
+      "--release",
+      "--target",
+      "aarch64-unknown-none",
+      "--target-dir",
+      "target/group-stage-b/rw-copy-candidates-first/aarch64-preemption-no-timer-test",
+      "--features",
+      "preemption-no-timer-test",
+      "--",
+      "--emit=link,asm"
+    ],
+    "returncode": 0,
+    "profile_environment": {
+      "HM_TASK_NEGATIVE": null
+    },
+    "elf": "target/group-stage-b/rw-copy-candidates-first/aarch64-preemption-no-timer-test/aarch64-unknown-none/release/hematite",
+    "elf_sha256": "b1a3fa07ac89d253884fe8e628c7c706e4b306029159ac3c8402b46c487edd7d",
+    "asm": "target/group-stage-b/rw-copy-candidates-first/aarch64-preemption-no-timer-test/aarch64-unknown-none/release/deps/hematite-2ac488e1b3939b56.s",
+    "asm_sha256": "a7aa20873d2211a29faf407c121aed59553c2f50c77b39d7d60987e6c5beee70"
+  },
+  "aarch64-preemption-overflow-test": {
+    "command": [
+      "cargo",
+      "rustc",
+      "--locked",
+      "--offline",
+      "-p",
+      "hm-core",
+      "--release",
+      "--target",
+      "aarch64-unknown-none",
+      "--target-dir",
+      "target/group-stage-b/rw-copy-candidates-first/aarch64-preemption-overflow-test",
+      "--features",
+      "preemption-overflow-test",
+      "--",
+      "--emit=link,asm"
+    ],
+    "returncode": 0,
+    "profile_environment": {
+      "HM_TASK_NEGATIVE": null
+    },
+    "elf": "target/group-stage-b/rw-copy-candidates-first/aarch64-preemption-overflow-test/aarch64-unknown-none/release/hematite",
+    "elf_sha256": "c0353a5d1d960e2fc7972e6c353508c65ed6c6fd13659852b29612737016da72",
+    "asm": "target/group-stage-b/rw-copy-candidates-first/aarch64-preemption-overflow-test/aarch64-unknown-none/release/deps/hematite-207b93852f6e4bd9.s",
+    "asm_sha256": "2bf2a308bb7109176d08ae741f24a724b195b54ce27c851f6cac25ed50cd1408"
+  },
+  "aarch64-wait-all-blocked-test": {
+    "command": [
+      "cargo",
+      "rustc",
+      "--locked",
+      "--offline",
+      "-p",
+      "hm-core",
+      "--release",
+      "--target",
+      "aarch64-unknown-none",
+      "--target-dir",
+      "target/group-stage-b/rw-copy-candidates-first/aarch64-wait-all-blocked-test",
+      "--features",
+      "wait-all-blocked-test",
+      "--",
+      "--emit=link,asm"
+    ],
+    "returncode": 0,
+    "profile_environment": {
+      "HM_TASK_NEGATIVE": null
+    },
+    "elf": "target/group-stage-b/rw-copy-candidates-first/aarch64-wait-all-blocked-test/aarch64-unknown-none/release/hematite",
+    "elf_sha256": "fc5a84aeb3c5005d5156976fbb039ae7343518c872e7f698d62bc67b18946286",
+    "asm": "target/group-stage-b/rw-copy-candidates-first/aarch64-wait-all-blocked-test/aarch64-unknown-none/release/deps/hematite-a9bc9be9dd7d2c96.s",
+    "asm_sha256": "94a6adc8c70bbc2bf69c99766dad4b1507acf8f057b4e7b0135b581af7808c08"
+  },
+  "aarch64-space-test": {
+    "command": [
+      "cargo",
+      "rustc",
+      "--locked",
+      "--offline",
+      "-p",
+      "hm-core",
+      "--release",
+      "--target",
+      "aarch64-unknown-none",
+      "--target-dir",
+      "target/group-stage-b/rw-copy-candidates-first/aarch64-space-test",
+      "--features",
+      "space-tests",
+      "--",
+      "--emit=link,asm"
+    ],
+    "returncode": 0,
+    "profile_environment": {
+      "HM_TASK_NEGATIVE": null
+    },
+    "elf": "target/group-stage-b/rw-copy-candidates-first/aarch64-space-test/aarch64-unknown-none/release/hematite",
+    "elf_sha256": "8ccc9eff36463f23ffd594740d58666277b1b72f0baf21ecffe316715a7e5cb2",
+    "asm": "target/group-stage-b/rw-copy-candidates-first/aarch64-space-test/aarch64-unknown-none/release/deps/hematite-c3bf695e125464d3.s",
+    "asm_sha256": "d6ae33062aa3bc12dd7a77ab0dd6025f3b7d08d1adae4c67237c3606cd06f834"
+  },
+  "aarch64-process-test": {
+    "command": [
+      "cargo",
+      "rustc",
+      "--locked",
+      "--offline",
+      "-p",
+      "hm-core",
+      "--release",
+      "--target",
+      "aarch64-unknown-none",
+      "--target-dir",
+      "target/group-stage-b/rw-copy-candidates-first/aarch64-process-test",
+      "--features",
+      "process-tests",
+      "--",
+      "--emit=link,asm"
+    ],
+    "returncode": 0,
+    "profile_environment": {
+      "HM_TASK_NEGATIVE": null
+    },
+    "elf": "target/group-stage-b/rw-copy-candidates-first/aarch64-process-test/aarch64-unknown-none/release/hematite",
+    "elf_sha256": "95d855c10e457b31bdd3ce10601657581395aa38b94ddfeb96dbdbfba947b9f5",
+    "asm": "target/group-stage-b/rw-copy-candidates-first/aarch64-process-test/aarch64-unknown-none/release/deps/hematite-97951d16c02ba655.s",
+    "asm_sha256": "bbf022738dd7bee26711e4248c0075d5d0e2291d3622a840b61f1f135e1f1d4b"
+  },
+  "aarch64-startup-input-test": {
+    "command": [
+      "cargo",
+      "rustc",
+      "--locked",
+      "--offline",
+      "-p",
+      "hm-core",
+      "--release",
+      "--target",
+      "aarch64-unknown-none",
+      "--target-dir",
+      "target/group-stage-b/rw-copy-candidates-first/aarch64-startup-input-test",
+      "--features",
+      "startup-input-tests",
+      "--",
+      "--emit=link,asm"
+    ],
+    "returncode": 0,
+    "profile_environment": {
+      "HM_TASK_NEGATIVE": null
+    },
+    "elf": "target/group-stage-b/rw-copy-candidates-first/aarch64-startup-input-test/aarch64-unknown-none/release/hematite",
+    "elf_sha256": "3fbfd09f1a6c61ac2b4d477513d8b2db20c78570f0f58b5e82f524f6d5f33484",
+    "asm": "target/group-stage-b/rw-copy-candidates-first/aarch64-startup-input-test/aarch64-unknown-none/release/deps/hematite-575d9fe702ed1c3e.s",
+    "asm_sha256": "c7a15fa34aef1e16f6f2ec964394c3eb5d59f3e0674135fdff16a4d7c1a8bc3e"
+  },
+  "aarch64-secondary-test": {
+    "command": [
+      "cargo",
+      "rustc",
+      "--locked",
+      "--offline",
+      "-p",
+      "hm-core",
+      "--release",
+      "--target",
+      "aarch64-unknown-none",
+      "--target-dir",
+      "target/group-stage-b/rw-copy-candidates-first/aarch64-secondary-test",
+      "--features",
+      "secondary-tests",
+      "--",
+      "--emit=link,asm"
+    ],
+    "returncode": 0,
+    "profile_environment": {
+      "HM_TASK_NEGATIVE": null
+    },
+    "elf": "target/group-stage-b/rw-copy-candidates-first/aarch64-secondary-test/aarch64-unknown-none/release/hematite",
+    "elf_sha256": "28072f4f872b8bdfe07ac6789b760eb91bd50cc6e61a43235fc2eb9750f4843b",
+    "asm": "target/group-stage-b/rw-copy-candidates-first/aarch64-secondary-test/aarch64-unknown-none/release/deps/hematite-c77d9a039967f069.s",
+    "asm_sha256": "9beefaf8856c06367d6a251e74978bbfcd1f69f597628ec8235467313094c4cd"
+  },
+  "aarch64-secondary-stale-test": {
+    "command": [
+      "cargo",
+      "rustc",
+      "--locked",
+      "--offline",
+      "-p",
+      "hm-core",
+      "--release",
+      "--target",
+      "aarch64-unknown-none",
+      "--target-dir",
+      "target/group-stage-b/rw-copy-candidates-first/aarch64-secondary-stale-test",
+      "--features",
+      "secondary-stale-generation-test",
+      "--",
+      "--emit=link,asm"
+    ],
+    "returncode": 0,
+    "profile_environment": {
+      "HM_TASK_NEGATIVE": null
+    },
+    "elf": "target/group-stage-b/rw-copy-candidates-first/aarch64-secondary-stale-test/aarch64-unknown-none/release/hematite",
+    "elf_sha256": "42b69fe164aff599362b6c40e5c04cb23b3e23363be726cd7f3e05dd23c98b42",
+    "asm": "target/group-stage-b/rw-copy-candidates-first/aarch64-secondary-stale-test/aarch64-unknown-none/release/deps/hematite-9314c936115041da.s",
+    "asm_sha256": "43ec626b1f83562734c5bd4025f9f07f4b78ed4002e1b7df63b28778834c8225"
+  },
+  "aarch64-secondary-off-return-test": {
+    "command": [
+      "cargo",
+      "rustc",
+      "--locked",
+      "--offline",
+      "-p",
+      "hm-core",
+      "--release",
+      "--target",
+      "aarch64-unknown-none",
+      "--target-dir",
+      "target/group-stage-b/rw-copy-candidates-first/aarch64-secondary-off-return-test",
+      "--features",
+      "secondary-cpu-off-return-test",
+      "--",
+      "--emit=link,asm"
+    ],
+    "returncode": 0,
+    "profile_environment": {
+      "HM_TASK_NEGATIVE": null
+    },
+    "elf": "target/group-stage-b/rw-copy-candidates-first/aarch64-secondary-off-return-test/aarch64-unknown-none/release/hematite",
+    "elf_sha256": "9ae873bd82635bfdac8e0877bd63386bb28901c1f13c4c5a1fc56ab66c3d415e",
+    "asm": "target/group-stage-b/rw-copy-candidates-first/aarch64-secondary-off-return-test/aarch64-unknown-none/release/deps/hematite-bd55870e8aeae975.s",
+    "asm_sha256": "372ca25a944e3bfcf2cc4a68e0f3d75a91cdf1836d691bc363e2715d1fa0784f"
+  },
+  "aarch64-smp-test": {
+    "command": [
+      "cargo",
+      "rustc",
+      "--locked",
+      "--offline",
+      "-p",
+      "hm-core",
+      "--release",
+      "--target",
+      "aarch64-unknown-none",
+      "--target-dir",
+      "target/group-stage-b/rw-copy-candidates-first/aarch64-smp-test",
+      "--features",
+      "smp-tests",
+      "--",
+      "--emit=link,asm"
+    ],
+    "returncode": 0,
+    "profile_environment": {
+      "HM_TASK_NEGATIVE": null
+    },
+    "elf": "target/group-stage-b/rw-copy-candidates-first/aarch64-smp-test/aarch64-unknown-none/release/hematite",
+    "elf_sha256": "e26725b5a9aa6eba7766093d0be47d765ceedddc15e8c0cb5fda96077642bd2f",
+    "asm": "target/group-stage-b/rw-copy-candidates-first/aarch64-smp-test/aarch64-unknown-none/release/deps/hematite-f3ab0fdcb8916ad1.s",
+    "asm_sha256": "4c6082bf2be9f9cab7d0d0855397fe1cba659506fafd989215edb0952bc59f57"
+  },
+  "aarch64-smp-no-peer-timer-test": {
+    "command": [
+      "cargo",
+      "rustc",
+      "--locked",
+      "--offline",
+      "-p",
+      "hm-core",
+      "--release",
+      "--target",
+      "aarch64-unknown-none",
+      "--target-dir",
+      "target/group-stage-b/rw-copy-candidates-first/aarch64-smp-no-peer-timer-test",
+      "--features",
+      "smp-no-peer-timer-test",
+      "--",
+      "--emit=link,asm"
+    ],
+    "returncode": 0,
+    "profile_environment": {
+      "HM_TASK_NEGATIVE": null
+    },
+    "elf": "target/group-stage-b/rw-copy-candidates-first/aarch64-smp-no-peer-timer-test/aarch64-unknown-none/release/hematite",
+    "elf_sha256": "b98c0f56e32531d1a29847ae0de7a9e62748e8c208444d6c58aad29c7f8566b4",
+    "asm": "target/group-stage-b/rw-copy-candidates-first/aarch64-smp-no-peer-timer-test/aarch64-unknown-none/release/deps/hematite-e5de356c7e9ed3c6.s",
+    "asm_sha256": "28351ebe99d9a65cfa63d7c54c3007de6b794234321736704ef5ee18b357f94b"
+  },
+  "aarch64-smp-peer-overflow-test": {
+    "command": [
+      "cargo",
+      "rustc",
+      "--locked",
+      "--offline",
+      "-p",
+      "hm-core",
+      "--release",
+      "--target",
+      "aarch64-unknown-none",
+      "--target-dir",
+      "target/group-stage-b/rw-copy-candidates-first/aarch64-smp-peer-overflow-test",
+      "--features",
+      "smp-peer-overflow-test",
+      "--",
+      "--emit=link,asm"
+    ],
+    "returncode": 0,
+    "profile_environment": {
+      "HM_TASK_NEGATIVE": null
+    },
+    "elf": "target/group-stage-b/rw-copy-candidates-first/aarch64-smp-peer-overflow-test/aarch64-unknown-none/release/hematite",
+    "elf_sha256": "4e9ebcb885312fbbdb5b5b8e740a2e0b64cfb95e2625581e3a5e96908d180ee4",
+    "asm": "target/group-stage-b/rw-copy-candidates-first/aarch64-smp-peer-overflow-test/aarch64-unknown-none/release/deps/hematite-03947a58607c89bf.s",
+    "asm_sha256": "16292c81ca45d38843e02b5629e67412c9e30a0ed303e0e8a266514835e5ab4c"
+  },
+  "aarch64-smp-all-blocked-test": {
+    "command": [
+      "cargo",
+      "rustc",
+      "--locked",
+      "--offline",
+      "-p",
+      "hm-core",
+      "--release",
+      "--target",
+      "aarch64-unknown-none",
+      "--target-dir",
+      "target/group-stage-b/rw-copy-candidates-first/aarch64-smp-all-blocked-test",
+      "--features",
+      "smp-all-blocked-test",
+      "--",
+      "--emit=link,asm"
+    ],
+    "returncode": 0,
+    "profile_environment": {
+      "HM_TASK_NEGATIVE": null
+    },
+    "elf": "target/group-stage-b/rw-copy-candidates-first/aarch64-smp-all-blocked-test/aarch64-unknown-none/release/hematite",
+    "elf_sha256": "bf5f72f80c356e09c70777082642b61fd0d7dcb3f095e055ea385317480c04e2",
+    "asm": "target/group-stage-b/rw-copy-candidates-first/aarch64-smp-all-blocked-test/aarch64-unknown-none/release/deps/hematite-47b602de746fee14.s",
+    "asm_sha256": "eb72a4e65e80fe24f9ae1622a561c7d9d0bc372341ea485234f1862372926ed7"
+  },
+  "x86_64-monitor": {
+    "command": [
+      "cargo",
+      "rustc",
+      "--locked",
+      "--offline",
+      "-p",
+      "hm-core",
+      "--release",
+      "--target",
+      "x86_64-unknown-none",
+      "--target-dir",
+      "target/group-stage-b/rw-copy-candidates-first/x86_64-monitor",
+      "--",
+      "--emit=link,asm"
+    ],
+    "returncode": 0,
+    "profile_environment": {
+      "HM_TASK_NEGATIVE": null
+    },
+    "elf": "target/group-stage-b/rw-copy-candidates-first/x86_64-monitor/x86_64-unknown-none/release/hematite",
+    "elf_sha256": "a8d1b03da701771c5da0e64be10bda5f59cdc09fc53a50474f89de2b1d0cfd05",
+    "asm": "target/group-stage-b/rw-copy-candidates-first/x86_64-monitor/x86_64-unknown-none/release/deps/hematite-e0b7078e8bf6100a.s",
+    "asm_sha256": "e044b71b33c7fc5ff9bf1500978b17e954b3af86c4ccb75369e0a529dfd653ef"
+  },
+  "x86_64-boot-test": {
+    "command": [
+      "cargo",
+      "rustc",
+      "--locked",
+      "--offline",
+      "-p",
+      "hm-core",
+      "--release",
+      "--target",
+      "x86_64-unknown-none",
+      "--target-dir",
+      "target/group-stage-b/rw-copy-candidates-first/x86_64-boot-test",
+      "--features",
+      "boot-tests",
+      "--",
+      "--emit=link,asm"
+    ],
+    "returncode": 0,
+    "profile_environment": {
+      "HM_TASK_NEGATIVE": null
+    },
+    "elf": "target/group-stage-b/rw-copy-candidates-first/x86_64-boot-test/x86_64-unknown-none/release/hematite",
+    "elf_sha256": "86fbce2e552f23e8cffba47ac4bac1cf9a4aced0e5d1a494fac8eb6cfd3bd83f",
+    "asm": "target/group-stage-b/rw-copy-candidates-first/x86_64-boot-test/x86_64-unknown-none/release/deps/hematite-d851cb8af74b2c9a.s",
+    "asm_sha256": "3c9c395fc7e0094638f7cb12766db3a6c18d5f8b8d598ee1d2b265f6a0f8f270"
+  },
+  "aarch64-runtime-test": {
+    "command": [
+      "cargo",
+      "rustc",
+      "--locked",
+      "--offline",
+      "-p",
+      "hm-core",
+      "--release",
+      "--target",
+      "aarch64-unknown-none",
+      "--target-dir",
+      "target/group-stage-b/rw-copy-candidates-first/aarch64-runtime-test",
+      "--features",
+      "runtime-tests",
+      "--",
+      "--emit=link,asm"
+    ],
+    "returncode": 0,
+    "profile_environment": {
+      "HM_TASK_NEGATIVE": null
+    },
+    "elf": "target/group-stage-b/rw-copy-candidates-first/aarch64-runtime-test/aarch64-unknown-none/release/hematite",
+    "elf_sha256": "e8bc875826e89885f198d5ce944c6f84d4ed4ceffc4efd563c838bbdd8a5521a",
+    "asm": "target/group-stage-b/rw-copy-candidates-first/aarch64-runtime-test/aarch64-unknown-none/release/deps/hematite-7f65bd2b18df27c6.s",
+    "asm_sha256": "3f7f7d832e08bc7833637934a080865ca50c7008eb13bef9e4012c1eca275db4"
+  },
+  "aarch64-task-test": {
+    "command": [
+      "cargo",
+      "rustc",
+      "--locked",
+      "--offline",
+      "-p",
+      "hm-core",
+      "--release",
+      "--target",
+      "aarch64-unknown-none",
+      "--target-dir",
+      "target/group-stage-b/rw-copy-candidates-first/aarch64-task-test",
+      "--features",
+      "task-tests",
+      "--",
+      "--emit=link,asm"
+    ],
+    "returncode": 0,
+    "profile_environment": {
+      "HM_TASK_NEGATIVE": null
+    },
+    "elf": "target/group-stage-b/rw-copy-candidates-first/aarch64-task-test/aarch64-unknown-none/release/hematite",
+    "elf_sha256": "eb80984964ac42354b64518b2315cd03c5154ace561c391f62ebf12a03d3f883",
+    "asm": "target/group-stage-b/rw-copy-candidates-first/aarch64-task-test/aarch64-unknown-none/release/deps/hematite-de003696f1ec1415.s",
+    "asm_sha256": "8fcfa0f975fb4a226cefcbab0066291abb935afd3a418fbd5920425dcd589dac"
+  },
+  "aarch64-rw-copy-test": {
+    "command": [
+      "cargo",
+      "rustc",
+      "--locked",
+      "--offline",
+      "-p",
+      "hm-core",
+      "--release",
+      "--target",
+      "aarch64-unknown-none",
+      "--target-dir",
+      "target/group-stage-b/rw-copy-candidates-first/aarch64-rw-copy-test",
+      "--features",
+      "rw-copy-tests",
+      "--",
+      "--emit=link,asm"
+    ],
+    "returncode": 0,
+    "profile_environment": {
+      "HM_TASK_NEGATIVE": null
+    },
+    "elf": "target/group-stage-b/rw-copy-candidates-first/aarch64-rw-copy-test/aarch64-unknown-none/release/hematite",
+    "elf_sha256": "6447c09daf1d348d3058fd9f5cae21e090f81cd03ddfb7966b7bb7d2f69c96ef",
+    "asm": "target/group-stage-b/rw-copy-candidates-first/aarch64-rw-copy-test/aarch64-unknown-none/release/deps/hematite-726dab69408266f0.s",
+    "asm_sha256": "d503eaf32975e43708cbdb2006ff7e285289bb858d7570481fefdcf66156af3c"
+  },
+  "aarch64-negative-final_budget_spawn": {
+    "command": [
+      "cargo",
+      "rustc",
+      "--locked",
+      "--offline",
+      "-p",
+      "hm-core",
+      "--release",
+      "--target",
+      "aarch64-unknown-none",
+      "--target-dir",
+      "target/group-stage-b/rw-copy-candidates-first/aarch64-negative-final_budget_spawn",
+      "--features",
+      "task-negative-tests",
+      "--",
+      "--emit=link,asm"
+    ],
+    "returncode": 0,
+    "profile_environment": {
+      "HM_TASK_NEGATIVE": "final_budget_spawn"
+    },
+    "elf": "target/group-stage-b/rw-copy-candidates-first/aarch64-negative-final_budget_spawn/aarch64-unknown-none/release/hematite",
+    "elf_sha256": "3aee5710a239aa37cdef34c014c54765d80fbbf0288da6068fd42d03251f4611",
+    "asm": "target/group-stage-b/rw-copy-candidates-first/aarch64-negative-final_budget_spawn/aarch64-unknown-none/release/deps/hematite-80d40ef7f553af6e.s",
+    "asm_sha256": "4d008c3df4089523867d3d24abca16be882c4f37b0a41f68aeab28742b4a5c2c"
+  },
+  "aarch64-negative-final_budget_park": {
+    "command": [
+      "cargo",
+      "rustc",
+      "--locked",
+      "--offline",
+      "-p",
+      "hm-core",
+      "--release",
+      "--target",
+      "aarch64-unknown-none",
+      "--target-dir",
+      "target/group-stage-b/rw-copy-candidates-first/aarch64-negative-final_budget_park",
+      "--features",
+      "task-negative-tests",
+      "--",
+      "--emit=link,asm"
+    ],
+    "returncode": 0,
+    "profile_environment": {
+      "HM_TASK_NEGATIVE": "final_budget_park"
+    },
+    "elf": "target/group-stage-b/rw-copy-candidates-first/aarch64-negative-final_budget_park/aarch64-unknown-none/release/hematite",
+    "elf_sha256": "a97e15b679783723d5c8d4ffa742aee39921c600608ad6db472a8ea80ffef22b",
+    "asm": "target/group-stage-b/rw-copy-candidates-first/aarch64-negative-final_budget_park/aarch64-unknown-none/release/deps/hematite-80d40ef7f553af6e.s",
+    "asm_sha256": "372e624b12f0459b1833a9dd28aa8e23a84a2d49d8e3f488a59672737fa9d773"
+  },
+  "aarch64-negative-platform_reply": {
+    "command": [
+      "cargo",
+      "rustc",
+      "--locked",
+      "--offline",
+      "-p",
+      "hm-core",
+      "--release",
+      "--target",
+      "aarch64-unknown-none",
+      "--target-dir",
+      "target/group-stage-b/rw-copy-candidates-first/aarch64-negative-platform_reply",
+      "--features",
+      "task-negative-tests",
+      "--",
+      "--emit=link,asm"
+    ],
+    "returncode": 0,
+    "profile_environment": {
+      "HM_TASK_NEGATIVE": "platform_reply"
+    },
+    "elf": "target/group-stage-b/rw-copy-candidates-first/aarch64-negative-platform_reply/aarch64-unknown-none/release/hematite",
+    "elf_sha256": "87104a05632aabc6a9e35ab7d8d384b19bdb6abf5fce2a18ccbd5f5d7531d759",
+    "asm": "target/group-stage-b/rw-copy-candidates-first/aarch64-negative-platform_reply/aarch64-unknown-none/release/deps/hematite-80d40ef7f553af6e.s",
+    "asm_sha256": "62fd5cbaff9b20cd011cc1a8db530053bddb09a3c3e8590a71d2787945c2a796"
+  },
+  "aarch64-negative-platform_park": {
+    "command": [
+      "cargo",
+      "rustc",
+      "--locked",
+      "--offline",
+      "-p",
+      "hm-core",
+      "--release",
+      "--target",
+      "aarch64-unknown-none",
+      "--target-dir",
+      "target/group-stage-b/rw-copy-candidates-first/aarch64-negative-platform_park",
+      "--features",
+      "task-negative-tests",
+      "--",
+      "--emit=link,asm"
+    ],
+    "returncode": 0,
+    "profile_environment": {
+      "HM_TASK_NEGATIVE": "platform_park"
+    },
+    "elf": "target/group-stage-b/rw-copy-candidates-first/aarch64-negative-platform_park/aarch64-unknown-none/release/hematite",
+    "elf_sha256": "678aeb2908f81e27480bfa81db21e6f150da40e3ae1d502ee84792e94ee1d217",
+    "asm": "target/group-stage-b/rw-copy-candidates-first/aarch64-negative-platform_park/aarch64-unknown-none/release/deps/hematite-80d40ef7f553af6e.s",
+    "asm_sha256": "bce1f924e17fa13d0ab1d208280278d9864a4b1452a752f080d9be2ce3c56d54"
+  },
+  "aarch64-negative-abandon_dispatch": {
+    "command": [
+      "cargo",
+      "rustc",
+      "--locked",
+      "--offline",
+      "-p",
+      "hm-core",
+      "--release",
+      "--target",
+      "aarch64-unknown-none",
+      "--target-dir",
+      "target/group-stage-b/rw-copy-candidates-first/aarch64-negative-abandon_dispatch",
+      "--features",
+      "task-negative-tests",
+      "--",
+      "--emit=link,asm"
+    ],
+    "returncode": 0,
+    "profile_environment": {
+      "HM_TASK_NEGATIVE": "abandon_dispatch"
+    },
+    "elf": "target/group-stage-b/rw-copy-candidates-first/aarch64-negative-abandon_dispatch/aarch64-unknown-none/release/hematite",
+    "elf_sha256": "ce7d3342b272ae174259b69ff2c47376d60de6052da47febf2ce105c61129838",
+    "asm": "target/group-stage-b/rw-copy-candidates-first/aarch64-negative-abandon_dispatch/aarch64-unknown-none/release/deps/hematite-80d40ef7f553af6e.s",
+    "asm_sha256": "db0b221980a31f03137f2120e473610538c467b3c14260e35f27ee702cdbdb0f"
+  },
+  "aarch64-negative-wake_install_failure": {
+    "command": [
+      "cargo",
+      "rustc",
+      "--locked",
+      "--offline",
+      "-p",
+      "hm-core",
+      "--release",
+      "--target",
+      "aarch64-unknown-none",
+      "--target-dir",
+      "target/group-stage-b/rw-copy-candidates-first/aarch64-negative-wake_install_failure",
+      "--features",
+      "task-negative-tests",
+      "--",
+      "--emit=link,asm"
+    ],
+    "returncode": 0,
+    "profile_environment": {
+      "HM_TASK_NEGATIVE": "wake_install_failure"
+    },
+    "elf": "target/group-stage-b/rw-copy-candidates-first/aarch64-negative-wake_install_failure/aarch64-unknown-none/release/hematite",
+    "elf_sha256": "e4fef593278ff9a316fcc6be11e67196456424765739bfb904ee440cc281dc65",
+    "asm": "target/group-stage-b/rw-copy-candidates-first/aarch64-negative-wake_install_failure/aarch64-unknown-none/release/deps/hematite-80d40ef7f553af6e.s",
+    "asm_sha256": "79b841a77ca62973be355c401629ecec6f761df07fb26ddd6a1f07b4e0e31d79"
+  },
+  "aarch64-negative-capability_exhaustion": {
+    "command": [
+      "cargo",
+      "rustc",
+      "--locked",
+      "--offline",
+      "-p",
+      "hm-core",
+      "--release",
+      "--target",
+      "aarch64-unknown-none",
+      "--target-dir",
+      "target/group-stage-b/rw-copy-candidates-first/aarch64-negative-capability_exhaustion",
+      "--features",
+      "task-negative-tests",
+      "--",
+      "--emit=link,asm"
+    ],
+    "returncode": 0,
+    "profile_environment": {
+      "HM_TASK_NEGATIVE": "capability_exhaustion"
+    },
+    "elf": "target/group-stage-b/rw-copy-candidates-first/aarch64-negative-capability_exhaustion/aarch64-unknown-none/release/hematite",
+    "elf_sha256": "6f8ab4e90e6c6cae884e8f49281b205239ab4ff479851343a498debc1d5473d6",
+    "asm": "target/group-stage-b/rw-copy-candidates-first/aarch64-negative-capability_exhaustion/aarch64-unknown-none/release/deps/hematite-80d40ef7f553af6e.s",
+    "asm_sha256": "2ee6b7116977bfa2ee53a941026eb395dd28a291fb9044849f8884aa7dfce680"
+  },
+  "aarch64-negative-slot_exhaustion": {
+    "command": [
+      "cargo",
+      "rustc",
+      "--locked",
+      "--offline",
+      "-p",
+      "hm-core",
+      "--release",
+      "--target",
+      "aarch64-unknown-none",
+      "--target-dir",
+      "target/group-stage-b/rw-copy-candidates-first/aarch64-negative-slot_exhaustion",
+      "--features",
+      "task-negative-tests",
+      "--",
+      "--emit=link,asm"
+    ],
+    "returncode": 0,
+    "profile_environment": {
+      "HM_TASK_NEGATIVE": "slot_exhaustion"
+    },
+    "elf": "target/group-stage-b/rw-copy-candidates-first/aarch64-negative-slot_exhaustion/aarch64-unknown-none/release/hematite",
+    "elf_sha256": "993d3cd312325ceeb572f722a38f640384a3eb9da43717a086de248c579fedb8",
+    "asm": "target/group-stage-b/rw-copy-candidates-first/aarch64-negative-slot_exhaustion/aarch64-unknown-none/release/deps/hematite-80d40ef7f553af6e.s",
+    "asm_sha256": "da8ba56c255e9273c3dcffa5d02832dfae4f60f03f3d76acb2043d1d7d939b66"
+  },
+  "aarch64-negative-child_retire_ready": {
+    "command": [
+      "cargo",
+      "rustc",
+      "--locked",
+      "--offline",
+      "-p",
+      "hm-core",
+      "--release",
+      "--target",
+      "aarch64-unknown-none",
+      "--target-dir",
+      "target/group-stage-b/rw-copy-candidates-first/aarch64-negative-child_retire_ready",
+      "--features",
+      "task-negative-tests",
+      "--",
+      "--emit=link,asm"
+    ],
+    "returncode": 0,
+    "profile_environment": {
+      "HM_TASK_NEGATIVE": "child_retire_ready"
+    },
+    "elf": "target/group-stage-b/rw-copy-candidates-first/aarch64-negative-child_retire_ready/aarch64-unknown-none/release/hematite",
+    "elf_sha256": "78bcea9d14e3ad96e31629f3f5458de2ff0e2dae437a9cab7dfea83605dc8e1a",
+    "asm": "target/group-stage-b/rw-copy-candidates-first/aarch64-negative-child_retire_ready/aarch64-unknown-none/release/deps/hematite-80d40ef7f553af6e.s",
+    "asm_sha256": "2bcf9d113b067ed22aa76cddda99d64d2d6219e3d2d297e11c0453b3ea2a34ee"
+  },
+  "aarch64-negative-child_retire_waiting": {
+    "command": [
+      "cargo",
+      "rustc",
+      "--locked",
+      "--offline",
+      "-p",
+      "hm-core",
+      "--release",
+      "--target",
+      "aarch64-unknown-none",
+      "--target-dir",
+      "target/group-stage-b/rw-copy-candidates-first/aarch64-negative-child_retire_waiting",
+      "--features",
+      "task-negative-tests",
+      "--",
+      "--emit=link,asm"
+    ],
+    "returncode": 0,
+    "profile_environment": {
+      "HM_TASK_NEGATIVE": "child_retire_waiting"
+    },
+    "elf": "target/group-stage-b/rw-copy-candidates-first/aarch64-negative-child_retire_waiting/aarch64-unknown-none/release/hematite",
+    "elf_sha256": "63e006564678fb0cbd6b04d1be87169c90aa51c5934f5791bda482399d80c845",
+    "asm": "target/group-stage-b/rw-copy-candidates-first/aarch64-negative-child_retire_waiting/aarch64-unknown-none/release/deps/hematite-80d40ef7f553af6e.s",
+    "asm_sha256": "dc5a75cdb332bd0147749d35f70614daa5773a5a95b495e365d727aff1019a23"
+  }
+}

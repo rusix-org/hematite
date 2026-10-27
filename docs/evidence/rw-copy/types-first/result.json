@@ -1,0 +1,55 @@
+{
+  "passed": true,
+  "probes": {
+    "library": {
+      "passed": true,
+      "returncode": 0
+    },
+    "read_only_client": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "private_validate": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0624"
+    },
+    "private_copy": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0624"
+    },
+    "private_frames": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0616"
+    },
+    "private_tables": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0616"
+    },
+    "space_send": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "space_sync": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "escape_backing": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0616"
+    },
+    "space_outlive_pool": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0515"
+    }
+  },
+  "scope": "actual private RW-copy methods and owned-space lifetimes; positive private adapter compiled, no execution claim"
+}

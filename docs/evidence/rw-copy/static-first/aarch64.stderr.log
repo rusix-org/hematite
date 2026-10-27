@@ -1,0 +1,48 @@
+    Checking hm-core v0.1.0 (/workspace/crates/hm-core)
+error: this `if` statement can be collapsed
+   --> crates/hm-core/src/rw_copy_checks.rs:171:9
+    |
+171 | /         if let Some(address) = va.checked_add(i as u64) {
+172 | |             if space.page(address).is_some() {
+173 | |                 space
+174 | |                     .read_into(address, &mut old[i..i + 1])
+...   |
+178 | |         }
+    | |_________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#collapsible_if
+    = note: `-D clippy::collapsible-if` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::collapsible_if)]`
+help: collapse nested if block
+    |
+171 ~         if let Some(address) = va.checked_add(i as u64)
+172 ~             && space.page(address).is_some() {
+173 |                 space
+...
+176 |                 mapped[i] = true;
+177 ~             }
+    |
+
+error: this `if` statement can be collapsed
+   --> crates/hm-core/src/rw_copy_checks.rs:193:9
+    |
+193 | /         if let Some(address) = address {
+194 | |             if space.page(address).is_some() {
+195 | |                 let mut byte = [0];
+196 | |                 space.read_into(address, &mut byte).map_err(|_| ())?;
+...   |
+199 | |         }
+    | |_________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#collapsible_if
+help: collapse nested if block
+    |
+193 ~         if let Some(address) = address
+194 ~             && space.page(address).is_some() {
+195 |                 let mut byte = [0];
+196 |                 space.read_into(address, &mut byte).map_err(|_| ())?;
+197 |                 neighbors[n] = (address, byte[0], true);
+198 ~             }
+    |
+
+error: could not compile `hm-core` (bin "hematite") due to 2 previous errors

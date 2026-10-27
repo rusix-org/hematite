@@ -1,0 +1,5 @@
+{
+  "passed": true,
+  "returncode": 0,
+  "scope": "synthetic/mutation validator tests only; no guest"
+}

@@ -1,0 +1,4 @@
+{
+  "passed": false,
+  "error": "object of type 'PosixPath' has no len()"
+}

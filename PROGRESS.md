@@ -1103,3 +1103,23 @@ does not claim resumable execution or process-group support.
   Source and verification checkpoints end at `0d7b3224`; all 342 captured inputs
   from the passing full-second run match its committed blobs exactly. Evidence
   and reviews are being saved before the standing-authorized GitHub push.
+
+- 2026-10-26: Implemented the independently reviewed private RW validator/copy
+  methods and dedicated test profile. Whole-range validation and both slices
+  precede stores; returned errors preserve bytes. Exact fixture/host/privacy/
+  static/35-profile stack-order gates pass. Two initial static lint findings and
+  one pre-VM Path/bytes binder failure are preserved and corrected. Diagnostic
+  64/128 MiB guests complete24 cases/48 AT probes/41 bootstrap checks; independent
+  raw review accepts both, followed by passing fresh strict reruns. No EL0 or
+  interactive input is claimed. The existing34 kernel images remain identical.
+
+- 2026-10-26: Full RW-copy ARM/x86 regression passes364.4 seconds, all captured
+  inputs unchanged. All35 actual kernels match reviewed candidates; raw archives
+  contain121 ARM/18 x86 result records with no false verdict. Independent audit
+  accepts exact reclamation, PAR/root/source bindings and complete baseline traces.
+  Previous safe-input checkpoint41b10cac also passed GitHub Actions40449034390.
+  Preparing the verified copy checkpoint and push; UART/idle/coordinator remain
+  design-only. See docs/evidence/rw-copy.md for evidence and scope.
+  Source/test checkpoint `8f50dde0` exactly matches all 351 captured full-suite
+  inputs, with zero mismatches. Saving evidence and publishing under Aaron's
+  standing push instruction; matching CI will be checked on the pushed head.

@@ -1,0 +1,29 @@
+{
+  "kernel_sha256": "6447c09daf1d348d3058fd9f5cae21e090f81cd03ddfb7966b7bb7d2f69c96ef",
+  "memory": 64,
+  "cpus": 1,
+  "binding": {
+    "fixture_sha256": "3af1b54406bcdd052c5c00669e029ff9877982db7272a05f8f892edfd888f9fa",
+    "manifest_sha256": "5cc0dd0220b9856626a312fd008aae55e140b8c690e8c848137a5d6bd1b5643f"
+  },
+  "validator_sources": {
+    "Dockerfile": "062e8f768b9786551d71ee0a53c40c02410e73c99b089c0db7c0378b52b3593e",
+    "crates/hm-core/fixtures/rw_copy.S": "fa11e579edf0f9b4c19cd5ae7f26ca150ff34788edb5ab86544866436e930c98",
+    "crates/hm-core/fixtures/rw_copy.ld": "ed87ea020470a1360621f8aa90c7ab4ae8b957608c5bd31a337cf26b178c171f",
+    "rust-toolchain.toml": "da55df283f88667ec7a31b7392d493f574a36c88467b955d467c3a3cbe2e9fb1",
+    "tools/build_apps.py": "a0f86453259b04debca675edb08091ea8472a49f35e418e480d7bb81d99b7958",
+    "tools/build_initramfs.py": "3ef54b0f1caa7a35eb554532abffe3cc9b87fc687119600621c77903ec3cb116",
+    "tools/build_rw_copy.py": "5366141a939a94538a903a79f4f31aee44bafed994b8e360194979eb9a88bc41",
+    "tools/build_tasks.py": "cb7be14de14b48c7cb7dfd2928f3bb31a9955c6c5698d264c05e10add11bad8d",
+    "tools/check_timer_trace.py": "91e28a32a0335aacb32b499f562159f0e29e53f854364a15548162d9ba81e68f",
+    "tools/test_boot_profiles.py": "19f0f6f2e6638e5c278269cb5c2b965352e6f46b1b69ef4e1b80f7dddb205668",
+    "tools/test_kernel.py": "64b8bdb54a51bb290ef5f1e4e7a38e937308a1a26f14bb1382c42df668a18fa1",
+    "tools/test_launcher.py": "c628a060ef132f6f1e163ae410927c9f9c14edc58e58def379799b9a34485a51",
+    "tools/test_preemption_negative.py": "872b572b2b4f8311603627bd6e8cd63f00414bc18024709cb155bbd9d0016e80",
+    "tools/test_process.py": "d1d761a06ce8da518243c0d6e4453a9c2af803d34ff92c2f626b8a9bf6991d6e",
+    "tools/test_rw_copy.py": "04bcfda1a1433a3cf29915c24f188b59ec97149fca8b37eca7a2a7b4f6e5bdc7",
+    "tools/test_space.py": "21ccf19a2e2aa87fa82423ec405d45bd1211a193bf15d74d2b4c2ce06edd3390"
+  },
+  "max_log_bytes": 16777216,
+  "log_poll_seconds": 0.05
+}

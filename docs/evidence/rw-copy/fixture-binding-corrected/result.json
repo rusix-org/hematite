@@ -1,0 +1,5 @@
+{
+  "passed": true,
+  "sha256": "3af1b54406bcdd052c5c00669e029ff9877982db7272a05f8f892edfd888f9fa",
+  "scope": "parse-only six-page ELF; no execution"
+}

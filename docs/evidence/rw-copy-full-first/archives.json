@@ -1,0 +1,12 @@
+[
+  {
+    "source": "target/evidence/20261027T044033-384121717-aarch64",
+    "archive": "docs/evidence/rw-copy-full-first/20261027T044033-384121717-aarch64.tar.gz",
+    "sha256": "9eea1650cf5808301339eda07cdfb859ccb5d9d9f70193393cfb4a04788ac6f5"
+  },
+  {
+    "source": "target/evidence/20261027T044541-872473874-x86_64",
+    "archive": "docs/evidence/rw-copy-full-first/20261027T044541-872473874-x86_64.tar.gz",
+    "sha256": "b61b485f98339563bec8a4dacc740f689cf2284251a8c4ef0cb9792607ecbfb5"
+  }
+]
