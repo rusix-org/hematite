@@ -53,6 +53,9 @@ mod secondary;
 )]
 mod smp_checks;
 
+#[cfg(all(target_arch = "aarch64", feature = "rw-copy-tests"))]
+#[allow(dead_code)] // Earlier diagnostic feature routes take precedence in combined builds.
+mod rw_copy_checks;
 #[cfg(all(target_arch = "aarch64", feature = "space-tests"))]
 #[cfg_attr(
     any(
@@ -391,6 +394,25 @@ extern "C" fn boot_main(_boot_info: u64) -> ! {
             arch::exit(hm_kernel::run_tests(&mut platform));
         }
         #[cfg(all(
+            target_arch = "aarch64",
+            feature = "rw-copy-tests",
+            not(any(
+                feature = "secondary-tests",
+                feature = "process-tests",
+                feature = "startup-input-tests",
+                feature = "runtime-tests",
+                feature = "task-tests",
+                feature = "task-negative-tests",
+                feature = "space-tests"
+            ))
+        ))]
+        {
+            if !arch::rw_copy_tests(&mut platform) {
+                arch::exit(false);
+            }
+            arch::exit(hm_kernel::run_tests(&mut platform));
+        }
+        #[cfg(all(
             feature = "preemption-no-timer-test",
             not(all(
                 target_arch = "aarch64",
@@ -401,7 +423,8 @@ extern "C" fn boot_main(_boot_info: u64) -> ! {
                     feature = "startup-input-tests",
                     feature = "runtime-tests",
                     feature = "task-tests",
-                    feature = "task-negative-tests"
+                    feature = "task-negative-tests",
+                    feature = "rw-copy-tests"
                 )
             ))
         ))]
@@ -417,7 +440,8 @@ extern "C" fn boot_main(_boot_info: u64) -> ! {
                     feature = "startup-input-tests",
                     feature = "runtime-tests",
                     feature = "task-tests",
-                    feature = "task-negative-tests"
+                    feature = "task-negative-tests",
+                    feature = "rw-copy-tests"
                 )
             ))
         ))]
@@ -438,7 +462,8 @@ extern "C" fn boot_main(_boot_info: u64) -> ! {
                     feature = "startup-input-tests",
                     feature = "runtime-tests",
                     feature = "task-tests",
-                    feature = "task-negative-tests"
+                    feature = "task-negative-tests",
+                    feature = "rw-copy-tests"
                 )
             ))
         ))]
@@ -455,7 +480,8 @@ extern "C" fn boot_main(_boot_info: u64) -> ! {
                     feature = "startup-input-tests",
                     feature = "runtime-tests",
                     feature = "task-tests",
-                    feature = "task-negative-tests"
+                    feature = "task-negative-tests",
+                    feature = "rw-copy-tests"
                 )
             )
         )))]

@@ -1,0 +1,58 @@
+{
+  "version": 1,
+  "file": "rw-copy.elf",
+  "sha256": "3af1b54406bcdd052c5c00669e029ff9877982db7272a05f8f892edfd888f9fa",
+  "entry": 4294971392,
+  "pages": 6,
+  "segments": [
+    {
+      "flags": 6,
+      "offset": 4096,
+      "va": 4294967296,
+      "filesz": 4096,
+      "memsz": 4096,
+      "align": 4096
+    },
+    {
+      "flags": 5,
+      "offset": 8192,
+      "va": 4294971392,
+      "filesz": 4096,
+      "memsz": 4096,
+      "align": 4096
+    },
+    {
+      "flags": 6,
+      "offset": 12288,
+      "va": 4294975488,
+      "filesz": 8192,
+      "memsz": 8192,
+      "align": 4096
+    },
+    {
+      "flags": 4,
+      "offset": 20480,
+      "va": 4294983680,
+      "filesz": 4096,
+      "memsz": 4096,
+      "align": 4096
+    },
+    {
+      "flags": 6,
+      "offset": 24576,
+      "va": 4294991872,
+      "filesz": 4096,
+      "memsz": 4096,
+      "align": 4096
+    }
+  ],
+  "sources": {
+    "crates/hm-core/fixtures/rw_copy.S": "fa11e579edf0f9b4c19cd5ae7f26ca150ff34788edb5ab86544866436e930c98",
+    "crates/hm-core/fixtures/rw_copy.ld": "ed87ea020470a1360621f8aa90c7ab4ae8b957608c5bd31a337cf26b178c171f",
+    "tools/build_rw_copy.py": "5366141a939a94538a903a79f4f31aee44bafed994b8e360194979eb9a88bc41",
+    "tools/build_initramfs.py": "3ef54b0f1caa7a35eb554532abffe3cc9b87fc687119600621c77903ec3cb116",
+    "tools/test_process.py": "d1d761a06ce8da518243c0d6e4453a9c2af803d34ff92c2f626b8a9bf6991d6e",
+    "Dockerfile": "062e8f768b9786551d71ee0a53c40c02410e73c99b089c0db7c0378b52b3593e",
+    "rust-toolchain.toml": "da55df283f88667ec7a31b7392d493f574a36c88467b955d467c3a3cbe2e9fb1"
+  }
+}

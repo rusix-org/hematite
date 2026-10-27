@@ -40,6 +40,7 @@ test: image
 		python3 tools/test_test_smp.py; \
 		python3 tools/test_test_elf.py; \
 		python3 tools/test_test_space.py; \
+		python3 tools/test_test_rw_copy.py; \
 		python3 tools/test_test_native.py; \
 		python3 tools/test_test_interactive_wire.py; \
 		python3 tools/test_test_input_policy.py; \
@@ -72,6 +73,7 @@ test: image
 			cargo build --locked --offline -p hm-core --release --features preemption-overflow-test --target $(TARGET) --target-dir target/$(ARCH)/preemption-overflow-test; \
 			cargo build --locked --offline -p hm-core --release --features wait-all-blocked-test --target $(TARGET) --target-dir target/$(ARCH)/wait-all-blocked-test; \
 			cargo build --locked --offline -p hm-core --release --features space-tests --target $(TARGET) --target-dir target/$(ARCH)/space-test; \
+			cargo build --locked --offline -p hm-core --release --features rw-copy-tests --target $(TARGET) --target-dir target/$(ARCH)/rw-copy-test; \
 			cargo build --locked --offline -p hm-core --release --features process-tests --target $(TARGET) --target-dir target/$(ARCH)/process-test; \
 			cargo build --locked --offline -p hm-core --release --features startup-input-tests --target $(TARGET) --target-dir target/$(ARCH)/startup-input-test; \
 			cargo build --locked --offline -p hm-core --release --features runtime-tests --target $(TARGET) --target-dir target/$(ARCH)/runtime-test; \
@@ -149,6 +151,7 @@ test: image
 			cargo clippy -p hm-kernel --test initramfs --locked --offline --target x86_64-unknown-linux-gnu --target-dir target/host-initramfs -- -D warnings; \
 			python3 tools/check_initramfs.py --reference "$$evidence_dir/initramfs-fixture/gnu-reference.cpio" --output "$$evidence_dir/initramfs-host"; \
 			python3 tools/build_process_fixtures.py --output "$$evidence_dir/process-fixtures"; \
+			python3 tools/build_rw_copy.py --output "$$evidence_dir/rw-copy-fixture"; \
 			python3 tools/check_elf.py --library target/host-mutex/x86_64-unknown-linux-gnu/release/libhm_kernel.rlib --output "$$evidence_dir/elf-host"; \
 			python3 tools/check_cpu_topology.py --library target/host-mutex/x86_64-unknown-linux-gnu/release/libhm_kernel.rlib --output "$$evidence_dir/cpu-topology"; \
 			mutex_host_args=(--host-library target/host-mutex/x86_64-unknown-linux-gnu/release/libhm_kernel.rlib); \
@@ -167,6 +170,9 @@ test: image
 			python3 tools/check_space_types.py \
 				--library target/$(ARCH)/boot-test/$(TARGET)/release/libhm_kernel.rlib \
 				--target $(TARGET) --output "$$evidence_dir/space-types"; \
+			python3 tools/check_rw_copy_types.py \
+				--library target/$(ARCH)/boot-test/$(TARGET)/release/libhm_kernel.rlib \
+				--target $(TARGET) --output "$$evidence_dir/rw-copy-types"; \
 			python3 tools/check_mapping_types.py \
 				--library target/$(ARCH)/boot-test/$(TARGET)/release/libhm_kernel.rlib \
 				--target $(TARGET) --output "$$evidence_dir/mapping-types"; \
@@ -201,6 +207,7 @@ test: image
 				python3 tools/test_task_negative.py --case "$$task_case" --kernel "target/$(ARCH)/task-negative-$$task_case/$(TARGET)/release/hematite" --fixtures crates/hm-core/fixtures/task-negative-cases/manifest.json --archive crates/hm-core/fixtures/task-negative-initramfs.cpio --layout "$$evidence_dir/task-negative-layout/result.json" --output "$$evidence_dir/task-negative-$$task_case"; \
 			done; \
 			python3 tools/test_space.py --kernel target/$(ARCH)/space-test/$(TARGET)/release/hematite --output "$$evidence_dir/space"; \
+			python3 tools/test_rw_copy.py --kernel target/$(ARCH)/rw-copy-test/$(TARGET)/release/hematite --output "$$evidence_dir/rw-copy"; \
 			python3 tools/test_secondary.py --kernel target/$(ARCH)/secondary-test/$(TARGET)/release/hematite --stale-generation-kernel target/$(ARCH)/secondary-stale-test/$(TARGET)/release/hematite --cpu-off-return-kernel target/$(ARCH)/secondary-off-return-test/$(TARGET)/release/hematite --output "$$evidence_dir/secondary"; \
 			python3 tools/test_smp.py --kernel target/$(ARCH)/smp-test/$(TARGET)/release/hematite --no-peer-timer-kernel target/$(ARCH)/smp-no-peer-timer-test/$(TARGET)/release/hematite --peer-overflow-kernel target/$(ARCH)/smp-peer-overflow-test/$(TARGET)/release/hematite --all-blocked-kernel target/$(ARCH)/smp-all-blocked-test/$(TARGET)/release/hematite --output "$$evidence_dir/smp"; \
 			python3 tools/check_timer_trace.py --trace "$$evidence_dir/boot/exceptions.log" \

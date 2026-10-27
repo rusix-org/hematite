@@ -1339,3 +1339,34 @@ pub(super) fn startup_input_tests(platform: &mut BootPlatform) -> bool {
         &mut Output,
     )
 }
+
+#[cfg(feature = "rw-copy-tests")]
+#[allow(dead_code)] // Earlier diagnostic feature routes take precedence in combined builds.
+#[inline(never)]
+pub(super) fn rw_copy_tests(platform: &mut BootPlatform) -> bool {
+    struct Output;
+    impl core::fmt::Write for Output {
+        fn write_str(&mut self, text: &str) -> core::fmt::Result {
+            for byte in text.bytes() {
+                if byte == b'\n' {
+                    serial_byte(b'\r');
+                }
+                serial_byte(byte);
+            }
+            Ok(())
+        }
+    }
+    let (Some(pool), Some(topology)) = (platform.pool.as_ref(), platform.topology.as_ref()) else {
+        return false;
+    };
+    if topology.affinities() != [0] {
+        return false;
+    }
+    // SAFETY: Actual initialized BootPlatform binds the unique boot pool and
+    // immutable boot tables; this CPU0 coordinator has started no peer or DMA.
+    let factory = unsafe { super::user_space::Factory::from_boot(pool, topology) };
+    let Ok(factory) = factory else {
+        return false;
+    };
+    super::rw_copy_checks::run(pool, &factory, &mut Output)
+}
