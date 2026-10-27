@@ -1,0 +1,11 @@
+	.file	"sizes.964e42e0c56ab884-cgu.0"
+	.type	_RNvCscU4zwgT8Htw_5sizes6LAYOUT,@object
+	.section	.rodata._RNvCscU4zwgT8Htw_5sizes6LAYOUT,"aR",@progbits
+	.globl	_RNvCscU4zwgT8Htw_5sizes6LAYOUT
+	.p2align	3, 0x0
+_RNvCscU4zwgT8Htw_5sizes6LAYOUT:
+	.asciz	"h&\000\000\000\000\000\000\350\"\000\000\000\000\000\000(\000\000\000\000\000\000\000(\000\000\000\000\000\000\000\003\000\000\000\000\000\000\000\330\001\000\000\000\000\000\000\001\000\000\000\000\000\000\000\310\003\000\000\000\000\000\000\001\000\000\000\000\000\000\000\250\007\000\000\000\000\000\000\003\000\000\000\000\000\000"
+	.size	_RNvCscU4zwgT8Htw_5sizes6LAYOUT, 88
+
+	.ident	"rustc version 1.99.0 (b940084d7 2026-09-28)"
+	.section	".note.GNU-stack","",@progbits

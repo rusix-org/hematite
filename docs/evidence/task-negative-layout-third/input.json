@@ -1,0 +1,39 @@
+{
+  "sources": {
+    "/workspace/crates/hm-core/src/frames.rs": "209641c0a9b5c8eccb91fe5be19a34387c31b5af455f444d359982b35c9f035c",
+    "/workspace/crates/hm-core/src/cpu_local.rs": "d8669c95b4c4411d2fbf098bebf71a967e8c536d7393d094d1bf6840c91296db",
+    "/workspace/crates/hm-core/src/threads.rs": "5c4fdbca0121770cec6a2de7b837d5c16d73b7265b65f4f427b0701a43d2474f",
+    "/workspace/crates/hm-core/src/preempt.rs": "4e6715b51a78cd4a12c656175745c5ccaf595d75f03838c013e1f19bea8ef78b",
+    "/workspace/crates/hm-core/src/secondary.rs": "f3ed41f81214d901b7b582192fb25f5e1ac3a5c113fa7aee959cd162da750249",
+    "/workspace/crates/hm-core/src/user_space.rs": "12ec07e43e52f074c7258b34c808db15e505b139ff0d003676167a5f4289e378",
+    "/workspace/crates/hm-core/src/process.rs": "8d2494cefaa0f46034718c421a68d56919e7bd2440044ec6e14047959e8ac823",
+    "/workspace/crates/hm-core/src/process_group.rs": "e00bdc49f18e89a439b22b27a74cec6b1cf99599ec70f4777507703733677704",
+    "/workspace/crates/hm-core/src/process_layout.rs": "cc2fbc9cf8a8cfaf6b51e5dd2d11b8cefb6ec750ed0f7165986ca5ce6cd4ff6e",
+    "/workspace/crates/hm-core/src/process_task.rs": "bf0b096830a142f77a09442ddb6a0ac23e790308f20ea8afac7a5db75862c84a",
+    "/workspace/crates/hm-core/src/process_task_turn.rs": "0ed261bde6e1baf9d13bf9a8e25645161e4138231c13682dfeaa70f4dd6ca63c",
+    "/workspace/crates/hm-core/src/process-aarch64.S": "edcd946e889b68299fdaf7b6477885e54ad123212ae38977c92445ccc4d50d6a",
+    "/workspace/crates/hm-core/src/user-space-aarch64.S": "f051cd04e4d5b482a6a809cc8de1e0d952797a250462a2170c217520d80a0195",
+    "/workspace/crates/hm-core/src/threads-aarch64.S": "2d299229f9402dc2176533501d38954d2030d2f80148cdd500459e22841414d6",
+    "/workspace/crates/hm-core/src/preempt-aarch64.S": "88b49387216e91c5589d9934997fbadb4b290339fc92440e0143e1a94120ce32",
+    "/workspace/crates/hm-core/src/preempt-probe-aarch64.S": "9ecab24b7573864bc974b387807da442f4e67ae729b66e4cbda99bb1c72caa0d",
+    "/workspace/crates/hm-core/src/secondary-aarch64.S": "e65246ffe521f5e1901a6a8a7a3203a2129d9ab10165285b7be1953cc576291b",
+    "/workspace/docs/evidence/task-negative-layout-third/hm_layout.rs": "fb5b8c0d489d146d04f011f16a80cf1f98232be8871b36834623a231f8883cb1",
+    "/workspace/docs/evidence/task-negative-layout-third/sizes.rs": "b68a89d4287adf2f2917a7ae325949d22112321cf572d8a058bfa033a0f35a84",
+    "/workspace/docs/evidence/task-negative-layout-third/process_group.rs": "1ac41c91378e16fdb4bf507bcb1e5b8b917ca7b6dba21da154743f0541559a46",
+    "/workspace/target/aarch64/boot-test/aarch64-unknown-none/release/libhm_kernel.rlib": "3aa796a53344b71d4ee6b0fd6ff459cd82018dfaf1a7a17f597f450eb2a13103",
+    "/workspace/rust-toolchain.toml": "da55df283f88667ec7a31b7392d493f574a36c88467b955d467c3a3cbe2e9fb1",
+    "/workspace/Cargo.lock": "383e08e95bee956a6cc81d5ee51e1b4dca8355d92c80473228e2c1413b7b177b",
+    "/workspace/tools/check_runtime_layout.py": "1f051851c0f9d47abe949f34b50f464fd459e90909331876b8c3b82c46540e60",
+    "/workspace/crates/hm-core/src/process_task_negative.rs": "49c66b1bf42ea00d421bd73efddc8028c5723fc03292fe0b9f1a1e810ccac5ad",
+    "/workspace/crates/hm-core/fixtures/task-negative-initramfs.cpio": "cdd793fa869f53eb8b61303a5aabcb6a8f9f1420f4c96721b2883c851ec1613f",
+    "/workspace/crates/hm-core/fixtures/task-negative-cases/layout.rs": "fe7108ad11bfe16d51e2a95fc6dfc0582c88f526add864adf7eb7610f5677dfc"
+  },
+  "group_transformation": {
+    "replace_once": [
+      "#[path = \"process_task.rs\"]",
+      "#[path = \"/workspace/crates/hm-core/src/process_task.rs\"]"
+    ],
+    "append": "\npub const TASK_LAYOUT: [usize; 6] = [\n    core::mem::size_of::<Image<'static>>(),\n    core::mem::size_of::<Image<'static>>().div_ceil(4096),\n    core::mem::size_of::<task::Authority<'static>>(),\n    core::mem::size_of::<task::Authority<'static>>().div_ceil(4096),\n    core::mem::size_of::<Group<'static, 'static>>(),\n    task::METADATA_FRAMES,\n];\n"
+  },
+  "scope": "actual ARM compiler layout only; no stack or allocation execution"
+}

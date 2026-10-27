@@ -1,0 +1,799 @@
+{
+  "version": 1,
+  "layout_sha256": "fbf0e225be2ffa6958af24531d83a1aaef65e969c80a8a7e1f465a9f76569242",
+  "fixtures": {
+    "final_budget_spawn": {
+      "entry": 4294967296,
+      "pages": 4,
+      "symbols": {
+        "supervisor_message": 4294975488,
+        "worker_message": 4294975508,
+        "native_start": 4294967296,
+        "write_svc": 4294967328,
+        "spawn_svc": 4294967356,
+        "wait_svc": 4294967384,
+        "cancel_svc": 4294967412,
+        "exit_svc": 4294967440,
+        "worker_yield_four": 4294967448,
+        "worker_yield_1": 4294967476,
+        "worker_yield_2": 4294967508,
+        "worker_yield_3": 4294967540,
+        "worker_yield_4": 4294967572,
+        "worker_yields_done": 4294967584,
+        "copy_job": 4294967608,
+        "worker_copy_begin": 4294967612,
+        "overwrite_job": 4294967632,
+        "parent_overwrite": 4294967640,
+        "loop_start": 4294967660,
+        "loop_end": 4294967664,
+        "task_negative_main": 4294968860
+      },
+      "segments": [
+        {
+          "flags": 5,
+          "offset": 4096,
+          "va": 4294967296,
+          "filesz": 5724,
+          "memsz": 5724,
+          "align": 4096,
+          "start": 4294967296,
+          "end": 4294975488
+        },
+        {
+          "flags": 4,
+          "offset": 12288,
+          "va": 4294975488,
+          "filesz": 416,
+          "memsz": 416,
+          "align": 4096,
+          "start": 4294975488,
+          "end": 4294979584
+        },
+        {
+          "flags": 6,
+          "offset": 16384,
+          "va": 4294979584,
+          "filesz": 1,
+          "memsz": 1,
+          "align": 4096,
+          "start": 4294979584,
+          "end": 4294983680
+        }
+      ],
+      "file": "final_budget_spawn.elf",
+      "path": "bin/final_budget_spawn",
+      "sha256": "ecbf7738da8ef079e031c9e57cf04641b2464052eb336296f045c3336db08c81"
+    },
+    "final_budget_park": {
+      "entry": 4294967296,
+      "pages": 4,
+      "symbols": {
+        "supervisor_message": 4294975488,
+        "worker_message": 4294975508,
+        "native_start": 4294967296,
+        "write_svc": 4294967328,
+        "spawn_svc": 4294967356,
+        "wait_svc": 4294967384,
+        "cancel_svc": 4294967412,
+        "exit_svc": 4294967440,
+        "worker_yield_four": 4294967448,
+        "worker_yield_1": 4294967476,
+        "worker_yield_2": 4294967508,
+        "worker_yield_3": 4294967540,
+        "worker_yield_4": 4294967572,
+        "worker_yields_done": 4294967584,
+        "copy_job": 4294967608,
+        "worker_copy_begin": 4294967612,
+        "overwrite_job": 4294967632,
+        "parent_overwrite": 4294967640,
+        "loop_start": 4294967660,
+        "loop_end": 4294967664,
+        "task_negative_main": 4294968640
+      },
+      "segments": [
+        {
+          "flags": 5,
+          "offset": 4096,
+          "va": 4294967296,
+          "filesz": 5188,
+          "memsz": 5188,
+          "align": 4096,
+          "start": 4294967296,
+          "end": 4294975488
+        },
+        {
+          "flags": 4,
+          "offset": 12288,
+          "va": 4294975488,
+          "filesz": 392,
+          "memsz": 392,
+          "align": 4096,
+          "start": 4294975488,
+          "end": 4294979584
+        },
+        {
+          "flags": 6,
+          "offset": 16384,
+          "va": 4294979584,
+          "filesz": 1,
+          "memsz": 1,
+          "align": 4096,
+          "start": 4294979584,
+          "end": 4294983680
+        }
+      ],
+      "file": "final_budget_park.elf",
+      "path": "bin/final_budget_park",
+      "sha256": "0285a398d0510178403623aca67d925842032ec01950b3c90f9c49eb81a6e010"
+    },
+    "platform_reply": {
+      "entry": 4294967296,
+      "pages": 4,
+      "symbols": {
+        "supervisor_message": 4294975488,
+        "worker_message": 4294975508,
+        "native_start": 4294967296,
+        "write_svc": 4294967328,
+        "spawn_svc": 4294967356,
+        "wait_svc": 4294967384,
+        "cancel_svc": 4294967412,
+        "exit_svc": 4294967440,
+        "worker_yield_four": 4294967448,
+        "worker_yield_1": 4294967476,
+        "worker_yield_2": 4294967508,
+        "worker_yield_3": 4294967540,
+        "worker_yield_4": 4294967572,
+        "worker_yields_done": 4294967584,
+        "copy_job": 4294967608,
+        "worker_copy_begin": 4294967612,
+        "overwrite_job": 4294967632,
+        "parent_overwrite": 4294967640,
+        "loop_start": 4294967660,
+        "loop_end": 4294967664,
+        "task_negative_main": 4294968860
+      },
+      "segments": [
+        {
+          "flags": 5,
+          "offset": 4096,
+          "va": 4294967296,
+          "filesz": 5724,
+          "memsz": 5724,
+          "align": 4096,
+          "start": 4294967296,
+          "end": 4294975488
+        },
+        {
+          "flags": 4,
+          "offset": 12288,
+          "va": 4294975488,
+          "filesz": 416,
+          "memsz": 416,
+          "align": 4096,
+          "start": 4294975488,
+          "end": 4294979584
+        },
+        {
+          "flags": 6,
+          "offset": 16384,
+          "va": 4294979584,
+          "filesz": 1,
+          "memsz": 1,
+          "align": 4096,
+          "start": 4294979584,
+          "end": 4294983680
+        }
+      ],
+      "file": "platform_reply.elf",
+      "path": "bin/platform_reply",
+      "sha256": "4933ca7b38280aa68ba6195e6508b7cb911c79fae43d7df2a5c5c542071dfde9"
+    },
+    "platform_park": {
+      "entry": 4294967296,
+      "pages": 4,
+      "symbols": {
+        "supervisor_message": 4294975488,
+        "worker_message": 4294975508,
+        "native_start": 4294967296,
+        "write_svc": 4294967328,
+        "spawn_svc": 4294967356,
+        "wait_svc": 4294967384,
+        "cancel_svc": 4294967412,
+        "exit_svc": 4294967440,
+        "worker_yield_four": 4294967448,
+        "worker_yield_1": 4294967476,
+        "worker_yield_2": 4294967508,
+        "worker_yield_3": 4294967540,
+        "worker_yield_4": 4294967572,
+        "worker_yields_done": 4294967584,
+        "copy_job": 4294967608,
+        "worker_copy_begin": 4294967612,
+        "overwrite_job": 4294967632,
+        "parent_overwrite": 4294967640,
+        "loop_start": 4294967660,
+        "loop_end": 4294967664,
+        "task_negative_main": 4294968640
+      },
+      "segments": [
+        {
+          "flags": 5,
+          "offset": 4096,
+          "va": 4294967296,
+          "filesz": 5188,
+          "memsz": 5188,
+          "align": 4096,
+          "start": 4294967296,
+          "end": 4294975488
+        },
+        {
+          "flags": 4,
+          "offset": 12288,
+          "va": 4294975488,
+          "filesz": 392,
+          "memsz": 392,
+          "align": 4096,
+          "start": 4294975488,
+          "end": 4294979584
+        },
+        {
+          "flags": 6,
+          "offset": 16384,
+          "va": 4294979584,
+          "filesz": 1,
+          "memsz": 1,
+          "align": 4096,
+          "start": 4294979584,
+          "end": 4294983680
+        }
+      ],
+      "file": "platform_park.elf",
+      "path": "bin/platform_park",
+      "sha256": "8ed729d18ed9d424185581b3de567bfa13b8f5bfe5fbb2f112399247371e3a90"
+    },
+    "abandon_dispatch": {
+      "entry": 4294967296,
+      "pages": 4,
+      "symbols": {
+        "supervisor_message": 4294975488,
+        "worker_message": 4294975508,
+        "native_start": 4294967296,
+        "write_svc": 4294967328,
+        "spawn_svc": 4294967356,
+        "wait_svc": 4294967384,
+        "cancel_svc": 4294967412,
+        "exit_svc": 4294967440,
+        "worker_yield_four": 4294967448,
+        "worker_yield_1": 4294967476,
+        "worker_yield_2": 4294967508,
+        "worker_yield_3": 4294967540,
+        "worker_yield_4": 4294967572,
+        "worker_yields_done": 4294967584,
+        "copy_job": 4294967608,
+        "worker_copy_begin": 4294967612,
+        "overwrite_job": 4294967632,
+        "parent_overwrite": 4294967640,
+        "loop_start": 4294967660,
+        "loop_end": 4294967664,
+        "task_negative_main": 4294969048
+      },
+      "segments": [
+        {
+          "flags": 5,
+          "offset": 4096,
+          "va": 4294967296,
+          "filesz": 6000,
+          "memsz": 6000,
+          "align": 4096,
+          "start": 4294967296,
+          "end": 4294975488
+        },
+        {
+          "flags": 4,
+          "offset": 12288,
+          "va": 4294975488,
+          "filesz": 416,
+          "memsz": 416,
+          "align": 4096,
+          "start": 4294975488,
+          "end": 4294979584
+        },
+        {
+          "flags": 6,
+          "offset": 16384,
+          "va": 4294979584,
+          "filesz": 1,
+          "memsz": 1,
+          "align": 4096,
+          "start": 4294979584,
+          "end": 4294983680
+        }
+      ],
+      "file": "abandon_dispatch.elf",
+      "path": "bin/abandon_dispatch",
+      "sha256": "9e43c05413756571588d558779d24273554aabe5677f81dd02fd92634c3bd86e"
+    },
+    "wake_install_failure": {
+      "entry": 4294967296,
+      "pages": 4,
+      "symbols": {
+        "supervisor_message": 4294975488,
+        "worker_message": 4294975508,
+        "native_start": 4294967296,
+        "write_svc": 4294967328,
+        "spawn_svc": 4294967356,
+        "wait_svc": 4294967384,
+        "cancel_svc": 4294967412,
+        "exit_svc": 4294967440,
+        "worker_yield_four": 4294967448,
+        "worker_yield_1": 4294967476,
+        "worker_yield_2": 4294967508,
+        "worker_yield_3": 4294967540,
+        "worker_yield_4": 4294967572,
+        "worker_yields_done": 4294967584,
+        "copy_job": 4294967608,
+        "worker_copy_begin": 4294967612,
+        "overwrite_job": 4294967632,
+        "parent_overwrite": 4294967640,
+        "loop_start": 4294967660,
+        "loop_end": 4294967664,
+        "task_negative_main": 4294968924
+      },
+      "segments": [
+        {
+          "flags": 5,
+          "offset": 4096,
+          "va": 4294967296,
+          "filesz": 5788,
+          "memsz": 5788,
+          "align": 4096,
+          "start": 4294967296,
+          "end": 4294975488
+        },
+        {
+          "flags": 4,
+          "offset": 12288,
+          "va": 4294975488,
+          "filesz": 416,
+          "memsz": 416,
+          "align": 4096,
+          "start": 4294975488,
+          "end": 4294979584
+        },
+        {
+          "flags": 6,
+          "offset": 16384,
+          "va": 4294979584,
+          "filesz": 1,
+          "memsz": 1,
+          "align": 4096,
+          "start": 4294979584,
+          "end": 4294983680
+        }
+      ],
+      "file": "wake_install_failure.elf",
+      "path": "bin/wake_install_failure",
+      "sha256": "ab9234deb9c7ac7767a4d14d5ef5f4d7929e18590972903f5cba415b03618c57"
+    },
+    "capability_exhaustion": {
+      "entry": 4294967296,
+      "pages": 4,
+      "symbols": {
+        "supervisor_message": 4294975488,
+        "worker_message": 4294975508,
+        "native_start": 4294967296,
+        "write_svc": 4294967328,
+        "spawn_svc": 4294967356,
+        "wait_svc": 4294967384,
+        "cancel_svc": 4294967412,
+        "exit_svc": 4294967440,
+        "worker_yield_four": 4294967448,
+        "worker_yield_1": 4294967476,
+        "worker_yield_2": 4294967508,
+        "worker_yield_3": 4294967540,
+        "worker_yield_4": 4294967572,
+        "worker_yields_done": 4294967584,
+        "copy_job": 4294967608,
+        "worker_copy_begin": 4294967612,
+        "overwrite_job": 4294967632,
+        "parent_overwrite": 4294967640,
+        "loop_start": 4294967660,
+        "loop_end": 4294967664,
+        "task_negative_main": 4294968916
+      },
+      "segments": [
+        {
+          "flags": 5,
+          "offset": 4096,
+          "va": 4294967296,
+          "filesz": 5784,
+          "memsz": 5784,
+          "align": 4096,
+          "start": 4294967296,
+          "end": 4294975488
+        },
+        {
+          "flags": 4,
+          "offset": 12288,
+          "va": 4294975488,
+          "filesz": 416,
+          "memsz": 416,
+          "align": 4096,
+          "start": 4294975488,
+          "end": 4294979584
+        },
+        {
+          "flags": 6,
+          "offset": 16384,
+          "va": 4294979584,
+          "filesz": 1,
+          "memsz": 1,
+          "align": 4096,
+          "start": 4294979584,
+          "end": 4294983680
+        }
+      ],
+      "file": "capability_exhaustion.elf",
+      "path": "bin/capability_exhaustion",
+      "sha256": "abc5b66118536bcc2a9ead8977ff1e8b795af39789ee2cbf0f4883a07bd4e9ed"
+    },
+    "slot_exhaustion": {
+      "entry": 4294967296,
+      "pages": 4,
+      "symbols": {
+        "supervisor_message": 4294975488,
+        "worker_message": 4294975508,
+        "native_start": 4294967296,
+        "write_svc": 4294967328,
+        "spawn_svc": 4294967356,
+        "wait_svc": 4294967384,
+        "cancel_svc": 4294967412,
+        "exit_svc": 4294967440,
+        "worker_yield_four": 4294967448,
+        "worker_yield_1": 4294967476,
+        "worker_yield_2": 4294967508,
+        "worker_yield_3": 4294967540,
+        "worker_yield_4": 4294967572,
+        "worker_yields_done": 4294967584,
+        "copy_job": 4294967608,
+        "worker_copy_begin": 4294967612,
+        "overwrite_job": 4294967632,
+        "parent_overwrite": 4294967640,
+        "loop_start": 4294967660,
+        "loop_end": 4294967664,
+        "task_negative_main": 4294969344
+      },
+      "segments": [
+        {
+          "flags": 5,
+          "offset": 4096,
+          "va": 4294967296,
+          "filesz": 6212,
+          "memsz": 6212,
+          "align": 4096,
+          "start": 4294967296,
+          "end": 4294975488
+        },
+        {
+          "flags": 4,
+          "offset": 12288,
+          "va": 4294975488,
+          "filesz": 416,
+          "memsz": 416,
+          "align": 4096,
+          "start": 4294975488,
+          "end": 4294979584
+        },
+        {
+          "flags": 6,
+          "offset": 16384,
+          "va": 4294979584,
+          "filesz": 1,
+          "memsz": 1,
+          "align": 4096,
+          "start": 4294979584,
+          "end": 4294983680
+        }
+      ],
+      "file": "slot_exhaustion.elf",
+      "path": "bin/slot_exhaustion",
+      "sha256": "9996ba01ce0da48160eac9d5626ca07dbac9cb9afdeeb887dd8ce879636e8f60"
+    },
+    "child_retire_ready": {
+      "entry": 4294967296,
+      "pages": 4,
+      "symbols": {
+        "supervisor_message": 4294975488,
+        "worker_message": 4294975508,
+        "native_start": 4294967296,
+        "write_svc": 4294967328,
+        "spawn_svc": 4294967356,
+        "wait_svc": 4294967384,
+        "cancel_svc": 4294967412,
+        "exit_svc": 4294967440,
+        "worker_yield_four": 4294967448,
+        "worker_yield_1": 4294967476,
+        "worker_yield_2": 4294967508,
+        "worker_yield_3": 4294967540,
+        "worker_yield_4": 4294967572,
+        "worker_yields_done": 4294967584,
+        "copy_job": 4294967608,
+        "worker_copy_begin": 4294967612,
+        "overwrite_job": 4294967632,
+        "parent_overwrite": 4294967640,
+        "loop_start": 4294967660,
+        "loop_end": 4294967664,
+        "task_negative_main": 4294968628
+      },
+      "segments": [
+        {
+          "flags": 5,
+          "offset": 4096,
+          "va": 4294967296,
+          "filesz": 5180,
+          "memsz": 5180,
+          "align": 4096,
+          "start": 4294967296,
+          "end": 4294975488
+        },
+        {
+          "flags": 4,
+          "offset": 12288,
+          "va": 4294975488,
+          "filesz": 392,
+          "memsz": 392,
+          "align": 4096,
+          "start": 4294975488,
+          "end": 4294979584
+        },
+        {
+          "flags": 6,
+          "offset": 16384,
+          "va": 4294979584,
+          "filesz": 1,
+          "memsz": 1,
+          "align": 4096,
+          "start": 4294979584,
+          "end": 4294983680
+        }
+      ],
+      "file": "child_retire_ready.elf",
+      "path": "bin/child_retire_ready",
+      "sha256": "e3379dcdc1a015c59eda47e6ca45ce3d687a032c398b8bbd34a172ef09057d3d"
+    },
+    "child_retire_waiting": {
+      "entry": 4294967296,
+      "pages": 4,
+      "symbols": {
+        "supervisor_message": 4294975488,
+        "worker_message": 4294975508,
+        "native_start": 4294967296,
+        "write_svc": 4294967328,
+        "spawn_svc": 4294967356,
+        "wait_svc": 4294967384,
+        "cancel_svc": 4294967412,
+        "exit_svc": 4294967440,
+        "worker_yield_four": 4294967448,
+        "worker_yield_1": 4294967476,
+        "worker_yield_2": 4294967508,
+        "worker_yield_3": 4294967540,
+        "worker_yield_4": 4294967572,
+        "worker_yields_done": 4294967584,
+        "copy_job": 4294967608,
+        "worker_copy_begin": 4294967612,
+        "overwrite_job": 4294967632,
+        "parent_overwrite": 4294967640,
+        "loop_start": 4294967660,
+        "loop_end": 4294967664,
+        "task_negative_main": 4294968640
+      },
+      "segments": [
+        {
+          "flags": 5,
+          "offset": 4096,
+          "va": 4294967296,
+          "filesz": 5188,
+          "memsz": 5188,
+          "align": 4096,
+          "start": 4294967296,
+          "end": 4294975488
+        },
+        {
+          "flags": 4,
+          "offset": 12288,
+          "va": 4294975488,
+          "filesz": 392,
+          "memsz": 392,
+          "align": 4096,
+          "start": 4294975488,
+          "end": 4294979584
+        },
+        {
+          "flags": 6,
+          "offset": 16384,
+          "va": 4294979584,
+          "filesz": 1,
+          "memsz": 1,
+          "align": 4096,
+          "start": 4294979584,
+          "end": 4294983680
+        }
+      ],
+      "file": "child_retire_waiting.elf",
+      "path": "bin/child_retire_waiting",
+      "sha256": "ac5f885c524e20e9539f6a1b42c276537f18bd30ba906e7888eee536257c2304"
+    },
+    "worker": {
+      "entry": 4294967296,
+      "pages": 3,
+      "symbols": {
+        "supervisor_message": 4294971392,
+        "worker_message": 4294971412,
+        "native_start": 4294967296,
+        "write_svc": 4294967328,
+        "spawn_svc": 4294967356,
+        "wait_svc": 4294967384,
+        "cancel_svc": 4294967412,
+        "exit_svc": 4294967440,
+        "worker_yield_four": 4294967448,
+        "worker_yield_1": 4294967476,
+        "worker_yield_2": 4294967508,
+        "worker_yield_3": 4294967540,
+        "worker_yield_4": 4294967572,
+        "worker_yields_done": 4294967584,
+        "copy_job": 4294967608,
+        "worker_copy_begin": 4294967612,
+        "overwrite_job": 4294967632,
+        "parent_overwrite": 4294967640,
+        "loop_start": 4294967660,
+        "loop_end": 4294967664,
+        "task_negative_main": 4294967884
+      },
+      "segments": [
+        {
+          "flags": 5,
+          "offset": 4096,
+          "va": 4294967296,
+          "filesz": 988,
+          "memsz": 988,
+          "align": 4096,
+          "start": 4294967296,
+          "end": 4294971392
+        },
+        {
+          "flags": 4,
+          "offset": 8192,
+          "va": 4294971392,
+          "filesz": 36,
+          "memsz": 36,
+          "align": 4096,
+          "start": 4294971392,
+          "end": 4294975488
+        },
+        {
+          "flags": 6,
+          "offset": 12288,
+          "va": 4294975488,
+          "filesz": 1,
+          "memsz": 1,
+          "align": 4096,
+          "start": 4294975488,
+          "end": 4294979584
+        }
+      ],
+      "file": "worker.elf",
+      "path": "bin/worker",
+      "sha256": "0f86adb987d3936064ba40a8afe4b1eda1190b83f132fe6389e25952286e1298"
+    },
+    "legacy_hello": {
+      "entry": 4294967296,
+      "pages": 3,
+      "symbols": {
+        "message": 4294971392,
+        "native_start": 4294967296,
+        "write_svc": 4294967328,
+        "newline_svc": 4294967356,
+        "exit_svc": 4294967384,
+        "loop_start": 4294967412,
+        "fault": 4294967404,
+        "loop_end": 4294967416
+      },
+      "segments": [
+        {
+          "flags": 5,
+          "offset": 4096,
+          "va": 4294967296,
+          "filesz": 320,
+          "memsz": 320,
+          "align": 4096,
+          "start": 4294967296,
+          "end": 4294971392
+        },
+        {
+          "flags": 4,
+          "offset": 8192,
+          "va": 4294971392,
+          "filesz": 16,
+          "memsz": 16,
+          "align": 4096,
+          "start": 4294971392,
+          "end": 4294975488
+        },
+        {
+          "flags": 6,
+          "offset": 12288,
+          "va": 4294975488,
+          "filesz": 1,
+          "memsz": 1,
+          "align": 4096,
+          "start": 4294975488,
+          "end": 4294979584
+        }
+      ],
+      "file": "legacy_hello.elf",
+      "path": "bin/legacy_hello",
+      "sha256": "9d7008184000b47c3310c5d93392b871ad7fb60c4c0d0a0d47726393ffa1cde1"
+    },
+    "loop": {
+      "entry": 4294967296,
+      "pages": 3,
+      "symbols": {
+        "supervisor_message": 4294971392,
+        "worker_message": 4294971412,
+        "native_start": 4294967296,
+        "write_svc": 4294967328,
+        "spawn_svc": 4294967356,
+        "wait_svc": 4294967384,
+        "cancel_svc": 4294967412,
+        "exit_svc": 4294967440,
+        "worker_yield_four": 4294967448,
+        "worker_yield_1": 4294967476,
+        "worker_yield_2": 4294967508,
+        "worker_yield_3": 4294967540,
+        "worker_yield_4": 4294967572,
+        "worker_yields_done": 4294967584,
+        "copy_job": 4294967608,
+        "worker_copy_begin": 4294967612,
+        "overwrite_job": 4294967632,
+        "parent_overwrite": 4294967640,
+        "loop_start": 4294967660,
+        "loop_end": 4294967664,
+        "task_negative_main": 4294967700
+      },
+      "segments": [
+        {
+          "flags": 5,
+          "offset": 4096,
+          "va": 4294967296,
+          "filesz": 780,
+          "memsz": 780,
+          "align": 4096,
+          "start": 4294967296,
+          "end": 4294971392
+        },
+        {
+          "flags": 4,
+          "offset": 8192,
+          "va": 4294971392,
+          "filesz": 36,
+          "memsz": 36,
+          "align": 4096,
+          "start": 4294971392,
+          "end": 4294975488
+        },
+        {
+          "flags": 6,
+          "offset": 12288,
+          "va": 4294975488,
+          "filesz": 1,
+          "memsz": 1,
+          "align": 4096,
+          "start": 4294975488,
+          "end": 4294979584
+        }
+      ],
+      "file": "loop.elf",
+      "path": "demo/loop",
+      "sha256": "a162eefdf57257c2e3c24383b69ef0760d36e5b939178a1b54090abca478c201"
+    }
+  }
+}

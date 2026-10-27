@@ -1,0 +1,21 @@
+{
+  "passed": true,
+  "fields": {
+    "process_bytes": 9832,
+    "space_bytes": 8936,
+    "box_bytes": 40,
+    "optional_box_bytes": 40,
+    "box_backing_pages": 3
+  },
+  "task_fields": {
+    "image_bytes": 472,
+    "image_pages": 1,
+    "authority_bytes": 928,
+    "authority_pages": 1,
+    "group_bytes": 1960,
+    "metadata_pages": 3
+  },
+  "assembly_sha256": "382442f6aac8e08573daa23c218b208bc37dfd94b9bc1fc1689eb926e60c9c10",
+  "bytes_sha256": "27b0e790fbfc03c9961488093463d657b817e174b429e62fee184f188194e68e",
+  "scope": "current ARM compiler layout constants only; not stack usage or runtime allocation proof"
+}

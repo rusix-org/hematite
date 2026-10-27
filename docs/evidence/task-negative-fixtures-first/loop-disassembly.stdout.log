@@ -1,0 +1,252 @@
+
+/workspace/docs/evidence/task-negative-fixtures-first/loop.elf:     file format elf64-littleaarch64
+
+
+Disassembly of section .text:
+
+0000000100000000 <native_start>:
+   100000000:	d2800ca1 	mov	x1, #0x65                  	// #101
+   100000004:	94000064 	bl	100000194 <task_negative_main>
+   100000008:	14000000 	b	100000008 <native_start+0x8>
+
+000000010000000c <call_write>:
+   10000000c:	aa0203e3 	mov	x3, x2
+   100000010:	aa0103e2 	mov	x2, x1
+   100000014:	aa0003e1 	mov	x1, x0
+   100000018:	d2800020 	mov	x0, #0x1                   	// #1
+   10000001c:	d2800028 	mov	x8, #0x1                   	// #1
+
+0000000100000020 <write_svc>:
+   100000020:	d4000001 	svc	#0x0
+   100000024:	d65f03c0 	ret
+
+0000000100000028 <call_spawn>:
+   100000028:	aa0203e3 	mov	x3, x2
+   10000002c:	aa0103e2 	mov	x2, x1
+   100000030:	aa0003e1 	mov	x1, x0
+   100000034:	d2800020 	mov	x0, #0x1                   	// #1
+   100000038:	d2800068 	mov	x8, #0x3                   	// #3
+
+000000010000003c <spawn_svc>:
+   10000003c:	d4000001 	svc	#0x0
+   100000040:	d65f03c0 	ret
+
+0000000100000044 <call_wait>:
+   100000044:	aa0103e2 	mov	x2, x1
+   100000048:	aa0003e1 	mov	x1, x0
+   10000004c:	d2800003 	mov	x3, #0x0                   	// #0
+   100000050:	d2800020 	mov	x0, #0x1                   	// #1
+   100000054:	d2800088 	mov	x8, #0x4                   	// #4
+
+0000000100000058 <wait_svc>:
+   100000058:	d4000001 	svc	#0x0
+   10000005c:	d65f03c0 	ret
+
+0000000100000060 <call_cancel>:
+   100000060:	aa0003e1 	mov	x1, x0
+   100000064:	d2800002 	mov	x2, #0x0                   	// #0
+   100000068:	d2800003 	mov	x3, #0x0                   	// #0
+   10000006c:	d2800020 	mov	x0, #0x1                   	// #1
+   100000070:	d28000a8 	mov	x8, #0x5                   	// #5
+
+0000000100000074 <cancel_svc>:
+   100000074:	d4000001 	svc	#0x0
+   100000078:	d65f03c0 	ret
+
+000000010000007c <call_exit>:
+   10000007c:	aa0003e1 	mov	x1, x0
+   100000080:	d2800002 	mov	x2, #0x0                   	// #0
+   100000084:	d2800003 	mov	x3, #0x0                   	// #0
+   100000088:	d2800020 	mov	x0, #0x1                   	// #1
+   10000008c:	d2800048 	mov	x8, #0x2                   	// #2
+
+0000000100000090 <exit_svc>:
+   100000090:	d4000001 	svc	#0x0
+   100000094:	d65f03c0 	ret
+
+0000000100000098 <worker_yield_four>:
+   100000098:	a9bf7bf3 	stp	x19, x30, [sp, #-16]!
+   10000009c:	aa0003f3 	mov	x19, x0
+   1000000a0:	d2800020 	mov	x0, #0x1                   	// #1
+   1000000a4:	aa1303e1 	mov	x1, x19
+   1000000a8:	92800002 	mov	x2, #0xffffffffffffffff    	// #-1
+   1000000ac:	d2800003 	mov	x3, #0x0                   	// #0
+   1000000b0:	d2800028 	mov	x8, #0x1                   	// #1
+
+00000001000000b4 <worker_yield_1>:
+   1000000b4:	d4000001 	svc	#0x0
+   1000000b8:	b50003a0 	cbnz	x0, 10000012c <worker_yields_done+0xc>
+   1000000bc:	b5000381 	cbnz	x1, 10000012c <worker_yields_done+0xc>
+   1000000c0:	d2800020 	mov	x0, #0x1                   	// #1
+   1000000c4:	aa1303e1 	mov	x1, x19
+   1000000c8:	92800002 	mov	x2, #0xffffffffffffffff    	// #-1
+   1000000cc:	d2800003 	mov	x3, #0x0                   	// #0
+   1000000d0:	d2800028 	mov	x8, #0x1                   	// #1
+
+00000001000000d4 <worker_yield_2>:
+   1000000d4:	d4000001 	svc	#0x0
+   1000000d8:	b50002a0 	cbnz	x0, 10000012c <worker_yields_done+0xc>
+   1000000dc:	b5000281 	cbnz	x1, 10000012c <worker_yields_done+0xc>
+   1000000e0:	d2800020 	mov	x0, #0x1                   	// #1
+   1000000e4:	aa1303e1 	mov	x1, x19
+   1000000e8:	92800002 	mov	x2, #0xffffffffffffffff    	// #-1
+   1000000ec:	d2800003 	mov	x3, #0x0                   	// #0
+   1000000f0:	d2800028 	mov	x8, #0x1                   	// #1
+
+00000001000000f4 <worker_yield_3>:
+   1000000f4:	d4000001 	svc	#0x0
+   1000000f8:	b50001a0 	cbnz	x0, 10000012c <worker_yields_done+0xc>
+   1000000fc:	b5000181 	cbnz	x1, 10000012c <worker_yields_done+0xc>
+   100000100:	d2800020 	mov	x0, #0x1                   	// #1
+   100000104:	aa1303e1 	mov	x1, x19
+   100000108:	92800002 	mov	x2, #0xffffffffffffffff    	// #-1
+   10000010c:	d2800003 	mov	x3, #0x0                   	// #0
+   100000110:	d2800028 	mov	x8, #0x1                   	// #1
+
+0000000100000114 <worker_yield_4>:
+   100000114:	d4000001 	svc	#0x0
+   100000118:	b50000a0 	cbnz	x0, 10000012c <worker_yields_done+0xc>
+   10000011c:	b5000081 	cbnz	x1, 10000012c <worker_yields_done+0xc>
+
+0000000100000120 <worker_yields_done>:
+   100000120:	d2800020 	mov	x0, #0x1                   	// #1
+   100000124:	a8c17bf3 	ldp	x19, x30, [sp], #16
+   100000128:	d65f03c0 	ret
+   10000012c:	d2800000 	mov	x0, #0x0                   	// #0
+   100000130:	a8c17bf3 	ldp	x19, x30, [sp], #16
+   100000134:	d65f03c0 	ret
+
+0000000100000138 <copy_job>:
+   100000138:	b40000a2 	cbz	x2, 10000014c <worker_copy_begin+0x10>
+
+000000010000013c <worker_copy_begin>:
+   10000013c:	38401403 	ldrb	w3, [x0], #1
+   100000140:	38001423 	strb	w3, [x1], #1
+   100000144:	f1000442 	subs	x2, x2, #0x1
+   100000148:	54ffffa1 	b.ne	10000013c <worker_copy_begin>  // b.any
+   10000014c:	d65f03c0 	ret
+
+0000000100000150 <overwrite_job>:
+   100000150:	b40000a1 	cbz	x1, 100000164 <parent_overwrite+0xc>
+   100000154:	528014a2 	mov	w2, #0xa5                  	// #165
+
+0000000100000158 <parent_overwrite>:
+   100000158:	38001402 	strb	w2, [x0], #1
+   10000015c:	f1000421 	subs	x1, x1, #0x1
+   100000160:	54ffffc1 	b.ne	100000158 <parent_overwrite>  // b.any
+   100000164:	d65f03c0 	ret
+
+0000000100000168 <run_loop>:
+   100000168:	d51b421f 	msr	nzcv, xzr
+
+000000010000016c <loop_start>:
+   10000016c:	14000000 	b	10000016c <loop_start>
+
+0000000100000170 <_RNvCslDsrDUR6uVx_19task_negative_cases6demand>:
+   100000170:	36000040 	tbz	w0, #0, 100000178 <_RNvCslDsrDUR6uVx_19task_negative_cases6demand+0x8>
+   100000174:	d65f03c0 	ret
+   100000178:	f81f0ffe 	str	x30, [sp, #-16]!
+   10000017c:	52801920 	mov	w0, #0xc9                  	// #201
+   100000180:	94000001 	bl	100000184 <_RNvCslDsrDUR6uVx_19task_negative_cases6finish>
+
+0000000100000184 <_RNvCslDsrDUR6uVx_19task_negative_cases6finish>:
+   100000184:	f81f0ffe 	str	x30, [sp, #-16]!
+   100000188:	97ffffbd 	bl	10000007c <call_exit>
+   10000018c:	d5033fdf 	isb
+   100000190:	17ffffff 	b	10000018c <_RNvCslDsrDUR6uVx_19task_negative_cases6finish+0x8>
+
+0000000100000194 <task_negative_main>:
+   100000194:	f81f0ffe 	str	x30, [sp, #-16]!
+   100000198:	d2800809 	mov	x9, #0x40                  	// #64
+   10000019c:	f101943f 	cmp	x1, #0x65
+   1000001a0:	f2a00209 	movk	x9, #0x10, lsl #16
+   1000001a4:	f2c00029 	movk	x9, #0x1, lsl #32
+   1000001a8:	d1010128 	sub	x8, x9, #0x40
+   1000001ac:	fa480000 	ccmp	x0, x8, #0x0, eq	// eq = none
+   1000001b0:	54000521 	b.ne	100000254 <task_negative_main+0xc0>  // b.any
+   1000001b4:	d288a90a 	mov	x10, #0x4548                	// #17736
+   1000001b8:	f85c0128 	ldur	x8, [x9, #-64]
+   1000001bc:	f2a829aa 	movk	x10, #0x414d, lsl #16
+   1000001c0:	f2c92a8a 	movk	x10, #0x4954, lsl #32
+   1000001c4:	f2e8aa8a 	movk	x10, #0x4554, lsl #48
+   1000001c8:	eb0a011f 	cmp	x8, x10
+   1000001cc:	54000441 	b.ne	100000254 <task_negative_main+0xc0>  // b.any
+   1000001d0:	b85c8128 	ldur	w8, [x9, #-56]
+   1000001d4:	7100051f 	cmp	w8, #0x1
+   1000001d8:	540003e1 	b.ne	100000254 <task_negative_main+0xc0>  // b.any
+   1000001dc:	b85cc128 	ldur	w8, [x9, #-52]
+   1000001e0:	7101011f 	cmp	w8, #0x40
+   1000001e4:	54000381 	b.ne	100000254 <task_negative_main+0xc0>  // b.any
+   1000001e8:	a97d212a 	ldp	x10, x8, [x9, #-48]
+   1000001ec:	d360fd0b 	lsr	x11, x8, #32
+   1000001f0:	f100017f 	cmp	x11, #0x0
+   1000001f4:	7a411900 	ccmp	w8, #0x1, #0x0, ne	// ne = any
+   1000001f8:	fa410940 	ccmp	x10, #0x1, #0x0, eq	// eq = none
+   1000001fc:	540002c1 	b.ne	100000254 <task_negative_main+0xc0>  // b.any
+   100000200:	f85e0128 	ldur	x8, [x9, #-32]
+   100000204:	f104011f 	cmp	x8, #0x100
+   100000208:	54000261 	b.ne	100000254 <task_negative_main+0xc0>  // b.any
+   10000020c:	f85e8128 	ldur	x8, [x9, #-24]
+   100000210:	f140051f 	cmp	x8, #0x1, lsl #12
+   100000214:	54000201 	b.ne	100000254 <task_negative_main+0xc0>  // b.any
+   100000218:	f85f0128 	ldur	x8, [x9, #-16]
+   10000021c:	f101011f 	cmp	x8, #0x40
+   100000220:	540001a1 	b.ne	100000254 <task_negative_main+0xc0>  // b.any
+   100000224:	f85f8128 	ldur	x8, [x9, #-8]
+   100000228:	b5000168 	cbnz	x8, 100000254 <task_negative_main+0xc0>
+   10000022c:	aa1f03ea 	mov	x10, xzr
+   100000230:	386a6928 	ldrb	w8, [x9, x10]
+   100000234:	35000148 	cbnz	w8, 10000025c <task_negative_main+0xc8>
+   100000238:	9100054a 	add	x10, x10, #0x1
+   10000023c:	f13f015f 	cmp	x10, #0xfc0
+   100000240:	54ffff81 	b.ne	100000230 <task_negative_main+0x9c>  // b.any
+   100000244:	7100011f 	cmp	w8, #0x0
+   100000248:	1a9f17e0 	cset	w0, eq	// eq = none
+   10000024c:	97ffffc9 	bl	100000170 <_RNvCslDsrDUR6uVx_19task_negative_cases6demand>
+   100000250:	97ffffc6 	bl	100000168 <run_loop>
+   100000254:	52801920 	mov	w0, #0xc9                  	// #201
+   100000258:	97ffffcb 	bl	100000184 <_RNvCslDsrDUR6uVx_19task_negative_cases6finish>
+   10000025c:	d289a90b 	mov	x11, #0x4d48                	// #19784
+   100000260:	f940012a 	ldr	x10, [x9]
+   100000264:	f2a9c92b 	movk	x11, #0x4e49, lsl #16
+   100000268:	f2caaa0b 	movk	x11, #0x5550, lsl #32
+   10000026c:	f2e00a8b 	movk	x11, #0x54, lsl #48
+   100000270:	eb0b015f 	cmp	x10, x11
+   100000274:	54000181 	b.ne	1000002a4 <task_negative_main+0x110>  // b.any
+   100000278:	b940092a 	ldr	w10, [x9, #8]
+   10000027c:	7100055f 	cmp	w10, #0x1
+   100000280:	54000121 	b.ne	1000002a4 <task_negative_main+0x110>  // b.any
+   100000284:	b9400d2a 	ldr	w10, [x9, #12]
+   100000288:	7100615f 	cmp	w10, #0x18
+   10000028c:	540000c1 	b.ne	1000002a4 <task_negative_main+0x110>  // b.any
+   100000290:	b940152a 	ldr	w10, [x9, #20]
+   100000294:	3500008a 	cbnz	w10, 1000002a4 <task_negative_main+0x110>
+   100000298:	b940112b 	ldr	w11, [x9, #16]
+   10000029c:	7104017f 	cmp	w11, #0x100
+   1000002a0:	54000069 	b.ls	1000002ac <task_negative_main+0x118>  // b.plast
+   1000002a4:	52801960 	mov	w0, #0xcb                  	// #203
+   1000002a8:	97ffffb7 	bl	100000184 <_RNvCslDsrDUR6uVx_19task_negative_cases6finish>
+   1000002ac:	5281f50a 	mov	w10, #0xfa8                 	// #4008
+   1000002b0:	8b0b0129 	add	x9, x9, x11
+   1000002b4:	cb0b014a 	sub	x10, x10, x11
+   1000002b8:	9100612b 	add	x11, x9, #0x18
+   1000002bc:	f240054c 	ands	x12, x10, #0x3
+   1000002c0:	aa0b03e9 	mov	x9, x11
+   1000002c4:	540000a0 	b.eq	1000002d8 <task_negative_main+0x144>  // b.none
+   1000002c8:	3840152d 	ldrb	w13, [x9], #1
+   1000002cc:	35fffecd 	cbnz	w13, 1000002a4 <task_negative_main+0x110>
+   1000002d0:	f100058c 	subs	x12, x12, #0x1
+   1000002d4:	54ffffa1 	b.ne	1000002c8 <task_negative_main+0x134>  // b.any
+   1000002d8:	8b0a016a 	add	x10, x11, x10
+   1000002dc:	3940012b 	ldrb	w11, [x9]
+   1000002e0:	35fffe2b 	cbnz	w11, 1000002a4 <task_negative_main+0x110>
+   1000002e4:	3940052b 	ldrb	w11, [x9, #1]
+   1000002e8:	35fffdeb 	cbnz	w11, 1000002a4 <task_negative_main+0x110>
+   1000002ec:	3940092b 	ldrb	w11, [x9, #2]
+   1000002f0:	35fffdab 	cbnz	w11, 1000002a4 <task_negative_main+0x110>
+   1000002f4:	39400d2b 	ldrb	w11, [x9, #3]
+   1000002f8:	35fffd6b 	cbnz	w11, 1000002a4 <task_negative_main+0x110>
+   1000002fc:	91001129 	add	x9, x9, #0x4
+   100000300:	eb0a013f 	cmp	x9, x10
+   100000304:	54fffec1 	b.ne	1000002dc <task_negative_main+0x148>  // b.any
+   100000308:	17ffffcf 	b	100000244 <task_negative_main+0xb0>

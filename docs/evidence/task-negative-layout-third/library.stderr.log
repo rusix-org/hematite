@@ -1,0 +1,1774 @@
+warning: static `CLAIMED` is never used
+  --> /workspace/crates/hm-core/src/frames.rs:10:8
+   |
+10 | static CLAIMED: AtomicBool = AtomicBool::new(false);
+   |        ^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: fields `leak_checked` and `heap_leak_checked` are never read
+  --> /workspace/crates/hm-core/src/frames.rs:20:5
+   |
+18 | struct State {
+   |        ----- fields in this struct
+19 |     used: [u64; WORDS],
+20 |     leak_checked: bool,
+   |     ^^^^^^^^^^^^
+21 |     heap_leak_checked: bool,
+   |     ^^^^^^^^^^^^^^^^^
+
+warning: function `irq_state` is never used
+  --> /workspace/crates/hm-core/src/frames.rs:75:15
+   |
+75 | pub(super) fn irq_state() -> u64 {
+   |               ^^^^^^^^^
+
+warning: multiple associated items are never used
+   --> /workspace/crates/hm-core/src/frames.rs:147:26
+    |
+125 | impl Pool {
+    | --------- associated items in this implementation
+...
+147 |     pub(crate) unsafe fn from_boot(plan: Plan) -> Result<Self, FrameError> {
+    |                          ^^^^^^^^^
+...
+164 |     fn claim(&self) -> Result<usize, FrameError> {
+    |        ^^^^^
+...
+188 |     pub fn allocate(&self) -> Result<Frame<'_>, FrameError> {
+    |            ^^^^^^^^
+...
+200 |     fn snapshot(&self) -> [u64; WORDS] {
+    |        ^^^^^^^^
+...
+204 |     fn reserve_leak_check(&self, heap: bool) -> bool {
+    |        ^^^^^^^^^^^^^^^^^^
+...
+218 |     fn retry_leak_check(&self, heap: bool) {
+    |        ^^^^^^^^^^^^^^^^
+...
+227 |     pub fn stats(&self) -> FrameStats {
+    |            ^^^^^
+...
+240 |     pub(super) fn critical_section_check(&self) -> bool {
+    |                   ^^^^^^^^^^^^^^^^^^^^^^
+...
+254 |     pub(super) fn excludes_region(&self, start: u64, end: u64) -> bool {
+    |                   ^^^^^^^^^^^^^^^
+...
+276 |     pub(super) fn exclusion_checks(&self) -> bool {
+    |                   ^^^^^^^^^^^^^^^^
+...
+312 |     pub fn exhaustion_check(&self) -> bool {
+    |            ^^^^^^^^^^^^^^^^
+
+warning: methods `claim_run`, `allocate_heap`, `box_value`, and `heap_exhaustion_check` are never used
+   --> /workspace/crates/hm-core/src/frames.rs:421:8
+    |
+420 | impl Pool {
+    | --------- methods in this implementation
+421 |     fn claim_run(
+    |        ^^^^^^^^^
+...
+466 |     pub fn allocate_heap(
+    |            ^^^^^^^^^^^^^
+...
+496 |     pub fn box_value<T>(
+    |            ^^^^^^^^^
+...
+523 |     pub fn heap_exhaustion_check(&self) -> bool {
+    |            ^^^^^^^^^^^^^^^^^^^^^
+
+warning: constant `CANARY` is never used
+  --> /workspace/crates/hm-core/src/cpu_local.rs:21:18
+   |
+21 | pub(super) const CANARY: u64 = 0xa55a_c33c_9669_f00f;
+   |                  ^^^^^^
+
+warning: function `valid` is never used
+  --> /workspace/crates/hm-core/src/cpu_local.rs:83:4
+   |
+83 | fn valid(pointer: usize, mpidr: u64) -> bool {
+   |    ^^^^^
+
+warning: function `checks` is never used
+   --> /workspace/crates/hm-core/src/cpu_local.rs:110:15
+    |
+110 | pub(super) fn checks() -> bool {
+    |               ^^^^^^
+
+warning: function `prepare_secondary` is never used
+   --> /workspace/crates/hm-core/src/cpu_local.rs:139:22
+    |
+139 | pub(super) unsafe fn prepare_secondary() {
+    |                      ^^^^^^^^^^^^^^^^^
+
+warning: function `restore_secondary` is never used
+   --> /workspace/crates/hm-core/src/cpu_local.rs:156:22
+    |
+156 | pub(super) unsafe fn restore_secondary() {
+    |                      ^^^^^^^^^^^^^^^^^
+
+warning: function `worker_active` is never used
+   --> /workspace/crates/hm-core/src/cpu_local.rs:178:15
+    |
+178 | pub(super) fn worker_active() -> bool {
+    |               ^^^^^^^^^^^^^
+
+warning: constant `RUNNING` is never used
+  --> /workspace/crates/hm-core/src/threads.rs:34:7
+   |
+34 | const RUNNING: u64 = 1;
+   |       ^^^^^^^
+
+warning: constant `DONE` is never used
+  --> /workspace/crates/hm-core/src/threads.rs:35:7
+   |
+35 | const DONE: u64 = 2;
+   |       ^^^^
+
+warning: associated function `zero` is never used
+  --> /workspace/crates/hm-core/src/threads.rs:47:14
+   |
+46 | impl Context {
+   | ------------ associated function in this implementation
+47 |     const fn zero() -> Self {
+   |              ^^^^
+
+warning: struct `Runner` is never constructed
+  --> /workspace/crates/hm-core/src/threads.rs:83:12
+   |
+83 | pub struct Runner {
+   |            ^^^^^^
+
+warning: associated items `from_boot`, `run_preemptive`, `run`, and `checks` are never used
+   --> /workspace/crates/hm-core/src/threads.rs:94:26
+    |
+ 88 | impl Runner {
+    | ----------- associated items in this implementation
+...
+ 94 |     pub(crate) unsafe fn from_boot() -> Self {
+    |                          ^^^^^^^^^
+...
+101 |     pub fn run_preemptive(
+    |            ^^^^^^^^^^^^^^
+...
+111 |     pub fn run(&self, jobs: &[ThreadJob]) -> Result<RunReport, ThreadError> {
+    |            ^^^
+...
+188 |     pub(super) fn checks(&self) -> hm_kernel::ThreadChecks {
+    |                   ^^^^^^
+
+warning: function `empty_job` is never used
+   --> /workspace/crates/hm-core/src/threads.rs:234:4
+    |
+234 | fn empty_job(_: &mut dyn ThreadContext, _: u64) -> u64 {
+    |    ^^^^^^^^^
+
+warning: function `control_state` is never used
+   --> /workspace/crates/hm-core/src/threads.rs:238:4
+    |
+238 | fn control_state() -> (u64, u64) {
+    |    ^^^^^^^^^^^^^
+
+warning: function `clear_stack` is never used
+   --> /workspace/crates/hm-core/src/threads.rs:305:22
+    |
+305 | pub(super) unsafe fn clear_stack(id: usize) {
+    |                      ^^^^^^^^^^^
+
+warning: function `guards_valid` is never used
+   --> /workspace/crates/hm-core/src/threads.rs:376:4
+    |
+376 | fn guards_valid() -> bool {
+    |    ^^^^^^^^^^^^
+
+warning: function `context_job` is never used
+   --> /workspace/crates/hm-core/src/threads.rs:400:4
+    |
+400 | fn context_job(context: &mut dyn ThreadContext, seed: u64) -> u64 {
+    |    ^^^^^^^^^^^
+
+warning: function `stack_pointer` is never used
+   --> /workspace/crates/hm-core/src/threads.rs:417:4
+    |
+417 | fn stack_pointer() -> usize {
+    |    ^^^^^^^^^^^^^
+
+warning: function `nested_job` is never used
+   --> /workspace/crates/hm-core/src/threads.rs:426:4
+    |
+426 | fn nested_job(_: &mut dyn ThreadContext, _: u64) -> u64 {
+    |    ^^^^^^^^^^
+
+warning: function `arm_thread_start` is never used
+  --> /workspace/crates/hm-core/src/threads.rs:24:8
+   |
+24 |     fn arm_thread_start();
+   |        ^^^^^^^^^^^^^^^^
+
+warning: function `arm_thread_context_probe` is never used
+  --> /workspace/crates/hm-core/src/threads.rs:25:8
+   |
+25 |     fn arm_thread_context_probe(bridge: *mut core::ffi::c_void, seed: u64) -> u64;
+   |        ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `run` is never used
+   --> /workspace/crates/hm-core/src/preempt.rs:110:15
+    |
+110 | pub(super) fn run(jobs: &[ThreadJob]) -> Result<PreemptReport, ThreadError> {
+    |               ^^^
+
+warning: function `shared_start` is never used
+   --> /workspace/crates/hm-core/src/preempt.rs:139:22
+    |
+139 | pub(super) unsafe fn shared_start() -> bool {
+    |                      ^^^^^^^^^^^^
+
+warning: function `shared_stop` is never used
+   --> /workspace/crates/hm-core/src/preempt.rs:145:22
+    |
+145 | pub(super) unsafe fn shared_stop() {
+    |                      ^^^^^^^^^^^
+
+warning: function `irq_count` is never used
+   --> /workspace/crates/hm-core/src/preempt.rs:456:15
+    |
+456 | pub(super) fn irq_count() -> u64 {
+    |               ^^^^^^^^^
+
+warning: function `wait_boundary_check` is never used
+   --> /workspace/crates/hm-core/src/preempt.rs:462:15
+    |
+462 | pub(super) fn wait_boundary_check() -> bool {
+    |               ^^^^^^^^^^^^^^^^^^^
+
+warning: function `context_checks` is never used
+   --> /workspace/crates/hm-core/src/preempt.rs:530:15
+    |
+530 | pub(super) fn context_checks(runner: &super::threads::Runner) -> bool {
+    |               ^^^^^^^^^^^^^^
+
+warning: function `control_checks` is never used
+   --> /workspace/crates/hm-core/src/preempt.rs:549:15
+    |
+549 | pub(super) fn control_checks() -> bool {
+    |               ^^^^^^^^^^^^^^
+
+warning: function `gic_checks` is never used
+   --> /workspace/crates/hm-core/src/preempt.rs:588:15
+    |
+588 | pub(super) fn gic_checks() -> bool {
+    |               ^^^^^^^^^^
+
+warning: function `reset_smp_observations` is never used
+   --> /workspace/crates/hm-core/src/preempt.rs:653:22
+    |
+653 | pub(super) unsafe fn reset_smp_observations() {
+    |                      ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `blocked_masks` is never used
+   --> /workspace/crates/hm-core/src/preempt.rs:662:15
+    |
+662 | pub(super) fn blocked_masks() -> [u64; 2] {
+    |               ^^^^^^^^^^^^^
+
+warning: function `arm_wait_race` is never used
+   --> /workspace/crates/hm-core/src/preempt.rs:689:15
+    |
+689 | pub(super) fn arm_wait_race() -> bool {
+    |               ^^^^^^^^^^^^^
+
+warning: function `wait_race_ready` is never used
+   --> /workspace/crates/hm-core/src/preempt.rs:708:15
+    |
+708 | pub(super) fn wait_race_ready() -> bool {
+    |               ^^^^^^^^^^^^^^^
+
+warning: function `finish_wait_race` is never used
+   --> /workspace/crates/hm-core/src/preempt.rs:712:15
+    |
+712 | pub(super) fn finish_wait_race() -> bool {
+    |               ^^^^^^^^^^^^^^^^
+
+warning: function `worker_observation` is never used
+   --> /workspace/crates/hm-core/src/preempt.rs:732:15
+    |
+732 | pub(super) fn worker_observation() -> Option<(u64, u64)> {
+    |               ^^^^^^^^^^^^^^^^^^
+
+warning: function `worker_register_probe` is never used
+   --> /workspace/crates/hm-core/src/preempt.rs:759:15
+    |
+759 | pub(super) fn worker_register_probe(seed: u64) -> u64 {
+    |               ^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `arm_preempt_context_probe` is never used
+  --> /workspace/crates/hm-core/src/preempt.rs:92:8
+   |
+92 |     fn arm_preempt_context_probe(seed: u64) -> u64;
+   |        ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `arm_gic_session_start` is never used
+  --> /workspace/crates/hm-core/src/preempt.rs:93:8
+   |
+93 |     fn arm_gic_session_start() -> u64;
+   |        ^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `arm_gic_session_stop` is never used
+  --> /workspace/crates/hm-core/src/preempt.rs:94:8
+   |
+94 |     fn arm_gic_session_stop() -> u64;
+   |        ^^^^^^^^^^^^^^^^^^^^
+
+warning: function `arm_gic_probe_target` is never used
+  --> /workspace/crates/hm-core/src/preempt.rs:95:8
+   |
+95 |     fn arm_gic_probe_target() -> u64;
+   |        ^^^^^^^^^^^^^^^^^^^^
+
+warning: function `arm_gic_probe_restore_target` is never used
+  --> /workspace/crates/hm-core/src/preempt.rs:96:8
+   |
+96 |     fn arm_gic_probe_restore_target(target: u64) -> u64;
+   |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `arm_gic_probe_seed` is never used
+  --> /workspace/crates/hm-core/src/preempt.rs:97:8
+   |
+97 |     fn arm_gic_probe_seed() -> u64;
+   |        ^^^^^^^^^^^^^^^^^^
+
+warning: function `arm_gic_probe_preserved` is never used
+  --> /workspace/crates/hm-core/src/preempt.rs:98:8
+   |
+98 |     fn arm_gic_probe_preserved() -> u64;
+   |        ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: constant `RETURNED` is never used
+  --> /workspace/crates/hm-core/src/secondary.rs:14:7
+   |
+14 | const RETURNED: u64 = 4;
+   |       ^^^^^^^^
+
+warning: constant `VERSION` is never used
+  --> /workspace/crates/hm-core/src/secondary.rs:15:7
+   |
+15 | const VERSION: u64 = 0x8400_0000;
+   |       ^^^^^^^
+
+warning: constant `FEATURES` is never used
+  --> /workspace/crates/hm-core/src/secondary.rs:16:7
+   |
+16 | const FEATURES: u64 = 0x8400_000a;
+   |       ^^^^^^^^
+
+warning: constant `CPU_ON` is never used
+  --> /workspace/crates/hm-core/src/secondary.rs:17:7
+   |
+17 | const CPU_ON: u64 = 0xc400_0003;
+   |       ^^^^^^
+
+warning: constant `CPU_OFF` is never used
+  --> /workspace/crates/hm-core/src/secondary.rs:18:7
+   |
+18 | const CPU_OFF: u64 = 0x8400_0002;
+   |       ^^^^^^^
+
+warning: constant `AFFINITY_INFO` is never used
+  --> /workspace/crates/hm-core/src/secondary.rs:19:7
+   |
+19 | const AFFINITY_INFO: u64 = 0xc400_0004;
+   |       ^^^^^^^^^^^^^
+
+warning: static `NEXT_GENERATION` is never used
+  --> /workspace/crates/hm-core/src/secondary.rs:78:8
+   |
+78 | static NEXT_GENERATION: AtomicU64 = AtomicU64::new(1);
+   |        ^^^^^^^^^^^^^^^
+
+warning: static `ACTIVE_POOL` is never used
+  --> /workspace/crates/hm-core/src/secondary.rs:81:8
+   |
+81 | static ACTIVE_POOL: AtomicPtr<Pool> = AtomicPtr::new(core::ptr::null_mut());
+   |        ^^^^^^^^^^^
+
+warning: struct `Info` is never constructed
+   --> /workspace/crates/hm-core/src/secondary.rs:114:19
+    |
+114 | pub(super) struct Info {
+    |                   ^^^^
+
+warning: struct `Session` is never constructed
+   --> /workspace/crates/hm-core/src/secondary.rs:121:19
+    |
+121 | pub(super) struct Session {
+    |                   ^^^^^^^
+
+warning: enum `Error` is never used
+   --> /workspace/crates/hm-core/src/secondary.rs:130:17
+    |
+130 | pub(super) enum Error {
+    |                 ^^^^^
+
+warning: struct `SmpReport` is never constructed
+   --> /workspace/crates/hm-core/src/secondary.rs:141:19
+    |
+141 | pub(super) struct SmpReport {
+    |                   ^^^^^^^^^
+
+warning: struct `Runner` is never constructed
+   --> /workspace/crates/hm-core/src/secondary.rs:153:12
+    |
+153 | pub struct Runner {
+    |            ^^^^^^
+
+warning: multiple associated items are never used
+   --> /workspace/crates/hm-core/src/secondary.rs:162:26
+    |
+157 | impl Runner {
+    | ----------- associated items in this implementation
+...
+162 |     pub(crate) unsafe fn from_boot(topology: &Topology) -> Option<Self> {
+    |                          ^^^^^^^^^
+...
+184 |     pub(super) fn info(&self) -> Info {
+    |                   ^^^^
+...
+188 |     pub(super) fn run(&mut self) -> Result<Session, Error> {
+    |                   ^^^
+...
+193 |     pub(super) fn run_smp(
+    |                   ^^^^^^^
+...
+203 |     pub(super) fn run_smp_with_pool(
+    |                   ^^^^^^^^^^^^^^^^^
+...
+212 |     fn run_smp_inner(
+    |        ^^^^^^^^^^^^^
+...
+242 |     fn execute(
+    |        ^^^^^^^
+
+warning: function `with_pool` is never used
+   --> /workspace/crates/hm-core/src/secondary.rs:361:8
+    |
+361 | pub fn with_pool<R>(f: impl for<'a> FnOnce(&'a Pool) -> R) -> Option<R> {
+    |        ^^^^^^^^^
+
+warning: function `admitted` is never used
+   --> /workspace/crates/hm-core/src/secondary.rs:375:15
+    |
+375 | pub(super) fn admitted(topology: &Topology) -> bool {
+    |               ^^^^^^^^
+
+warning: function `authority` is never used
+   --> /workspace/crates/hm-core/src/secondary.rs:378:4
+    |
+378 | fn authority() -> bool {
+    |    ^^^^^^^^^
+
+warning: function `hvc` is never used
+   --> /workspace/crates/hm-core/src/secondary.rs:386:4
+    |
+386 | fn hvc(function: u64, a: u64, b: u64, c: u64) -> u64 {
+    |    ^^^
+
+warning: function `clear_stacks` is never used
+   --> /workspace/crates/hm-core/src/secondary.rs:417:11
+    |
+417 | unsafe fn clear_stacks() {
+    |           ^^^^^^^^^^^^
+
+warning: function `arm_secondary_start` is never used
+   --> /workspace/crates/hm-core/src/secondary.rs:102:8
+    |
+102 |     fn arm_secondary_start();
+    |        ^^^^^^^^^^^^^^^^^^^
+
+warning: fields `pool` and `cpus` are never read
+  --> /workspace/crates/hm-core/src/user_space.rs:82:5
+   |
+81 | pub struct Factory<'pool> {
+   |            ------- fields in this struct
+82 |     pool: &'pool Pool,
+   |     ^^^^
+83 |     cpus: usize,
+   |     ^^^^
+
+warning: field `pool` is never read
+  --> /workspace/crates/hm-core/src/user_space.rs:87:5
+   |
+86 | pub struct Space<'pool> {
+   |            ----- field in this struct
+87 |     pool: &'pool Pool,
+   |     ^^^^
+
+warning: associated items `reborrow`, `pool`, `cpus`, `from_boot`, `load`, and `allocate` are never used
+   --> /workspace/crates/hm-core/src/user_space.rs:99:19
+    |
+ 98 | impl<'pool> Factory<'pool> {
+    | -------------------------- associated items in this implementation
+ 99 |     pub(super) fn reborrow(&self) -> Factory<'pool> {
+    |                   ^^^^^^^^
+...
+106 |     pub(super) fn pool(&self) -> &'pool Pool {
+    |                   ^^^^
+...
+109 |     pub(super) fn cpus(&self) -> usize {
+    |                   ^^^^
+...
+116 |     pub(crate) unsafe fn from_boot(pool: &'pool Pool, topology: &Topology) -> Result<Self, Error> {
+    |                          ^^^^^^^^^
+...
+131 |     pub fn load(&self, image: &Image<'_>, frame_budget: usize) -> Result<Space<'pool>, Error> {
+    |            ^^^^
+...
+179 |     fn allocate(&self, count: &mut usize, budget: usize) -> Result<Frame<'pool>, Error> {
+    |        ^^^^^^^^
+
+warning: methods `cpus`, `install_startup`, `prepare_instructions`, `set`, and `build_tables` are never used
+   --> /workspace/crates/hm-core/src/user_space.rs:215:19
+    |
+189 | impl Space<'_> {
+    | -------------- methods in this implementation
+...
+215 |     pub(super) fn cpus(&self) -> usize {
+    |                   ^^^^
+...
+218 |     pub(super) fn install_startup(
+    |                   ^^^^^^^^^^^^^^^
+...
+257 |     pub(super) fn prepare_instructions(&self) -> Result<(), Error> {
+    |                   ^^^^^^^^^^^^^^^^^^^^
+...
+337 |     fn set(&mut self, table: usize, index: usize, value: u64) -> Result<(), Error> {
+    |        ^^^
+...
+351 |     fn build_tables(&mut self) -> Result<(), Error> {
+    |        ^^^^^^^^^^^^
+
+warning: constant `STARTUP` is never used
+  --> /workspace/crates/hm-core/src/process.rs:12:11
+   |
+12 | pub const STARTUP: u64 = 0x1_0010_0000;
+   |           ^^^^^^^
+
+warning: constant `STACK_TOP` is never used
+  --> /workspace/crates/hm-core/src/process.rs:13:11
+   |
+13 | pub const STACK_TOP: u64 = 0x1_0020_0000;
+   |           ^^^^^^^^^
+
+warning: constant `MAX_COUNT` is never used
+  --> /workspace/crates/hm-core/src/process.rs:14:18
+   |
+14 | pub(super) const MAX_COUNT: u64 = 0x00ff_ffff_ffff_ffff;
+   |                  ^^^^^^^^^
+
+warning: static `CLAIMED` is never used
+  --> /workspace/crates/hm-core/src/process.rs:15:8
+   |
+15 | static CLAIMED: AtomicBool = AtomicBool::new(false);
+   |        ^^^^^^^
+
+warning: enum `Error` is never used
+  --> /workspace/crates/hm-core/src/process.rs:17:10
+   |
+17 | pub enum Error {
+   |          ^^^^^
+
+warning: enum `Reason` is never used
+  --> /workspace/crates/hm-core/src/process.rs:31:10
+   |
+31 | pub enum Reason {
+   |          ^^^^^^
+
+warning: struct `RunReport` is never constructed
+  --> /workspace/crates/hm-core/src/process.rs:38:12
+   |
+38 | pub struct RunReport {
+   |            ^^^^^^^^^
+
+warning: variants `Trace` and `Terminal` are never constructed
+  --> /workspace/crates/hm-core/src/process.rs:54:5
+   |
+53 | enum OutputMode {
+   |      ---------- variants in this enum
+54 |     Trace,
+   |     ^^^^^
+55 |     Terminal,
+   |     ^^^^^^^^
+   |
+   = note: `OutputMode` has a derived impl for the trait `Clone`, but this is intentionally ignored during dead code analysis
+
+warning: multiple variants are never constructed
+  --> /workspace/crates/hm-core/src/process.rs:60:5
+   |
+59 | pub(crate) enum NegativeCase {
+   |                 ------------ variants in this enum
+60 |     FinalBudgetSpawn, FinalBudgetPark, PlatformReply, PlatformPark,
+   |     ^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^  ^^^^^^^^^^^^
+61 |     AbandonDispatch, WakeInstallFailure, CapabilityExhaustion, SlotExhaustion,
+   |     ^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^
+62 |     ChildRetireReady, ChildRetireWaiting,
+   |     ^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^
+   |
+   = note: `NegativeCase` has derived impls for the traits `Debug` and `Clone`, but these are intentionally ignored during dead code analysis
+
+warning: associated items `name` and `selected` are never used
+  --> /workspace/crates/hm-core/src/process.rs:66:19
+   |
+65 | impl NegativeCase {
+   | ----------------- associated items in this implementation
+66 |     pub(crate) fn name(self) -> &'static str {
+   |                   ^^^^
+...
+80 |     fn selected() -> Option<Self> {
+   |        ^^^^^^^^
+
+warning: multiple fields are never read
+   --> /workspace/crates/hm-core/src/process.rs:90:5
+    |
+ 89 | pub struct Executor {
+    |            -------- fields in this struct
+ 90 |     issuer: Issuer,
+    |     ^^^^^^
+ 91 |     output: OutputMode,
+    |     ^^^^^^
+ 92 |     cpus: usize,
+    |     ^^^^
+ 93 |     index: u64,
+    |     ^^^^^
+ 94 |     frequency: u64,
+    |     ^^^^^^^^^
+ 95 |     retired: bool,
+    |     ^^^^^^^
+ 96 |     next_group: u64,
+    |     ^^^^^^^^^^
+ 97 |     next_task_cap: u32,
+    |     ^^^^^^^^^^^^^
+ 98 |     last_prepared: Option<u32>,
+    |     ^^^^^^^^^^^^^
+ 99 |     #[cfg(feature = "task-negative-tests")]
+100 |     negative: Option<NegativeCase>,
+    |     ^^^^^^^^
+
+warning: fields `session` and `context` are never read
+   --> /workspace/crates/hm-core/src/process.rs:105:5
+    |
+103 | pub struct Process<'pool> {
+    |            ------- fields in this struct
+104 |     space: Space<'pool>,
+105 |     session: Option<Session>,
+    |     ^^^^^^^
+106 |     context: [u64; layout::USER_WORDS],
+    |     ^^^^^^^
+
+warning: multiple associated items are never used
+   --> /workspace/crates/hm-core/src/process.rs:181:26
+    |
+177 | impl Executor {
+    | ------------- associated items in this implementation
+...
+181 |     pub(crate) unsafe fn from_boot(topology: &Topology) -> Result<Self, Error> {
+    |                          ^^^^^^^^^
+...
+188 |     pub(crate) unsafe fn from_boot_terminal(topology: &Topology) -> Result<Self, Error> {
+    |                          ^^^^^^^^^^^^^^^^^^
+...
+193 |     unsafe fn from_boot_mode(topology: &Topology, output: OutputMode) -> Result<Self, Error> {
+    |               ^^^^^^^^^^^^^^
+...
+230 |     fn mark_negative_profile(&mut self) -> Result<(), Error> {
+    |        ^^^^^^^^^^^^^^^^^^^^^
+...
+246 |     pub(crate) fn negative_case(&self) -> Option<NegativeCase> { self.negative }
+    |                   ^^^^^^^^^^^^^
+247 |     #[cfg(feature = "task-negative-tests")]
+248 |     pub(super) fn take_negative_profile(&mut self) -> Option<NegativeCase> {
+    |                   ^^^^^^^^^^^^^^^^^^^^^
+...
+251 |     pub fn frequency(&self) -> u64 {
+    |            ^^^^^^^^^
+...
+254 |     pub fn ticks(&self) -> u64 {
+    |            ^^^^^
+...
+261 |     pub fn prepare<'p>(
+    |            ^^^^^^^
+...
+272 |     pub fn prepare_with_input<'p>(
+    |            ^^^^^^^^^^^^^^^^^^
+...
+285 |     fn prepare_inner<'p>(
+    |        ^^^^^^^^^^^^^
+...
+328 |     pub fn run(&mut self, mut process: Process<'_>) -> Result<RunReport, Error> {
+    |            ^^^
+...
+340 |     fn execute(&mut self, process: &mut Process<'_>, lease: &Lease) -> Result<RunReport, Error> {
+    |        ^^^^^^^
+...
+439 |     fn slice(
+    |        ^^^^^
+...
+465 |     pub(super) fn group_slice(
+    |                   ^^^^^^^^^^^
+...
+480 |     pub(super) fn retire(&mut self) {
+    |                   ^^^^^^
+...
+483 |     pub(super) fn retired(&self) -> bool {
+    |                   ^^^^^^^
+...
+486 |     pub(super) fn cpus(&self) -> usize {
+    |                   ^^^^
+...
+489 |     pub(super) fn last_prepared_generation(&self) -> Option<u32> {
+    |                   ^^^^^^^^^^^^^^^^^^^^^^^^
+...
+494 |     pub(super) fn task_issuance_snapshot(&self) -> (u32, Option<u32>) {
+    |                   ^^^^^^^^^^^^^^^^^^^^^^
+...
+497 |     pub(super) fn issue_group(&mut self) -> Result<u64, Error> {
+    |                   ^^^^^^^^^^^
+...
+505 |     pub(super) fn issue_task_cap(&mut self) -> Option<u32> {
+    |                   ^^^^^^^^^^^^^^
+...
+513 |     pub(super) fn group_namespace_available(&self) -> bool {
+    |                   ^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+516 |     pub(super) fn admit_task_call(
+    |                   ^^^^^^^^^^^^^^^
+...
+542 |     pub(super) fn tracing(&self) -> bool {
+    |                   ^^^^^^^
+...
+546 |     fn dispatch(&mut self, process: &mut Process<'_>, index: u64) -> Option<(Reason, u8)> {
+    |        ^^^^^^^^
+...
+599 |     pub(super) fn dispatch_group(
+    |                   ^^^^^^^^^^^^^^
+
+warning: multiple methods are never used
+   --> /workspace/crates/hm-core/src/process.rs:644:19
+    |
+643 | impl Process<'_> {
+    | ---------------- methods in this implementation
+644 |     pub(super) fn put_session(&mut self, session: Session) -> Result<(), Session> {
+    |                   ^^^^^^^^^^^
+...
+651 |     pub(super) fn has_session(&self) -> bool {
+    |                   ^^^^^^^^^^^
+...
+654 |     pub(super) fn copy_task_bytes(
+    |                   ^^^^^^^^^^^^^^^
+...
+661 |     pub(super) fn task_reply(&mut self, reply: native::Response) {
+    |                   ^^^^^^^^^^
+...
+665 |     pub(super) fn pc(&self) -> u64 {
+    |                   ^^
+...
+668 |     pub(super) fn executable_pc(&self) -> bool {
+    |                   ^^^^^^^^^^^^^
+...
+681 |     pub(super) fn prepare_instructions(&self) -> Result<(), user_space::Error> {
+    |                   ^^^^^^^^^^^^^^^^^^^^
+...
+684 |     pub(super) fn calls(&self) -> usize {
+    |                   ^^^^^
+...
+687 |     pub(super) fn written(&self) -> usize {
+    |                   ^^^^^^^
+...
+690 |     pub(super) fn trap(&self) -> (u64, u64, u64, u64) {
+    |                   ^^^^
+
+warning: struct `Lease` is never constructed
+   --> /workspace/crates/hm-core/src/process.rs:739:19
+    |
+739 | pub(super) struct Lease {
+    |                   ^^^^^
+
+warning: associated function `acquire` is never used
+   --> /workspace/crates/hm-core/src/process.rs:743:19
+    |
+742 | impl Lease {
+    | ---------- associated function in this implementation
+743 |     pub(super) fn acquire() -> Result<Self, Error> {
+    |                   ^^^^^^^
+
+warning: struct `Console` is never constructed
+   --> /workspace/crates/hm-core/src/process.rs:758:8
+    |
+758 | struct Console<'a, 'p> {
+    |        ^^^^^^^
+
+warning: multiple fields are never read
+   --> /workspace/crates/hm-core/src/process.rs:797:5
+    |
+796 | pub(super) struct GroupCapture {
+    |                   ------------ fields in this struct
+797 |     request: Option<native::Request>,
+    |     ^^^^^^^
+798 |     reply: Option<native::Response>,
+    |     ^^^^^
+799 |     ordinal: usize,
+    |     ^^^^^^^
+800 |     pc: u64,
+    |     ^^
+801 |     output: [u8; native::MAX_WRITE],
+    |     ^^^^^^
+802 |     length: usize,
+    |     ^^^^^^
+803 |     output_recorded: bool,
+    |     ^^^^^^^^^^^^^^^
+
+warning: associated items `new`, `emit_task_call`, `emit_task_output`, `record_reply`, and `emit` are never used
+   --> /workspace/crates/hm-core/src/process.rs:807:19
+    |
+806 | impl GroupCapture {
+    | ----------------- associated items in this implementation
+807 |     pub(super) fn new() -> Self {
+    |                   ^^^
+...
+818 |     pub(super) fn emit_task_call(&self, group: u64, turn: u64) {
+    |                   ^^^^^^^^^^^^^^
+...
+827 |     pub(super) fn emit_task_output(&self, group: u64, turn: u64) {
+    |                   ^^^^^^^^^^^^^^^^
+...
+841 |     pub(super) fn record_reply(&mut self, reply: native::Response) {
+    |                   ^^^^^^^^^^^^
+...
+846 |     pub(super) fn emit(&self, group: u64, turn: u64) {
+    |                   ^^^^
+
+warning: struct `GroupConsole` is never constructed
+   --> /workspace/crates/hm-core/src/process.rs:883:8
+    |
+883 | struct GroupConsole<'space, 'pool, 'capture> {
+    |        ^^^^^^^^^^^^
+
+warning: function `group_counter` is never used
+   --> /workspace/crates/hm-core/src/process.rs:918:15
+    |
+918 | pub(super) fn group_counter(process: &Process<'_>, capture: &GroupCapture) -> u64 {
+    |               ^^^^^^^^^^^^^
+
+warning: function `task_counter` is never used
+   --> /workspace/crates/hm-core/src/process.rs:935:15
+    |
+935 | pub(super) fn task_counter<G, W, C>(
+    |               ^^^^^^^^^^^^
+
+warning: struct `Uart` is never constructed
+   --> /workspace/crates/hm-core/src/process.rs:953:19
+    |
+953 | pub(super) struct Uart;
+    |                   ^^^^
+
+warning: function `uart` is never used
+   --> /workspace/crates/hm-core/src/process.rs:962:4
+    |
+962 | fn uart(byte: u8) {
+    |    ^^^^
+
+warning: function `fatal` is never used
+   --> /workspace/crates/hm-core/src/process.rs:975:15
+    |
+975 | pub(super) fn fatal() -> ! {
+    |               ^^^^^
+
+warning: function `counter` is never used
+   --> /workspace/crates/hm-core/src/process.rs:979:15
+    |
+979 | pub(super) fn counter() -> u64 {
+    |               ^^^^^^^
+
+warning: function `frequency` is never used
+   --> /workspace/crates/hm-core/src/process.rs:987:4
+    |
+987 | fn frequency() -> u64 {
+    |    ^^^^^^^^^
+
+warning: function `hvc` is never used
+   --> /workspace/crates/hm-core/src/process.rs:995:4
+    |
+995 | fn hvc(function: u64, a: u64, b: u64) -> u64 {
+    |    ^^^
+
+warning: function `observe` is never used
+    --> /workspace/crates/hm-core/src/process.rs:1003:15
+     |
+1003 | pub(super) fn observe() -> [u64; 26] {
+     |               ^^^^^^^
+
+warning: function `admission` is never used
+    --> /workspace/crates/hm-core/src/process.rs:1048:15
+     |
+1048 | pub(super) fn admission() -> Result<(), Error> {
+     |               ^^^^^^^^^
+
+warning: static `arm_vectors` is never used
+   --> /workspace/crates/hm-core/src/process.rs:172:12
+    |
+172 |     static arm_vectors: u8;
+    |            ^^^^^^^^^^^
+
+warning: function `arm_process_slice` is never used
+   --> /workspace/crates/hm-core/src/process.rs:174:8
+    |
+174 |     fn arm_process_slice(root: u64, context: *mut u64, deadline: u64) -> u64;
+    |        ^^^^^^^^^^^^^^^^^
+
+warning: function `arm_process_kernel_fatal` is never used
+   --> /workspace/crates/hm-core/src/process.rs:175:8
+    |
+175 |     fn arm_process_kernel_fatal() -> !;
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: constant `MAX_FRAMES` is never used
+  --> /workspace/docs/evidence/task-negative-layout-third/process_group.rs:11:11
+   |
+11 | pub const MAX_FRAMES: usize = 512;
+   |           ^^^^^^^^^^
+
+warning: constant `BOX_FRAMES` is never used
+  --> /workspace/docs/evidence/task-negative-layout-third/process_group.rs:13:11
+   |
+13 | pub const BOX_FRAMES: usize = PROCESS_BYTES.div_ceil(4096);
+   |           ^^^^^^^^^^
+
+warning: methods `group`, `slot`, and `generation` are never used
+  --> /workspace/docs/evidence/task-negative-layout-third/process_group.rs:22:12
+   |
+21 | impl TaskId {
+   | ----------- methods in this implementation
+22 |     pub fn group(self) -> u64 {
+   |            ^^^^^
+...
+25 |     pub fn slot(self) -> usize {
+   |            ^^^^
+...
+28 |     pub fn generation(self) -> u32 {
+   |            ^^^^^^^^^^
+
+warning: variants `None`, `Svc`, `Timer`, `Spurious`, and `Fault` are never constructed
+  --> /workspace/docs/evidence/task-negative-layout-third/process_group.rs:34:5
+   |
+33 | pub enum Event {
+   |          ----- variants in this enum
+34 |     None,
+   |     ^^^^
+35 |     Svc,
+   |     ^^^
+36 |     Timer,
+   |     ^^^^^
+37 |     Spurious,
+   |     ^^^^^^^^
+38 |     Fault,
+   |     ^^^^^
+   |
+   = note: `Event` has derived impls for the traits `Debug` and `Clone`, but these are intentionally ignored during dead code analysis
+
+warning: multiple variants are never constructed
+  --> /workspace/docs/evidence/task-negative-layout-third/process_group.rs:42:5
+   |
+41 | pub enum End {
+   |          --- variants in this enum
+42 |     Exited(u8),
+   |     ^^^^^^
+43 |     Fault,
+   |     ^^^^^
+44 |     Budget,
+   |     ^^^^^^
+45 |     CallLimit,
+   |     ^^^^^^^^^
+46 |     TurnLimit,
+   |     ^^^^^^^^^
+47 |     Cancelled,
+   |     ^^^^^^^^^
+48 |     Unavailable,
+   |     ^^^^^^^^^^^
+   |
+   = note: `End` has derived impls for the traits `Debug` and `Clone`, but these are intentionally ignored during dead code analysis
+
+warning: variants `Ready`, `CancelPending`, `Waiting`, `Closing`, and `Completed` are never constructed
+  --> /workspace/docs/evidence/task-negative-layout-third/process_group.rs:52:5
+   |
+51 | pub enum TaskState {
+   |          --------- variants in this enum
+52 |     Ready,
+   |     ^^^^^
+53 |     CancelPending,
+   |     ^^^^^^^^^^^^^
+54 |     Waiting,
+   |     ^^^^^^^
+55 |     Closing,
+   |     ^^^^^^^
+56 |     Completed,
+   |     ^^^^^^^^^
+   |
+   = note: `TaskState` has derived impls for the traits `Debug` and `Clone`, but these are intentionally ignored during dead code analysis
+
+warning: enum `Error` is never used
+  --> /workspace/docs/evidence/task-negative-layout-third/process_group.rs:59:10
+   |
+59 | pub enum Error {
+   |          ^^^^^
+
+warning: multiple methods are never used
+  --> /workspace/docs/evidence/task-negative-layout-third/process_group.rs:92:14
+   |
+91 | impl TaskInfo {
+   | ------------- methods in this implementation
+92 |     getters!(id:TaskId,state:TaskState,root:u64,process_frames:usize,box_frames:usize,console_generation:Option<u32>,budget:Snapshot);
+   |              ^^        ^^^^^           ^^^^     ^^^^^^^^^^^^^^       ^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^             ^^^^^^
+   |
+   = note: this warning originates in the macro `getters` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+warning: methods `start`, `end`, `comparator`, `hard_end`, and `accounted` are never used
+   --> /workspace/docs/evidence/task-negative-layout-third/process_group.rs:103:14
+    |
+102 | impl Timing {
+    | ----------- methods in this implementation
+103 |     getters!(start:u64,end:u64,comparator:u64,hard_end:u64,accounted:bool);
+    |              ^^^^^     ^^^     ^^^^^^^^^^     ^^^^^^^^     ^^^^^^^^^
+    |
+    = note: this warning originates in the macro `getters` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+warning: multiple methods are never used
+   --> /workspace/docs/evidence/task-negative-layout-third/process_group.rs:128:14
+    |
+127 | impl StepReport {
+    | --------------- methods in this implementation
+128 |     getters!(task:TaskInfo,event:Event,ordinal:u64,entered:bool,entry_pc:u64,elr:u64,esr:u64,far:u64,spsr:u64,calls:usize,written:usize,irqs:u64,spurious:u64,boot_root:u64,vbar:u64,controls:bool,charged_delta:u64,timing:Option<Timing>,live_frames:us...
+    |              ^^^^          ^^^^^       ^^^^^^^     ^^^^^^^      ^^^^^^^^     ^^^     ^^^     ^^^     ^^^^     ^^^^^       ^^^^^^^       ^^^^     ^^^^^^^^     ^^^^^^^^^     ^^^^     ^^^^^^^^      ^^^^^^^^^^^^^     ^^^^^^                ^^^^^^^^^^^
+    |
+    = note: this warning originates in the macro `getters` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+warning: methods `end` and `report` are never used
+   --> /workspace/docs/evidence/task-negative-layout-third/process_group.rs:136:14
+    |
+135 | impl Completion {
+    | --------------- methods in this implementation
+136 |     getters!(end:End,report:StepReport);
+    |              ^^^     ^^^^^^
+    |
+    = note: this warning originates in the macro `getters` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+warning: enum `Turn` is never used
+   --> /workspace/docs/evidence/task-negative-layout-third/process_group.rs:142:10
+    |
+142 | pub enum Turn {
+    |          ^^^^
+
+warning: multiple fields are never read
+   --> /workspace/docs/evidence/task-negative-layout-third/process_group.rs:155:5
+    |
+154 | struct Slot<'pool> {
+    |        ---- fields in this struct
+155 |     owner: Option<KernelBox<'pool, Process<'pool>>>,
+    |     ^^^^^
+156 |     budget: Option<Budget>,
+    |     ^^^^^^
+157 |     info: Option<TaskInfo>,
+    |     ^^^^
+158 |     completion: Option<Completion>,
+    |     ^^^^^^^^^^
+159 |     next: u32,
+    |     ^^^^
+160 |     ordinal: u64,
+    |     ^^^^^^^
+161 |     irqs: u64,
+    |     ^^^^
+162 |     spurious: u64,
+    |     ^^^^^^^^
+163 |     cancel: bool,
+    |     ^^^^^^
+164 |     cached: bool,
+    |     ^^^^^^
+165 |     last_event: Event,
+    |     ^^^^^^^^^^
+
+warning: associated items `new` and `info` are never used
+   --> /workspace/docs/evidence/task-negative-layout-third/process_group.rs:170:14
+    |
+169 | impl Slot<'_> {
+    | ------------- associated items in this implementation
+170 |     const fn new() -> Self {
+    |              ^^^
+...
+187 |     fn info(&self) -> TaskInfo {
+    |        ^^^^
+
+warning: multiple fields are never read
+   --> /workspace/docs/evidence/task-negative-layout-third/process_group.rs:205:5
+    |
+204 | pub struct Group<'executor, 'pool> {
+    |            ----- fields in this struct
+205 |     executor: &'executor mut Executor,
+    |     ^^^^^^^^
+206 |     factory: Factory<'pool>,
+    |     ^^^^^^^
+207 |     slots: [Slot<'pool>; CAPACITY],
+    |     ^^^^^
+208 |     namespace: u64,
+    |     ^^^^^^^^^
+209 |     limit: usize,
+    |     ^^^^^
+210 |     charged: usize,
+    |     ^^^^^^^
+211 |     cursor: usize,
+    |     ^^^^^^
+212 |     task: Option<KernelBox<'pool, task::Authority<'pool>>>,
+    |     ^^^^
+213 |     task_closed: bool,
+    |     ^^^^^^^^^^^
+
+warning: multiple associated items are never used
+   --> /workspace/docs/evidence/task-negative-layout-third/process_group.rs:216:12
+    |
+215 | impl<'executor, 'pool> Group<'executor, 'pool> {
+    | ---------------------------------------------- associated items in this implementation
+216 |     pub fn new(
+    |            ^^^
+...
+251 |     fn empty_under_lease(
+    |        ^^^^^^^^^^^^^^^^^
+...
+270 |     pub fn charged_frames(&self) -> usize {
+    |            ^^^^^^^^^^^^^^
+...
+273 |     pub fn last_prepared_generation(&self) -> Option<u32> {
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^
+...
+276 |     pub fn namespace(&self) -> u64 {
+    |            ^^^^^^^^^
+...
+280 |     pub fn admit(
+    |            ^^^^^
+...
+357 |     fn index(&self, id: TaskId) -> Result<usize, Error> {
+    |        ^^^^^
+...
+367 |     pub fn info(&self, id: TaskId) -> Result<TaskInfo, Error> {
+    |            ^^^^
+...
+373 |     pub fn request_cancel(&mut self, id: TaskId) -> Result<(), Error> {
+    |            ^^^^^^^^^^^^^^
+...
+383 |     pub fn completion(&self, id: TaskId) -> Result<Option<Completion>, Error> {
+    |            ^^^^^^^^^^
+...
+389 |     pub fn reap(&mut self, id: TaskId) -> Result<Completion, Error> {
+    |            ^^^^
+...
+395 |     fn reap_internal(&mut self, id: TaskId) -> Result<Completion, Error> {
+    |        ^^^^^^^^^^^^^
+...
+407 |     pub fn turn(&mut self) -> Result<Turn, Error> {
+    |            ^^^^
+
+warning: function `lease_error` is never used
+   --> /workspace/docs/evidence/task-negative-layout-third/process_group.rs:602:4
+    |
+602 | fn lease_error(error: process::Error) -> Error {
+    |    ^^^^^^^^^^^
+
+warning: function `load_boxed` is never used
+   --> /workspace/docs/evidence/task-negative-layout-third/process_group.rs:610:4
+    |
+610 | fn load_boxed<'pool>(
+    |    ^^^^^^^^^^
+
+warning: function `box_loaded` is never used
+   --> /workspace/docs/evidence/task-negative-layout-third/process_group.rs:642:4
+    |
+642 | fn box_loaded<'pool>(
+    |    ^^^^^^^^^^
+
+warning: function `box_process` is never used
+   --> /workspace/docs/evidence/task-negative-layout-third/process_group.rs:673:4
+    |
+673 | fn box_process<'pool>(
+    |    ^^^^^^^^^^^
+
+warning: function `run_turn` is never used
+   --> /workspace/docs/evidence/task-negative-layout-third/process_group.rs:684:4
+    |
+684 | fn run_turn(
+    |    ^^^^^^^^
+
+warning: function `trace_return` is never used
+   --> /workspace/docs/evidence/task-negative-layout-third/process_group.rs:853:4
+    |
+853 | fn trace_return(group: u64, turn: &Turn, before: usize, after: usize) {
+    |    ^^^^^^^^^^^^
+
+warning: variants `Executed` and `Administrative` are never constructed
+  --> /workspace/crates/hm-core/src/process_task.rs:19:5
+   |
+18 | pub enum RootEvidence {
+   |          ------------ variants in this enum
+19 |     Executed(StepReport),
+   |     ^^^^^^^^
+20 |     Administrative { trigger: Option<TaskId> },
+   |     ^^^^^^^^^^^^^^
+   |
+   = note: `RootEvidence` has derived impls for the traits `Debug` and `Clone`, but these are intentionally ignored during dead code analysis
+
+warning: methods `root`, `end`, and `evidence` are never used
+  --> /workspace/crates/hm-core/src/process_task.rs:29:14
+   |
+28 | impl RootClosure {
+   | ---------------- methods in this implementation
+29 |     getters!(root:TaskInfo,end:End,evidence:RootEvidence);
+   |              ^^^^          ^^^     ^^^^^^^^
+   |
+   = note: this warning originates in the macro `getters` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+warning: methods `closure` and `live_frames` are never used
+  --> /workspace/crates/hm-core/src/process_task.rs:37:14
+   |
+36 | impl TaskCompletion {
+   | ------------------- methods in this implementation
+37 |     getters!(closure:RootClosure,live_frames:usize);
+   |              ^^^^^^^             ^^^^^^^^^^^
+   |
+   = note: this warning originates in the macro `getters` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+warning: multiple methods are never used
+  --> /workspace/crates/hm-core/src/process_task.rs:50:14
+   |
+49 | impl Management {
+   | --------------- methods in this implementation
+50 |     getters!(root:TaskId,woken:Option<TaskId>,reaped:u8,children_remaining:u8,closing:bool,live_frames:usize,closed_root:Option<Root...
+   |              ^^^^        ^^^^^                ^^^^^^    ^^^^^^^^^^^^^^^^^^    ^^^^^^^      ^^^^^^^^^^^       ^^^^^^^^^^^
+   |
+   = note: this warning originates in the macro `getters` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+warning: enum `TaskTurn` is never used
+  --> /workspace/crates/hm-core/src/process_task.rs:53:10
+   |
+53 | pub enum TaskTurn {
+   |          ^^^^^^^^
+
+warning: fields `generation`, `child`, and `rights` are never read
+  --> /workspace/crates/hm-core/src/process_task.rs:69:5
+   |
+68 | struct Cap {
+   |        --- fields in this struct
+69 |     generation: u32,
+   |     ^^^^^^^^^^
+70 |     child: TaskId,
+   |     ^^^^^
+71 |     rights: Rights,
+   |     ^^^^^^
+   |
+   = note: `Cap` has a derived impl for the trait `Clone`, but this is intentionally ignored during dead code analysis
+
+warning: fields `child`, `slot`, and `generation` are never read
+  --> /workspace/crates/hm-core/src/process_task.rs:75:5
+   |
+74 | struct Pending {
+   |        ------- fields in this struct
+75 |     child: TaskId,
+   |     ^^^^^
+76 |     slot: usize,
+   |     ^^^^
+77 |     generation: u32,
+   |     ^^^^^^^^^^
+   |
+   = note: `Pending` has a derived impl for the trait `Clone`, but this is intentionally ignored during dead code analysis
+
+warning: fields `session` and `pending` are never read
+  --> /workspace/crates/hm-core/src/process_task.rs:80:5
+   |
+79 | struct Waiting {
+   |        ------- fields in this struct
+80 |     session: ParkedSession,
+   |     ^^^^^^^
+81 |     pending: Pending,
+   |     ^^^^^^^
+
+warning: multiple fields are never read
+  --> /workspace/crates/hm-core/src/process_task.rs:84:5
+   |
+83 | pub(super) struct Authority<'p> {
+   |                   --------- fields in this struct
+84 |     root: TaskId,
+   |     ^^^^
+85 |     launch: Option<u32>,
+   |     ^^^^^^
+86 |     console_allowed: bool,
+   |     ^^^^^^^^^^^^^^^
+87 |     caps: [Option<Cap>; 2],
+   |     ^^^^
+88 |     catalog: [KernelBox<'p, Image<'static>>; 2],
+   |     ^^^^^^^
+89 |     closing: Option<RootClosure>,
+   |     ^^^^^^^
+90 |     published: Option<TaskCompletion>,
+   |     ^^^^^^^^^
+91 |     waiting: Option<Waiting>,
+   |     ^^^^^^^
+92 |     dispatching: Option<TaskId>,
+   |     ^^^^^^^^^^^
+93 |     sequence: u64,
+   |     ^^^^^^^^
+94 |     #[cfg(feature = "task-negative-tests")]
+95 |     negative: Option<negative::HookState>,
+   |     ^^^^^^^^
+
+warning: function `catalog_image` is never used
+   --> /workspace/crates/hm-core/src/process_task.rs:104:4
+    |
+104 | fn catalog_image<'p>(
+    |    ^^^^^^^^^^^^^
+
+warning: function `authority_box` is never used
+   --> /workspace/crates/hm-core/src/process_task.rs:113:4
+    |
+113 | fn authority_box<'p>(
+    |    ^^^^^^^^^^^^^
+
+warning: function `budget` is never used
+   --> /workspace/crates/hm-core/src/process_task.rs:119:4
+    |
+119 | fn budget(executor: &Executor) -> Result<Budget, Error> {
+    |    ^^^^^^
+
+warning: function `charge` is never used
+   --> /workspace/crates/hm-core/src/process_task.rs:122:4
+    |
+122 | fn charge(image: &Image<'_>) -> Result<usize, Error> {
+    |    ^^^^^^
+
+warning: function `populate` is never used
+   --> /workspace/crates/hm-core/src/process_task.rs:129:4
+    |
+129 | fn populate<'p>(
+    |    ^^^^^^^^
+
+warning: multiple associated items are never used
+   --> /workspace/crates/hm-core/src/process_task.rs:158:19
+    |
+155 | impl<'e, 'p> Group<'e, 'p> {
+    | -------------------------- associated items in this implementation
+...
+158 |     pub(crate) fn new_task(
+    |                   ^^^^^^^^
+...
+169 |     fn new_task_inner(
+    |        ^^^^^^^^^^^^^^
+...
+260 |     pub fn task_root(&self) -> Result<TaskId, Error> {
+    |            ^^^^^^^^^
+...
+265 |     pub(crate) fn task_issuance_snapshot(&self) -> (u32, Option<u32>) {
+    |                   ^^^^^^^^^^^^^^^^^^^^^^
+...
+270 |     pub(crate) fn task_launch_generation(&self) -> Result<u32, Error> {
+    |                   ^^^^^^^^^^^^^^^^^^^^^^
+...
+276 |     fn authority(&self) -> &Authority<'p> {
+    |        ^^^^^^^^^
+...
+279 |     fn authority_mut(&mut self) -> &mut Authority<'p> {
+    |        ^^^^^^^^^^^^^
+...
+282 |     fn root_gate(&self, id: TaskId) -> Result<(), Error> {
+    |        ^^^^^^^^^
+...
+289 |     pub(super) fn task_info(&self, id: TaskId) -> Result<TaskInfo, Error> {
+    |                   ^^^^^^^^^
+...
+306 |     pub(super) fn task_cancel(&mut self, id: TaskId) -> Result<(), Error> {
+    |                   ^^^^^^^^^^^
+...
+313 |     pub fn task_completion(&self, id: TaskId) -> Result<Option<TaskCompletion>, Error> {
+    |            ^^^^^^^^^^^^^^^
+...
+317 |     pub fn task_reap(&mut self, id: TaskId) -> Result<TaskCompletion, Error> {
+    |            ^^^^^^^^^
+
+warning: fields `calls` and `written` are never read
+   --> /workspace/crates/hm-core/src/process_task.rs:350:5
+    |
+349 | struct Counters {
+    |        -------- fields in this struct
+350 |     calls: usize,
+    |     ^^^^^
+351 |     written: usize,
+    |     ^^^^^^^
+    |
+    = note: `Counters` has a derived impl for the trait `Clone`, but this is intentionally ignored during dead code analysis
+
+warning: variants `Reply` and `Park` are never constructed
+   --> /workspace/crates/hm-core/src/process_task.rs:354:5
+    |
+353 | enum Settlement {
+    |      ---------- variants in this enum
+354 |     Reply { session: Session, outcome: Outcome },
+    |     ^^^^^
+355 |     Park(Waiting),
+    |     ^^^^
+
+warning: fields `counters`, `settlement`, and `failed` are never read
+   --> /workspace/crates/hm-core/src/process_task.rs:358:5
+    |
+357 | struct Work {
+    |        ---- fields in this struct
+358 |     counters: Counters,
+    |     ^^^^^^^^
+359 |     settlement: Option<Settlement>,
+    |     ^^^^^^^^^^
+360 |     failed: bool,
+    |     ^^^^^^
+
+warning: associated function `new` is never used
+   --> /workspace/crates/hm-core/src/process_task.rs:363:8
+    |
+362 | impl Work {
+    | --------- associated function in this implementation
+363 |     fn new() -> Self {
+    |        ^^^
+
+warning: multiple fields are never read
+   --> /workspace/crates/hm-core/src/process_task.rs:374:5
+    |
+373 | struct Commit {
+    |        ------ fields in this struct
+374 |     child: TaskId,
+    |     ^^^^^
+375 |     token: u64,
+    |     ^^^^^
+376 |     program: u32,
+    |     ^^^^^^^
+377 |     console: u32,
+    |     ^^^^^^^
+378 |     entry: u64,
+    |     ^^^^^
+379 |     root: u64,
+    |     ^^^^
+380 |     frames: usize,
+    |     ^^^^^^
+381 |     before: usize,
+    |     ^^^^^^
+382 |     after: usize,
+    |     ^^^^^
+    |
+    = note: `Commit` has a derived impl for the trait `Clone`, but this is intentionally ignored during dead code analysis
+
+warning: fields `pending` and `outcome` are never read
+   --> /workspace/crates/hm-core/src/process_task.rs:386:5
+    |
+385 | struct Consume {
+    |        ------- fields in this struct
+386 |     pending: Pending,
+    |     ^^^^^^^
+387 |     outcome: u64,
+    |     ^^^^^^^
+    |
+    = note: `Consume` has a derived impl for the trait `Clone`, but this is intentionally ignored during dead code analysis
+
+warning: fields `kind`, `status`, `result`, and `pending` are never read
+   --> /workspace/crates/hm-core/src/process_task.rs:391:5
+    |
+390 | struct Settle {
+    |        ------ fields in this struct
+391 |     kind: &'static str,
+    |     ^^^^
+392 |     status: u64,
+    |     ^^^^^^
+393 |     result: u64,
+    |     ^^^^^^
+394 |     pending: Option<Pending>,
+    |     ^^^^^^^
+    |
+    = note: `Settle` has a derived impl for the trait `Clone`, but this is intentionally ignored during dead code analysis
+
+warning: multiple fields are never read
+   --> /workspace/crates/hm-core/src/process_task.rs:397:5
+    |
+396 | struct TaskCapture {
+    |        ----------- fields in this struct
+397 |     descriptor: [u8; 64],
+    |     ^^^^^^^^^^
+398 |     input: [u8; 256],
+    |     ^^^^^
+399 |     output: GroupCapture,
+    |     ^^^^^^
+400 |     commit: Option<Commit>,
+    |     ^^^^^^
+401 |     consumed: Option<Consume>,
+    |     ^^^^^^^^
+402 |     descriptor_copied: bool,
+    |     ^^^^^^^^^^^^^^^^^
+403 |     input_copied: usize,
+    |     ^^^^^^^^^^^^
+404 |     settle: Option<Settle>,
+    |     ^^^^^^
+405 |     #[cfg(feature = "task-negative-tests")]
+406 |     injection: Option<negative::Injection>,
+    |     ^^^^^^^^^
+
+warning: associated function `new` is never used
+   --> /workspace/crates/hm-core/src/process_task.rs:409:8
+    |
+408 | impl TaskCapture {
+    | ---------------- associated function in this implementation
+409 |     fn new() -> Self {
+    |        ^^^
+
+warning: function `response` is never used
+   --> /workspace/crates/hm-core/src/process_task.rs:430:4
+    |
+430 | fn response(status: Status, written: u64) -> Response {
+    |    ^^^^^^^^
+
+warning: function `reply` is never used
+   --> /workspace/crates/hm-core/src/process_task.rs:433:4
+    |
+433 | fn reply(guard: TaskAdmission, status: Status, written: u64) -> Settlement {
+    |    ^^^^^
+
+warning: function `wire_error` is never used
+   --> /workspace/crates/hm-core/src/process_task.rs:437:4
+    |
+437 | fn wire_error(error: task_wire::Error) -> Status {
+    |    ^^^^^^^^^^
+
+warning: function `completion_word` is never used
+   --> /workspace/crates/hm-core/src/process_task.rs:451:4
+    |
+451 | fn completion_word(end: End) -> u64 {
+    |    ^^^^^^^^^^^^^^^
+
+warning: methods `selected_owner`, `selected_owner_mut`, `lookup_cap`, `consume_child`, `dispatch_owned`, and `dispatch_task` are never used
+   --> /workspace/crates/hm-core/src/process_task.rs:465:8
+    |
+464 | impl<'e, 'p> Group<'e, 'p> {
+    | -------------------------- methods in this implementation
+465 |     fn selected_owner(&self, index: usize) -> &Process<'p> {
+    |        ^^^^^^^^^^^^^^
+...
+471 |     fn selected_owner_mut(&mut self, index: usize) -> &mut Process<'p> {
+    |        ^^^^^^^^^^^^^^^^^^
+...
+477 |     fn lookup_cap(&self, parent: TaskId, token: u64) -> Result<(usize, Cap), Status> {
+    |        ^^^^^^^^^^
+...
+492 |     fn consume_child(&mut self, pending: Pending) -> Result<Completion, Error> {
+    |        ^^^^^^^^^^^^^
+...
+501 |     fn dispatch_owned(
+    |        ^^^^^^^^^^^^^^
+...
+686 |     fn dispatch_task(
+    |        ^^^^^^^^^^^^^
+
+warning: multiple methods are never used
+   --> /workspace/crates/hm-core/src/process_task_turn.rs:5:8
+    |
+  4 | impl Group<'_, '_> {
+    | ------------------ methods in this implementation
+  5 |     fn management(&self) -> Management {
+    |        ^^^^^^^^^^
+...
+ 17 |     fn refresh_management(&self, m: &mut Management) {
+    |        ^^^^^^^^^^^^^^^^^^
+...
+ 22 |     fn release_owner(&mut self, index: usize) {
+    |        ^^^^^^^^^^^^^
+...
+ 32 |     fn close_root(&mut self, end: End, evidence: RootEvidence, m: &mut Management) {
+    |        ^^^^^^^^^^
+...
+ 63 |     fn manage(&mut self, m: &mut Management) -> Result<(), Error> {
+    |        ^^^^^^
+...
+120 |     fn fail_management(&mut self, m: &mut Management, trigger: Option<TaskId>) {
+    |        ^^^^^^^^^^^^^^^
+...
+129 |     pub(crate) fn task_turn(&mut self) -> Result<Turn, Error> {
+    |                   ^^^^^^^^^
+...
+355 |     fn execute_task_turn(
+    |        ^^^^^^^^^^^^^^^^^
+
+warning: function `end_name` is never used
+   --> /workspace/crates/hm-core/src/process_task_turn.rs:512:4
+    |
+512 | fn end_name(end: Option<End>) -> (&'static str, u8) {
+    |    ^^^^^^^^
+
+warning: function `state_name` is never used
+   --> /workspace/crates/hm-core/src/process_task_turn.rs:524:4
+    |
+524 | fn state_name(state: TaskState) -> &'static str {
+    |    ^^^^^^^^^^
+
+warning: function `bytes_record` is never used
+   --> /workspace/crates/hm-core/src/process_task_turn.rs:533:4
+    |
+533 | fn bytes_record(group: u64, turn: u64, part: &str, bytes: &[u8]) {
+    |    ^^^^^^^^^^^^
+
+warning: function `closure_record` is never used
+   --> /workspace/crates/hm-core/src/process_task_turn.rs:544:4
+    |
+544 | fn closure_record(kind: &str, group: u64, closure: RootClosure, charged: Option<usize>) {
+    |    ^^^^^^^^^^^^^^
+
+warning: methods `emit_management`, `emit_administrative`, `emit_publication`, and `emit_task_step` are never used
+   --> /workspace/crates/hm-core/src/process_task_turn.rs:565:8
+    |
+564 | impl Group<'_, '_> {
+    | ------------------ methods in this implementation
+565 |     fn emit_management(&mut self, m: &Management) {
+    |        ^^^^^^^^^^^^^^^
+...
+583 |     fn emit_administrative(&mut self, m: &Management) {
+    |        ^^^^^^^^^^^^^^^^^^^
+...
+593 |     fn emit_publication(&mut self, c: &TaskCompletion, m: &Management) {
+    |        ^^^^^^^^^^^^^^^^
+...
+600 |     fn emit_task_step(
+    |        ^^^^^^^^^^^^^^
+
+warning: static `ARCHIVE` is never used
+ --> /workspace/crates/hm-core/src/process_task_negative.rs:5:8
+  |
+5 | static ARCHIVE: &[u8] = include_bytes!("../fixtures/task-negative-initramfs.cpio");
+  |        ^^^^^^^
+
+warning: variants `Armed`, `Fired`, and `ConsumedFailed` are never constructed
+  --> /workspace/crates/hm-core/src/process_task_negative.rs:13:30
+   |
+13 | pub(crate) enum HookStatus { Armed, Fired, ConsumedFailed }
+   |                 ----------   ^^^^^  ^^^^^  ^^^^^^^^^^^^^^
+   |                 |
+   |                 variants in this enum
+   |
+   = note: `HookStatus` has derived impls for the traits `Debug` and `Clone`, but these are intentionally ignored during dead code analysis
+
+warning: variants `None`, `TaskCapabilityMax`, and `ChildSlotsMax` are never constructed
+  --> /workspace/crates/hm-core/src/process_task_negative.rs:15:28
+   |
+15 | pub(crate) enum SeedKind { None, TaskCapabilityMax, ChildSlotsMax }
+   |                 --------   ^^^^  ^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^
+   |                 |
+   |                 variants in this enum
+   |
+   = note: `SeedKind` has derived impls for the traits `Debug` and `Clone`, but these are intentionally ignored during dead code analysis
+
+warning: methods `case`, `state`, `fired`, `seed`, and `succeeded` are never used
+  --> /workspace/crates/hm-core/src/process_task_negative.rs:24:19
+   |
+23 | impl NegativeObservation {
+   | ------------------------ methods in this implementation
+24 |     pub(crate) fn case(self) -> NegativeCase { self.case }
+   |                   ^^^^
+25 |     pub(crate) fn state(self) -> HookStatus { self.state }
+   |                   ^^^^^
+26 |     pub(crate) fn fired(self) -> u8 { self.fired }
+   |                   ^^^^^
+27 |     pub(crate) fn seed(self) -> SeedKind { self.seed }
+   |                   ^^^^
+28 |     pub(crate) fn succeeded(self) -> bool { self.state == HookStatus::Fired && self.fired == 1 }
+   |                   ^^^^^^^^^
+
+warning: variants `FinalBudget`, `Retire`, `Abandon`, `WakeInstall`, and `ChildRetire` are never constructed
+  --> /workspace/crates/hm-core/src/process_task_negative.rs:31:29
+   |
+31 | pub(super) enum Injection { FinalBudget, Retire, Abandon, WakeInstall, ChildRetire }
+   |                 ---------   ^^^^^^^^^^^  ^^^^^^  ^^^^^^^  ^^^^^^^^^^^  ^^^^^^^^^^^
+   |                 |
+   |                 variants in this enum
+   |
+   = note: `Injection` has a derived impl for the trait `Clone`, but this is intentionally ignored during dead code analysis
+
+warning: method `emit` is never used
+  --> /workspace/crates/hm-core/src/process_task_negative.rs:33:19
+   |
+32 | impl Injection {
+   | -------------- method in this implementation
+33 |     pub(super) fn emit(self, group: u64, turn: u64) {
+   |                   ^^^^
+
+warning: fields `observation`, `first`, and `wake_fact` are never read
+  --> /workspace/crates/hm-core/src/process_task_negative.rs:43:5
+   |
+42 | pub(super) struct HookState {
+   |                   --------- fields in this struct
+43 |     observation: NegativeObservation,
+   |     ^^^^^^^^^^^
+44 |     first: Option<(TaskId, u32)>,
+   |     ^^^^^
+45 |     wake_fact: Option<Injection>,
+   |     ^^^^^^^^^
+
+warning: associated items `new`, `armed`, `consume`, and `succeed` are never used
+  --> /workspace/crates/hm-core/src/process_task_negative.rs:48:19
+   |
+47 | impl HookState {
+   | -------------- associated items in this implementation
+48 |     pub(super) fn new(case: NegativeCase) -> Self {
+   |                   ^^^
+...
+60 |     fn armed(&self, case: NegativeCase) -> bool {
+   |        ^^^^^
+...
+63 |     fn consume(&mut self) {
+   |        ^^^^^^^
+...
+67 |     fn succeed(&mut self) {
+   |        ^^^^^^^
+
+warning: multiple associated items are never used
+   --> /workspace/crates/hm-core/src/process_task_negative.rs:75:19
+    |
+ 73 | impl<'e, 'p> Group<'e, 'p> {
+    | -------------------------- associated items in this implementation
+ 74 |     /// Immutable canonical bytes; this conveys no hook provenance.
+ 75 |     pub(crate) fn negative_archive() -> &'static [u8] { ARCHIVE }
+    |                   ^^^^^^^^^^^^^^^^
+ 76 |     #[inline(never)]
+ 77 |     pub(crate) fn new_negative_task(executor: &'e mut Executor, factory: Factory<'p>) -> Result<Self, Error> {
+    |                   ^^^^^^^^^^^^^^^^^
+...
+ 94 |     pub(crate) fn negative_observation(&self) -> Result<NegativeObservation, Error> {
+    |                   ^^^^^^^^^^^^^^^^^^^^
+...
+ 97 |     fn negative_hook(&self) -> Option<&HookState> { self.authority().negative.as_ref() }
+    |        ^^^^^^^^^^^^^
+ 98 |     fn negative_hook_mut(&mut self) -> &mut HookState {
+    |        ^^^^^^^^^^^^^^^^^
+...
+101 |     fn negative_fire(&mut self, capture: &mut TaskCapture, fact: Injection) {
+    |        ^^^^^^^^^^^^^
+...
+106 |     pub(super) fn negative_commit(&mut self, child: TaskId, program: u32) {
+    |                   ^^^^^^^^^^^^^^^
+...
+111 |     pub(super) fn negative_abandon(&mut self, index: usize, guard: &TaskAdmission, capture: &mut TaskCapture) -> bool {
+    |                   ^^^^^^^^^^^^^^^^
+...
+119 |     pub(super) fn negative_install_wake(&mut self, root: TaskId, pending: Pending, session: Session) -> Result<(), Session> {
+    |                   ^^^^^^^^^^^^^^^^^^^^^
+...
+131 |     pub(super) fn negative_take_wake(&mut self, capture: &mut TaskCapture) {
+    |                   ^^^^^^^^^^^^^^^^^^
+...
+138 |     pub(super) fn negative_final_boundary(&mut self, index: usize, report: &StepReport, work: &Work, capture: &mut TaskCapture, har...
+    |                   ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: 170 warnings emitted
+

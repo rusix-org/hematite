@@ -1,0 +1,55 @@
+{
+  "passed": true,
+  "profiles": {
+    "final_budget_spawn": {
+      "returncode": 0,
+      "passed": true,
+      "errors": []
+    },
+    "final_budget_park": {
+      "returncode": 0,
+      "passed": true,
+      "errors": []
+    },
+    "platform_reply": {
+      "returncode": 0,
+      "passed": true,
+      "errors": []
+    },
+    "platform_park": {
+      "returncode": 0,
+      "passed": true,
+      "errors": []
+    },
+    "abandon_dispatch": {
+      "returncode": 0,
+      "passed": true,
+      "errors": []
+    },
+    "wake_install_failure": {
+      "returncode": 0,
+      "passed": true,
+      "errors": []
+    },
+    "capability_exhaustion": {
+      "returncode": 0,
+      "passed": true,
+      "errors": []
+    },
+    "slot_exhaustion": {
+      "returncode": 0,
+      "passed": true,
+      "errors": []
+    },
+    "child_retire_ready": {
+      "returncode": 0,
+      "passed": true,
+      "errors": []
+    },
+    "child_retire_waiting": {
+      "returncode": 0,
+      "passed": true,
+      "errors": []
+    }
+  }
+}

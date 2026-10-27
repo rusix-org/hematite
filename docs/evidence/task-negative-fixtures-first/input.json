@@ -1,0 +1,22 @@
+{
+  "update": true,
+  "layout": "/workspace/docs/evidence/task-negative-layout-second/result.json",
+  "sources": {
+    "crates/hm-core/fixtures/task_negative_cases.rs": "53e81bf19812421a5a6ad69e27deb5bbbe12a1aac1c2acacf73b45b97548c406",
+    "crates/hm-core/fixtures/task_negative_cases.S": "8e72d4f2e28ec7f5c8b4f13b684f3e6794925b45ef704045cadbf8693447fdd4",
+    "crates/hm-core/fixtures/task_negative_cases.ld": "20a9ff90960aaaad9f0c680c8bcef4e155038888ff3afbbd207c1b0fe28528f1",
+    "crates/hm-core/fixtures/apps.rs": "8a8238481fc0d806dd8d6a475755923ade6ab513465bea6c45303b41caa65c51",
+    "crates/hm-core/fixtures/apps.S": "00fd8c048652955a101b510fad4569dfb5a672fc3ab3f8e353629a1bd013af6f",
+    "crates/hm-core/fixtures/native-elf.ld": "20a9ff90960aaaad9f0c680c8bcef4e155038888ff3afbbd207c1b0fe28528f1",
+    "crates/hm-core/fixtures/apps/hello.elf": "9d7008184000b47c3310c5d93392b871ad7fb60c4c0d0a0d47726393ffa1cde1",
+    "crates/hm-kernel/src/startup_input.rs": "78f6593de5ff4dcdaab66b58bc807e04dcf78008955b6295e98479cb8bbce059",
+    "crates/hm-kernel/src/task_wire.rs": "8b3b76438f013d06df43b6af89c20b72b1514a65194483739f028825d04dc711",
+    "tools/build_task_negative_cases.py": "f4607ebcc66db15b7a5b98c990c547da04c0be618933bfc8c70b88ed712c5b90",
+    "tools/build_tasks.py": "cb7be14de14b48c7cb7dfd2928f3bb31a9955c6c5698d264c05e10add11bad8d",
+    "tools/build_task_cases.py": "c963a37c34caaa9988630ceef7de14b45082cd833f6bcd34cd274414d03773f0",
+    "tools/build_apps.py": "a0f86453259b04debca675edb08091ea8472a49f35e418e480d7bb81d99b7958",
+    "tools/build_initramfs.py": "3ef54b0f1caa7a35eb554532abffe3cc9b87fc687119600621c77903ec3cb116",
+    "tools/test_runtime.py": "8297737f05c26e7d8c384828b5eb7eff28187320a6989958694040ad8e24f079",
+    "tools/test_process.py": "d1d761a06ce8da518243c0d6e4453a9c2af803d34ff92c2f626b8a9bf6991d6e"
+  }
+}

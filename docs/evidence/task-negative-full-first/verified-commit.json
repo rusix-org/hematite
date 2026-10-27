@@ -1,0 +1,7 @@
+{
+  "commit": "ccdd6bc55e0a3c475736530fd9d7381883f49642",
+  "checked_inputs": 333,
+  "mismatches": [],
+  "passed": true,
+  "scope": "source identity of the preserved failed full run; not test success"
+}

@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "archive": {
+    "bytes": 269312,
+    "sha256": "cdd793fa869f53eb8b61303a5aabcb6a8f9f1420f4c96721b2883c851ec1613f",
+    "entries": 15,
+    "files": 13,
+    "layout_scope": "task-negative-tests"
+  },
+  "scope": "dedicated negative fixture artifacts only; no hook or execution evidence"
+}

@@ -1,0 +1,336 @@
+hematite: ARM64 Rust kernel entered at EL1
+Boot RAM bytes: 0x0000000008000000 (discovered RAM)
+Frame pool pages: 0x0000000000000ca4 (4 KiB each; boot reservations excluded)
+HMTASK PREFLIGHT checks=15 irqs=8
+HMTASK BEGIN 1
+HMTASK INFO wire=1 cpus=1 frequency=62500000 total_ticks=6250000 quantum_ticks=62500 process_bytes=9832 process_pages=3 image_bytes=472 image_pages=1 authority_bytes=968 authority_pages=1
+HMTASK CASE index=0 pass=0 name=slot_exhaustion before=3236
+HMTASK SEED kind=child_slots_max value=4294967295
+HMTASK GROUP group=1 limit=512 metadata=3 before=3236 after=3197
+HMTASK ROOT group=1 slot=0 generation=1 launch_generation=1 console_generation=1 fixture=slot_exhaustion entry=4294967296 root=1077272576 process_frames=33 box_frames=3 before=3236 after=3197
+HMTASK STEP group=1 turn=1 slot=0 generation=1 state=ready calls=0 written=0 irqs=0 remaining=6250000 charged=0 turns=0 before=3197
+HMTASK CLOCK group=1 turn=1 begin=9666480 remaining=6250000 comparator=9728980 whole_end=15916480
+HMTASK ENTER group=1 turn=1 pc=4294967296 root=1077272576
+HMTASK TRAP group=1 turn=1 kind=irq esr=0 far=0 elr=4294967296 spsr=4195136
+HMTASK CHARGE group=1 turn=1 end=10401045 accounted=1 remaining=5515435 charged=734565 turns=1
+HMTASK RETURN group=1 turn=1 event=timer terminal=none state=ready entered=1 code=0 calls=0 written=0 irqs=1 elr=4294967296 remaining=5515435 charged=734565 turns=1 root=1076457472 vbar=1075841024 controls=1 before=3197 after=3197
+HMTASK MANAGE group=1 sequence=1 woken=0 reaped=0 remaining_children=0 closing=0 charged=39
+HMTASK STEP group=1 turn=2 slot=0 generation=1 state=ready calls=0 written=0 irqs=1 remaining=5515435 charged=734565 turns=1 before=3197
+HMTASK CLOCK group=1 turn=2 begin=10721597 remaining=5515435 comparator=10784097 whole_end=16237032
+HMTASK ENTER group=1 turn=2 pc=4294967296 root=1077272576
+HMTASK TRAP group=1 turn=2 kind=svc esr=1442840576 far=0 elr=4294967360 spsr=1614807872
+HMTASK CALL group=1 turn=2 ordinal=1 pc=4294967360 version=1 operation=3 arg1=4294967298 arg2=4297064320 arg3=64
+HMTASK COPY group=1 turn=2 part=descriptor length=64 hex=01000000400000000100000003000000142000000100000010000000000000008000000000000000030000000000000000000000000000000000000000000000
+HMTASK COPY group=1 turn=2 part=input length=16 hex=776f726b657220636f6d706c6574650a
+HMTASK COMMIT group=1 turn=2 cap_slot=3 cap_generation=2 child_slot=1 child_generation=4294967295 program=1 console_generation=2 entry=4294967296 root=1077424128 process_frames=32 box_frames=3 before=3197 after=3162
+HMTASK SETTLE group=1 turn=2 kind=reply status=0 result=8589934595 child_slot=0 child_generation=0 cap_slot=0 cap_generation=0
+HMTASK CHARGE group=1 turn=2 end=12107608 accounted=1 remaining=4129424 charged=2120576 turns=2
+HMTASK RETURN group=1 turn=2 event=svc terminal=none state=ready entered=1 code=0 calls=1 written=0 irqs=1 elr=4294967360 remaining=4129424 charged=2120576 turns=2 root=1076457472 vbar=1075841024 controls=1 before=3197 after=3162
+HMTASK MANAGE group=1 sequence=2 woken=0 reaped=0 remaining_children=1 closing=0 charged=74
+HMTASK STEP group=1 turn=1 slot=1 generation=4294967295 state=ready calls=0 written=0 irqs=0 remaining=6250000 charged=0 turns=0 before=3162
+HMTASK CLOCK group=1 turn=1 begin=12518456 remaining=6250000 comparator=12580956 whole_end=18768456
+HMTASK ENTER group=1 turn=1 pc=4294967296 root=1077424128
+HMTASK TRAP group=1 turn=1 kind=irq esr=0 far=0 elr=4294967296 spsr=4195136
+HMTASK CHARGE group=1 turn=1 end=13138560 accounted=1 remaining=5629896 charged=620104 turns=1
+HMTASK RETURN group=1 turn=1 event=timer terminal=none state=ready entered=1 code=0 calls=0 written=0 irqs=1 elr=4294967296 remaining=5629896 charged=620104 turns=1 root=1076457472 vbar=1075841024 controls=1 before=3162 after=3162
+HMTASK MANAGE group=1 sequence=3 woken=0 reaped=0 remaining_children=1 closing=0 charged=74
+HMTASK STEP group=1 turn=3 slot=0 generation=1 state=ready calls=1 written=0 irqs=1 remaining=4129424 charged=2120576 turns=2 before=3162
+HMTASK CLOCK group=1 turn=3 begin=13331620 remaining=4129424 comparator=13394120 whole_end=17461044
+HMTASK ENTER group=1 turn=3 pc=4294967360 root=1077272576
+HMTASK TRAP group=1 turn=3 kind=svc esr=1442840576 far=0 elr=4294967388 spsr=1614807872
+HMTASK CALL group=1 turn=3 ordinal=2 pc=4294967388 version=1 operation=4 arg1=8589934595 arg2=0 arg3=0
+HMTASK SETTLE group=1 turn=3 kind=park status=0 result=0 child_slot=1 child_generation=4294967295 cap_slot=3 cap_generation=2
+HMTASK CHARGE group=1 turn=3 end=13358247 accounted=1 remaining=4102797 charged=2147203 turns=3
+HMTASK RETURN group=1 turn=3 event=svc terminal=none state=waiting entered=1 code=0 calls=2 written=0 irqs=1 elr=4294967388 remaining=4102797 charged=2147203 turns=3 root=1076457472 vbar=1075841024 controls=1 before=3162 after=3162
+HMTASK MANAGE group=1 sequence=4 woken=0 reaped=0 remaining_children=1 closing=0 charged=74
+HMTASK STEP group=1 turn=2 slot=1 generation=4294967295 state=ready calls=0 written=0 irqs=1 remaining=5629896 charged=620104 turns=1 before=3162
+HMTASK CLOCK group=1 turn=2 begin=13626392 remaining=5629896 comparator=13688892 whole_end=19256288
+HMTASK ENTER group=1 turn=2 pc=4294967296 root=1077424128
+HMTASK TRAP group=1 turn=2 kind=svc esr=1442840576 far=0 elr=4294967480 spsr=1614807872
+HMTASK CALL group=1 turn=2 ordinal=1 pc=4294967480 version=1 operation=1 arg1=8589934593 arg2=18446744073709551615 arg3=0
+HMTASK SETTLE group=1 turn=2 kind=reply status=0 result=0 child_slot=0 child_generation=0 cap_slot=0 cap_generation=0
+HMTASK CHARGE group=1 turn=2 end=13661147 accounted=1 remaining=5595141 charged=654859 turns=2
+HMTASK RETURN group=1 turn=2 event=svc terminal=none state=ready entered=1 code=0 calls=1 written=0 irqs=1 elr=4294967480 remaining=5595141 charged=654859 turns=2 root=1076457472 vbar=1075841024 controls=1 before=3162 after=3162
+HMTASK MANAGE group=1 sequence=5 woken=0 reaped=0 remaining_children=1 closing=0 charged=74
+HMTASK STEP group=1 turn=3 slot=1 generation=4294967295 state=ready calls=1 written=0 irqs=1 remaining=5595141 charged=654859 turns=2 before=3162
+HMTASK CLOCK group=1 turn=3 begin=13912494 remaining=5595141 comparator=13974994 whole_end=19507635
+HMTASK ENTER group=1 turn=3 pc=4294967480 root=1077424128
+HMTASK TRAP group=1 turn=3 kind=svc esr=1442840576 far=0 elr=4294967512 spsr=1614807872
+HMTASK CALL group=1 turn=3 ordinal=2 pc=4294967512 version=1 operation=1 arg1=8589934593 arg2=18446744073709551615 arg3=0
+HMTASK SETTLE group=1 turn=3 kind=reply status=0 result=0 child_slot=0 child_generation=0 cap_slot=0 cap_generation=0
+HMTASK CHARGE group=1 turn=3 end=13925533 accounted=1 remaining=5582102 charged=667898 turns=3
+HMTASK RETURN group=1 turn=3 event=svc terminal=none state=ready entered=1 code=0 calls=2 written=0 irqs=1 elr=4294967512 remaining=5582102 charged=667898 turns=3 root=1076457472 vbar=1075841024 controls=1 before=3162 after=3162
+HMTASK MANAGE group=1 sequence=6 woken=0 reaped=0 remaining_children=1 closing=0 charged=74
+HMTASK STEP group=1 turn=4 slot=1 generation=4294967295 state=ready calls=2 written=0 irqs=1 remaining=5582102 charged=667898 turns=3 before=3162
+HMTASK CLOCK group=1 turn=4 begin=14178613 remaining=5582102 comparator=14241113 whole_end=19760715
+HMTASK ENTER group=1 turn=4 pc=4294967512 root=1077424128
+HMTASK TRAP group=1 turn=4 kind=svc esr=1442840576 far=0 elr=4294967544 spsr=1614807872
+HMTASK CALL group=1 turn=4 ordinal=3 pc=4294967544 version=1 operation=1 arg1=8589934593 arg2=18446744073709551615 arg3=0
+HMTASK SETTLE group=1 turn=4 kind=reply status=0 result=0 child_slot=0 child_generation=0 cap_slot=0 cap_generation=0
+HMTASK CHARGE group=1 turn=4 end=14190810 accounted=1 remaining=5569905 charged=680095 turns=4
+HMTASK RETURN group=1 turn=4 event=svc terminal=none state=ready entered=1 code=0 calls=3 written=0 irqs=1 elr=4294967544 remaining=5569905 charged=680095 turns=4 root=1076457472 vbar=1075841024 controls=1 before=3162 after=3162
+HMTASK MANAGE group=1 sequence=7 woken=0 reaped=0 remaining_children=1 closing=0 charged=74
+HMTASK STEP group=1 turn=5 slot=1 generation=4294967295 state=ready calls=3 written=0 irqs=1 remaining=5569905 charged=680095 turns=4 before=3162
+HMTASK CLOCK group=1 turn=5 begin=14433095 remaining=5569905 comparator=14495595 whole_end=20003000
+HMTASK ENTER group=1 turn=5 pc=4294967544 root=1077424128
+HMTASK TRAP group=1 turn=5 kind=svc esr=1442840576 far=0 elr=4294967576 spsr=1614807872
+HMTASK CALL group=1 turn=5 ordinal=4 pc=4294967576 version=1 operation=1 arg1=8589934593 arg2=18446744073709551615 arg3=0
+HMTASK SETTLE group=1 turn=5 kind=reply status=0 result=0 child_slot=0 child_generation=0 cap_slot=0 cap_generation=0
+HMTASK CHARGE group=1 turn=5 end=14448421 accounted=1 remaining=5554579 charged=695421 turns=5
+HMTASK RETURN group=1 turn=5 event=svc terminal=none state=ready entered=1 code=0 calls=4 written=0 irqs=1 elr=4294967576 remaining=5554579 charged=695421 turns=5 root=1076457472 vbar=1075841024 controls=1 before=3162 after=3162
+HMTASK MANAGE group=1 sequence=8 woken=0 reaped=0 remaining_children=1 closing=0 charged=74
+HMTASK STEP group=1 turn=6 slot=1 generation=4294967295 state=ready calls=4 written=0 irqs=1 remaining=5554579 charged=695421 turns=5 before=3162
+HMTASK CLOCK group=1 turn=6 begin=14693251 remaining=5554579 comparator=14755751 whole_end=20247830
+HMTASK ENTER group=1 turn=6 pc=4294967576 root=1077424128
+HMTASK TRAP group=1 turn=6 kind=svc esr=1442840576 far=0 elr=4294967332 spsr=1614807872
+HMTASK CALL group=1 turn=6 ordinal=5 pc=4294967332 version=1 operation=1 arg1=8589934593 arg2=4297064368 arg3=16
+HMTASK OUTPUT group=1 turn=6 ordinal=5 length=16 hex=776f726b657220636f6d706c6574650a
+HMTASK SETTLE group=1 turn=6 kind=reply status=0 result=16 child_slot=0 child_generation=0 cap_slot=0 cap_generation=0
+HMTASK CHARGE group=1 turn=6 end=14717273 accounted=1 remaining=5530557 charged=719443 turns=6
+HMTASK RETURN group=1 turn=6 event=svc terminal=none state=ready entered=1 code=0 calls=5 written=16 irqs=1 elr=4294967332 remaining=5530557 charged=719443 turns=6 root=1076457472 vbar=1075841024 controls=1 before=3162 after=3162
+HMTASK MANAGE group=1 sequence=9 woken=0 reaped=0 remaining_children=1 closing=0 charged=74
+HMTASK STEP group=1 turn=7 slot=1 generation=4294967295 state=ready calls=5 written=16 irqs=1 remaining=5530557 charged=719443 turns=6 before=3162
+HMTASK CLOCK group=1 turn=7 begin=14992441 remaining=5530557 comparator=15054941 whole_end=20522998
+HMTASK ENTER group=1 turn=7 pc=4294967332 root=1077424128
+HMTASK TRAP group=1 turn=7 kind=svc esr=1442840576 far=0 elr=4294967444 spsr=1614807872
+HMTASK CALL group=1 turn=7 ordinal=6 pc=4294967444 version=1 operation=2 arg1=55 arg2=0 arg3=0
+HMTASK SETTLE group=1 turn=7 kind=terminate status=0 result=0 child_slot=0 child_generation=0 cap_slot=0 cap_generation=0
+HMTASK CHARGE group=1 turn=7 end=15013293 accounted=1 remaining=5509705 charged=740295 turns=7
+HMTASK RETURN group=1 turn=7 event=svc terminal=exit state=completed entered=1 code=55 calls=6 written=16 irqs=1 elr=4294967444 remaining=5509705 charged=740295 turns=7 root=1076457472 vbar=1075841024 controls=1 before=3162 after=3197
+HMTASK MANAGE group=1 sequence=10 woken=1 reaped=1 remaining_children=0 closing=0 charged=39
+HMTASK STEP group=1 turn=4 slot=0 generation=1 state=ready calls=2 written=0 irqs=1 remaining=4102797 charged=2147203 turns=3 before=3197
+HMTASK CLOCK group=1 turn=4 begin=15301569 remaining=4102797 comparator=15364069 whole_end=19404366
+HMTASK ENTER group=1 turn=4 pc=4294967388 root=1077272576
+HMTASK TRAP group=1 turn=4 kind=svc esr=1442840576 far=0 elr=4294967360 spsr=1614807872
+HMTASK CALL group=1 turn=4 ordinal=3 pc=4294967360 version=1 operation=3 arg1=4294967298 arg2=4297064320 arg3=64
+HMTASK COPY group=1 turn=4 part=descriptor length=64 hex=01000000400000000100000003000000142000000100000010000000000000008000000000000000030000000000000000000000000000000000000000000000
+HMTASK COPY group=1 turn=4 part=input length=16 hex=776f726b657220636f6d706c6574650a
+HMTASK COMMIT group=1 turn=4 cap_slot=3 cap_generation=3 child_slot=2 child_generation=4294967295 program=1 console_generation=3 entry=4294967296 root=1077424128 process_frames=32 box_frames=3 before=3197 after=3162
+HMTASK SETTLE group=1 turn=4 kind=reply status=0 result=12884901891 child_slot=0 child_generation=0 cap_slot=0 cap_generation=0
+HMTASK CHARGE group=1 turn=4 end=16504703 accounted=1 remaining=2899663 charged=3350337 turns=4
+HMTASK RETURN group=1 turn=4 event=svc terminal=none state=ready entered=1 code=0 calls=3 written=0 irqs=1 elr=4294967360 remaining=2899663 charged=3350337 turns=4 root=1076457472 vbar=1075841024 controls=1 before=3197 after=3162
+HMTASK MANAGE group=1 sequence=11 woken=0 reaped=0 remaining_children=1 closing=0 charged=74
+HMTASK STEP group=1 turn=1 slot=2 generation=4294967295 state=ready calls=0 written=0 irqs=0 remaining=6250000 charged=0 turns=0 before=3162
+HMTASK CLOCK group=1 turn=1 begin=16868740 remaining=6250000 comparator=16931240 whole_end=23118740
+HMTASK ENTER group=1 turn=1 pc=4294967296 root=1077424128
+HMTASK TRAP group=1 turn=1 kind=irq esr=0 far=0 elr=4294967296 spsr=4195136
+HMTASK CHARGE group=1 turn=1 end=17461942 accounted=1 remaining=5656798 charged=593202 turns=1
+HMTASK RETURN group=1 turn=1 event=timer terminal=none state=ready entered=1 code=0 calls=0 written=0 irqs=1 elr=4294967296 remaining=5656798 charged=593202 turns=1 root=1076457472 vbar=1075841024 controls=1 before=3162 after=3162
+HMTASK MANAGE group=1 sequence=12 woken=0 reaped=0 remaining_children=1 closing=0 charged=74
+HMTASK STEP group=1 turn=5 slot=0 generation=1 state=ready calls=3 written=0 irqs=1 remaining=2899663 charged=3350337 turns=4 before=3162
+HMTASK CLOCK group=1 turn=5 begin=17654858 remaining=2899663 comparator=17717358 whole_end=20554521
+HMTASK ENTER group=1 turn=5 pc=4294967360 root=1077272576
+HMTASK TRAP group=1 turn=5 kind=svc esr=1442840576 far=0 elr=4294967388 spsr=1614807872
+HMTASK CALL group=1 turn=5 ordinal=4 pc=4294967388 version=1 operation=4 arg1=12884901891 arg2=0 arg3=0
+HMTASK SETTLE group=1 turn=5 kind=park status=0 result=0 child_slot=2 child_generation=4294967295 cap_slot=3 cap_generation=3
+HMTASK CHARGE group=1 turn=5 end=17670079 accounted=1 remaining=2884442 charged=3365558 turns=5
+HMTASK RETURN group=1 turn=5 event=svc terminal=none state=waiting entered=1 code=0 calls=4 written=0 irqs=1 elr=4294967388 remaining=2884442 charged=3365558 turns=5 root=1076457472 vbar=1075841024 controls=1 before=3162 after=3162
+HMTASK MANAGE group=1 sequence=13 woken=0 reaped=0 remaining_children=1 closing=0 charged=74
+HMTASK STEP group=1 turn=2 slot=2 generation=4294967295 state=ready calls=0 written=0 irqs=1 remaining=5656798 charged=593202 turns=1 before=3162
+HMTASK CLOCK group=1 turn=2 begin=17912133 remaining=5656798 comparator=17974633 whole_end=23568931
+HMTASK ENTER group=1 turn=2 pc=4294967296 root=1077424128
+HMTASK TRAP group=1 turn=2 kind=svc esr=1442840576 far=0 elr=4294967480 spsr=1614807872
+HMTASK CALL group=1 turn=2 ordinal=1 pc=4294967480 version=1 operation=1 arg1=12884901889 arg2=18446744073709551615 arg3=0
+HMTASK SETTLE group=1 turn=2 kind=reply status=0 result=0 child_slot=0 child_generation=0 cap_slot=0 cap_generation=0
+HMTASK CHARGE group=1 turn=2 end=17942279 accounted=1 remaining=5626652 charged=623348 turns=2
+HMTASK RETURN group=1 turn=2 event=svc terminal=none state=ready entered=1 code=0 calls=1 written=0 irqs=1 elr=4294967480 remaining=5626652 charged=623348 turns=2 root=1076457472 vbar=1075841024 controls=1 before=3162 after=3162
+HMTASK MANAGE group=1 sequence=14 woken=0 reaped=0 remaining_children=1 closing=0 charged=74
+HMTASK STEP group=1 turn=3 slot=2 generation=4294967295 state=ready calls=1 written=0 irqs=1 remaining=5626652 charged=623348 turns=2 before=3162
+HMTASK CLOCK group=1 turn=3 begin=18190593 remaining=5626652 comparator=18253093 whole_end=23817245
+HMTASK ENTER group=1 turn=3 pc=4294967480 root=1077424128
+HMTASK TRAP group=1 turn=3 kind=svc esr=1442840576 far=0 elr=4294967512 spsr=1614807872
+HMTASK CALL group=1 turn=3 ordinal=2 pc=4294967512 version=1 operation=1 arg1=12884901889 arg2=18446744073709551615 arg3=0
+HMTASK SETTLE group=1 turn=3 kind=reply status=0 result=0 child_slot=0 child_generation=0 cap_slot=0 cap_generation=0
+HMTASK CHARGE group=1 turn=3 end=18207560 accounted=1 remaining=5609685 charged=640315 turns=3
+HMTASK RETURN group=1 turn=3 event=svc terminal=none state=ready entered=1 code=0 calls=2 written=0 irqs=1 elr=4294967512 remaining=5609685 charged=640315 turns=3 root=1076457472 vbar=1075841024 controls=1 before=3162 after=3162
+HMTASK MANAGE group=1 sequence=15 woken=0 reaped=0 remaining_children=1 closing=0 charged=74
+HMTASK STEP group=1 turn=4 slot=2 generation=4294967295 state=ready calls=2 written=0 irqs=1 remaining=5609685 charged=640315 turns=3 before=3162
+HMTASK CLOCK group=1 turn=4 begin=18456864 remaining=5609685 comparator=18519364 whole_end=24066549
+HMTASK ENTER group=1 turn=4 pc=4294967512 root=1077424128
+HMTASK TRAP group=1 turn=4 kind=svc esr=1442840576 far=0 elr=4294967544 spsr=1614807872
+HMTASK CALL group=1 turn=4 ordinal=3 pc=4294967544 version=1 operation=1 arg1=12884901889 arg2=18446744073709551615 arg3=0
+HMTASK SETTLE group=1 turn=4 kind=reply status=0 result=0 child_slot=0 child_generation=0 cap_slot=0 cap_generation=0
+HMTASK CHARGE group=1 turn=4 end=18471592 accounted=1 remaining=5594957 charged=655043 turns=4
+HMTASK RETURN group=1 turn=4 event=svc terminal=none state=ready entered=1 code=0 calls=3 written=0 irqs=1 elr=4294967544 remaining=5594957 charged=655043 turns=4 root=1076457472 vbar=1075841024 controls=1 before=3162 after=3162
+HMTASK MANAGE group=1 sequence=16 woken=0 reaped=0 remaining_children=1 closing=0 charged=74
+HMTASK STEP group=1 turn=5 slot=2 generation=4294967295 state=ready calls=3 written=0 irqs=1 remaining=5594957 charged=655043 turns=4 before=3162
+HMTASK CLOCK group=1 turn=5 begin=18716453 remaining=5594957 comparator=18778953 whole_end=24311410
+HMTASK ENTER group=1 turn=5 pc=4294967544 root=1077424128
+HMTASK TRAP group=1 turn=5 kind=svc esr=1442840576 far=0 elr=4294967576 spsr=1614807872
+HMTASK CALL group=1 turn=5 ordinal=4 pc=4294967576 version=1 operation=1 arg1=12884901889 arg2=18446744073709551615 arg3=0
+HMTASK SETTLE group=1 turn=5 kind=reply status=0 result=0 child_slot=0 child_generation=0 cap_slot=0 cap_generation=0
+HMTASK CHARGE group=1 turn=5 end=18730884 accounted=1 remaining=5580526 charged=669474 turns=5
+HMTASK RETURN group=1 turn=5 event=svc terminal=none state=ready entered=1 code=0 calls=4 written=0 irqs=1 elr=4294967576 remaining=5580526 charged=669474 turns=5 root=1076457472 vbar=1075841024 controls=1 before=3162 after=3162
+HMTASK MANAGE group=1 sequence=17 woken=0 reaped=0 remaining_children=1 closing=0 charged=74
+HMTASK STEP group=1 turn=6 slot=2 generation=4294967295 state=ready calls=4 written=0 irqs=1 remaining=5580526 charged=669474 turns=5 before=3162
+HMTASK CLOCK group=1 turn=6 begin=18977024 remaining=5580526 comparator=19039524 whole_end=24557550
+HMTASK ENTER group=1 turn=6 pc=4294967576 root=1077424128
+HMTASK TRAP group=1 turn=6 kind=svc esr=1442840576 far=0 elr=4294967332 spsr=1614807872
+HMTASK CALL group=1 turn=6 ordinal=5 pc=4294967332 version=1 operation=1 arg1=12884901889 arg2=4297064368 arg3=16
+HMTASK OUTPUT group=1 turn=6 ordinal=5 length=16 hex=776f726b657220636f6d706c6574650a
+HMTASK SETTLE group=1 turn=6 kind=reply status=0 result=16 child_slot=0 child_generation=0 cap_slot=0 cap_generation=0
+HMTASK CHARGE group=1 turn=6 end=18994917 accounted=1 remaining=5562633 charged=687367 turns=6
+HMTASK RETURN group=1 turn=6 event=svc terminal=none state=ready entered=1 code=0 calls=5 written=16 irqs=1 elr=4294967332 remaining=5562633 charged=687367 turns=6 root=1076457472 vbar=1075841024 controls=1 before=3162 after=3162
+HMTASK MANAGE group=1 sequence=18 woken=0 reaped=0 remaining_children=1 closing=0 charged=74
+HMTASK STEP group=1 turn=7 slot=2 generation=4294967295 state=ready calls=5 written=16 irqs=1 remaining=5562633 charged=687367 turns=6 before=3162
+HMTASK CLOCK group=1 turn=7 begin=19262407 remaining=5562633 comparator=19324907 whole_end=24825040
+HMTASK ENTER group=1 turn=7 pc=4294967332 root=1077424128
+HMTASK TRAP group=1 turn=7 kind=svc esr=1442840576 far=0 elr=4294967444 spsr=1614807872
+HMTASK CALL group=1 turn=7 ordinal=6 pc=4294967444 version=1 operation=2 arg1=55 arg2=0 arg3=0
+HMTASK SETTLE group=1 turn=7 kind=terminate status=0 result=0 child_slot=0 child_generation=0 cap_slot=0 cap_generation=0
+HMTASK CHARGE group=1 turn=7 end=19276484 accounted=1 remaining=5548556 charged=701444 turns=7
+HMTASK RETURN group=1 turn=7 event=svc terminal=exit state=completed entered=1 code=55 calls=6 written=16 irqs=1 elr=4294967444 remaining=5548556 charged=701444 turns=7 root=1076457472 vbar=1075841024 controls=1 before=3162 after=3197
+HMTASK MANAGE group=1 sequence=19 woken=1 reaped=1 remaining_children=0 closing=0 charged=39
+HMTASK STEP group=1 turn=6 slot=0 generation=1 state=ready calls=4 written=0 irqs=1 remaining=2884442 charged=3365558 turns=5 before=3197
+HMTASK CLOCK group=1 turn=6 begin=19518503 remaining=2884442 comparator=19581003 whole_end=22402945
+HMTASK ENTER group=1 turn=6 pc=4294967388 root=1077272576
+HMTASK TRAP group=1 turn=6 kind=svc esr=1442840576 far=0 elr=4294967360 spsr=1614807872
+HMTASK CALL group=1 turn=6 ordinal=5 pc=4294967360 version=1 operation=3 arg1=4294967298 arg2=4297064320 arg3=64
+HMTASK COPY group=1 turn=6 part=descriptor length=64 hex=01000000400000000100000003000000142000000100000010000000000000008000000000000000030000000000000000000000000000000000000000000000
+HMTASK COPY group=1 turn=6 part=input length=16 hex=776f726b657220636f6d706c6574650a
+HMTASK COMMIT group=1 turn=6 cap_slot=3 cap_generation=4 child_slot=3 child_generation=4294967295 program=1 console_generation=4 entry=4294967296 root=1077424128 process_frames=32 box_frames=3 before=3197 after=3162
+HMTASK SETTLE group=1 turn=6 kind=reply status=0 result=17179869187 child_slot=0 child_generation=0 cap_slot=0 cap_generation=0
+HMTASK CHARGE group=1 turn=6 end=20699899 accounted=1 remaining=1703046 charged=4546954 turns=6
+HMTASK RETURN group=1 turn=6 event=svc terminal=none state=ready entered=1 code=0 calls=5 written=0 irqs=1 elr=4294967360 remaining=1703046 charged=4546954 turns=6 root=1076457472 vbar=1075841024 controls=1 before=3197 after=3162
+HMTASK MANAGE group=1 sequence=20 woken=0 reaped=0 remaining_children=1 closing=0 charged=74
+HMTASK STEP group=1 turn=1 slot=3 generation=4294967295 state=ready calls=0 written=0 irqs=0 remaining=6250000 charged=0 turns=0 before=3162
+HMTASK CLOCK group=1 turn=1 begin=21050413 remaining=6250000 comparator=21112913 whole_end=27300413
+HMTASK ENTER group=1 turn=1 pc=4294967296 root=1077424128
+HMTASK TRAP group=1 turn=1 kind=irq esr=0 far=0 elr=4294967296 spsr=4195136
+HMTASK CHARGE group=1 turn=1 end=21629114 accounted=1 remaining=5671299 charged=578701 turns=1
+HMTASK RETURN group=1 turn=1 event=timer terminal=none state=ready entered=1 code=0 calls=0 written=0 irqs=1 elr=4294967296 remaining=5671299 charged=578701 turns=1 root=1076457472 vbar=1075841024 controls=1 before=3162 after=3162
+HMTASK MANAGE group=1 sequence=21 woken=0 reaped=0 remaining_children=1 closing=0 charged=74
+HMTASK STEP group=1 turn=7 slot=0 generation=1 state=ready calls=5 written=0 irqs=1 remaining=1703046 charged=4546954 turns=6 before=3162
+HMTASK CLOCK group=1 turn=7 begin=21812654 remaining=1703046 comparator=21875154 whole_end=23515700
+HMTASK ENTER group=1 turn=7 pc=4294967360 root=1077272576
+HMTASK TRAP group=1 turn=7 kind=svc esr=1442840576 far=0 elr=4294967388 spsr=1614807872
+HMTASK CALL group=1 turn=7 ordinal=6 pc=4294967388 version=1 operation=4 arg1=17179869187 arg2=0 arg3=0
+HMTASK SETTLE group=1 turn=7 kind=park status=0 result=0 child_slot=3 child_generation=4294967295 cap_slot=3 cap_generation=4
+HMTASK CHARGE group=1 turn=7 end=21830564 accounted=1 remaining=1685136 charged=4564864 turns=7
+HMTASK RETURN group=1 turn=7 event=svc terminal=none state=waiting entered=1 code=0 calls=6 written=0 irqs=1 elr=4294967388 remaining=1685136 charged=4564864 turns=7 root=1076457472 vbar=1075841024 controls=1 before=3162 after=3162
+HMTASK MANAGE group=1 sequence=22 woken=0 reaped=0 remaining_children=1 closing=0 charged=74
+HMTASK STEP group=1 turn=2 slot=3 generation=4294967295 state=ready calls=0 written=0 irqs=1 remaining=5671299 charged=578701 turns=1 before=3162
+HMTASK CLOCK group=1 turn=2 begin=22067751 remaining=5671299 comparator=22130251 whole_end=27739050
+HMTASK ENTER group=1 turn=2 pc=4294967296 root=1077424128
+HMTASK TRAP group=1 turn=2 kind=svc esr=1442840576 far=0 elr=4294967480 spsr=1614807872
+HMTASK CALL group=1 turn=2 ordinal=1 pc=4294967480 version=1 operation=1 arg1=17179869185 arg2=18446744073709551615 arg3=0
+HMTASK SETTLE group=1 turn=2 kind=reply status=0 result=0 child_slot=0 child_generation=0 cap_slot=0 cap_generation=0
+HMTASK CHARGE group=1 turn=2 end=22096648 accounted=1 remaining=5642402 charged=607598 turns=2
+HMTASK RETURN group=1 turn=2 event=svc terminal=none state=ready entered=1 code=0 calls=1 written=0 irqs=1 elr=4294967480 remaining=5642402 charged=607598 turns=2 root=1076457472 vbar=1075841024 controls=1 before=3162 after=3162
+HMTASK MANAGE group=1 sequence=23 woken=0 reaped=0 remaining_children=1 closing=0 charged=74
+HMTASK STEP group=1 turn=3 slot=3 generation=4294967295 state=ready calls=1 written=0 irqs=1 remaining=5642402 charged=607598 turns=2 before=3162
+HMTASK CLOCK group=1 turn=3 begin=22337925 remaining=5642402 comparator=22400425 whole_end=27980327
+HMTASK ENTER group=1 turn=3 pc=4294967480 root=1077424128
+HMTASK TRAP group=1 turn=3 kind=svc esr=1442840576 far=0 elr=4294967512 spsr=1614807872
+HMTASK CALL group=1 turn=3 ordinal=2 pc=4294967512 version=1 operation=1 arg1=17179869185 arg2=18446744073709551615 arg3=0
+HMTASK SETTLE group=1 turn=3 kind=reply status=0 result=0 child_slot=0 child_generation=0 cap_slot=0 cap_generation=0
+HMTASK CHARGE group=1 turn=3 end=22347733 accounted=1 remaining=5632594 charged=617406 turns=3
+HMTASK RETURN group=1 turn=3 event=svc terminal=none state=ready entered=1 code=0 calls=2 written=0 irqs=1 elr=4294967512 remaining=5632594 charged=617406 turns=3 root=1076457472 vbar=1075841024 controls=1 before=3162 after=3162
+HMTASK MANAGE group=1 sequence=24 woken=0 reaped=0 remaining_children=1 closing=0 charged=74
+HMTASK STEP group=1 turn=4 slot=3 generation=4294967295 state=ready calls=2 written=0 irqs=1 remaining=5632594 charged=617406 turns=3 before=3162
+HMTASK CLOCK group=1 turn=4 begin=22578447 remaining=5632594 comparator=22640947 whole_end=28211041
+HMTASK ENTER group=1 turn=4 pc=4294967512 root=1077424128
+HMTASK TRAP group=1 turn=4 kind=svc esr=1442840576 far=0 elr=4294967544 spsr=1614807872
+HMTASK CALL group=1 turn=4 ordinal=3 pc=4294967544 version=1 operation=1 arg1=17179869185 arg2=18446744073709551615 arg3=0
+HMTASK SETTLE group=1 turn=4 kind=reply status=0 result=0 child_slot=0 child_generation=0 cap_slot=0 cap_generation=0
+HMTASK CHARGE group=1 turn=4 end=22590687 accounted=1 remaining=5620354 charged=629646 turns=4
+HMTASK RETURN group=1 turn=4 event=svc terminal=none state=ready entered=1 code=0 calls=3 written=0 irqs=1 elr=4294967544 remaining=5620354 charged=629646 turns=4 root=1076457472 vbar=1075841024 controls=1 before=3162 after=3162
+HMTASK MANAGE group=1 sequence=25 woken=0 reaped=0 remaining_children=1 closing=0 charged=74
+HMTASK STEP group=1 turn=5 slot=3 generation=4294967295 state=ready calls=3 written=0 irqs=1 remaining=5620354 charged=629646 turns=4 before=3162
+HMTASK CLOCK group=1 turn=5 begin=22827595 remaining=5620354 comparator=22890095 whole_end=28447949
+HMTASK ENTER group=1 turn=5 pc=4294967544 root=1077424128
+HMTASK TRAP group=1 turn=5 kind=svc esr=1442840576 far=0 elr=4294967576 spsr=1614807872
+HMTASK CALL group=1 turn=5 ordinal=4 pc=4294967576 version=1 operation=1 arg1=17179869185 arg2=18446744073709551615 arg3=0
+HMTASK SETTLE group=1 turn=5 kind=reply status=0 result=0 child_slot=0 child_generation=0 cap_slot=0 cap_generation=0
+HMTASK CHARGE group=1 turn=5 end=22841580 accounted=1 remaining=5606369 charged=643631 turns=5
+HMTASK RETURN group=1 turn=5 event=svc terminal=none state=ready entered=1 code=0 calls=4 written=0 irqs=1 elr=4294967576 remaining=5606369 charged=643631 turns=5 root=1076457472 vbar=1075841024 controls=1 before=3162 after=3162
+HMTASK MANAGE group=1 sequence=26 woken=0 reaped=0 remaining_children=1 closing=0 charged=74
+HMTASK STEP group=1 turn=6 slot=3 generation=4294967295 state=ready calls=4 written=0 irqs=1 remaining=5606369 charged=643631 turns=5 before=3162
+HMTASK CLOCK group=1 turn=6 begin=23076930 remaining=5606369 comparator=23139430 whole_end=28683299
+HMTASK ENTER group=1 turn=6 pc=4294967576 root=1077424128
+HMTASK TRAP group=1 turn=6 kind=svc esr=1442840576 far=0 elr=4294967332 spsr=1614807872
+HMTASK CALL group=1 turn=6 ordinal=5 pc=4294967332 version=1 operation=1 arg1=17179869185 arg2=4297064368 arg3=16
+HMTASK OUTPUT group=1 turn=6 ordinal=5 length=16 hex=776f726b657220636f6d706c6574650a
+HMTASK SETTLE group=1 turn=6 kind=reply status=0 result=16 child_slot=0 child_generation=0 cap_slot=0 cap_generation=0
+HMTASK CHARGE group=1 turn=6 end=23094050 accounted=1 remaining=5589249 charged=660751 turns=6
+HMTASK RETURN group=1 turn=6 event=svc terminal=none state=ready entered=1 code=0 calls=5 written=16 irqs=1 elr=4294967332 remaining=5589249 charged=660751 turns=6 root=1076457472 vbar=1075841024 controls=1 before=3162 after=3162
+HMTASK MANAGE group=1 sequence=27 woken=0 reaped=0 remaining_children=1 closing=0 charged=74
+HMTASK STEP group=1 turn=7 slot=3 generation=4294967295 state=ready calls=5 written=16 irqs=1 remaining=5589249 charged=660751 turns=6 before=3162
+HMTASK CLOCK group=1 turn=7 begin=23348165 remaining=5589249 comparator=23410665 whole_end=28937414
+HMTASK ENTER group=1 turn=7 pc=4294967332 root=1077424128
+HMTASK TRAP group=1 turn=7 kind=svc esr=1442840576 far=0 elr=4294967444 spsr=1614807872
+HMTASK CALL group=1 turn=7 ordinal=6 pc=4294967444 version=1 operation=2 arg1=55 arg2=0 arg3=0
+HMTASK SETTLE group=1 turn=7 kind=terminate status=0 result=0 child_slot=0 child_generation=0 cap_slot=0 cap_generation=0
+HMTASK CHARGE group=1 turn=7 end=23361714 accounted=1 remaining=5575700 charged=674300 turns=7
+HMTASK RETURN group=1 turn=7 event=svc terminal=exit state=completed entered=1 code=55 calls=6 written=16 irqs=1 elr=4294967444 remaining=5575700 charged=674300 turns=7 root=1076457472 vbar=1075841024 controls=1 before=3162 after=3197
+HMTASK MANAGE group=1 sequence=28 woken=1 reaped=1 remaining_children=0 closing=0 charged=39
+HMTASK STEP group=1 turn=8 slot=0 generation=1 state=ready calls=6 written=0 irqs=1 remaining=1685136 charged=4564864 turns=7 before=3197
+HMTASK CLOCK group=1 turn=8 begin=23596679 remaining=1685136 comparator=23659179 whole_end=25281815
+HMTASK ENTER group=1 turn=8 pc=4294967388 root=1077272576
+HMTASK TRAP group=1 turn=8 kind=svc esr=1442840576 far=0 elr=4294967360 spsr=1614807872
+HMTASK CALL group=1 turn=8 ordinal=7 pc=4294967360 version=1 operation=3 arg1=4294967298 arg2=4297064320 arg3=64
+HMTASK COPY group=1 turn=8 part=descriptor length=64 hex=01000000400000000100000003000000142000000100000010000000000000008000000000000000030000000000000000000000000000000000000000000000
+HMTASK COPY group=1 turn=8 part=input length=16 hex=776f726b657220636f6d706c6574650a
+HMTASK SETTLE group=1 turn=8 kind=reply status=9 result=0 child_slot=0 child_generation=0 cap_slot=0 cap_generation=0
+HMTASK CHARGE group=1 turn=8 end=23628178 accounted=1 remaining=1653637 charged=4596363 turns=8
+HMTASK RETURN group=1 turn=8 event=svc terminal=none state=ready entered=1 code=0 calls=7 written=0 irqs=1 elr=4294967360 remaining=1653637 charged=4596363 turns=8 root=1076457472 vbar=1075841024 controls=1 before=3197 after=3197
+HMTASK MANAGE group=1 sequence=29 woken=0 reaped=0 remaining_children=0 closing=0 charged=39
+HMTASK STEP group=1 turn=9 slot=0 generation=1 state=ready calls=7 written=0 irqs=1 remaining=1653637 charged=4596363 turns=8 before=3197
+HMTASK CLOCK group=1 turn=9 begin=23931383 remaining=1653637 comparator=23993883 whole_end=25585020
+HMTASK ENTER group=1 turn=9 pc=4294967360 root=1077272576
+HMTASK TRAP group=1 turn=9 kind=svc esr=1442840576 far=0 elr=4294967444 spsr=1614807872
+HMTASK CALL group=1 turn=9 ordinal=8 pc=4294967444 version=1 operation=2 arg1=0 arg2=0 arg3=0
+HMTASK SETTLE group=1 turn=9 kind=terminate status=0 result=0 child_slot=0 child_generation=0 cap_slot=0 cap_generation=0
+HMTASK CHARGE group=1 turn=9 end=23946744 accounted=1 remaining=1638276 charged=4611724 turns=9
+HMTASK RETURN group=1 turn=9 event=svc terminal=exit state=closing entered=1 code=0 calls=8 written=0 irqs=1 elr=4294967444 remaining=1638276 charged=4611724 turns=9 root=1076457472 vbar=1075841024 controls=1 before=3197 after=3233
+HMTASK CLOSE group=1 root_slot=0 root_generation=1 end=exit code=0 evidence=executed turn=9 trigger_group=0 trigger_slot=0 trigger_generation=0
+HMTASK MANAGE group=1 sequence=30 woken=0 reaped=0 remaining_children=0 closing=1 charged=3
+HMTASK MANAGE group=1 sequence=31 woken=0 reaped=0 remaining_children=0 closing=1 charged=3
+HMTASK PUBLISH group=1 root_slot=0 root_generation=1 end=exit code=0 evidence=executed turn=9 trigger_group=0 trigger_slot=0 trigger_generation=0 charged=3
+HMTASK REAP_ROOT group=1 outcome=0 before=3233 after=3236
+HMTASK DROP group=1 before=3236 after=3236
+HMTASK PASS index=0 pass=0 name=slot_exhaustion before=3236 after=3236
+HMTASK END 1
+HMTEST BEGIN 41
+HMTEST PASS write_protect
+HMTEST PASS nx
+HMTEST PASS user_execute_protect
+HMTEST PASS user_access_protect
+HMTEST PASS wx
+HMTEST PASS stack_guard
+HMTEST PASS null_guard
+HMTEST PASS checked_range
+HMTEST PASS monitor_bounds
+HMTEST PASS cap_authority
+HMTEST PASS cap_limits
+HMTEST PASS cap_lifetime
+HMTEST PASS cap_generation
+HMTEST PASS boot_memory_valid
+HMTEST PASS boot_memory_malformed
+HMTEST PASS cpu_topology_valid
+HMTEST PASS cpu_topology_malformed
+HMTEST PASS cpu_topology_live
+HMTEST PASS elf_valid
+HMTEST PASS elf_malformed
+HMTEST PASS frame_ranges
+HMTEST PASS frame_boundaries
+HMTEST PASS frame_contract
+HMTEST PASS heap_blocks
+HMTEST PASS heap_values
+HMTEST PASS event_contract
+HMTEST PASS mutex_contract
+HMTEST PASS mutex_lifetime
+HMTEST PASS mutex_workers
+HMTEST PASS thread_contract
+HMTEST PASS thread_limits
+HMTEST PASS thread_core
+HMTEST PASS timer_contract
+HMTEST PASS fault_contract
+HMTEST PASS mapping_contract
+HMTEST PASS mapping_limits
+HMTEST PASS mapping_hardware
+HMTEST PASS cpu_local_state
+HMTEST PASS gic_ownership
+HMTEST PASS secondary_memory
+HMTEST PASS cap_orderings
+HMTEST END 41

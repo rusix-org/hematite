@@ -1,0 +1,16 @@
+warning: function `call_cancel` is never used
+  --> /workspace/crates/hm-core/fixtures/task_negative_cases.rs:32:8
+   |
+32 |     fn call_cancel(handle: u64) -> Reply;
+   |        ^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `overwrite_job` is never used
+  --> /workspace/crates/hm-core/fixtures/task_negative_cases.rs:36:8
+   |
+36 |     fn overwrite_job(destination: *mut u8, length: usize);
+   |        ^^^^^^^^^^^^^
+
+warning: 2 warnings emitted
+

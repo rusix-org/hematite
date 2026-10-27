@@ -1,0 +1,15 @@
+bin
+bin/final_budget_spawn
+bin/final_budget_park
+bin/platform_reply
+bin/platform_park
+bin/abandon_dispatch
+bin/wake_install_failure
+bin/capability_exhaustion
+bin/slot_exhaustion
+bin/child_retire_ready
+bin/child_retire_waiting
+bin/worker
+bin/legacy_hello
+demo
+demo/loop

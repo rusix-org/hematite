@@ -1,0 +1,5 @@
+[
+  "readelf",
+  "-sW",
+  "/workspace/target/group-stage-b/candidates-first/aarch64-negative-wake_install_failure/aarch64-unknown-none/release/hematite"
+]

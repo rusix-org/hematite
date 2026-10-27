@@ -1,0 +1,17 @@
+{
+  "command": [
+    "tools/dev.sh",
+    "python3",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "tools",
+    "-p",
+    "test_test_task_negative.py"
+  ],
+  "sources": {
+    "tools/test_task_negative.py": "2ebed2aa9ff6c21ccb2c022dcbe51f458a08f67a1fd034a9a3439c29e294019b",
+    "tools/test_test_task_negative.py": "d72323aade3b43c8320ee845db868dcf89af4a8a4c36c8abc28eb0fddabb8ea4"
+  }
+}

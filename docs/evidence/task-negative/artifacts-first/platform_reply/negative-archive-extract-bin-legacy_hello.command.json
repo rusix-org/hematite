@@ -1,0 +1,18 @@
+{
+  "argv": [
+    "cpio",
+    "--extract",
+    "--to-stdout",
+    "--quiet",
+    "--file=/workspace/crates/hm-core/fixtures/task-negative-initramfs.cpio",
+    "bin/legacy_hello"
+  ],
+  "cwd": "/workspace",
+  "stdin_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout": "docs/evidence/task-negative/artifacts-first/platform_reply/negative-archive-extract-bin-legacy_hello.stdout.log",
+  "env": {
+    "LC_ALL": "C",
+    "TZ": "UTC"
+  },
+  "timeout_seconds": 20
+}

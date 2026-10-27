@@ -1,0 +1,23 @@
+[
+  "rustc",
+  "--edition=2024",
+  "--target",
+  "aarch64-unknown-none",
+  "-C",
+  "panic=abort",
+  "--cfg",
+  "feature=\"startup-input-tests\"",
+  "--cfg",
+  "feature=\"secondary-tests\"",
+  "--cfg",
+  "feature=\"smp-tests\"",
+  "--extern",
+  "hm_kernel=/workspace/target/aarch64/boot-test/aarch64-unknown-none/release/libhm_kernel.rlib",
+  "-L",
+  "dependency=/workspace/target/aarch64/boot-test/aarch64-unknown-none/release/deps",
+  "--crate-type=rlib",
+  "--crate-name=hm_process",
+  "/workspace/docs/evidence/task-negative/types-first/hm_process.rs",
+  "-o",
+  "/workspace/docs/evidence/task-negative/types-first/libhm_process.rlib"
+]

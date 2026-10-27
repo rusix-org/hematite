@@ -1,0 +1,15 @@
+{
+  "argv": [
+    "readelf",
+    "-sW",
+    "/workspace/crates/hm-core/fixtures/task-negative-cases/loop.elf"
+  ],
+  "cwd": "/workspace",
+  "stdin_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout": "/workspace/docs/evidence/task-negative/guest-second/capability_exhaustion/loop-symbols.stdout.log",
+  "env": {
+    "LC_ALL": "C",
+    "TZ": "UTC"
+  },
+  "timeout_seconds": 20
+}

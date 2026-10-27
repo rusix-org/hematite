@@ -1,0 +1,16 @@
+[
+  "python3",
+  "tools/test_task_negative.py",
+  "--case",
+  "platform_park",
+  "--kernel",
+  "target/group-stage-b/candidates-first/aarch64-negative-platform_park/aarch64-unknown-none/release/hematite",
+  "--fixtures",
+  "crates/hm-core/fixtures/task-negative-cases/manifest.json",
+  "--archive",
+  "crates/hm-core/fixtures/task-negative-initramfs.cpio",
+  "--layout",
+  "docs/evidence/task-negative-layout-fresh/result.json",
+  "--output",
+  "docs/evidence/task-negative/guest-second/platform_park"
+]

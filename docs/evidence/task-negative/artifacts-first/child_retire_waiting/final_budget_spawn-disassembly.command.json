@@ -1,0 +1,15 @@
+{
+  "argv": [
+    "aarch64-linux-gnu-objdump",
+    "-d",
+    "/workspace/crates/hm-core/fixtures/task-negative-cases/final_budget_spawn.elf"
+  ],
+  "cwd": "/workspace",
+  "stdin_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout": "docs/evidence/task-negative/artifacts-first/child_retire_waiting/final_budget_spawn-disassembly.stdout.log",
+  "env": {
+    "LC_ALL": "C",
+    "TZ": "UTC"
+  },
+  "timeout_seconds": 20
+}

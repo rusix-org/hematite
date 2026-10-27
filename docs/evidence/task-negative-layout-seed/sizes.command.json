@@ -1,0 +1,35 @@
+{
+  "argv": [
+    "rustc",
+    "--edition=2024",
+    "--target",
+    "aarch64-unknown-none",
+    "-C",
+    "panic=abort",
+    "--cfg",
+    "feature=\"secondary-tests\"",
+    "--cfg",
+    "feature=\"smp-tests\"",
+    "--extern",
+    "hm_kernel=/workspace/target/aarch64/boot-test/aarch64-unknown-none/release/libhm_kernel.rlib",
+    "-L",
+    "dependency=/workspace/target/aarch64/boot-test/aarch64-unknown-none/release/deps",
+    "--crate-type=lib",
+    "--emit=asm",
+    "-C",
+    "opt-level=2",
+    "--extern",
+    "hm_layout=/workspace/docs/evidence/task-negative-layout-seed/libhm_layout.rlib",
+    "/workspace/docs/evidence/task-negative-layout-seed/sizes.rs",
+    "-o",
+    "/workspace/docs/evidence/task-negative-layout-seed/sizes.s"
+  ],
+  "cwd": "/workspace",
+  "stdin_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout": "/workspace/docs/evidence/task-negative-layout-seed/sizes.stdout.log",
+  "env": {
+    "LC_ALL": "C",
+    "TZ": "UTC"
+  },
+  "timeout_seconds": 20
+}

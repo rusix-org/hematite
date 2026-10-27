@@ -1,0 +1,18 @@
+{
+  "argv": [
+    "cpio",
+    "--extract",
+    "--to-stdout",
+    "--quiet",
+    "--file=/workspace/docs/evidence/task-negative-fixtures-first/task-negative-initramfs.cpio",
+    "bin/abandon_dispatch"
+  ],
+  "cwd": "/workspace",
+  "stdin_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout": "/workspace/docs/evidence/task-negative-fixtures-first/negative-archive-extract-bin-abandon_dispatch.stdout.log",
+  "env": {
+    "LC_ALL": "C",
+    "TZ": "UTC"
+  },
+  "timeout_seconds": 20
+}

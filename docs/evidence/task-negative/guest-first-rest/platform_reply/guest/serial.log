@@ -1,0 +1,82 @@
+hematite: ARM64 Rust kernel entered at EL1
+Boot RAM bytes: 0x0000000008000000 (discovered RAM)
+Frame pool pages: 0x0000000000000ca4 (4 KiB each; boot reservations excluded)
+HMTASK PREFLIGHT checks=15 irqs=8
+HMTASK BEGIN 1
+HMTASK INFO wire=1 cpus=1 frequency=62500000 total_ticks=6250000 quantum_ticks=62500 process_bytes=9832 process_pages=3 image_bytes=472 image_pages=1 authority_bytes=968 authority_pages=1
+HMTASK CASE index=0 pass=0 name=platform_reply before=3236
+HMTASK GROUP group=1 limit=512 metadata=3 before=3236 after=3197
+HMTASK ROOT group=1 slot=0 generation=1 launch_generation=1 console_generation=1 fixture=platform_reply entry=4294967296 root=1077272576 process_frames=33 box_frames=3 before=3236 after=3197
+HMTASK STEP group=1 turn=1 slot=0 generation=1 state=ready calls=0 written=0 irqs=0 remaining=6250000 charged=0 turns=0 before=3197
+HMTASK CLOCK group=1 turn=1 begin=9751898 remaining=6250000 comparator=9814398 whole_end=16001898
+HMTASK ENTER group=1 turn=1 pc=4294967296 root=1077272576
+HMTASK TRAP group=1 turn=1 kind=irq esr=0 far=0 elr=4294967296 spsr=4195136
+HMTASK CHARGE group=1 turn=1 end=10506792 accounted=1 remaining=5495106 charged=754894 turns=1
+HMTASK RETURN group=1 turn=1 event=timer terminal=none state=ready entered=1 code=0 calls=0 written=0 irqs=1 elr=4294967296 remaining=5495106 charged=754894 turns=1 root=1076457472 vbar=1075841024 controls=1 before=3197 after=3197
+HMTASK MANAGE group=1 sequence=1 woken=0 reaped=0 remaining_children=0 closing=0 charged=39
+HMTASK STEP group=1 turn=2 slot=0 generation=1 state=ready calls=0 written=0 irqs=1 remaining=5495106 charged=754894 turns=1 before=3197
+HMTASK CLOCK group=1 turn=2 begin=10830975 remaining=5495106 comparator=10893475 whole_end=16326081
+HMTASK ENTER group=1 turn=2 pc=4294967296 root=1077272576
+HMTASK TRAP group=1 turn=2 kind=svc esr=1442840576 far=0 elr=4294967360 spsr=1614807872
+HMTASK CALL group=1 turn=2 ordinal=1 pc=4294967360 version=1 operation=3 arg1=4294967298 arg2=4297064320 arg3=64
+HMTASK COPY group=1 turn=2 part=descriptor length=64 hex=01000000400000000100000003000000142000000100000010000000000000008000000000000000030000000000000000000000000000000000000000000000
+HMTASK COPY group=1 turn=2 part=input length=16 hex=776f726b657220636f6d706c6574650a
+HMTASK COMMIT group=1 turn=2 cap_slot=3 cap_generation=2 child_slot=1 child_generation=1 program=1 console_generation=2 entry=4294967296 root=1077424128 process_frames=32 box_frames=3 before=3197 after=3162
+HMTASK SETTLE group=1 turn=2 kind=reply status=0 result=8589934595 child_slot=0 child_generation=0 cap_slot=0 cap_generation=0
+HMTASK INJECT group=1 turn=2 kind=retire
+HMTASK CHARGE group=1 turn=2 end=12294646 accounted=1 remaining=4031435 charged=2218565 turns=2
+HMTASK RETURN group=1 turn=2 event=svc terminal=unavailable state=closing entered=1 code=0 calls=1 written=0 irqs=1 elr=4294967360 remaining=4031435 charged=2218565 turns=2 root=1076457472 vbar=1075841024 controls=1 before=3197 after=3198
+HMTASK CLOSE group=1 root_slot=0 root_generation=1 end=unavailable code=0 evidence=executed turn=2 trigger_group=0 trigger_slot=0 trigger_generation=0
+HMTASK MANAGE group=1 sequence=2 woken=0 reaped=0 remaining_children=1 closing=1 charged=38
+HMTASK STEP group=1 turn=1 slot=1 generation=1 state=cancel_pending calls=0 written=0 irqs=0 remaining=6250000 charged=0 turns=0 before=3198
+HMTASK RETURN group=1 turn=1 event=none terminal=cancelled state=completed entered=0 code=0 calls=0 written=0 irqs=0 elr=4294967296 remaining=6250000 charged=0 turns=0 root=1076457472 vbar=1075841024 controls=1 before=3198 after=3233
+HMTASK MANAGE group=1 sequence=3 woken=0 reaped=1 remaining_children=0 closing=1 charged=3
+HMTASK MANAGE group=1 sequence=4 woken=0 reaped=0 remaining_children=0 closing=1 charged=3
+HMTASK PUBLISH group=1 root_slot=0 root_generation=1 end=unavailable code=0 evidence=executed turn=2 trigger_group=0 trigger_slot=0 trigger_generation=0 charged=3
+HMTASK REAP_ROOT group=1 outcome=6 before=3233 after=3236
+HMTASK DROP group=1 before=3236 after=3236
+HMTASK PASS index=0 pass=0 name=platform_reply before=3236 after=3236
+HMTASK END 1
+HMTEST BEGIN 41
+HMTEST PASS write_protect
+HMTEST PASS nx
+HMTEST PASS user_execute_protect
+HMTEST PASS user_access_protect
+HMTEST PASS wx
+HMTEST PASS stack_guard
+HMTEST PASS null_guard
+HMTEST PASS checked_range
+HMTEST PASS monitor_bounds
+HMTEST PASS cap_authority
+HMTEST PASS cap_limits
+HMTEST PASS cap_lifetime
+HMTEST PASS cap_generation
+HMTEST PASS boot_memory_valid
+HMTEST PASS boot_memory_malformed
+HMTEST PASS cpu_topology_valid
+HMTEST PASS cpu_topology_malformed
+HMTEST PASS cpu_topology_live
+HMTEST PASS elf_valid
+HMTEST PASS elf_malformed
+HMTEST PASS frame_ranges
+HMTEST PASS frame_boundaries
+HMTEST PASS frame_contract
+HMTEST PASS heap_blocks
+HMTEST PASS heap_values
+HMTEST PASS event_contract
+HMTEST PASS mutex_contract
+HMTEST PASS mutex_lifetime
+HMTEST PASS mutex_workers
+HMTEST PASS thread_contract
+HMTEST PASS thread_limits
+HMTEST PASS thread_core
+HMTEST PASS timer_contract
+HMTEST PASS fault_contract
+HMTEST PASS mapping_contract
+HMTEST PASS mapping_limits
+HMTEST PASS mapping_hardware
+HMTEST PASS cpu_local_state
+HMTEST PASS gic_ownership
+HMTEST PASS secondary_memory
+HMTEST PASS cap_orderings
+HMTEST END 41

@@ -11,7 +11,11 @@ from strict Linux parity to native OS design with selective compatibility.
 - Native userspace task creation is **verified locally for the ordinary demo**;
   the ordinary 25-case authority/lifecycle matrix now also passes both RAM
   profiles after independent raw-trace review (two passes, 50 cases per guest).
-  Its full ARM/x86 regression passes; ten injection profiles remain pending. Its wire codec and owned
+  Its preceding full ARM/x86 regression passes. All ten new injection profiles
+  now pass strict fresh guests after independent raw review, but the latest full
+  suite failed in the ordinary 128 MiB copy-input case on genuine budget
+  exhaustion. See [checkpoint evidence](docs/evidence/task-negative.md).
+  Its wire codec and owned
   Session admission policy are also **implemented and verified locally**.
   The preceding Session stage passed 16 independent policy cases, 13 compiler clients per
   architecture and a full ARM/x86 rerun (210 Python validator cases per target).
@@ -965,3 +969,49 @@ does not claim resumable execution or process-group support.
   guest execution is eligible but not yet rerun; hook binaries need separate gates.
   The exact revised ten-hook design is independently approved; implementation
   and dedicated negative fixtures are now in progress.
+
+- 2026-10-26: Implemented fixed core hooks, negative ARM bootstrap and a safe
+  bounded driver; independent source review approves compilation, with a final
+  freshness refinement in progress. Dedicated 13-ELF/15-entry archive builds
+  and reproduces exactly (SHA cdd793fa869f53eb8b61303a5aabcb6a8f9f1420f4c96721b2883c851ec1613f).
+  Actual negative-feature layout measures Authority968 bytes/one page, unchanged
+  three metadata pages. The initial missing observer cfg compile failure is
+  preserved and corrected. Combined both-architecture all-feature static checks
+  pass before the final freshness refinement. No injected guest has run.
+  Protocol0030 explicitly retains strict existing HMPROC only inside the
+  capability-exhaustion legacy recovery interval, avoiding a mode setter/reset.
+
+- 2026-10-26: All 34 profiles (24 ordinary, ten negative) compile. Independent
+  emitted-code review accepts negative maximum61,136/65,536 bytes including the
+  unchanged640 allowance; legacy chain53,088. Actual counter polling, sticky
+  invalid-clock propagation, final accounting and pre-install retirement check
+  pass ordering review. Fresh feature layout and all59 compiler clients pass;
+  all ten kernels bind to the exact canonical archive and witness. No guest yet.
+  Parser review found a boot-root alias gap; ordinary and negative admission
+  validators now reject it, including legacy recovery. Coordinated mutation
+  tests pass in the local44-case task-parser batch. Independent parser acceptance
+  and pinned post-fix host evidence remain before diagnostic negative guests.
+
+- 2026-10-26: Pinned post-alias-fix host task tests pass all44 cases and
+  independent parser source review accepts diagnostic eligibility. All ten
+  actual negative guests now exit0 with all41 baseline checks. Exact profile
+  validators report only the intentionally disabled raw-review gate; no other
+  error, timeout or unexpected exit. The first final_budget_spawn evidence is
+  [separate](docs/evidence/task-negative/guest-first-final_budget_spawn/result.json);
+  [remaining nine](docs/evidence/task-negative/guest-first-rest/results.json)
+  preserve each raw serial/exception log and command. Independent raw review
+  is in progress. This is diagnostic execution, not strict ten-profile acceptance
+  or a full regression claim.
+
+- 2026-10-26 break checkpoint requested by Aaron: all ten strict negative
+  guests and independent raw review pass. Standard test integration is complete.
+  Latest full run fails ordinary128MiB copy_inputs: call7's39.203ms selected
+  turn exceeds36.395ms remaining. Reviewed cleanup/closure is correct; no
+  diagnostic serialization or clock-accounting defect is established, and
+  host scheduling versus TCG execution cost is unresolved. Failed logs and
+  exact inputs are preserved; no budget relaxation or blind rerun. Resume with
+  this timing/reproducibility investigation, then full ARM/x86 acceptance.
+  The interactive-input proposal0031 is a draft only; no input/shell code added.
+  Saved implementation checkpoint `ccdd6bc5`; all333 captured inputs from the
+  preserved failed full run match its committed blobs exactly. This verifies
+  source identity, not full-suite success. Work is paused at Aaron's request.

@@ -1,0 +1,9 @@
+error[E0599]: no method named `task_issuance_snapshot` found for mutable reference `&'e mut process::Executor` in the current scope
+   --> /workspace/crates/hm-core/src/process_task.rs:266:23
+    |
+266 |         self.executor.task_issuance_snapshot()
+    |                       ^^^^^^^^^^^^^^^^^^^^^^ method not found in `&'e mut process::Executor`
+
+error: aborting due to 1 previous error
+
+For more information about this error, try `rustc --explain E0599`.

@@ -1,0 +1,7 @@
+[
+  {
+    "source": "target/evidence/20261027T015846-174706867-aarch64",
+    "archive": "docs/evidence/task-negative-full-first/20261027T015846-174706867-aarch64.tar.gz",
+    "sha256": "5927364289c0eb448642b716162bf3a706344dde80986f15f2398c824020a85c"
+  }
+]

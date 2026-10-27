@@ -1,0 +1,114 @@
+{
+  "version": 1,
+  "archive": "task-negative-initramfs.cpio",
+  "sha256": "cdd793fa869f53eb8b61303a5aabcb6a8f9f1420f4c96721b2883c851ec1613f",
+  "bytes": 269312,
+  "entries": [
+    {
+      "path": "bin",
+      "kind": "directory",
+      "mode": 16877,
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "bin/final_budget_spawn",
+      "kind": "file",
+      "mode": 33261,
+      "size": 22408,
+      "sha256": "ecbf7738da8ef079e031c9e57cf04641b2464052eb336296f045c3336db08c81"
+    },
+    {
+      "path": "bin/final_budget_park",
+      "kind": "file",
+      "mode": 33261,
+      "size": 22320,
+      "sha256": "0285a398d0510178403623aca67d925842032ec01950b3c90f9c49eb81a6e010"
+    },
+    {
+      "path": "bin/platform_reply",
+      "kind": "file",
+      "mode": 33261,
+      "size": 22408,
+      "sha256": "4933ca7b38280aa68ba6195e6508b7cb911c79fae43d7df2a5c5c542071dfde9"
+    },
+    {
+      "path": "bin/platform_park",
+      "kind": "file",
+      "mode": 33261,
+      "size": 22320,
+      "sha256": "8ed729d18ed9d424185581b3de567bfa13b8f5bfe5fbb2f112399247371e3a90"
+    },
+    {
+      "path": "bin/abandon_dispatch",
+      "kind": "file",
+      "mode": 33261,
+      "size": 22504,
+      "sha256": "9e43c05413756571588d558779d24273554aabe5677f81dd02fd92634c3bd86e"
+    },
+    {
+      "path": "bin/wake_install_failure",
+      "kind": "file",
+      "mode": 33261,
+      "size": 22504,
+      "sha256": "ab9234deb9c7ac7767a4d14d5ef5f4d7929e18590972903f5cba415b03618c57"
+    },
+    {
+      "path": "bin/capability_exhaustion",
+      "kind": "file",
+      "mode": 33261,
+      "size": 22408,
+      "sha256": "abc5b66118536bcc2a9ead8977ff1e8b795af39789ee2cbf0f4883a07bd4e9ed"
+    },
+    {
+      "path": "bin/slot_exhaustion",
+      "kind": "file",
+      "mode": 33261,
+      "size": 22408,
+      "sha256": "9996ba01ce0da48160eac9d5626ca07dbac9cb9afdeeb887dd8ce879636e8f60"
+    },
+    {
+      "path": "bin/child_retire_ready",
+      "kind": "file",
+      "mode": 33261,
+      "size": 22128,
+      "sha256": "e3379dcdc1a015c59eda47e6ca45ce3d687a032c398b8bbd34a172ef09057d3d"
+    },
+    {
+      "path": "bin/child_retire_waiting",
+      "kind": "file",
+      "mode": 33261,
+      "size": 22320,
+      "sha256": "ac5f885c524e20e9539f6a1b42c276537f18bd30ba906e7888eee536257c2304"
+    },
+    {
+      "path": "bin/worker",
+      "kind": "file",
+      "mode": 33261,
+      "size": 14824,
+      "sha256": "0f86adb987d3936064ba40a8afe4b1eda1190b83f132fe6389e25952286e1298"
+    },
+    {
+      "path": "bin/legacy_hello",
+      "kind": "file",
+      "mode": 33261,
+      "size": 13984,
+      "sha256": "9d7008184000b47c3310c5d93392b871ad7fb60c4c0d0a0d47726393ffa1cde1"
+    },
+    {
+      "path": "demo",
+      "kind": "directory",
+      "mode": 16877,
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "demo/loop",
+      "kind": "file",
+      "mode": 33261,
+      "size": 14624,
+      "sha256": "a162eefdf57257c2e3c24383b69ef0760d36e5b939178a1b54090abca478c201"
+    }
+  ],
+  "fixtures_manifest_sha256": "7df9aac2963f6a0f422143ea336c32d8a551fd38b48a5d79cdb6f816709814cb"
+}

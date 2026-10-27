@@ -1,0 +1,5 @@
+[
+  "readelf",
+  "-sW",
+  "/workspace/target/group-stage-b/candidates-first/aarch64-negative-final_budget_park/aarch64-unknown-none/release/hematite"
+]

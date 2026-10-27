@@ -1,0 +1,5 @@
+{
+  "passed": true,
+  "returncode": 0,
+  "scope": "task parser synthetic and mutation checks only; no guest"
+}

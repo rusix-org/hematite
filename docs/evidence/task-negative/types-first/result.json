@@ -1,0 +1,305 @@
+{
+  "passed": true,
+  "probes": {
+    "library": {
+      "passed": true,
+      "returncode": 0
+    },
+    "negative_no_production_constructor": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0599"
+    },
+    "negative_no_production_observer": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0599"
+    },
+    "negative_no_production_archive": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0599"
+    },
+    "negative_no_production_case": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0599"
+    },
+    "negative_no_production_mark": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0599"
+    },
+    "negative_no_production_consume": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0599"
+    },
+    "valid_task_owned_root": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "valid_task_copied_completion": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "task_constructor_private": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0624"
+    },
+    "task_executor_exclusive": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0499"
+    },
+    "task_archive_static": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0521"
+    },
+    "task_pool_lifetime": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0515"
+    },
+    "task_shared_reap": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0596"
+    },
+    "task_wrong_token": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0308"
+    },
+    "task_forge_completion": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0451"
+    },
+    "task_no_production_group_snapshot": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0599"
+    },
+    "task_no_production_executor_snapshot": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0599"
+    },
+    "task_no_production_launch_snapshot": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0599"
+    },
+    "valid_group_owned_inputs": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "valid_group_token_survives_drop": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "group_clone": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "group_copy": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "group_send": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "group_sync": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "group_shared_turn": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0596"
+    },
+    "group_no_callback": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0061"
+    },
+    "group_wrong_token": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0308"
+    },
+    "group_no_production_release": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0599"
+    },
+    "group_no_production_observer": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0599"
+    },
+    "group_no_production_probe": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0599"
+    },
+    "group_forge_token": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0451"
+    },
+    "group_executor_exclusive": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0499"
+    },
+    "group_pool_lifetime": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0515"
+    },
+    "valid_prepare_run": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "valid_input_released": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "valid_startup_input_released": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "startup_input_wrong_type": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0308"
+    },
+    "startup_input_forge": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0451"
+    },
+    "private_startup_observer": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0624"
+    },
+    "startup_pool_lifetime": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0515"
+    },
+    "valid_forget_inactive": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "valid_owned_report": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "private_terminal_constructor": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0624"
+    },
+    "private_output_mode": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0616"
+    },
+    "private_constructor": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0624"
+    },
+    "private_context": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0616"
+    },
+    "private_space": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0616"
+    },
+    "private_session": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0616"
+    },
+    "private_issuer": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0616"
+    },
+    "process_clone": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "executor_clone": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "process_send": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "process_sync": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "executor_send": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "executor_sync": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "process_consumed_once": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0382"
+    },
+    "no_callback": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0061"
+    },
+    "pool_lifetime": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0515"
+    },
+    "forge_process": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0451"
+    }
+  },
+  "scope": "actual native-process safe-client authority and lifetime boundaries; execution tested separately"
+}

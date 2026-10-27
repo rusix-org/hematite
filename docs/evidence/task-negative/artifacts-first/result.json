@@ -1,0 +1,112 @@
+{
+  "final_budget_spawn": {
+    "passed": true,
+    "report": {
+      "bytes": 269312,
+      "sha256": "cdd793fa869f53eb8b61303a5aabcb6a8f9f1420f4c96721b2883c851ec1613f",
+      "entries": 15,
+      "files": 13,
+      "layout_scope": "task-negative-tests",
+      "kernel_file_offset": 407670
+    }
+  },
+  "final_budget_park": {
+    "passed": true,
+    "report": {
+      "bytes": 269312,
+      "sha256": "cdd793fa869f53eb8b61303a5aabcb6a8f9f1420f4c96721b2883c851ec1613f",
+      "entries": 15,
+      "files": 13,
+      "layout_scope": "task-negative-tests",
+      "kernel_file_offset": 407670
+    }
+  },
+  "platform_reply": {
+    "passed": true,
+    "report": {
+      "bytes": 269312,
+      "sha256": "cdd793fa869f53eb8b61303a5aabcb6a8f9f1420f4c96721b2883c851ec1613f",
+      "entries": 15,
+      "files": 13,
+      "layout_scope": "task-negative-tests",
+      "kernel_file_offset": 407670
+    }
+  },
+  "platform_park": {
+    "passed": true,
+    "report": {
+      "bytes": 269312,
+      "sha256": "cdd793fa869f53eb8b61303a5aabcb6a8f9f1420f4c96721b2883c851ec1613f",
+      "entries": 15,
+      "files": 13,
+      "layout_scope": "task-negative-tests",
+      "kernel_file_offset": 407670
+    }
+  },
+  "abandon_dispatch": {
+    "passed": true,
+    "report": {
+      "bytes": 269312,
+      "sha256": "cdd793fa869f53eb8b61303a5aabcb6a8f9f1420f4c96721b2883c851ec1613f",
+      "entries": 15,
+      "files": 13,
+      "layout_scope": "task-negative-tests",
+      "kernel_file_offset": 407670
+    }
+  },
+  "wake_install_failure": {
+    "passed": true,
+    "report": {
+      "bytes": 269312,
+      "sha256": "cdd793fa869f53eb8b61303a5aabcb6a8f9f1420f4c96721b2883c851ec1613f",
+      "entries": 15,
+      "files": 13,
+      "layout_scope": "task-negative-tests",
+      "kernel_file_offset": 407670
+    }
+  },
+  "capability_exhaustion": {
+    "passed": true,
+    "report": {
+      "bytes": 269312,
+      "sha256": "cdd793fa869f53eb8b61303a5aabcb6a8f9f1420f4c96721b2883c851ec1613f",
+      "entries": 15,
+      "files": 13,
+      "layout_scope": "task-negative-tests",
+      "kernel_file_offset": 407718
+    }
+  },
+  "slot_exhaustion": {
+    "passed": true,
+    "report": {
+      "bytes": 269312,
+      "sha256": "cdd793fa869f53eb8b61303a5aabcb6a8f9f1420f4c96721b2883c851ec1613f",
+      "entries": 15,
+      "files": 13,
+      "layout_scope": "task-negative-tests",
+      "kernel_file_offset": 407670
+    }
+  },
+  "child_retire_ready": {
+    "passed": true,
+    "report": {
+      "bytes": 269312,
+      "sha256": "cdd793fa869f53eb8b61303a5aabcb6a8f9f1420f4c96721b2883c851ec1613f",
+      "entries": 15,
+      "files": 13,
+      "layout_scope": "task-negative-tests",
+      "kernel_file_offset": 407670
+    }
+  },
+  "child_retire_waiting": {
+    "passed": true,
+    "report": {
+      "bytes": 269312,
+      "sha256": "cdd793fa869f53eb8b61303a5aabcb6a8f9f1420f4c96721b2883c851ec1613f",
+      "entries": 15,
+      "files": 13,
+      "layout_scope": "task-negative-tests",
+      "kernel_file_offset": 407670
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "kernel": "/workspace/target/group-stage-b/candidates-first/aarch64-negative-abandon_dispatch/aarch64-unknown-none/release/hematite",
+  "kernel_sha256": "c0173152348fdee1259c7a2a01b2e2207c44ecaf3cd973de4a9264f8cd74b8a7",
+  "ram_mb": 128,
+  "cpus": 1,
+  "timeout_seconds": 60,
+  "max_serial_bytes": 33554432,
+  "max_trace_bytes": 16777216,
+  "selected_case": "abandon_dispatch",
+  "fixtures_sha256": "7df9aac2963f6a0f422143ea336c32d8a551fd38b48a5d79cdb6f816709814cb",
+  "layout_sha256": "fbf0e225be2ffa6958af24531d83a1aaef65e969c80a8a7e1f465a9f76569242",
+  "archive": {
+    "bytes": 269312,
+    "sha256": "cdd793fa869f53eb8b61303a5aabcb6a8f9f1420f4c96721b2883c851ec1613f",
+    "entries": 15,
+    "files": 13,
+    "layout_scope": "task-negative-tests",
+    "kernel_file_offset": 407670
+  }
+}

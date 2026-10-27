@@ -1,0 +1,19 @@
+{
+  "command": [
+    "tools/dev.sh",
+    "python3",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "tools",
+    "-p",
+    "test_test_task*.py"
+  ],
+  "sources": {
+    "tools/test_task_negative.py": "a65a91597d0a3b98bd6bfb6b1e2dec226de0d3959316b8dfceb8c200b77e72a3",
+    "tools/test_test_task_negative.py": "5ce057da6311d162b66ec85bc6650e267929500f227aba36d65cb96c4d7da511",
+    "tools/test_task_cases.py": "18d9178dc6680613e4132660e7c05a9ba33183c48b636595794654a8227fd196",
+    "tools/test_test_task_cases.py": "38bf4a3eb0a2ef2fd8adca3fd7780ec9eb899860de0fc42e40f787c077bbe939"
+  }
+}
