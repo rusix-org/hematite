@@ -238,6 +238,19 @@ impl<'e, 'p> Group<'e, 'p> {
     pub fn task_root(&self) -> Result<TaskId, Error> {
         self.task.as_ref().map(|a| a.root).ok_or(Error::Mode)
     }
+    /// Read-only test observation, also available after task metadata is reaped.
+    #[cfg(feature = "task-tests")]
+    pub(crate) fn task_issuance_snapshot(&self) -> (u32, Option<u32>) {
+        self.executor.task_issuance_snapshot()
+    }
+    /// Report only the currently stored launch grant, never reconstruct a revoked one.
+    #[cfg(feature = "task-tests")]
+    pub(crate) fn task_launch_generation(&self) -> Result<u32, Error> {
+        self.task
+            .as_ref()
+            .and_then(|authority| authority.launch)
+            .ok_or(Error::Mode)
+    }
     fn authority(&self) -> &Authority<'p> {
         self.task.as_ref().unwrap_or_else(|| process::fatal())
     }

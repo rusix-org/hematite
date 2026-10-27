@@ -50,7 +50,7 @@ selected steps and per-pass 8192 selected steps are hard bounds; reaching a larg
 count is failure. Guest deadline 60 seconds; each raw artifact 32 MiB maximum.
 Existing Session 64-call/4096-byte limits are unchanged. Every purported fixture
 success has exact expected calls/output/outcomes; Budget is not an acceptable
-substitute except `parent_budget` and the dedicated negatives.
+substitute except the parent in `parent_budget`, the child in `wait_budget_child`, and the separately reviewed dedicated negatives.
 
 Before these cases, six root-construction failures run under real owned Pool
 pressure. Independently derive Image box pages I, authority box pages A, root
@@ -132,16 +132,51 @@ uses canonical zero address; do not introduce a hardware dereference for it.
 
 ## Canonical fixtures and deterministic scheduling
 
-Dedicated archive `task-initramfs.cpio` contains explicit `bin`, the named root
-fixtures, `bin/worker` (program 1), explicit `demo`, and `demo/loop` (program 2). Exact root basename is the case name, except `rights_console` uses
-`rights_console_policy` then `rights_console_wait_only`. The supervisor reused
-by `drop_waiting` is the same `bin/supervisor` already in the inventory. The ten negative roots have their scenario names; include the existing pinned
-hello ELF as `bin/legacy_hello`. The normal test archive therefore has exactly
-39 entries: bin plus 38 regular files (25 main roots after the documented
-variant/large-root adjustments, ten negative roots, worker, loop and legacy hello). Catalog metadata is admitted once per task group from
-this complete archive; no public path/program bytes can select another image.
-The logical-cap profile uses a separate pinned archive with large-BSS root and
-worker; its immutable catalog still contains exactly program 1/2.
+The ordinary-only dedicated archive is `task-cases-initramfs.cpio`. Its exact
+29-entry order is the following; directories precede children:
+
+```text
+bin
+bin/supervisor
+bin/copy_inputs
+bin/wait_poll_ready
+bin/wait_budget_child
+bin/rights_console_policy
+bin/rights_console_wait_only
+bin/foreign_authority
+bin/stale_reuse
+bin/malformed_outer
+bin/malformed_descriptor
+bin/copy_faults
+bin/child_fault
+bin/held_capacity
+bin/child_frame_cap
+bin/allocation_rollback
+bin/parent_exit
+bin/parent_fault
+bin/parent_budget
+bin/parent_call_limit
+bin/parent_cancel_ready
+bin/parent_cancel_waiting
+bin/limit_spawn
+bin/limit_wait
+bin/limit_cancel
+bin/drop_waiting
+bin/worker
+demo
+demo/loop
+```
+
+The separate `task-cases-large-initramfs.cpio` has exactly five entries:
+`bin`, `bin/group_frame_cap`, `bin/worker`, `demo`, `demo/loop`, in that order.
+Its root and worker have the independently verified large-BSS geometry below.
+Both catalogs still bind program 1 to `bin/worker` and program 2 to `demo/loop`.
+The `drop_waiting` recovery uses the same `bin/supervisor` already listed.
+No negative-hook roots or legacy hello ELF belong to these ordinary archives;
+the ordinary monitor gate independently exercises legacy hello afterward.
+The existing ordinary `task-initramfs.cpio` and its three fixture programs remain
+separate and unchanged. Future negative-profile artifacts require their own
+reviewed manifest, rather than silently expanding this inventory.
 
 Export `native_start`, each actual `write_svc`, `spawn_svc`, `wait_svc`,
 `cancel_svc`, `exit_svc`, `fault`, `loop_start`, `loop_end`, plus fixed descriptor,
@@ -152,7 +187,8 @@ Returned SVC PC means the successor instruction. Capture raw x0/x1 replies in
 EL0 and compare them before the next success marker/EXIT; host metadata alone
 cannot establish the application received the result.
 
-Finite worker issues four bounded zero WRITEs before reading its job, then one
+Finite worker recognizes the two fixed mode prefixes first; the ordinary path
+issues four bounded zero WRITEs before its opaque full-payload copy, then one
 WRITE of the exact copied job and EXIT55 (absent 10, empty 11 variants). A hardware turn may end in a parent IRQ rather than a SVC, so four yields do
 not universally force the supervisor's WAIT to park: its correct immediate or
 parked result is accepted. The separate wait_budget_child case requires actual
@@ -160,9 +196,9 @@ parking and wake while the loop child exhausts its budget. No fixed iteration
 count substitutes for that trace evidence.
 
 For copy_inputs, the actual named overwrite-marker SVC must precede the
-worker's fourth zero-WRITE SVC, whose successor leads to the pinned job-read
+worker's fourth zero-WRITE SVC, whose successor leads to the pinned full-payload copy
 site. Linked source/instruction ordering binds the parent's overwrite before
-its marker and the child's input use after that fourth yield. Reject a run
+its marker and the child's opaque full-payload copy/output use after that fourth yield. Reject a run
 where interrupts cause the child to pass that boundary too early; do not
 claim the source mutation happened before child use merely from final bytes.
 This is a required observed order, not a claim of timing-independent scheduling. The no-console variant performs no WRITE
@@ -290,11 +326,11 @@ HMTASK CALL group=G turn=U ordinal=N pc=P version=V operation=O arg1=A arg2=B ar
 HMTASK COPY group=G turn=U part=descriptor|input length=L hex=H
 HMTASK COMMIT group=G turn=U cap_slot=C cap_generation=V child_slot=S child_generation=T program=P console_generation=H entry=E root=R process_frames=F box_frames=K before=B after=A
 HMTASK OUTPUT group=G turn=U ordinal=N length=L hex=H
+HMTASK CONSUME group=G turn=U child_slot=C child_generation=J cap_slot=H cap_generation=K outcome=O
 HMTASK SETTLE group=G turn=U kind=reply|park|terminate|failure status=S result=R child_slot=C child_generation=V cap_slot=H cap_generation=J
 HMTASK INJECT group=G turn=U kind=final_budget|retire|abandon|wake_install|child_retire
 HMTASK CHARGE group=G turn=U end=Y accounted=A remaining=M charged=D turns=T
 HMTASK RETURN group=G turn=U event=none|svc|timer|fault terminal=none|exit|fault|budget|call_limit|turn_limit|cancelled|unavailable state=ready|waiting|closing|completed entered=E code=C calls=N written=W irqs=J elr=P remaining=M charged=D turns=T root=R vbar=V controls=1 before=B after=A
-HMTASK CONSUME group=G turn=U child_slot=C child_generation=J cap_slot=H cap_generation=K outcome=O
 HMTASK CLOSE group=G root_slot=S root_generation=V end=E code=C evidence=executed|administrative turn=U trigger_group=H trigger_slot=I trigger_generation=J
 HMTASK ADMIN group=G reason=retired
 HMTASK MANAGE group=G sequence=N woken=W reaped=R remaining_children=C closing=L charged=F
@@ -343,7 +379,9 @@ Use accounted 0 only for a dedicated rejected-finish scenario, with unchanged
 last valid snapshot; none of the currently proposed spin-budget negatives needs
 that relaxation.
 
-A selected step serializes STEP through CHARGE/RETURN, optional CLOSE, then
+A selected step serializes STEP, optional CLOCK and ENTER/TRAP, optional CALL,
+descriptor COPY then input COPY, optional COMMIT, optional OUTPUT, optional
+CONSUME, optional SETTLE, optional CHARGE, and RETURN, followed by optional CLOSE, then
 exactly one MANAGE summary from its actual copied Management report. MANAGE's
 strictly increasing group sequence is not a selected-task ordinal. `woken` is
 0/1 for the sole root; `reaped` is 0..2, counting actual child slot reaps, not
@@ -361,6 +399,9 @@ terminal step and before wake; preselection retirement emits ADMIN then CLOSE
 with all trigger fields 0, then MANAGE. Root TaskInfo identity/charge remains
 bound to ROOT and its prior state. Retired cleanup cannot enter any user task.
 A root already Closing retains its original End even if a child later fails.
+
+`CLOSE` has no charged field; the later `PUBLISH` includes the actual retained
+metadata charge. Neither record may add, omit or reorder fields.
 
 Root terminal always reaches Closing first. At most two zero-entry child
 cancellation Steps follow, with any already-held children reaped by bounded

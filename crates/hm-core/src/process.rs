@@ -424,6 +424,11 @@ impl Executor {
     pub(super) fn last_prepared_generation(&self) -> Option<u32> {
         self.last_prepared
     }
+    /// Test observation only: the second value is not the console issuer's next value.
+    #[cfg(feature = "task-tests")]
+    pub(super) fn task_issuance_snapshot(&self) -> (u32, Option<u32>) {
+        (self.next_task_cap, self.last_prepared)
+    }
     pub(super) fn issue_group(&mut self) -> Result<u64, Error> {
         if self.retired || self.next_group == 0 {
             return Err(Error::Platform);

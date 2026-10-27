@@ -16,6 +16,37 @@ use hm_process::{Group, TaskId};
 use hm_kernel::elf::Image;
 '''
 PROBES = {
+    "valid_task_owned_root": ('''pub fn client<'e, 'p>(e: &'e mut Executor, f: Factory<'p>, bytes: &mut [u8], archive: &'static [u8]) -> Option<Group<'e, 'p>> {
+        let image = Image::parse(bytes).ok()?;
+        let group = hm_process::task_group(e, f, &image, archive).ok()?;
+        drop(image); bytes.fill(0); Some(group)
+    }''', None),
+    "valid_task_copied_completion": ('''pub fn client(mut g: Group<'_, '_>) -> Option<hm_process::TaskCompletion> {
+        fn copied<T: Copy>() {} copied::<hm_process::TaskCompletion>();
+        let root = g.task_root().ok()?;
+        let done = g.task_reap(root).ok()?; drop(g);
+        let _ = (done.closure().root().id(), done.closure().end(), done.closure().evidence(), done.live_frames());
+        Some(done)
+    }''', None),
+    "task_constructor_private": ('''pub fn client(e: &mut Executor, f: Factory<'_>, image: &Image<'_>, archive: &'static [u8]) {
+        let _ = Group::new_task(e, f, image, archive, true);
+    }''', "E0624"),
+    "task_executor_exclusive": ('''pub fn client(e: &mut Executor, f: Factory<'_>, image: &Image<'_>, archive: &'static [u8], p: Process<'_>) {
+        let g = hm_process::task_group(e, f, image, archive).ok().unwrap();
+        let _ = e.run(p); let _ = g.task_root();
+    }''', "E0499"),
+    "task_archive_static": ('''pub fn client(e: &mut Executor, f: Factory<'_>, image: &Image<'_>, archive: &[u8]) {
+        let _ = hm_process::task_group(e, f, image, archive);
+    }''', "E0521"),
+    "task_pool_lifetime": ('''pub fn client(e: &'static mut Executor, pool: Pool, make: for<'p> fn(&'p Pool)->Factory<'p>, image: &Image<'_>, archive: &'static [u8]) -> Option<Group<'static, 'static>> {
+        hm_process::task_group(e, make(&pool), image, archive).ok()
+    }''', "E0515"),
+    "task_shared_reap": ('''pub fn client(g: &Group<'_, '_>, id: TaskId) { let _ = g.task_reap(id); }''', "E0596"),
+    "task_wrong_token": ('''pub fn client(g: &Group<'_, '_>) { let _ = g.task_completion(3u64); }''', "E0308"),
+    "task_forge_completion": ('''pub fn client(done: hm_process::TaskCompletion) { let _ = hm_process::TaskCompletion { ..done }; }''', "E0451"),
+    "task_no_production_group_snapshot": ('''pub fn client(g: &Group<'_, '_>) { let _ = g.task_issuance_snapshot(); }''', "E0599"),
+    "task_no_production_executor_snapshot": ('''pub fn client(e: &Executor) { let _ = e.task_issuance_snapshot(); }''', "E0599"),
+    "task_no_production_launch_snapshot": ('''pub fn client(g: &Group<'_, '_>) { let _ = g.task_launch_generation(); }''', "E0599"),
     "valid_group_owned_inputs": ('''pub fn client<'e, 'p>(e: &'e mut Executor, f: Factory<'p>, bytes: &mut [u8]) {
         let mut group = Group::new(e, f, 512).ok().unwrap();
         let image = Image::parse(bytes).ok().unwrap();
@@ -123,10 +154,15 @@ def main():
     wrapper = output / "hm_process.rs"
     wrapper.write_text('#![no_std]\n#![deny(unsafe_op_in_unsafe_fn)]\n' + ''.join(
         f'#[path={json.dumps(str(source / (name + ".rs")))}] mod {name};\n' for name in modules) +
-        'pub use user_space::{Factory, Space};\npub use frames::Pool;\npub use process::{Executor, Process, RunReport, Error};\npub use process_group::{Group, TaskId};\n')
+        'pub use user_space::{Factory, Space};\npub use frames::Pool;\npub use process::{Executor, Process, RunReport, Error};\npub use process_group::{Group, TaskId, TaskCompletion};\n' +
+        '''// Compile-only bridge calls the real crate-private constructor unchanged.
+pub fn task_group<'e, 'p>(e: &'e mut Executor, f: Factory<'p>, image: &hm_kernel::elf::Image<'_>, archive: &'static [u8]) -> Result<Group<'e, 'p>, process_group::Error> {
+    Group::new_task(e, f, image, archive, true)
+}
+''')
     (output / "input.json").write_text(json.dumps({"library": str(library),
         "sha256": hashlib.sha256(library.read_bytes()).hexdigest(), "target": args.target,
-        "expected_probes": list(PROBES), "sources": {name: hashlib.sha256(
+        "expected_probes": list(PROBES), "wrapper_sha256": hashlib.sha256(wrapper.read_bytes()).hexdigest(), "sources": {name: hashlib.sha256(
             (source / name).read_bytes()).hexdigest() for name in inputs}}, indent=2) + '\n')
     base = ["rustc", "--edition=2024", "--target", args.target, "-C", "panic=abort",
         "--cfg", 'feature="startup-input-tests"', "--cfg", 'feature="secondary-tests"', "--cfg", 'feature="smp-tests"',

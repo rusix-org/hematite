@@ -1,0 +1,44 @@
+{
+  "version": 1,
+  "archive": "task-cases-large-initramfs.cpio",
+  "sha256": "de3dc49aca624bdd67c3cdcc86a09fbf6271ccbff32f84410846fac1e430cce1",
+  "bytes": 69632,
+  "entries": [
+    {
+      "path": "bin",
+      "kind": "directory",
+      "mode": 16877,
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "bin/group_frame_cap",
+      "kind": "file",
+      "mode": 33261,
+      "size": 23456,
+      "sha256": "65c014bc26a9b4e76e7fdc96ea732d1359560ca3a7f28c808bba29a4e77cd618"
+    },
+    {
+      "path": "bin/worker",
+      "kind": "file",
+      "mode": 33261,
+      "size": 22904,
+      "sha256": "2d891b930e8b278ed8b7607d3f7b89b6818d73e6b6eac683616d11f7ce7d2288"
+    },
+    {
+      "path": "demo",
+      "kind": "directory",
+      "mode": 16877,
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "demo/loop",
+      "kind": "file",
+      "mode": 33261,
+      "size": 22200,
+      "sha256": "d00b6f52cb107e5288c14967ad8df18915973f0ca59fe778f9a4acdcc31eb74e"
+    }
+  ],
+  "fixtures_manifest_sha256": "a777af7e42bacb9c6757b6392bfcc3c73f7927c32bc12ae3377659b91ca3c570"
+}

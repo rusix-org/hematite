@@ -51,7 +51,9 @@ cancels the loop and exits after both children are reclaimed. It prints
 `worker complete` and `supervisor complete`, then returns to the monitor.
 Repeated runs preserve free-frame counts, and ordinary programs still launch
 afterward. The three ordinary QEMU profiles pass with independently reviewed
-traces; the broader negative authority matrix is still pending.
+traces. The [ordinary authority/lifecycle matrix](docs/evidence/task-matrix.md)
+also passes 50 cases at each RAM size; dedicated failure-injection coverage
+remains pending.
 
 This first task interface uses a fixed two-program catalog and at most two
 outstanding children. Only the supervisor receives launch authority. A child

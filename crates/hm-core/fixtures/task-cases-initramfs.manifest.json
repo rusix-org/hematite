@@ -1,0 +1,212 @@
+{
+  "version": 1,
+  "archive": "task-cases-initramfs.cpio",
+  "sha256": "e0998dea00de2f42424d50f4777a5e087ce7d1526942c2017693ffdac307d1c9",
+  "bytes": 632320,
+  "entries": [
+    {
+      "path": "bin",
+      "kind": "directory",
+      "mode": 16877,
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "bin/supervisor",
+      "kind": "file",
+      "mode": 33261,
+      "size": 23472,
+      "sha256": "45983db16e89a06d7c72bfee07197c815c2b4164375da239c201290a354ab7b7"
+    },
+    {
+      "path": "bin/copy_inputs",
+      "kind": "file",
+      "mode": 33261,
+      "size": 23024,
+      "sha256": "67c50aed4444402f74cc12cfd49cc30a7dee208af6ddb541518255d3a1871f4c"
+    },
+    {
+      "path": "bin/wait_poll_ready",
+      "kind": "file",
+      "mode": 33261,
+      "size": 23328,
+      "sha256": "38668d665b561280c1b0f4cb8c903b334508ebe207a62efd4c82209a45d045bd"
+    },
+    {
+      "path": "bin/wait_budget_child",
+      "kind": "file",
+      "mode": 33261,
+      "size": 23064,
+      "sha256": "1e57eb4c27ac54a90d5da51b487ff75e678d48ce695314f44ca118ba0d6e8795"
+    },
+    {
+      "path": "bin/rights_console_policy",
+      "kind": "file",
+      "mode": 33261,
+      "size": 23512,
+      "sha256": "26619b01ded54ad6fad92556eb40fa4c1cdb2260ab48e338f962e81f62157904"
+    },
+    {
+      "path": "bin/rights_console_wait_only",
+      "kind": "file",
+      "mode": 33261,
+      "size": 23416,
+      "sha256": "91c8b17e7602c9de479bd22b4220e64424409fd86d7d5ecc7fd05e17c788ba4f"
+    },
+    {
+      "path": "bin/foreign_authority",
+      "kind": "file",
+      "mode": 33261,
+      "size": 23328,
+      "sha256": "0f41e352769cedc9c3ad1ec347baa9289d54ed5b8c74c6066e975952165510df"
+    },
+    {
+      "path": "bin/stale_reuse",
+      "kind": "file",
+      "mode": 33261,
+      "size": 23504,
+      "sha256": "18498f93b951f9183d5b3db6667bca36e77068db225089b209125f5584a1c401"
+    },
+    {
+      "path": "bin/malformed_outer",
+      "kind": "file",
+      "mode": 33261,
+      "size": 22912,
+      "sha256": "8c3960661ea5dba5d1bb740468e74d935ed84feac1a99bb73847393961e54392"
+    },
+    {
+      "path": "bin/malformed_descriptor",
+      "kind": "file",
+      "mode": 33261,
+      "size": 22944,
+      "sha256": "f9889f9ad3daec51b45df661ddf698565437999c75484607704034ab58e185aa"
+    },
+    {
+      "path": "bin/copy_faults",
+      "kind": "file",
+      "mode": 33261,
+      "size": 27336,
+      "sha256": "7a13705bf145e62170091db0d133b656d51cbed1e83bbb5853a062657a7b8c73"
+    },
+    {
+      "path": "bin/child_fault",
+      "kind": "file",
+      "mode": 33261,
+      "size": 23328,
+      "sha256": "fa3f67a26a583f27abe7f63512afbd322d9be7a586eab9f15cc3489886260587"
+    },
+    {
+      "path": "bin/held_capacity",
+      "kind": "file",
+      "mode": 33261,
+      "size": 23504,
+      "sha256": "f9a4b7f38b4f52af2a02fe9bd802a5b9d1c19c9a6e81b14a6f40822ba2446ebc"
+    },
+    {
+      "path": "bin/child_frame_cap",
+      "kind": "file",
+      "mode": 33261,
+      "size": 23328,
+      "sha256": "4c6cd9be929653f23af0e7c6d5e5fdb1ad168999be5a80ef8f448bc1398ea68f"
+    },
+    {
+      "path": "bin/allocation_rollback",
+      "kind": "file",
+      "mode": 33261,
+      "size": 22912,
+      "sha256": "a1b0d1c2aac32ec8acfc989ebc0f6b3c2eb1c7ee62906eccfa84d34bcf333e36"
+    },
+    {
+      "path": "bin/parent_exit",
+      "kind": "file",
+      "mode": 33261,
+      "size": 23152,
+      "sha256": "f68c07337e077f7c5267d2143cc8936b5875d523f1ac9f90f023f0e30bd6257b"
+    },
+    {
+      "path": "bin/parent_fault",
+      "kind": "file",
+      "mode": 33261,
+      "size": 23152,
+      "sha256": "f53bd1a43603da049c4d8c4d04e5c58e1386cc2244f65ee1ea5d60de65806d74"
+    },
+    {
+      "path": "bin/parent_budget",
+      "kind": "file",
+      "mode": 33261,
+      "size": 23152,
+      "sha256": "e547b74daf4d4d55dc924706a9245d5bb220f60f67e47b1479d77276b3a2e0ea"
+    },
+    {
+      "path": "bin/parent_call_limit",
+      "kind": "file",
+      "mode": 33261,
+      "size": 23064,
+      "sha256": "faf9c018a65e004ea1c4d92718bd3dde4d8295a26f930476d99c0658b5233248"
+    },
+    {
+      "path": "bin/parent_cancel_ready",
+      "kind": "file",
+      "mode": 33261,
+      "size": 23152,
+      "sha256": "33e415a9803e3fc74c8e5c2474e9de1a2bbfb8e3522765708b2bfa684c873609"
+    },
+    {
+      "path": "bin/parent_cancel_waiting",
+      "kind": "file",
+      "mode": 33261,
+      "size": 22976,
+      "sha256": "796770644d79d3d38b8c1fe15f41d278a5ae1e7b65decb43c57878e978e2d35c"
+    },
+    {
+      "path": "bin/limit_spawn",
+      "kind": "file",
+      "mode": 33261,
+      "size": 23064,
+      "sha256": "1d4e983a2df9a4d83cf5e9d25f427aab34376f45c8275c205677e8c542c1f316"
+    },
+    {
+      "path": "bin/limit_wait",
+      "kind": "file",
+      "mode": 33261,
+      "size": 22880,
+      "sha256": "85dc510535c166e064b0379e92142f48cf7c823cd6aa488416dcc3f87dfdd4f3"
+    },
+    {
+      "path": "bin/limit_cancel",
+      "kind": "file",
+      "mode": 33261,
+      "size": 22880,
+      "sha256": "ff98ec124347351c3c811b7c9362dd09268b7ed76e4f609fd9ab2df5ac09a802"
+    },
+    {
+      "path": "bin/drop_waiting",
+      "kind": "file",
+      "mode": 33261,
+      "size": 22976,
+      "sha256": "0b24a4797a95df0c80c16a6b60f53767323ca84e1c1c3c300575080da9ac6ada"
+    },
+    {
+      "path": "bin/worker",
+      "kind": "file",
+      "mode": 33261,
+      "size": 22864,
+      "sha256": "f97de4921a3e6a1f7e82cd5ca3c028fabce6fa5e0548517869b730a94c44096a"
+    },
+    {
+      "path": "demo",
+      "kind": "directory",
+      "mode": 16877,
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "demo/loop",
+      "kind": "file",
+      "mode": 33261,
+      "size": 22200,
+      "sha256": "d00b6f52cb107e5288c14967ad8df18915973f0ca59fe778f9a4acdcc31eb74e"
+    }
+  ],
+  "fixtures_manifest_sha256": "a777af7e42bacb9c6757b6392bfcc3c73f7927c32bc12ae3377659b91ca3c570"
+}
