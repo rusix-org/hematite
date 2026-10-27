@@ -1,7 +1,6 @@
 # 0029 supplement: Group-owned task authority
 
-Status: **authority component reviewed; complete core implementation remains
-draft and unapproved**. See [review 0029](../reviews/0029-native-task-creation.md). Real Group catalog/capability lifecycle, depending
+Status: **ordinary mechanism and demo verified locally; detailed negative matrix pending**. See [review 0029](../reviews/0029-native-task-creation.md). Real Group catalog/capability lifecycle, depending
 on the reviewed core-dispatch boundary and implemented task_wire codec.
 
 ## Principal and persistent issuance
@@ -89,12 +88,15 @@ Authority remains until root completion is consumed or Group drops; then its
 boxes are dropped once. No metadata allocation is repeated per child spawn.
 
 Setup ordering: acquire lease/admit platform, choose root slot and candidate
-TaskId without advancing its generation, validate complete catalog, build boxed
-Images, check metadata+root charge<=512, reserve root launch generation, encode
+TaskId without advancing its generation, validate the complete archive, admit and
+box `bin/worker`, then admit and box `demo/loop`, check metadata+root charge<=512,
+reserve root launch generation, encode
 the actual launch grant into owned Input, prepare/box root, build authority box,
 then publish root+authority+charge together. All tentative owners remain local
 and drop under Lease on failure. No runnable root or authority is published on
-partial failure. Launch/console generations may burn, but slot generation and
+partial failure. First-image allocation exhaustion may therefore precede an
+invalid second ELF; each failure retains its actual typed cause. This sequential
+precedence was independently accepted in review 0029. Launch/console generations may burn, but slot generation and
 Group charge remain unchanged. Setup may fail at any real allocation; free-page
 counts must return to their entry baseline. No Pool.free early shortcut replaces
 actual load/startup/box rollback tests.

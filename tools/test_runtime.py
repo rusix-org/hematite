@@ -623,8 +623,15 @@ def verify_layout(path, root=None):
     names = ('process_bytes', 'space_bytes', 'box_bytes', 'optional_box_bytes', 'box_backing_pages')
     fields = layout['fields']
     require(set(fields) == set(names) and all(type(fields[k]) is int and 0 < fields[k] < 2**64 for k in names), 'Malformed actual layout fields')
+    task_names = ('image_bytes', 'image_pages', 'authority_bytes', 'authority_pages', 'group_bytes', 'metadata_pages')
+    task = layout.get('task_fields')
+    require(isinstance(task, dict) and set(task) == set(task_names) and
+            all(type(task[k]) is int and 0 < task[k] < 2**64 for k in task_names), 'Malformed task layout fields')
+    require(task['image_pages'] == (task['image_bytes'] + 4095) // 4096 and
+            task['authority_pages'] == (task['authority_bytes'] + 4095) // 4096 and
+            task['metadata_pages'] == 2 * task['image_pages'] + task['authority_pages'], 'Task metadata charge mismatch')
     blob = (path.parent / 'layout.bin').read_bytes()
-    require(blob == struct.pack('<5Q', *(fields[k] for k in names)) and
+    require(blob == struct.pack('<11Q', *(fields[k] for k in names), *(task[k] for k in task_names)) and
         hashlib.sha256(blob).hexdigest() == layout.get('bytes_sha256'), 'Compiler layout bytes mismatch')
     command = json.loads((path.parent / 'assemble.command.json').read_text())
     assembly = local(command['argv'][1])
@@ -637,7 +644,9 @@ def verify_layout(path, root=None):
         source = local(name)
         require(hashlib.sha256(source.read_bytes()).hexdigest() == digest, 'Stale actual layout source: ' + str(source))
         resolved[str(source.relative_to(root))] = digest
-    require({'crates/hm-core/src/process.rs', 'crates/hm-core/src/user_space.rs'} <= set(resolved), 'Layout witness lacks actual owner types')
+    required = {'crates/hm-core/src/' + name for name in
+                ('process.rs', 'user_space.rs', 'process_group.rs', 'process_task.rs', 'process_task_turn.rs')}
+    require(required <= set(resolved), 'Layout witness lacks actual owner types')
     size = fields['process_bytes']
     require(0 < size <= 16384 and fields['box_backing_pages'] == (size + 4095) // 4096, 'Malformed actual box backing charge')
     return size, dict(result=layout, sources=resolved, input_sha256=hashlib.sha256((assembly.parent / 'input.json').read_bytes()).hexdigest())

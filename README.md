@@ -23,6 +23,7 @@ run demo/fault
 run demo/loop
 run-group bin/echo bin/echo
 run-group demo/loop bin/hello
+run-task bin/supervisor
 status
 ```
 
@@ -36,13 +37,27 @@ generation, free frames and active memory protections. Native launch currently
 supports one ARM CPU at 64/128 MiB; the x86 monitor reports it as unsupported.
 Programs can receive up to 256 opaque startup bytes through the typed native
 interface. Interactive commands retain the 64-byte line limit. Console reads,
-argument vectors and process spawning remain unimplemented.
+argument vectors and arbitrary executable spawning remain unimplemented.
 
 `run-group` admits two programs before running either and schedules them in
 turns. The echo pair receives `worker-a` and `worker-b`; their text and newline
 writes can interleave. In the loop/hello pair, hello finishes while the loop is
 preempted, then the loop exhausts its budget. These demos and the broader cancellation, exhaustion and reclamation suite
 pass locally, including the full ARM64 and x86_64 regression run.
+
+`run-task bin/supervisor` demonstrates native userspace task creation. The
+supervisor starts a finite worker and a looping child, waits for the worker,
+cancels the loop and exits after both children are reclaimed. It prints
+`worker complete` and `supervisor complete`, then returns to the monitor.
+Repeated runs preserve free-frame counts, and ordinary programs still launch
+afterward. The three ordinary QEMU profiles pass with independently reviewed
+traces; the broader negative authority matrix is still pending.
+
+This first task interface uses a fixed two-program catalog and at most two
+outstanding children. Only the supervisor receives launch authority. A child
+completion handle grants explicit wait/cancel rights; completion consumption
+releases its slot. This is a bounded native design experiment, not a Unix
+fork/exec implementation.
 
 Type `help` for commands;
 `test` runs 41 bootstrap, capability, memory, topology, event, mutex, thread, timer, exception and mapping checks. The ARM boot banner reports discovered RAM and usable frame capacity.

@@ -432,22 +432,34 @@ class ActualLayoutWitnessTests(unittest.TestCase):
             evidence = root / 'evidence'; evidence.mkdir()
             assembly = evidence / 'sizes.s'; assembly.write_bytes(b'compiled assembly witness')
             sources = {}
-            for name in ('crates/hm-core/src/process.rs', 'crates/hm-core/src/user_space.rs', 'wrapper.rs', 'sizes.rs'):
+            for name in ('crates/hm-core/src/process.rs', 'crates/hm-core/src/user_space.rs',
+                         'crates/hm-core/src/process_group.rs', 'crates/hm-core/src/process_task.rs',
+                         'crates/hm-core/src/process_task_turn.rs', 'wrapper.rs', 'sizes.rs'):
                 source = root / name; source.parent.mkdir(parents=True, exist_ok=True); source.write_bytes(name.encode())
                 sources[name] = hashlib.sha256(source.read_bytes()).hexdigest()
             (evidence / 'input.json').write_text(json.dumps(dict(sources=sources)))
             (evidence / 'assemble.command.json').write_text(json.dumps(dict(argv=['aarch64-linux-gnu-as', str(assembly)])))
             values = dict(process_bytes=9832, space_bytes=8936, box_bytes=40, optional_box_bytes=40, box_backing_pages=3)
-            blob = struct.pack('<5Q', *values.values()); (evidence / 'layout.bin').write_bytes(blob)
-            result = dict(passed=True, fields=values, assembly_sha256=hashlib.sha256(assembly.read_bytes()).hexdigest(),
+            task = dict(image_bytes=472, image_pages=1, authority_bytes=928, authority_pages=1, group_bytes=1960, metadata_pages=3)
+            blob = struct.pack('<11Q', *values.values(), *task.values()); (evidence / 'layout.bin').write_bytes(blob)
+            result = dict(passed=True, fields=values, task_fields=task, assembly_sha256=hashlib.sha256(assembly.read_bytes()).hexdigest(),
                 bytes_sha256=hashlib.sha256(blob).hexdigest())
             path = evidence / 'result.json'; path.write_text(json.dumps(result))
             self.assertEqual(gate.verify_layout(path, root)[0], 9832)
-            for filename, replacement in (('layout.bin', bytes(40)), ('sizes.s', b'different actual assembly'),
+            for filename, replacement in (('layout.bin', bytes(88)), ('sizes.s', b'different actual assembly'),
                     ('input.json', json.dumps(dict(sources={})).encode())):
                 source = evidence / filename; prior = source.read_bytes(); source.write_bytes(replacement)
                 with self.subTest(file=filename), self.assertRaises(ValueError): gate.verify_layout(path, root)
                 source.write_bytes(prior)
+            for missing in ('process_group.rs', 'process_task.rs', 'process_task_turn.rs'):
+                reduced = {name: digest for name, digest in sources.items() if not name.endswith('/' + missing)}
+                (evidence / 'input.json').write_text(json.dumps(dict(sources=reduced)))
+                with self.subTest(missing=missing), self.assertRaises(ValueError): gate.verify_layout(path, root)
+            (evidence / 'input.json').write_text(json.dumps(dict(sources=sources)))
+            for bad in (None, {}, {**task, 'metadata_pages': 4}, {**task, 'group_bytes': True}):
+                path.write_text(json.dumps({**result, 'task_fields': bad}))
+                with self.subTest(task=bad), self.assertRaises(ValueError): gate.verify_layout(path, root)
+            path.write_text(json.dumps(result))
             process = root / 'crates/hm-core/src/process.rs'; process.write_bytes(b'changed layout source')
             with self.assertRaises(ValueError): gate.verify_layout(path, root)
 

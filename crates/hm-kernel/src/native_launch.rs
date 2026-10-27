@@ -61,6 +61,15 @@ pub struct GroupLaunchReport {
     pub before: usize,
     pub after: usize,
 }
+/// Copied root result, published after all task owners and metadata are reclaimed.
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub struct TaskLaunchReport {
+    pub outcome: GroupOutcome,
+    pub completed: u64,
+    pub generation: u32,
+    pub before: usize,
+    pub after: usize,
+}
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum LaunchError {
     Unsupported,
@@ -73,6 +82,49 @@ pub enum LaunchError {
     Resources,
 }
 const UNSUPPORTED: &str = "Native launching is unsupported on this platform.\n";
+
+/// The root receives its launch grant as startup input, not monitor text.
+#[inline(never)]
+pub(crate) fn run_task_command(platform: &mut impl Platform, command: &str) {
+    let mut words = command.split_ascii_whitespace();
+    let (Some(path), None) = (words.next(), words.next()) else {
+        platform.write("Usage: run-task <archive-path>.\n");
+        return;
+    };
+    match platform.run_native_task(path) {
+        Ok(report) => {
+            platform.write(path);
+            platform.write(": ");
+            write_group_outcome(platform, report.outcome);
+        }
+        Err(error) => platform.write(match error {
+            LaunchError::Unsupported => UNSUPPORTED,
+            LaunchError::Archive(_) => "Native application archive is invalid.\n",
+            LaunchError::Missing => "Program not found.\n",
+            LaunchError::Directory => "Cannot launch a directory.\n",
+            LaunchError::Elf(_) => "Program is not a supported native ELF.\n",
+            LaunchError::Unavailable => "Native launcher is unavailable.\n",
+            LaunchError::Busy => "Native launcher is busy.\n",
+            LaunchError::Resources => "Insufficient resources to launch task group.\n",
+        }),
+    }
+}
+
+fn write_group_outcome(platform: &mut impl Platform, outcome: GroupOutcome) {
+    match outcome {
+        GroupOutcome::Exited(code) => {
+            platform.write("exited (status ");
+            number(platform, u64::from(code));
+            platform.write(").\n");
+        }
+        GroupOutcome::Fault => platform.write("faulted.\n"),
+        GroupOutcome::Budget => platform.write("exhausted its active-time budget.\n"),
+        GroupOutcome::CallLimit => platform.write("exceeded its call limit.\n"),
+        GroupOutcome::TurnLimit => platform.write("exceeded its turn limit.\n"),
+        GroupOutcome::Cancelled => platform.write("cancelled.\n"),
+        GroupOutcome::Unavailable => platform.write("execution unavailable.\n"),
+    }
+}
 
 /// Parse two exact archive paths; output occurs after synchronous teardown.
 #[inline(never)]
@@ -91,19 +143,7 @@ pub(crate) fn run_group_command(platform: &mut impl Platform, command: &str) {
             for index in report.completion_order {
                 platform.write(if index == 0 { first } else { second });
                 platform.write(": ");
-                match report.outcomes[index] {
-                    GroupOutcome::Exited(code) => {
-                        platform.write("exited (status ");
-                        number(platform, u64::from(code));
-                        platform.write(").\n");
-                    }
-                    GroupOutcome::Fault => platform.write("faulted.\n"),
-                    GroupOutcome::Budget => platform.write("exhausted its active-time budget.\n"),
-                    GroupOutcome::CallLimit => platform.write("exceeded its call limit.\n"),
-                    GroupOutcome::TurnLimit => platform.write("exceeded its turn limit.\n"),
-                    GroupOutcome::Cancelled => platform.write("cancelled.\n"),
-                    GroupOutcome::Unavailable => platform.write("execution unavailable.\n"),
-                }
+                write_group_outcome(platform, report.outcomes[index]);
             }
         }
         Err(error) => platform.write(match error {

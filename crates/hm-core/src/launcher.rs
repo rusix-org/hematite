@@ -1,13 +1,14 @@
 //! Persistent ordinary-monitor launch authority; design 0026.
 use super::frames::Pool;
 use super::process::{Error, Executor, Reason};
-use super::process_group::{End, Group, TaskId, Turn};
+use super::process_group::{End, Group, TaskId, TaskTurn, Turn};
 use super::user_space::{Factory, Space};
 use core::sync::atomic::Ordering;
 use hm_kernel::boot_image::{self, AdmissionError};
 use hm_kernel::cpu_topology::Topology;
 use hm_kernel::native_launch::{
-    Availability, GroupLaunchReport, GroupOutcome, LaunchError, LaunchReport, NativeStatus, Outcome,
+    Availability, GroupLaunchReport, GroupOutcome, LaunchError, LaunchReport, NativeStatus,
+    Outcome, TaskLaunchReport,
 };
 
 pub(super) static ARCHIVE: &[u8] = include_bytes!("../fixtures/apps-initramfs.cpio");
@@ -97,6 +98,62 @@ impl State {
         result.map(|mut report| {
             report.after = after;
             report
+        })
+    }
+
+    /// Launch one supervisor and retain authority until its children are reclaimed.
+    #[inline(never)]
+    // SAFETY: Only BootPlatform supplies its actual pool/topology/root authority.
+    pub(super) unsafe fn run_task(
+        &mut self,
+        pool: &Pool,
+        topology: &Topology,
+        path: &str,
+    ) -> Result<TaskLaunchReport, LaunchError> {
+        if topology.affinities() != [0] {
+            return Err(LaunchError::Unsupported);
+        }
+        if super::threads::BUSY.load(Ordering::Acquire) {
+            return Err(LaunchError::Busy);
+        }
+        super::user_space::context().map_err(|_| LaunchError::Unavailable)?;
+        // At most 32 successful spawns: after the first two, each needs a
+        // consuming WAIT; the 64th call cannot perform a task operation.
+        if self.completed.checked_add(33).is_none() {
+            self.authority = Authority::Unavailable;
+            return Err(LaunchError::Unavailable);
+        }
+        // SAFETY: Preserve the permanent BootPlatform proof above.
+        unsafe { self.initialize(topology) }?;
+        let Authority::Ready(executor) = &mut self.authority else {
+            return Err(LaunchError::Unavailable);
+        };
+        let factory = {
+            // SAFETY: Actual boot pool, immutable mappings and topology, with no
+            // external CPU starts or DMA throughout this synchronous invocation.
+            unsafe { Factory::from_boot(pool, topology) }
+        }
+        .map_err(|_| LaunchError::Unavailable)?;
+        let before = pool.stats().free;
+        let result = run_tasks(executor, factory, path, &mut self.completed);
+        // Include preparation that succeeded before a later setup failure.
+        self.generation = executor.last_prepared_generation().or(self.generation);
+        let retired = executor.retired();
+        let after = pool.stats().free;
+        if retired || before != after || matches!(result, Err(LaunchError::Unavailable)) {
+            self.authority = Authority::Unavailable;
+        }
+        if before != after {
+            return Err(LaunchError::Unavailable);
+        }
+        let outcome = result?;
+        let generation = self.generation.ok_or(LaunchError::Unavailable)?;
+        Ok(TaskLaunchReport {
+            outcome,
+            completed: self.completed,
+            generation,
+            before,
+            after,
         })
     }
 
@@ -233,7 +290,7 @@ fn run_pair(
     // Each task has at most 256 accounted turns and one no-entry termination.
     for _ in 0..514 {
         match group.turn().map_err(group_error)? {
-            Turn::Idle => return Err(LaunchError::Unavailable),
+            Turn::Idle | Turn::Task(_) => return Err(LaunchError::Unavailable),
             Turn::Progress(_) => {}
             Turn::Completed(completion) => {
                 let id = completion.report().task().id();
@@ -286,6 +343,65 @@ fn admit_group(group: &mut Group<'_, '_>, path: &str, bytes: &[u8]) -> Result<Ta
     }
 }
 
+// Root image admission stays out of the retained scheduling frame.
+#[inline(never)]
+fn create_tasks<'e, 'p>(
+    executor: &'e mut Executor,
+    factory: Factory<'p>,
+    path: &str,
+) -> Result<Group<'e, 'p>, LaunchError> {
+    let image = admit(path);
+    match &image {
+        Ok(image) => Group::new_task(executor, factory, image, ARCHIVE, true).map_err(group_error),
+        Err(error) => Err(*error),
+    }
+}
+
+#[inline(never)]
+fn run_tasks(
+    executor: &mut Executor,
+    factory: Factory<'_>,
+    path: &str,
+    completed: &mut u64,
+) -> Result<GroupOutcome, LaunchError> {
+    let mut created = create_tasks(executor, factory, path);
+    let group = match &mut created {
+        Ok(group) => group,
+        Err(error) => return Err(*error),
+    };
+    let root = group.task_root().map_err(group_error)?;
+    // 33 owners, each at most 256 accounted turns plus a no-entry terminal
+    // turn; additional bounded administrative closure/publication steps.
+    for _ in 0..(33 * 258 + 4) {
+        match group.turn().map_err(group_error)? {
+            Turn::Task(TaskTurn::Step {
+                report, terminal, ..
+            }) => {
+                if terminal.is_some() && report.task().id() != root {
+                    *completed = completed.checked_add(1).ok_or(LaunchError::Unavailable)?;
+                }
+            }
+            Turn::Task(TaskTurn::Administrative { .. }) => {}
+            Turn::Task(TaskTurn::RootCompleted { completion, .. }) => {
+                if completion.closure().root().id() != root
+                    || group.task_completion(root).map_err(group_error)? != Some(completion)
+                {
+                    return Err(LaunchError::Unavailable);
+                }
+                if group.task_reap(root).map_err(group_error)? != completion
+                    || group.charged_frames() != 0
+                {
+                    return Err(LaunchError::Unavailable);
+                }
+                *completed = completed.checked_add(1).ok_or(LaunchError::Unavailable)?;
+                return Ok(group_outcome(completion.closure().end()));
+            }
+            _ => return Err(LaunchError::Unavailable),
+        }
+    }
+    Err(LaunchError::Unavailable)
+}
+
 fn group_outcome(end: End) -> GroupOutcome {
     match end {
         End::Exited(code) => GroupOutcome::Exited(code),
@@ -304,6 +420,7 @@ fn group_error(error: super::process_group::Error) -> LaunchError {
         E::Unsupported => LaunchError::Unsupported,
         E::Busy => LaunchError::Busy,
         E::Bounds | E::Full | E::Resources => LaunchError::Resources,
+        E::Catalog(error) => admission_error(error),
         E::Prepare(error) => core_error(error),
         E::Load(super::user_space::Error::Budget | super::user_space::Error::Exhausted) => {
             LaunchError::Resources

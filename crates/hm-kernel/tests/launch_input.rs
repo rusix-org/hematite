@@ -8,6 +8,11 @@ mod native_launch;
 use native_launch::{LaunchError, LaunchReport, NativeStatus, Outcome};
 
 trait Platform {
+    fn run_native_task(
+        &mut self,
+        path: &str,
+    ) -> Result<native_launch::TaskLaunchReport, LaunchError>;
+
     fn run_native_group(
         &mut self,
         _paths: [&str; 2],
@@ -31,6 +36,8 @@ trait Platform {
 #[derive(Default)]
 struct Recorder {
     calls: Vec<(String, Option<Vec<u8>>)>,
+    tasks: Vec<String>,
+    task_report: Option<native_launch::TaskLaunchReport>,
     groups: Vec<[String; 2]>,
     group_report: Option<native_launch::GroupLaunchReport>,
     output: String,
@@ -53,6 +60,15 @@ impl Recorder {
     }
 }
 impl Platform for Recorder {
+    fn run_native_task(
+        &mut self,
+        path: &str,
+    ) -> Result<native_launch::TaskLaunchReport, LaunchError> {
+        self.tasks.push(path.to_owned());
+        self.task_report
+            .ok_or(self.error.unwrap_or(LaunchError::Unsupported))
+    }
+
     fn run_native_group(
         &mut self,
         paths: [&str; 2],
@@ -230,5 +246,71 @@ fn group_malformed_order_rejected() {
         native_launch::run_group_command(&mut r, "bin/hello bin/info");
         assert_eq!(r.output, "Invalid group completion report.\n");
         assert_eq!(r.groups.len(), 1);
+    }
+}
+
+#[test]
+fn task_path_arity() {
+    for command in ["", "   ", "bin/supervisor extra"] {
+        let mut r = Recorder::default();
+        native_launch::run_task_command(&mut r, command);
+        assert!(r.tasks.is_empty());
+        assert_eq!(r.output, "Usage: run-task <archive-path>.\n");
+    }
+    let mut r = Recorder::default();
+    native_launch::run_task_command(&mut r, "  bin/supervisor  ");
+    assert_eq!(r.tasks, ["bin/supervisor"]);
+    assert!(r.calls.is_empty() && r.groups.is_empty());
+    assert_eq!(
+        r.output,
+        "Native launching is unsupported on this platform.\n"
+    );
+}
+#[test]
+fn task_terminal_results() {
+    use native_launch::GroupOutcome::*;
+    for (outcome, text) in [
+        (Exited(55), "exited (status 55).\n"),
+        (Fault, "faulted.\n"),
+        (Budget, "exhausted its active-time budget.\n"),
+        (CallLimit, "exceeded its call limit.\n"),
+        (TurnLimit, "exceeded its turn limit.\n"),
+        (Cancelled, "cancelled.\n"),
+        (Unavailable, "execution unavailable.\n"),
+    ] {
+        let mut r = Recorder {
+            task_report: Some(native_launch::TaskLaunchReport {
+                outcome,
+                completed: 3,
+                generation: 7,
+                before: 100,
+                after: 100,
+            }),
+            ..Recorder::default()
+        };
+        native_launch::run_task_command(&mut r, "bin/supervisor");
+        assert_eq!(r.output, format!("bin/supervisor: {text}"));
+        assert_eq!(r.tasks, ["bin/supervisor"]);
+    }
+}
+#[test]
+fn task_setup_failure() {
+    for (error, text) in [
+        (
+            LaunchError::Resources,
+            "Insufficient resources to launch task group.\n",
+        ),
+        (LaunchError::Missing, "Program not found.\n"),
+        (
+            LaunchError::Unavailable,
+            "Native launcher is unavailable.\n",
+        ),
+    ] {
+        let mut r = Recorder {
+            error: Some(error),
+            ..Recorder::default()
+        };
+        native_launch::run_task_command(&mut r, "bin/supervisor");
+        assert_eq!(r.output, text);
     }
 }

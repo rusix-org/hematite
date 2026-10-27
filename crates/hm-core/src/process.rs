@@ -62,12 +62,13 @@ pub struct Executor {
     frequency: u64,
     retired: bool,
     next_group: u64,
+    next_task_cap: u32,
     last_prepared: Option<u32>,
     _local: PhantomData<*mut ()>,
 }
 pub struct Process<'pool> {
     space: Space<'pool>,
-    session: Session,
+    session: Option<Session>,
     context: [u64; layout::USER_WORDS],
     handle: u64,
 }
@@ -177,6 +178,7 @@ impl Executor {
             frequency,
             retired: false,
             next_group: 1,
+            next_task_cap: 1,
             last_prepared: None,
             _local: PhantomData,
         })
@@ -252,7 +254,7 @@ impl Executor {
         }
         Ok(Process {
             space,
-            session,
+            session: Some(session),
             context,
             handle,
         })
@@ -347,8 +349,8 @@ impl Executor {
         let report = RunReport {
             reason,
             code,
-            calls: process.session.calls(),
-            written: process.session.written(),
+            calls: process.calls(),
+            written: process.written(),
             esr: if reason == Reason::Deadline {
                 0
             } else {
@@ -402,7 +404,10 @@ impl Executor {
         saved: &[u64; 26],
         lease: &Lease,
     ) -> u64 {
-        if self.cpus != 1 || self.retired {
+        if self.cpus != 1
+            || self.retired
+            || !process.session.as_ref().is_some_and(Session::may_resume)
+        {
             fatal();
         }
         self.slice(process, deadline, saved, lease)
@@ -427,6 +432,43 @@ impl Executor {
         self.next_group = group.checked_add(1).unwrap_or(0);
         Ok(group)
     }
+    pub(super) fn issue_task_cap(&mut self) -> Option<u32> {
+        if self.retired || self.next_task_cap == 0 {
+            return None;
+        }
+        let generation = self.next_task_cap;
+        self.next_task_cap = generation.checked_add(1).unwrap_or(0);
+        Some(generation)
+    }
+    pub(super) fn group_namespace_available(&self) -> bool {
+        self.next_group != 0
+    }
+    pub(super) fn admit_task_call(
+        &mut self,
+        process: &mut Process<'_>,
+        capture: &mut GroupCapture,
+    ) -> native::Admission {
+        if capture.request.is_some() {
+            fatal();
+        }
+        let session = process.session.take().unwrap_or_else(|| fatal());
+        let request = native::Request {
+            version: process.context[0],
+            operation: process.context[8],
+            argument: process.context[1],
+            address: process.context[2],
+            length: process.context[3],
+        };
+        capture.ordinal = session.calls() + 1;
+        capture.pc = process.pc();
+        capture.request = Some(request);
+        let mut host = GroupConsole {
+            output: self.output,
+            space: &process.space,
+            capture,
+        };
+        session.admit_task(request, &mut host)
+    }
     pub(super) fn tracing(&self) -> bool {
         self.output == OutputMode::Trace
     }
@@ -439,7 +481,7 @@ impl Executor {
             address: process.context[2],
             length: process.context[3],
         };
-        let ordinal = process.session.calls() + 1;
+        let ordinal = process.calls() + 1;
         if self.tracing() {
             let _ = writeln!(
                 Uart,
@@ -458,7 +500,12 @@ impl Executor {
             index,
             ordinal,
         };
-        match process.session.dispatch(request, &mut host) {
+        match process
+            .session
+            .as_mut()
+            .unwrap_or_else(|| fatal())
+            .dispatch(request, &mut host)
+        {
             native::Outcome::Stop(native::Stop::Exit(code)) => Some((Reason::Exit, code)),
             native::Outcome::Stop(native::Stop::CallLimit) => Some((Reason::CallLimit, 0)),
             native::Outcome::Reply(reply) => {
@@ -471,7 +518,7 @@ impl Executor {
                 }
                 process.context[0] = reply.status as u64;
                 process.context[1] = reply.written;
-                if process.session.may_resume() {
+                if process.session.as_ref().is_some_and(Session::may_resume) {
                     None
                 } else {
                     Some((Reason::CallLimit, 0))
@@ -495,21 +542,26 @@ impl Executor {
             length: process.context[3],
         };
         capture.request = Some(request);
-        capture.ordinal = process.session.calls() + 1;
+        capture.ordinal = process.calls() + 1;
         capture.pc = process.pc();
         let mut host = GroupConsole {
             output: self.output,
             space: &process.space,
             capture,
         };
-        match process.session.dispatch(request, &mut host) {
+        match process
+            .session
+            .as_mut()
+            .unwrap_or_else(|| fatal())
+            .dispatch(request, &mut host)
+        {
             native::Outcome::Stop(native::Stop::Exit(code)) => Some((Reason::Exit, code)),
             native::Outcome::Stop(native::Stop::CallLimit) => Some((Reason::CallLimit, 0)),
             native::Outcome::Reply(reply) => {
                 capture.reply = Some(reply);
                 process.context[0] = reply.status as u64;
                 process.context[1] = reply.written;
-                if process.session.may_resume() {
+                if process.session.as_ref().is_some_and(Session::may_resume) {
                     None
                 } else {
                     Some((Reason::CallLimit, 0))
@@ -519,6 +571,27 @@ impl Executor {
     }
 }
 impl Process<'_> {
+    pub(super) fn put_session(&mut self, session: Session) -> Result<(), Session> {
+        if self.session.is_some() {
+            return Err(session);
+        }
+        self.session = Some(session);
+        Ok(())
+    }
+    pub(super) fn has_session(&self) -> bool {
+        self.session.is_some()
+    }
+    pub(super) fn copy_task_bytes(
+        &self,
+        address: u64,
+        output: &mut [u8],
+    ) -> Result<(), user_space::Error> {
+        self.space.read_into(address, output)
+    }
+    pub(super) fn task_reply(&mut self, reply: native::Response) {
+        self.context[0] = reply.status as u64;
+        self.context[1] = reply.written;
+    }
     pub(super) fn pc(&self) -> u64 {
         self.context[layout::USER_PC / 8]
     }
@@ -539,10 +612,10 @@ impl Process<'_> {
         self.space.prepare_instructions()
     }
     pub(super) fn calls(&self) -> usize {
-        self.session.calls()
+        self.session.as_ref().unwrap_or_else(|| fatal()).calls()
     }
     pub(super) fn written(&self) -> usize {
-        self.session.written()
+        self.session.as_ref().unwrap_or_else(|| fatal()).written()
     }
     pub(super) fn trap(&self) -> (u64, u64, u64, u64) {
         (
@@ -672,6 +745,34 @@ impl GroupCapture {
             output_recorded: false,
         }
     }
+    pub(super) fn emit_task_call(&self, group: u64, turn: u64) {
+        if let Some(r) = self.request {
+            let _ = writeln!(
+                Uart,
+                "HMTASK CALL group={group} turn={turn} ordinal={} pc={} version={} operation={} arg1={} arg2={} arg3={}",
+                self.ordinal, self.pc, r.version, r.operation, r.argument, r.address, r.length
+            );
+        }
+    }
+    pub(super) fn emit_task_output(&self, group: u64, turn: u64) {
+        if self.length == 0 {
+            return;
+        }
+        let _ = write!(
+            Uart,
+            "HMTASK OUTPUT group={group} turn={turn} ordinal={} length={} hex=",
+            self.ordinal, self.length
+        );
+        for byte in &self.output[..self.length] {
+            let _ = write!(Uart, "{byte:02x}");
+        }
+        let _ = writeln!(Uart);
+    }
+    pub(super) fn record_reply(&mut self, reply: native::Response) {
+        if self.reply.replace(reply).is_some() {
+            fatal();
+        }
+    }
     pub(super) fn emit(&self, group: u64, turn: u64) {
         let Some(request) = self.request else {
             return;
@@ -756,6 +857,26 @@ pub(super) fn group_counter(process: &Process<'_>, capture: &GroupCapture) -> u6
             owner = in(reg) core::ptr::from_ref(process),
             capture = in(reg) core::ptr::from_ref(capture),
             options(nostack, preserves_flags));
+    }
+    value
+}
+/// Task-only ordering boundary covers detached policy owners and Group commits.
+#[inline(always)]
+pub(super) fn task_counter<G, W, C>(
+    group: &G,
+    process: &Process<'_>,
+    work: &W,
+    capture: &C,
+) -> u64 {
+    let value;
+    // SAFETY: Admitted EL1 counter observation. Opaque addresses are compiler
+    // memory inputs only; assembly does not dereference, retain or modify them.
+    // Default memory effects order owned policy and Group changes around the read.
+    unsafe {
+        asm!("isb", "mrs {value}, cntpct_el0", "/* {group} {owner} {work} {capture} */",
+            value = out(reg) value, group = in(reg) core::ptr::from_ref(group),
+            owner = in(reg) core::ptr::from_ref(process), work = in(reg) core::ptr::from_ref(work),
+            capture = in(reg) core::ptr::from_ref(capture), options(nostack, preserves_flags));
     }
     value
 }

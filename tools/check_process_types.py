@@ -98,7 +98,7 @@ PROBES = {
         e.prepare(space, true, 1).ok()
     }''', "E0515"),
     "forge_process": ('''pub fn client(space: Space<'_>, session: hm_kernel::native::Session) {
-        let _ = Process { space, session, context: [0;106], handle: 1 };
+        let _ = Process { space, session: Some(session), context: [0;106], handle: 1 };
     }''', "E0451"),
 }
 
@@ -117,7 +117,7 @@ def main():
     output.mkdir(parents=True)
     source = Path(__file__).resolve().parents[1] / "crates/hm-core/src"
     modules = ("frames", "cpu_local", "threads", "preempt", "secondary", "user_space", "process", "process_group")
-    inputs = [name + ".rs" for name in modules] + ["process_layout.rs",
+    inputs = [name + ".rs" for name in modules] + ["process_layout.rs", "process_task.rs", "process_task_turn.rs",
         "process-aarch64.S", "user-space-aarch64.S", "threads-aarch64.S",
         "preempt-aarch64.S", "preempt-probe-aarch64.S", "secondary-aarch64.S"]
     wrapper = output / "hm_process.rs"

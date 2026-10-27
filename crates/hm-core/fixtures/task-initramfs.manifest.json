@@ -1,0 +1,44 @@
+{
+  "version": 1,
+  "archive": "task-initramfs.cpio",
+  "sha256": "350cc3833bf04cf0b87cb191458fbb1c63e8ebcf61cb79eed65e1ae553ad3851",
+  "bytes": 52736,
+  "entries": [
+    {
+      "path": "bin",
+      "kind": "directory",
+      "mode": 16877,
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "bin/supervisor",
+      "kind": "file",
+      "mode": 33261,
+      "size": 22432,
+      "sha256": "4f14f048a574f316122d6288d2b2768963e97a0cc117423cdf860d22f4dac018"
+    },
+    {
+      "path": "bin/worker",
+      "kind": "file",
+      "mode": 33261,
+      "size": 14768,
+      "sha256": "6c87c7bf3aae17af59fa7ec743e2c211bceb125c9b5a594b299d04ed89914987"
+    },
+    {
+      "path": "demo",
+      "kind": "directory",
+      "mode": 16877,
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "demo/loop",
+      "kind": "file",
+      "mode": 33261,
+      "size": 14592,
+      "sha256": "af4e10bcfef5376b1331b1b3b81c2988fedb32d96243cca1ca9d166ea4b5966c"
+    }
+  ],
+  "apps_manifest_sha256": "e6799175915c1da4391ee03552ce11309a9bb792cd7a02378e4ccab94473b546"
+}

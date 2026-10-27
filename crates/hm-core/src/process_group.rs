@@ -51,10 +51,14 @@ pub enum End {
 pub enum TaskState {
     Ready,
     CancelPending,
+    Waiting,
+    Closing,
     Completed,
 }
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum Error {
+    Mode,
+    Catalog(hm_kernel::boot_image::AdmissionError),
     Unsupported,
     Bounds,
     Full,
@@ -77,6 +81,13 @@ pub struct TaskInfo {
     budget: Snapshot,
 }
 macro_rules! getters { ($($name:ident:$ty:ty),* $(,)?) => {$ (pub fn $name(&self)->$ty {self.$name})*}; }
+#[path = "process_task.rs"]
+mod task;
+// Named copied report types are the public API even when this boot profile
+// consumes their getters through inferred return types rather than imports.
+#[allow(unused_imports)]
+pub use task::{Management, RootClosure, RootEvidence, TaskCompletion, TaskTurn};
+
 impl TaskInfo {
     getters!(id:TaskId,state:TaskState,root:u64,process_frames:usize,box_frames:usize,console_generation:Option<u32>,budget:Snapshot);
 }
@@ -125,7 +136,11 @@ impl Completion {
     getters!(end:End,report:StepReport);
 }
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
+// Fixed copied reports remain valid after owner teardown without allocating.
+// Their actual sizes and retained caller frames are part of the stack gate.
+#[allow(clippy::large_enum_variant)]
 pub enum Turn {
+    Task(TaskTurn),
     Idle,
     Progress(StepReport),
     Completed(Completion),
@@ -194,6 +209,8 @@ pub struct Group<'executor, 'pool> {
     limit: usize,
     charged: usize,
     cursor: usize,
+    task: Option<KernelBox<'pool, task::Authority<'pool>>>,
+    task_closed: bool,
 }
 impl<'executor, 'pool> Group<'executor, 'pool> {
     pub fn new(
@@ -223,7 +240,21 @@ impl<'executor, 'pool> Group<'executor, 'pool> {
             executor.retire();
             return Err(Error::Unavailable);
         }
-        let namespace = executor.issue_group().map_err(|_| Error::Unavailable)?;
+        Self::empty_under_lease(executor, factory, frame_limit, &_lease).map_err(|e| {
+            if e == Error::Resources {
+                Error::Unavailable
+            } else {
+                e
+            }
+        })
+    }
+    fn empty_under_lease(
+        executor: &'executor mut Executor,
+        factory: Factory<'pool>,
+        frame_limit: usize,
+        _lease: &Lease,
+    ) -> Result<Self, Error> {
+        let namespace = executor.issue_group().map_err(|_| Error::Resources)?;
         Ok(Self {
             executor,
             factory,
@@ -232,6 +263,8 @@ impl<'executor, 'pool> Group<'executor, 'pool> {
             limit: frame_limit,
             charged: 0,
             cursor: 0,
+            task: None,
+            task_closed: false,
         })
     }
     pub fn charged_frames(&self) -> usize {
@@ -250,6 +283,9 @@ impl<'executor, 'pool> Group<'executor, 'pool> {
         console: bool,
         input: Option<&Input>,
     ) -> Result<TaskId, Error> {
+        if self.task.is_some() || self.task_closed {
+            return Err(Error::Mode);
+        }
         if self.executor.retired() {
             return Err(Error::Unavailable);
         }
@@ -329,9 +365,15 @@ impl<'executor, 'pool> Group<'executor, 'pool> {
         Ok(index)
     }
     pub fn info(&self, id: TaskId) -> Result<TaskInfo, Error> {
+        if self.task.is_some() || self.task_closed {
+            return self.task_info(id);
+        }
         Ok(self.slots[self.index(id)?].info())
     }
     pub fn request_cancel(&mut self, id: TaskId) -> Result<(), Error> {
+        if self.task.is_some() || self.task_closed {
+            return self.task_cancel(id);
+        }
         let index = self.index(id)?;
         if self.slots[index].completion.is_none() {
             self.slots[index].cancel = true;
@@ -339,9 +381,18 @@ impl<'executor, 'pool> Group<'executor, 'pool> {
         Ok(())
     }
     pub fn completion(&self, id: TaskId) -> Result<Option<Completion>, Error> {
+        if self.task.is_some() || self.task_closed {
+            return Err(Error::Mode);
+        }
         Ok(self.slots[self.index(id)?].completion)
     }
     pub fn reap(&mut self, id: TaskId) -> Result<Completion, Error> {
+        if self.task.is_some() || self.task_closed {
+            return Err(Error::Mode);
+        }
+        self.reap_internal(id)
+    }
+    fn reap_internal(&mut self, id: TaskId) -> Result<Completion, Error> {
         let index = self.index(id)?;
         let slot = &mut self.slots[index];
         let completion = slot.completion.ok_or(Error::Pending)?;
@@ -354,6 +405,12 @@ impl<'executor, 'pool> Group<'executor, 'pool> {
     }
     #[inline(never)]
     pub fn turn(&mut self) -> Result<Turn, Error> {
+        if self.task.is_some() {
+            return self.task_turn();
+        }
+        if self.task_closed {
+            return Ok(Turn::Idle);
+        }
         let lease = match Lease::acquire() {
             Ok(lease) => lease,
             Err(error) => {
@@ -798,6 +855,7 @@ fn trace_return(group: u64, turn: &Turn, before: usize, after: usize) {
         Turn::Progress(report) => (report, None),
         Turn::Completed(done) => (&done.report, Some(done.end)),
         Turn::Idle => return,
+        Turn::Task(_) => process::fatal(),
     };
     let (terminal, code) = match end {
         Some(End::Exited(code)) => ("exit", code),

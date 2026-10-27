@@ -53,6 +53,12 @@ pub struct BootChecks {
 
 /// The core retains all hardware authority; policy only exchanges owned values.
 pub trait Platform {
+    fn run_native_task(
+        &mut self,
+        _path: &str,
+    ) -> Result<native_launch::TaskLaunchReport, native_launch::LaunchError> {
+        Err(native_launch::LaunchError::Unsupported)
+    }
     fn run_native_group(
         &mut self,
         _paths: [&str; 2],
@@ -655,7 +661,7 @@ fn status(platform: &mut impl Platform) {
 pub fn run_monitor(platform: &mut impl Platform) -> ! {
     platform.write("Hematite bootstrap monitor (local working name)\n");
     platform.write(
-        "Commands: help, status, test, apps, run <path> [text], run-group <path1> <path2>. This is not a Linux shell.\n",
+        "Commands: help, status, test, apps, run <path> [text], run-group <path1> <path2>, run-task <path>. This is not a Linux shell.\n",
     );
     platform.write("hm> ");
     let mut line = InputLine::new();
@@ -678,10 +684,16 @@ pub fn run_monitor(platform: &mut impl Platform) -> ! {
                 match line.command() {
                     None => platform.write("Rejected: use at most 64 printable ASCII bytes.\n"),
                     Some(b"") => {}
-                    Some(b"help") => platform.write("help   - show commands\nstatus - inspect boot protections\ntest   - run bootstrap tests\napps   - list native programs\nrun <path> [text] - launch a native program\nrun-group <path1> <path2> - run two native programs\n"),
+                    Some(b"help") => platform.write("help   - show commands\nstatus - inspect boot protections\ntest   - run bootstrap tests\napps   - list native programs\nrun <path> [text] - launch a native program\nrun-group <path1> <path2> - run two native programs\nrun-task <path> - launch a native task supervisor\n"),
                     Some(b"status") => status(platform),
                     Some(b"apps") => native_launch::list_apps(platform),
                     Some(b"run") => native_launch::run_command(platform, ""),
+                    Some(b"run-task") => native_launch::run_task_command(platform, ""),
+                    Some(command) if command.starts_with(b"run-task ") => {
+                        if let Ok(path) = core::str::from_utf8(&command[9..]) {
+                            native_launch::run_task_command(platform, path);
+                        }
+                    },
                     Some(b"run-group") => native_launch::run_group_command(platform, ""),
                     Some(command) if command.starts_with(b"run-group ") => {
                         if let Ok(paths) = core::str::from_utf8(&command[10..]) {

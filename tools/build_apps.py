@@ -7,13 +7,16 @@ import struct
 import sys
 
 import build_initramfs as cpio
+import build_tasks
 from test_process import require, embedded_archive
 
 ROOT = Path(__file__).resolve().parents[1]
 CANONICAL = ROOT / 'crates/hm-core/fixtures/apps'
 ARCHIVE = ROOT / 'crates/hm-core/fixtures/apps-initramfs.cpio'
-APPS = ('hello', 'info', 'echo', 'fault', 'loop')
-PATHS = ('bin/hello', 'bin/info', 'bin/echo', 'demo/fault', 'demo/loop')
+LEGACY_APPS = ('hello', 'info', 'echo', 'fault', 'loop')
+TASK_APPS = ('supervisor', 'worker')
+APPS = LEGACY_APPS + TASK_APPS
+PATHS = ('bin/hello', 'bin/info', 'bin/echo', 'demo/fault', 'demo/loop', 'bin/supervisor', 'bin/worker')
 SYMBOLS = ('native_start', 'write_svc', 'newline_svc', 'exit_svc', 'fault', 'loop_start', 'loop_end', 'message')
 
 
@@ -80,7 +83,8 @@ def inspect(data, symbol_text):
 def archive_entries(data):
     return [('bin', 0o40755, b''), ('bin/hello', 0o100755, data['hello']),
             ('bin/info', 0o100755, data['info']), ('bin/echo', 0o100755, data['echo']), ('demo', 0o40755, b''),
-            ('demo/fault', 0o100755, data['fault']), ('demo/loop', 0o100755, data['loop'])]
+            ('demo/fault', 0o100755, data['fault']), ('demo/loop', 0o100755, data['loop']),
+            ('bin/supervisor', 0o100755, data['supervisor']), ('bin/worker', 0o100755, data['worker'])]
 
 
 def archive_manifest(raw, entries, manifest_bytes):
@@ -110,7 +114,8 @@ def verify(manifest_path, archive_path, output, kernel=None):
         data[name] = elf.read_bytes()
         symbols, stderr = cpio.run(['readelf', '-sW', str(elf)], output, name + '-symbols')
         require(not stderr, 'readelf emitted diagnostics')
-        actual = inspect(data[name], symbols.decode('ascii'))
+        actual = (build_tasks.inspect(data[name], symbols.decode('ascii'), name) if name in TASK_APPS
+                  else inspect(data[name], symbols.decode('ascii')))
         require(name != 'hello' or 'message' in actual['symbols'], 'Hello message symbol missing')
         require(item == dict(actual, file=name + '.elf', path=path, sha256=cpio.sha(data[name])), 'App metadata/hash differs from ELF')
         cpio.run(['aarch64-linux-gnu-objdump', '-d', str(elf)], output, name + '-disassembly')
@@ -121,7 +126,7 @@ def verify(manifest_path, archive_path, output, kernel=None):
     require(archive_path.with_suffix('.manifest.json').read_bytes() ==
             json_bytes(archive_manifest(raw, entries, manifest_path.read_bytes())), 'App archive manifest mismatch')
     cpio.inspect_with_gnu(archive_path, entries, output, 'apps-archive')
-    report = {'bytes': len(raw), 'sha256': cpio.sha(raw), 'entries': 7, 'files': 5}
+    report = {'bytes': len(raw), 'sha256': cpio.sha(raw), 'entries': 9, 'files': 7}
     if kernel is not None:
         report['kernel_file_offset'] = embedded_archive(kernel.read_bytes(), raw, list(data.values()))
     return document['apps'], report
@@ -138,10 +143,12 @@ def main():
     output.mkdir(parents=True)
     sources = ['crates/hm-core/fixtures/' + name for name in ('apps.rs', 'apps.S', 'native-elf.ld')]
     sources += ['crates/hm-kernel/src/startup_input.rs', 'tools/build_apps.py', 'tools/build_initramfs.py', 'tools/test_process.py', 'docs/design/0026-native-launcher.md']
+    sources += ['crates/hm-core/fixtures/' + name for name in ('tasks.rs', 'tasks.S', 'tasks.ld')]
+    sources += ['tools/build_tasks.py', 'crates/hm-kernel/src/task_wire.rs']
     (output / 'input.json').write_bytes(json_bytes({'sources': {p: cpio.sha((ROOT / p).read_bytes()) for p in sources}, 'update': args.update}))
     try:
         data, apps = {}, {}
-        for name, path in zip(APPS, PATHS):
+        for name, path in zip(LEGACY_APPS, PATHS):
             elf = output / (name + '.elf')
             command = ['rustc', '--edition=2024', '--crate-name', 'native_apps', '--crate-type=bin', '--target', 'aarch64-unknown-none',
                        '--cfg', f'app="{name}"', '-C', 'panic=abort', '-C', 'opt-level=2', '-C', 'codegen-units=1',
@@ -153,6 +160,14 @@ def main():
             symbols, stderr = cpio.run(['readelf', '-sW', str(elf)], output, name + '-build-symbols')
             require(not stderr, 'readelf emitted diagnostics')
             apps[name] = dict(inspect(data[name], symbols.decode('ascii')), file=name + '.elf', path=path, sha256=cpio.sha(data[name]))
+        task_output = output / 'tasks'
+        cpio.run([sys.executable, str(ROOT / 'tools/build_tasks.py'), '--output', str(task_output)],
+                 output, 'task-apps-build')
+        task_manifest = json.loads((task_output / 'manifest.json').read_text())
+        for name in TASK_APPS:
+            data[name] = (task_output / (name + '.elf')).read_bytes()
+            (output / (name + '.elf')).write_bytes(data[name])
+            apps[name] = task_manifest['apps'][name]
         manifest = json_bytes({'version': 1, 'apps': apps})
         (output / 'manifest.json').write_bytes(manifest)
         entries = archive_entries(data)

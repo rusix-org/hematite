@@ -165,7 +165,7 @@ def run_rejected_cpu(output, kernel, feature, arch="aarch64"):
 def help_body():
     return (b"help   - show commands\nstatus - inspect boot protections\n"
             b"test   - run bootstrap tests\napps   - list native programs\n"
-            b"run <path> [text] - launch a native program\nrun-group <path1> <path2> - run two native programs\n")
+            b"run <path> [text] - launch a native program\nrun-group <path1> <path2> - run two native programs\nrun-task <path> - launch a native task supervisor\n")
 
 
 def status_body(arch="aarch64", free=0, completed=0, generation=None):
@@ -249,7 +249,7 @@ def run_monitor(output, kernel, arch="aarch64", ram_mb=128):
             banner = read_prompt()
             result["checks"]["initial_prompt_and_banner"] = (
                 b"Hematite bootstrap monitor (local working name)" in banner
-                and b"Commands: help, status, test, apps, run <path> [text], run-group <path1> <path2>. This is not a Linux shell." in banner
+                and b"Commands: help, status, test, apps, run <path> [text], run-group <path1> <path2>, run-task <path>. This is not a Linux shell." in banner
             )
             if arch == "aarch64":
                 expected_memory = (f"Boot RAM bytes: 0x{ram_mb * 1024 * 1024:016x} "

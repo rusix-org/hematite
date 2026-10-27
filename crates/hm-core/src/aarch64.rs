@@ -134,6 +134,20 @@ pub(super) fn runtime_tests(platform: &mut BootPlatform) -> bool {
 }
 
 impl Platform for BootPlatform {
+    fn run_native_task(
+        &mut self,
+        path: &str,
+    ) -> Result<hm_kernel::native_launch::TaskLaunchReport, hm_kernel::native_launch::LaunchError>
+    {
+        let (Some(pool), Some(topology)) = (self.pool.as_ref(), self.topology.as_ref()) else {
+            return Err(hm_kernel::native_launch::LaunchError::Unavailable);
+        };
+        // SAFETY: Private initialized BootPlatform fields bind actual mappings,
+        // Pool exclusions and topology; no external CPU starts or DMA exist.
+        // State retains authority through complete group teardown.
+        unsafe { self.native.run_task(pool, topology, path) }
+    }
+
     fn run_native_group(
         &mut self,
         paths: [&str; 2],

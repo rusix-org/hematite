@@ -117,6 +117,7 @@ impl Checks<'_> {
         let result = group.turn().map_err(|_| ())?;
         let report = match result {
             Turn::Idle => return Ok(result),
+            Turn::Task(_) => return Err(()),
             Turn::Progress(report) => report,
             Turn::Completed(done) => done.report(),
         };
@@ -521,21 +522,7 @@ fn cancel_case(
         None,
     )?;
     let b = checks.admit(group, "hello", true, None)?;
-    if case != 6 {
-        loop {
-            match checks.step(group)? {
-                Turn::Progress(report)
-                    if report.task().id() == a
-                        && report.event() == if case == 7 { Event::Svc } else { Event::Timer } =>
-                {
-                    break;
-                }
-                Turn::Completed(done) if done.report().task().id() == a => return Err(()),
-                Turn::Idle => return Err(()),
-                _ => {}
-            }
-        }
-    }
+    wait_cancel_boundary(checks, group, a, case)?;
     checks.cancel(group, a)?;
     checks.cancel(group, a)?;
     checks.drain(group, &[a, b])?;
@@ -555,6 +542,31 @@ fn cancel_case(
         drop(owned_group);
         checks.dropped(namespace, before)
     }
+}
+// Keep large Turn temporaries out of the admission-bearing caller frame.
+#[inline(never)]
+fn wait_cancel_boundary(
+    checks: &mut Checks<'_>,
+    group: &mut Group<'_, '_>,
+    id: TaskId,
+    case: usize,
+) -> Check {
+    if case != 6 {
+        loop {
+            match checks.step(group)? {
+                Turn::Progress(report)
+                    if report.task().id() == id
+                        && report.event() == if case == 7 { Event::Svc } else { Event::Timer } =>
+                {
+                    break;
+                }
+                Turn::Completed(done) if done.report().task().id() == id => return Err(()),
+                Turn::Idle => return Err(()),
+                _ => {}
+            }
+        }
+    }
+    Ok(())
 }
 fn reject_token(checks: &mut Checks<'_>, group: &mut Group<'_, '_>, id: TaskId) -> Check {
     let before = checks.pool.stats().free;

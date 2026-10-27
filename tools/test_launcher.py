@@ -24,7 +24,7 @@ SYMBOLS = ('__kernel_end', 'arm_vectors', 'arm_process_vectors', 'arm_timer_wind
 INFO = b'native ABI 1\nconsole: granted\nwrite limit: 256 bytes\nconsole budget: 4096 bytes\ncall limit: 64\n'
 HELLO = b'hello from EL0\n'
 EXIT = b'Program exited (status 0).\n'
-APPS = b'Native programs:\n  bin/hello\n  bin/info\n  bin/echo\n  demo/fault\n  demo/loop\n'
+APPS = b'Native programs:\n  bin/hello\n  bin/info\n  bin/echo\n  demo/fault\n  demo/loop\n  bin/supervisor\n  bin/worker\n'
 SETUP = ((0, 0), (4, 255), (8, 0), (0, 1))
 SLICE_SETUP = ((4, 255), (8, 0), (0, 1))
 SLICE_RESTORE = ((0, 0), (4, 255), (8, 0), (0, 0))
@@ -43,7 +43,7 @@ def banner(ram_mb, pages):
     return transport((f'hematite: ARM64 Rust kernel entered at EL1\nBoot RAM bytes: 0x{ram_mb * 1024 * 1024:016x} (discovered RAM)\n'
                       f'Frame pool pages: 0x{pages:016x} (4 KiB each; boot reservations excluded)\n'
                       'Hematite bootstrap monitor (local working name)\n'
-                      'Commands: help, status, test, apps, run <path> [text], run-group <path1> <path2>. This is not a Linux shell.\n').encode())
+                      'Commands: help, status, test, apps, run <path> [text], run-group <path1> <path2>, run-task <path>. This is not a Linux shell.\n').encode())
 
 
 def steps(pages, fresh=False, input_first=False):

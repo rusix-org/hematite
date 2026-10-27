@@ -48,6 +48,7 @@ test: image
 		python3 tools/test_test_launch_input.py; \
 		python3 tools/test_test_startup_delivery.py; \
 		python3 tools/test_test_group_launcher.py; \
+		python3 tools/test_test_task_launcher.py; \
 		python3 tools/test_test_runtime.py; \
 		python3 tools/check_repository.py; \
 		python3 tools/check_safety.py; \
@@ -171,6 +172,7 @@ test: image
 			python3 tools/test_startup_delivery.py --kernel target/$(ARCH)/startup-input-test/$(TARGET)/release/hematite --fixtures crates/hm-core/fixtures/startup-input/manifest.json --archive crates/hm-core/fixtures/startup-input-initramfs.cpio --output "$$evidence_dir/startup-delivery"; \
 			python3 tools/test_launcher.py --kernel target/$(ARCH)/monitor/$(TARGET)/release/hematite --apps crates/hm-core/fixtures/apps/manifest.json --archive crates/hm-core/fixtures/apps-initramfs.cpio --output "$$evidence_dir/launcher"; \
 			python3 tools/test_group_launcher.py --kernel target/$(ARCH)/monitor/$(TARGET)/release/hematite --apps crates/hm-core/fixtures/apps/manifest.json --archive crates/hm-core/fixtures/apps-initramfs.cpio --output "$$evidence_dir/group-launcher"; \
+			python3 tools/test_task_launcher.py --kernel target/$(ARCH)/monitor/$(TARGET)/release/hematite --apps crates/hm-core/fixtures/apps/manifest.json --archive crates/hm-core/fixtures/apps-initramfs.cpio --output "$$evidence_dir/task-launcher"; \
 			python3 tools/test_runtime.py --kernel target/$(ARCH)/runtime-test/$(TARGET)/release/hematite --fixtures crates/hm-core/fixtures/runtime/manifest.json --archive crates/hm-core/fixtures/runtime-initramfs.cpio --layout "$$evidence_dir/runtime-layout/result.json" --output "$$evidence_dir/runtime"; \
 			python3 tools/test_space.py --kernel target/$(ARCH)/space-test/$(TARGET)/release/hematite --output "$$evidence_dir/space"; \
 			python3 tools/test_secondary.py --kernel target/$(ARCH)/secondary-test/$(TARGET)/release/hematite --stale-generation-kernel target/$(ARCH)/secondary-stale-test/$(TARGET)/release/hematite --cpu-off-return-kernel target/$(ARCH)/secondary-off-return-test/$(TARGET)/release/hematite --output "$$evidence_dir/secondary"; \

@@ -7,6 +7,10 @@ The eventual 0029 mechanism/wire document owns operation numbers, layouts,
 limits, error precedence and lifecycle semantics. This document must be aligned
 with that document before either implementation or a supposedly strict parser.
 
+The concrete proposed case inventory and record grammar now live in
+[0029 task protocol](0029-task-protocol.md). Its explicit review questions
+supersede the exploratory inventory below; neither document authorizes core code.
+
 ## What must actually run
 
 An admitted ARM EL0 parent receives explicit launch authority, invokes native
