@@ -19,6 +19,7 @@ pub mod heap_api;
 mod heap_tests;
 pub mod initramfs;
 pub mod mapping_api;
+pub mod mapping_audit;
 mod mapping_tests;
 pub mod mutex_api;
 mod mutex_tests;

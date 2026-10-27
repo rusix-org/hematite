@@ -22,6 +22,11 @@ CASES = tuple(sorted((
 )))
 TIMEOUT_SECONDS = 60
 MAX_LOG_BYTES = 4 * 1024 * 1024
+EXPECTED_CASES = tuple(sorted(tuple('native::tests::' + name for name in CASES) + (
+    'mapping_audit::tests::boundaries_duplicates_and_overflow',
+    'mapping_audit::tests::every_singleton_and_full_window',
+    'mapping_audit::tests::generated_owner_sets_match_original_existential_lookup',
+)))
 
 
 def validate(raw):
@@ -34,12 +39,12 @@ def validate(raw):
     if not raw.endswith(b'\n') or len(raw) > MAX_LOG_BYTES:
         errors.append('Incomplete or oversized test output')
     lines = [line for line in text.split('\n') if line]
-    expected = ['running 10 tests'] + [f'test native::tests::{case} ... ok' for case in CASES]
+    expected = ['running 13 tests'] + [f'test {case} ... ok' for case in EXPECTED_CASES]
     if lines[:-1] != expected:
-        errors.append('Test inventory/order/results differ from the exact ten cases')
-    if not lines or not re.fullmatch(r'test result: ok\. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in [0-9]+\.[0-9]+s', lines[-1]):
+        errors.append('Test inventory/order/results differ from the exact thirteen cases')
+    if not lines or not re.fullmatch(r'test result: ok\. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in [0-9]+\.[0-9]+s', lines[-1]):
         errors.append('Missing or unsuccessful complete summary')
-    return {'passed': not errors, 'errors': errors, 'expected_cases': list(CASES), 'observed_lines': lines}
+    return {'passed': not errors, 'errors': errors, 'expected_cases': list(EXPECTED_CASES), 'observed_lines': lines}
 
 
 def validate_execution(raw, execution, artifacts):
@@ -75,8 +80,9 @@ def main():
     sources = ('rust-toolchain.toml', 'Cargo.lock', 'Cargo.toml', 'crates/hm-kernel/Cargo.toml',
                'crates/hm-kernel/src/lib.rs', 'crates/hm-kernel/src/native.rs',
                'crates/hm-kernel/src/native_tests.rs', 'crates/hm-kernel/src/task_wire.rs',
+               'crates/hm-kernel/src/mapping_audit.rs',
                'tools/check_native.py')
-    write('input.json', {'cwd': str(root), 'expected_cases': list(CASES), 'sources': {
+    write('input.json', {'cwd': str(root), 'expected_cases': list(EXPECTED_CASES), 'sources': {
         name: hashlib.sha256((root / name).read_bytes()).hexdigest() for name in sources}})
     started = time.monotonic()
     execution = {'started_utc': datetime.now(timezone.utc).isoformat(), 'timeout_seconds': TIMEOUT_SECONDS,

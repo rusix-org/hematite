@@ -440,19 +440,30 @@ impl Space<'_> {
                 return false;
             }
         }
-        for i in 0..4096 {
-            let pa = RAM + i as u64 * PAGE as u64;
-            let executable = self
-                .pages
-                .iter()
-                .zip(self.permissions.iter())
-                .any(|(f, p)| {
-                    *p == Some(Permissions::ReadExecute)
-                        && f.as_ref().is_some_and(|f| f.physical_address() == pa)
-                });
-            let expected = if executable { pa | RO } else { boot_ram(i) };
-            if self.word(2 + i / 512, i % 512) != Some(expected) {
-                return false;
+        for window in 0..64 {
+            let base = RAM + window as u64 * 64 * PAGE as u64;
+            let executable = hm_kernel::mapping_audit::executable_mask(
+                base,
+                self.pages
+                    .iter()
+                    .zip(self.permissions.iter())
+                    .filter_map(|(f, p)| {
+                        (*p == Some(Permissions::ReadExecute))
+                            .then(|| f.as_ref().map(OwnedFrame::physical_address))
+                            .flatten()
+                    }),
+            );
+            for bit in 0..64 {
+                let i = window * 64 + bit;
+                let pa = RAM + i as u64 * PAGE as u64;
+                let expected = if executable & (1u64 << bit) != 0 {
+                    pa | RO
+                } else {
+                    boot_ram(i)
+                };
+                if self.word(2 + i / 512, i % 512) != Some(expected) {
+                    return false;
+                }
             }
         }
         self.page(self.entry)

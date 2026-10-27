@@ -8,9 +8,9 @@ ARTIFACTS = {'stdout': {'within_limit': True}, 'stderr': {'within_limit': True}}
 
 
 def report():
-    lines = ['running 10 tests']
-    lines += [f'test native::tests::{name} ... ok' for name in harness.CASES]
-    lines += ['test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s']
+    lines = ['running 13 tests']
+    lines += [f'test {name} ... ok' for name in harness.EXPECTED_CASES]
+    lines += ['test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s']
     return ('\n' + '\n'.join(lines) + '\n\n').encode()
 
 
@@ -28,7 +28,7 @@ class NativeHarnessTests(unittest.TestCase):
 
     def test_wrong_order_or_test_name(self):
         raw = report()
-        first, second = [f'test native::tests::{name} ... ok\n'.encode() for name in harness.CASES[:2]]
+        first, second = [f'test {name} ... ok\n'.encode() for name in harness.EXPECTED_CASES[:2]]
         self.assertFalse(harness.validate(raw.replace(first + second, second + first))['passed'])
         self.assertFalse(harness.validate(raw.replace(first, b'test native::tests::unknown ... ok\n'))['passed'])
         self.assertFalse(harness.validate(raw + b'unknown extra output\n')['passed'])
@@ -37,9 +37,9 @@ class NativeHarnessTests(unittest.TestCase):
         raw = report()
         for before, after in ((b'... ok', b'... ignored'), (b'... ok', b'... FAILED'),
                 (b'0 ignored', b'1 ignored'), (b'0 filtered out', b'1 filtered out'),
-                (b'0 failed', b'1 failed'), (b'10 passed', b'9 passed'),
+                (b'0 failed', b'1 failed'), (b'13 passed', b'12 passed'),
                 (b'0 measured', b'1 measured'), (b'test result: ok', b'test result: FAILED'),
-                (b'running 10 tests', b'running 0 tests')):
+                (b'running 13 tests', b'running 0 tests')):
             with self.subTest(after=after):
                 self.assertFalse(harness.validate(raw.replace(before, after, 1))['passed'])
         self.assertFalse(harness.validate(b'running 0 tests\n')['passed'])
