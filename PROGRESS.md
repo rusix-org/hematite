@@ -8,6 +8,19 @@ from strict Linux parity to native OS design with selective compatibility.
 
 ## Implementation and verification
 
+- Interactive input groundwork is **verified locally**: the canonical input
+  grant codec, owned READ admission/parking policy, and private inactive RW
+  validator/copy pass their scoped tests and the full ARM/x86 regression.
+  Source/test checkpoint `8f50dde0` matches all351 captured full-suite inputs;
+  all35 executed kernels match reviewed candidates. Evidence checkpoint
+  `dbd117a1` is pushed to GitHub and its
+  [matching CI run](https://github.com/rusix-org/hematite/actions/runs/40452129267)
+  passed. See [RW-copy evidence](docs/evidence/rw-copy.md)
+  and [safe input evidence](docs/evidence/input-safe.md).
+  Actual UART input, hardware idle, the interactive coordinator and user shell
+  remain **unimplemented**. Current design work resolves bounded GIC cleanup,
+  partial-setup restoration and ownership; no hardware approval is implied.
+
 - Native userspace task creation is **verified locally for the ordinary demo**;
   the ordinary 25-case authority/lifecycle matrix now also passes both RAM
   profiles after independent raw-trace review (two passes, 50 cases per guest).

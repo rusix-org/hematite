@@ -51,5 +51,7 @@ candidates. Raw archives retain121 ARM/18 x86 result records with no failed
 verdict. All 351 captured inputs match committed source `8f50dde0` exactly;
 see [committed-blob verification](rw-copy-full-first/verified-commit.json).
 Independent final audit replays both copy profiles. Matching remote CI
-for this checkpoint is pending. Hardware input, terminal ownership, idle waiting
+for pushed checkpoint `dbd117a16ecc43b1f2c09bf0cbd17507d245b99f`
+[passed](https://github.com/rusix-org/hematite/actions/runs/40452129267), including
+the test step and evidence upload. Hardware input, terminal ownership, idle waiting
 and a real userspace input loop are still unimplemented.
