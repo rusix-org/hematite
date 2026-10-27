@@ -67,6 +67,8 @@ pub(super) struct BootPlatform {
     mapper: Option<super::mappings::Mapper>,
     runner: Option<super::threads::Runner>,
     native: super::launcher::State,
+    #[cfg(feature = "idle-tests")]
+    terminal: super::idle::Terminal,
 }
 pub(super) const BANNER: &str = "hematite: ARM64 Rust kernel entered at EL1\n";
 
@@ -496,6 +498,10 @@ impl Platform for BootPlatform {
     }
 
     fn read_byte(&mut self) -> Option<u8> {
+        #[cfg(feature = "idle-tests")]
+        if !self.terminal.monitor() {
+            return None;
+        }
         // SAFETY: Only the mapped PL011 flag/data registers are accessed as
         // aligned u32 volatile MMIO. They cannot initiate DMA or change maps.
         unsafe {
@@ -769,9 +775,13 @@ fn leaf(index: usize) -> u64 {
     }
 }
 
-// Keep test bootstrap initialization temporaries out of live task-driver frames.
+// Keep test bootstrap initialization temporaries out of retained driver frames.
 #[cfg_attr(
-    any(feature = "task-tests", feature = "task-negative-tests"),
+    any(
+        feature = "task-tests",
+        feature = "task-negative-tests",
+        feature = "idle-tests"
+    ),
     inline(never)
 )]
 pub(super) fn init() -> BootPlatform {
@@ -797,6 +807,8 @@ fn initialize() -> Result<BootPlatform, ()> {
         mapper: None,
         runner: None,
         native: super::launcher::State::new(),
+        #[cfg(feature = "idle-tests")]
+        terminal: super::idle::Terminal::new(),
     };
     let checks = platform.checks();
     if !checks.write_protect
@@ -1369,4 +1381,70 @@ pub(super) fn rw_copy_tests(platform: &mut BootPlatform) -> bool {
         return false;
     };
     super::rw_copy_checks::run(pool, &factory, &mut Output)
+}
+
+#[cfg(feature = "idle-tests")]
+#[allow(dead_code)] // Earlier diagnostic feature routes take precedence.
+#[inline(never)]
+pub(super) fn idle_tests(platform: &mut BootPlatform) -> bool {
+    if !super::idle::profile_valid() {
+        return false;
+    }
+    struct Output;
+    impl core::fmt::Write for Output {
+        fn write_str(&mut self, text: &str) -> core::fmt::Result {
+            for byte in text.bytes() {
+                if byte == b'\n' {
+                    serial_byte(b'\r');
+                }
+                serial_byte(byte);
+            }
+            Ok(())
+        }
+    }
+    let Some(topology) = platform.topology.as_ref() else {
+        return false;
+    };
+    if topology.affinities() != [0] {
+        return false;
+    }
+    let checks = super::timer::checks();
+    if !(checks.delivery && checks.context && checks.quiescent && checks.timeout) {
+        return false;
+    }
+    use core::fmt::Write;
+    let mut out = Output;
+    if writeln!(out, "HMIDLE PREFLIGHT checks=15 irqs=8").is_err() {
+        return false;
+    }
+    // SAFETY: This actual BootPlatform owns permanent reviewed boot mappings
+    // and one-CPU topology, has entered/initialized no Process, and starts no
+    // peer or DMA. Its real terminal boundary is reserved for the whole test.
+    let passed = {
+        // SAFETY: The same actual BootPlatform proof above covers this lexical
+        // reservation; the Result and all its borrows end before native entry.
+        let test = unsafe { super::idle::BootTest::from_boot(&mut platform.terminal, topology) };
+        match test {
+            Ok(test) => super::idle_checks::run(test, &mut out),
+            Err(_) => false,
+        }
+    };
+    if !passed {
+        return false;
+    }
+    if writeln!(out, "HMIDLE HELLO BEGIN").is_err() {
+        return false;
+    }
+    let report = platform.run_native("bin/hello");
+    let Ok(report) = report else {
+        return false;
+    };
+    if report.outcome != hm_kernel::native_launch::Outcome::Exited(0)
+        || report.completed != 1
+        || report.generation != 1
+        || report.before != report.after
+    {
+        return false;
+    }
+    writeln!(out, "HMIDLE HELLO END status=0 generation=1 restored=1").is_ok()
 }

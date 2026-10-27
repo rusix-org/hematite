@@ -1,8 +1,9 @@
 # Idle ownership and integration boundary
 
-Status: **independently approved design; no hardware implementation**.
+Status: **independently approved design; boot-only implementation under verification**.
 See [the final review](../reviews/0031-idle-transaction.md). The concrete
-boot-test entry and profile remain pending.
+boot-test profile is source-approved. Production interactive ownership remains
+planned; the feature-only boot witness does not stand in for a live Process.
 This maps the [transaction](0031-idle-transaction.md) and
 [cleanup refinement](0031-idle-cleanup-refinement.md) onto actual existing
 owners. It does not authorize another executor or an IRQ handler.

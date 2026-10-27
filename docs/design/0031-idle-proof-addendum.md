@@ -206,3 +206,46 @@ This refinement supersedes the need to assume a fixed timer-to-GIC propagation
 delay for cleanup. It does not establish a universal barrier-only guarantee,
 physical-device latency, or execution evidence. Source/layout/order and raw
 pinned transaction review remain mandatory before acceptance.
+
+## First diagnostic: uniprocessor target registers
+
+Read-only investigation after the first short64 diagnostic returned
+Configuration before PMR setup: the requested UART target write/readback is
+incompatible with the pinned one-CPU GICv2 model. This finding proposes a
+narrow profile correction; it is not evidence of a successful idle transaction.
+
+In official QEMU v7.2.22
+[arm_gic.c](https://raw.githubusercontent.com/qemu/qemu/v7.2.22/hw/intc/arm_gic.c),
+`gic_dist_readb`, lines 1078–1095, reads every interrupt target byte as zero
+when `num_cpu == 1` and the revision is not the older 11MPCore variant.
+`gic_dist_writeb`, lines 1400–1415, ignores writes under the same condition.
+Consequently a checked target8 write of `0x100` necessarily reads back zero
+in the admitted one-CPU revision-2 profile, before the following PMR write.
+The full-word read is assembled from these byte reads; preserving the other
+lanes cannot make that requested UART33 lane writable.
+
+This zero does not mean UART33 targets no CPU. In
+[arm_gic_common.c](https://raw.githubusercontent.com/qemu/qemu/v7.2.22/hw/intc/arm_gic_common.c),
+reset lines 302–308 initializes every internal `irq_target` cell to 1 on a
+one-CPU GIC. [gic_internal.h](https://raw.githubusercontent.com/qemu/qemu/v7.2.22/hw/intc/gic_internal.h)
+line 50 defines the target accessor through that internal array;
+`arm_gic.c` lines 94–97 selects a pending SPI when that target intersects the
+current CPU mask. The ignored target writes leave the internal CPU0 route
+unchanged. This is a pinned TCG source derivation, not a physical-board claim.
+
+Proposed correction for independent review: retain the fixed one-CPU admission,
+require target8 readback zero, omit the UART target write and its dirty bit
+(index 32 in the frozen snapshot order), and retain zero in entry/setup/restored
+snapshots. Do not accept both zero and `0x100` as interchangeable observations,
+and do not broaden admission to an SMP profile. Actual UART ACK33/wake and
+restoration remain required in the next diagnostic.
+
+Complete source SHA256, fetched from the official tag without modification:
+
+- arm_gic.c: `42216ce03268c5dcc561fd2704ae3489d0d59d6cf2d048e2da3a57098fed5859`.
+- arm_gic_common.c: `d2bd4a8a109bdd45a00c7aa13a4346b87c13f1b23eb9757e17bdbdf1b3e57865`.
+- gic_internal.h: `2fe9dbbecd1e94518b24670f05ee86ca20b7af1605f3a84aef56764234be3efe`.
+
+Temporary complete files were supplied to the independent reviewer for this
+finding; they are not incorporated into the kernel. No implementation, build,
+or VM was performed by this investigation.

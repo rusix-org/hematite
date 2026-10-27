@@ -53,6 +53,12 @@ mod secondary;
 )]
 mod smp_checks;
 
+#[cfg(all(target_arch = "aarch64", feature = "idle-tests"))]
+#[allow(dead_code)] // Earlier diagnostic features take precedence in combined builds.
+mod idle;
+#[cfg(all(target_arch = "aarch64", feature = "idle-tests"))]
+#[allow(dead_code)] // Earlier diagnostic features take precedence in combined builds.
+mod idle_checks;
 #[cfg(all(target_arch = "aarch64", feature = "rw-copy-tests"))]
 #[allow(dead_code)] // Earlier diagnostic feature routes take precedence in combined builds.
 mod rw_copy_checks;
@@ -296,6 +302,26 @@ extern "C" fn boot_main(_boot_info: u64) -> ! {
         }
         #[cfg(all(
             target_arch = "aarch64",
+            feature = "idle-tests",
+            not(any(
+                feature = "secondary-tests",
+                feature = "process-tests",
+                feature = "startup-input-tests",
+                feature = "runtime-tests",
+                feature = "task-tests",
+                feature = "task-negative-tests",
+                feature = "space-tests",
+                feature = "rw-copy-tests"
+            ))
+        ))]
+        {
+            if !arch::idle_tests(&mut platform) {
+                arch::exit(false);
+            }
+            arch::exit(hm_kernel::run_tests(&mut platform));
+        }
+        #[cfg(all(
+            target_arch = "aarch64",
             feature = "secondary-tests",
             not(feature = "smp-tests")
         ))]
@@ -424,7 +450,8 @@ extern "C" fn boot_main(_boot_info: u64) -> ! {
                     feature = "runtime-tests",
                     feature = "task-tests",
                     feature = "task-negative-tests",
-                    feature = "rw-copy-tests"
+                    feature = "rw-copy-tests",
+                    feature = "idle-tests"
                 )
             ))
         ))]
@@ -441,7 +468,8 @@ extern "C" fn boot_main(_boot_info: u64) -> ! {
                     feature = "runtime-tests",
                     feature = "task-tests",
                     feature = "task-negative-tests",
-                    feature = "rw-copy-tests"
+                    feature = "rw-copy-tests",
+                    feature = "idle-tests"
                 )
             ))
         ))]
@@ -463,7 +491,8 @@ extern "C" fn boot_main(_boot_info: u64) -> ! {
                     feature = "runtime-tests",
                     feature = "task-tests",
                     feature = "task-negative-tests",
-                    feature = "rw-copy-tests"
+                    feature = "rw-copy-tests",
+                    feature = "idle-tests"
                 )
             ))
         ))]
@@ -481,7 +510,8 @@ extern "C" fn boot_main(_boot_info: u64) -> ! {
                     feature = "runtime-tests",
                     feature = "task-tests",
                     feature = "task-negative-tests",
-                    feature = "rw-copy-tests"
+                    feature = "rw-copy-tests",
+                    feature = "idle-tests"
                 )
             )
         )))]

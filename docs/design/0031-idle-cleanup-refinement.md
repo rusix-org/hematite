@@ -167,7 +167,7 @@ before touching MMIO; retain the immutable mapping proof throughout.
 Before any bank1/config/target access or write, require
 `GICD_TYPER.ITLinesNumber >= 1` (at least64 interrupt IDs), so SPI33 exists.
 Reject a32-ID controller before snapshotting any SPI33 register. Also require
-GICD_TYPER.SecurityExtn bit10=0, GICC_IIDR version
+GICD_TYPER.SecurityExtn bit10=0 and CPUNumber bits7:5=0, GICC_IIDR version
 bits19:16=2, GICD_CTLR=0 and GICC_CTLR=0. Therefore the admitted CPU view has no
 security banking and starts in combined EOI/deactivation mode; setup only writes
 GICC_CTLR=1, which leaves EOImode clear. Reject every other view. Require all
@@ -191,7 +191,7 @@ readback. This checks preservation of unrelated implemented bits too.
 | GICD+0xc08 ICFGR2 | 0x00000008 | 0 (level33) | full saved word |
 | GICD+0x41c IPRIORITYR7 | 0x00ff0000 | 0x00800000 | full saved word |
 | GICD+0x420 IPRIORITYR8 | 0x0000ff00 | 0x00008000 | full saved word |
-| GICD+0x820 ITARGETSR8 | 0x0000ff00 | 0x00000100 (CPU0) | full saved word |
+| GICD+0x820 ITARGETSR8 | none; RAZ/WI in admitted UP profile | no write; implicit CPU0 routing | exact0 entry/setup/restored |
 | GICC+0x004 PMR | 0x000000ff | 0x000000ff | saved low8; upper bits must0 |
 | GICC+0x008 BPR | 0x00000007 | 0 | saved low3; upper bits must0 |
 | GICD+0x000 CTLR | admitted whole values0/1 | 1 | exact0 |
@@ -201,7 +201,13 @@ readback. This checks preservation of unrelated implemented bits too.
 | CNTP_CVAL_EL0 | all64 | authenticated absolute limit | exact saved64 |
 | CNTP_CTL_EL0 | 0x3 | 1 after programming | exact saved2 under mask3 |
 
-No PPI target write is attempted. No writes to GICD_TYPER/IIDR, active-bit
+No target write is attempted. The first diagnostic rejected the earlier SPI33
+target write before WFI: pinned QEMU's one-CPU GICv2 makes ITARGETSR RAZ/WI and
+internally routes SPIs to CPU0. The independently reviewed
+[source refinement](0031-idle-proof-addendum.md) replaces that unsupported
+programmable-target assumption. Require the whole target8 word zero, omit its
+write/dirty bit32, and preserve every other exact whole-word check.
+No writes to GICD_TYPER/IIDR, active-bit
 registers, UART CR/LCR_H/baud/ICR/ECR, CNTFRQ/CNTKCTL or unrelated enable bits.
 The two enable snapshots include existing SGI enables; restore by clearing only
 owned bits and compare full words. Read-only ISTATUS, UART raw/status and GIC
@@ -221,7 +227,7 @@ No callbacks, public unwind guard or caller-visible partially armed state exist.
 | Stage / first writes | Required readback before advancing | Failure action |
 |---|---|---|
 | S0: no mutations; validate lease, mappings, profile, snapshots and limit | current counter valid; expired limit returns no-WFI observation | return Context/Busy/Clock; no device writes |
-| S1: group, config, priorities, UART target, PMR/BPR in table order | DSB SY after each write; exact readback | common rollback; restore dirty configuration only |
+| S1: group, config, priorities, PMR/BPR in table order; target8 read-only0 | DSB SY after each write; exact readback | common rollback; restore dirty configuration only |
 | S2: CTL2; CVAL limit | ISB after each system-register write; CTL&3=2, exact CVAL | common rollback including dirty timer fields |
 | S3: owned ISENABLER30 then33 | DSB/readback both full words with expected owned additions | common rollback clearing both owned enables |
 | S4: GICD_CTLR1 then GICC_CTLR1 | DSB/exact1 after each write | common rollback with forwarding suppression |

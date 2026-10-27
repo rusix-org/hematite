@@ -11,6 +11,7 @@ hm-kernel = { path = "../hm-kernel" }
 boot-tests = []
 space-tests = []
 rw-copy-tests = ["boot-tests"]
+idle-tests = ["boot-tests"]
 process-tests = []
 startup-input-tests = ["boot-tests"]
 runtime-tests = ["boot-tests"]
