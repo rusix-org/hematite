@@ -18,7 +18,7 @@ build: image
 
 test: image
 	bash tools/dev.sh bash -eu -c '\
-		unset HM_TASK_NEGATIVE; \
+		unset HM_TASK_NEGATIVE HM_IDLE_PROFILE; \
 		evidence_dir="target/evidence/$$(date -u +%Y%m%dT%H%M%S-%N)-$(ARCH)"; \
 		mkdir -p "$$evidence_dir"; \
 		task_negative_cases="$$(python3 tools/build_task_negative_cases.py --list-profiles)"; \
@@ -41,6 +41,7 @@ test: image
 		python3 tools/test_test_elf.py; \
 		python3 tools/test_test_space.py; \
 		python3 tools/test_test_rw_copy.py; \
+		python3 tools/test_test_idle.py; \
 		python3 tools/test_test_native.py; \
 		python3 tools/test_test_interactive_wire.py; \
 		python3 tools/test_test_input_policy.py; \
@@ -74,6 +75,8 @@ test: image
 			cargo build --locked --offline -p hm-core --release --features wait-all-blocked-test --target $(TARGET) --target-dir target/$(ARCH)/wait-all-blocked-test; \
 			cargo build --locked --offline -p hm-core --release --features space-tests --target $(TARGET) --target-dir target/$(ARCH)/space-test; \
 			cargo build --locked --offline -p hm-core --release --features rw-copy-tests --target $(TARGET) --target-dir target/$(ARCH)/rw-copy-test; \
+			HM_IDLE_PROFILE=short cargo build --locked --offline -p hm-core --release --features idle-tests --target $(TARGET) --target-dir target/$(ARCH)/idle-short-test; \
+			HM_IDLE_PROFILE=wall cargo build --locked --offline -p hm-core --release --features idle-tests --target $(TARGET) --target-dir target/$(ARCH)/idle-wall-test; \
 			cargo build --locked --offline -p hm-core --release --features process-tests --target $(TARGET) --target-dir target/$(ARCH)/process-test; \
 			cargo build --locked --offline -p hm-core --release --features startup-input-tests --target $(TARGET) --target-dir target/$(ARCH)/startup-input-test; \
 			cargo build --locked --offline -p hm-core --release --features runtime-tests --target $(TARGET) --target-dir target/$(ARCH)/runtime-test; \
@@ -208,6 +211,7 @@ test: image
 			done; \
 			python3 tools/test_space.py --kernel target/$(ARCH)/space-test/$(TARGET)/release/hematite --output "$$evidence_dir/space"; \
 			python3 tools/test_rw_copy.py --kernel target/$(ARCH)/rw-copy-test/$(TARGET)/release/hematite --output "$$evidence_dir/rw-copy"; \
+			python3 tools/test_idle.py --kernel target/$(ARCH)/idle-short-test/$(TARGET)/release/hematite --wall-kernel target/$(ARCH)/idle-wall-test/$(TARGET)/release/hematite --apps crates/hm-core/fixtures/apps/manifest.json --archive crates/hm-core/fixtures/apps-initramfs.cpio --output "$$evidence_dir/idle"; \
 			python3 tools/test_secondary.py --kernel target/$(ARCH)/secondary-test/$(TARGET)/release/hematite --stale-generation-kernel target/$(ARCH)/secondary-stale-test/$(TARGET)/release/hematite --cpu-off-return-kernel target/$(ARCH)/secondary-off-return-test/$(TARGET)/release/hematite --output "$$evidence_dir/secondary"; \
 			python3 tools/test_smp.py --kernel target/$(ARCH)/smp-test/$(TARGET)/release/hematite --no-peer-timer-kernel target/$(ARCH)/smp-no-peer-timer-test/$(TARGET)/release/hematite --peer-overflow-kernel target/$(ARCH)/smp-peer-overflow-test/$(TARGET)/release/hematite --all-blocked-kernel target/$(ARCH)/smp-all-blocked-test/$(TARGET)/release/hematite --output "$$evidence_dir/smp"; \
 			python3 tools/check_timer_trace.py --trace "$$evidence_dir/boot/exceptions.log" \

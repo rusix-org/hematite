@@ -381,3 +381,33 @@ pass; the sole remaining validator error is the intentional review flag.
 Readiness polling took 78 iterations (87 total samples), still within the fixed
 bounds; no input/timing substitution is needed. The actual 300-second wall
 case remains the final diagnostic prerequisite for global trace approval.
+
+## Complete diagnostic raw review: trace gate approved
+
+Independently replayed `guest-fourth-wall128/wall128` using its saved actual
+serial/trace, actual ELF fixup table and hello symbols. The kernel binds the
+third wall hash above; all saved raw artifact hashes match. The one-CPU QEMU
+virt command uses TCG, no Security extension, GICv2 and privileged-only
+semihosting, with execution logging restricted to the verified leaf.
+
+The real production deadline is exercised: frequency 62,500,000, immutable
+start 7,887,223, wall_end and limit 18,757,887,223; the difference is exactly
+18,750,000,000 ticks (300 seconds). Wake 18,764,404,341 and final 18,764,671,180
+exceed that actual bound, with no poisoned sample. Host elapsed time is
+302.421 seconds, return code zero, no injected input, timeout or host kill.
+This is not a shortened production bound or watchdog-driven success.
+
+Raw execution has exactly WFI, ISB, then counter/RET blocks before ACK30 and
+its exact EOI. Timer cause/expiry, suppression, pending0/active1 before EOI,
+pending0/active0 afterward, spurious1023 without EOI, and complete restored
+snapshot all pass. Subsequent retained hello has two actual SVCs and generation
+1; the 41-case baseline, 32 external preflight/baseline timer IRQs and 24 baseline
+faults pass. There is no IRQ exception inside the masked idle transaction.
+
+All nine fixed diagnostic cases across short64, short128 and wall128 are now
+independently accepted. **Approved enabling the exact three-TB trace-review
+flag and running fresh strict profiles/full regression.** Original stack,
+configuration and parser failures remain preserved. This approval establishes
+the declared one-CPU masked-WFI transaction and recovery scope; it does not
+prove halted residency, simultaneous-cause races, physical ARM/KVM behavior,
+production interactive READ delivery or a completed full regression.
