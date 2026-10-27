@@ -492,7 +492,9 @@ impl Group<'_, '_> {
             hard_end,
             accounted: result.is_ok(),
         });
-        if result.is_err() {
+        // Retirement invalidates any provisional reply/park before installation;
+        // valid elapsed time remains accounted even when the platform is lost.
+        if result.is_err() || self.executor.retired() {
             end = Some(End::Unavailable);
         } else if result == Ok(Finish::Exhausted) && end.is_none() {
             end = Some(End::Budget);
