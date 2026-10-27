@@ -1,0 +1,17 @@
+[
+  "cargo",
+  "rustc",
+  "--locked",
+  "--offline",
+  "-p",
+  "hm-core",
+  "--release",
+  "--target",
+  "aarch64-unknown-none",
+  "--target-dir",
+  "target/group-stage-b/task-matrix-fifth/aarch64-smp-no-peer-timer-test",
+  "--features",
+  "smp-no-peer-timer-test",
+  "--",
+  "--emit=link,asm"
+]

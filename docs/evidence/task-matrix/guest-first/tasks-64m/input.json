@@ -1,0 +1,25 @@
+{
+  "kernel": "/workspace/target/group-stage-b/task-matrix-fifth/aarch64-task-test/aarch64-unknown-none/release/hematite",
+  "kernel_sha256": "01251bcee0e50b7103da61ba959dc72120781d5e33de3494804671cb9cc65389",
+  "ram_mb": 64,
+  "cpus": 1,
+  "timeout_seconds": 60,
+  "max_serial_bytes": 33554432,
+  "max_trace_bytes": 16777216,
+  "fixtures_sha256": "a777af7e42bacb9c6757b6392bfcc3c73f7927c32bc12ae3377659b91ca3c570",
+  "layout_sha256": "7f448f41d5f7cf410cd0a7b4a21a72dab765d85a307209c765760ed7d9794642",
+  "archives": {
+    "task-cases-initramfs.cpio": {
+      "sha256": "e0998dea00de2f42424d50f4777a5e087ce7d1526942c2017693ffdac307d1c9",
+      "bytes": 632320,
+      "entries": 29,
+      "kernel_file_offset": 482948
+    },
+    "task-cases-large-initramfs.cpio": {
+      "sha256": "de3dc49aca624bdd67c3cdcc86a09fbf6271ccbff32f84410846fac1e430cce1",
+      "bytes": 69632,
+      "entries": 5,
+      "kernel_file_offset": 413316
+    }
+  }
+}

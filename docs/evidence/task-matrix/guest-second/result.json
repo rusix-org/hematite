@@ -1,0 +1,9 @@
+{
+  "passed": true,
+  "profiles": {
+    "tasks-64m": true,
+    "tasks-128m": true
+  },
+  "error": null,
+  "scope": "50 ordinary cases per RAM profile; detailed injection tests excluded"
+}

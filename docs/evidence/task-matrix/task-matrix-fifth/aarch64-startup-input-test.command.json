@@ -1,0 +1,17 @@
+[
+  "cargo",
+  "rustc",
+  "--locked",
+  "--offline",
+  "-p",
+  "hm-core",
+  "--release",
+  "--target",
+  "aarch64-unknown-none",
+  "--target-dir",
+  "target/group-stage-b/task-matrix-fifth/aarch64-startup-input-test",
+  "--features",
+  "startup-input-tests",
+  "--",
+  "--emit=link,asm"
+]

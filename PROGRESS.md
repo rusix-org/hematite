@@ -9,7 +9,9 @@ from strict Linux parity to native OS design with selective compatibility.
 ## Implementation and verification
 
 - Native userspace task creation is **verified locally for the ordinary demo**;
-  detailed negative authority coverage remains pending. Its wire codec and owned
+  the ordinary 25-case authority/lifecycle matrix now also passes both RAM
+  profiles after independent raw-trace review (two passes, 50 cases per guest).
+  Its full ARM/x86 regression passes; ten injection profiles remain pending. Its wire codec and owned
   Session admission policy are also **implemented and verified locally**.
   The preceding Session stage passed 16 independent policy cases, 13 compiler clients per
   architecture and a full ARM/x86 rerun (210 Python validator cases per target).
@@ -24,8 +26,8 @@ from strict Linux parity to native OS design with selective compatibility.
   [authority](docs/design/0029-task-authority.md) designs prepare the actual
   lifecycle integration. SPAWN/WAIT/CANCEL and `run-task` now pass the ordinary
   three-profile guest demo with independent raw trace review. The normal archive includes supervisor/worker programs. Full
-  ARM/x86 regressions pass; detailed negative authority tests and remote CI
-  remain unverified.
+  ARM/x86 regressions also pass for the expanded matrix; matching remote CI
+  remains unverified. See [matrix evidence](docs/evidence/task-matrix.md).
 
 - Stage B group runtime design and hardware protocol passed independent review.
   Core resumable turns, owned groups and ordinary launcher integration are
@@ -902,3 +904,47 @@ does not claim resumable execution or process-group support.
   full-third source hashes match its committed blobs. Raw archives include
   87 ARM and 17 x86 result records with no failed result in the passing run.
   No remote push or new remote CI claim. Detailed task-negative tests remain next.
+
+- 2026-10-26: Began the reviewed ordinary 25-case task matrix, excluding all ten
+  injection profiles. Added cfg-only read-only generation observations and
+  twelve compiler clients; all 53 clients pass, including production observer
+  absence and actual constructor/Pool/Executor lifetime boundaries. Dedicated
+  fixed fixtures build (29-entry ordinary and five-entry large archives); actual
+  geometry proves root+one child fits512 frames while two children require519.
+  Bootstrap/safe driver source passed review and the first new profile compiles;
+  both-architecture all-feature static gates pass. Its stack audit rejected
+  reachable paths (largest73,728/65,536), before any guest. Driver-only phase and
+  compact-report refactoring is in progress. No new matrix pass is claimed.
+
+- 2026-10-26: Preserved three rejected task-matrix stack candidates. The private
+  Result<Space> experiment moved storage rather than saving it and was reverted.
+  Retained driver changes use compact copied facts, isolated free-count snapshots
+  and lexical Group cleanup. A task-tests-only noinline init boundary removes
+  initialization temporaries from the execution chain. Independent fourth-candidate
+  review measures61,552/65,536 bytes including the unchanged allowance; its
+  initialization subtree also fits. All24 profiles are rebuilding before guests.
+  The strict parser passes15 tests including a complete synthetic50-case sequence;
+  real task-matrix execution remains pending.
+
+- 2026-10-26: All 24 linked profiles compile with source hashes verified; the
+  ordinary profiles remain byte-identical to their accepted checkpoints. Both
+  real task-matrix guests complete 50 cases/54 groups and 41 bootstrap checks.
+  Independent raw review accepts actual SVC/interrupt/fault correlation,
+  allocation pressure/recovery, copied inputs, held/stale/foreign handles and
+  cancellation/cleanup. The first aggregate failure preserves the intentional
+  trace-review gate. After acceptance, [strict second guests](docs/evidence/task-matrix/guest-second/result.json)
+  pass at 64/128 MiB. The full ARM/x86 regression is running with captured inputs
+  and raw evidence. Ten injection profiles remain excluded and unimplemented.
+
+- 2026-10-26: Expanded full `make test-all` passes in 272.0 seconds with all
+  captured inputs unchanged. Both raw archives are preserved: 91 ARM result
+  records and 17 x86 records, including expected rejection/timeout profiles.
+  See [full result](docs/evidence/task-matrix-full-first/result.json) and
+  [scope/evidence](docs/evidence/task-matrix.md). This closes the ordinary
+  25-case matrix's local regression gate, not the ten injection profiles,
+  remote CI, or the broader useful-system objective.
+
+- 2026-10-26: Local implementation checkpoint `67b86e1b` records the ordinary
+  task matrix. All 308 captured full-suite source inputs match its committed
+  blobs, with zero mismatches. No push or remote CI claim. Remaining injected
+  boundaries are being designed separately before any implementation.

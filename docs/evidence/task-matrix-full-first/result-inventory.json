@@ -1,0 +1,101 @@
+[
+  {
+    "archive": "docs/evidence/task-matrix-full-first/20261027T011634-684026141-aarch64.tar.gz",
+    "result_records": 91,
+    "nonzero_exit_records": [
+      {
+        "path": "20261027T011634-684026141-aarch64/preemption-negative/no-timer/result.json",
+        "passed": true,
+        "returncode": -9
+      },
+      {
+        "path": "20261027T011634-684026141-aarch64/preemption-negative/overflow/result.json",
+        "passed": true,
+        "returncode": 2
+      },
+      {
+        "path": "20261027T011634-684026141-aarch64/profiles/missing-pan/result.json",
+        "passed": true,
+        "returncode": 1
+      },
+      {
+        "path": "20261027T011634-684026141-aarch64/profiles/nested-fault/result.json",
+        "passed": true,
+        "returncode": 2
+      },
+      {
+        "path": "20261027T011634-684026141-aarch64/profiles/thread-overflow/result.json",
+        "passed": true,
+        "returncode": 2
+      },
+      {
+        "path": "20261027T011634-684026141-aarch64/profiles/unexpected-fault/result.json",
+        "passed": true,
+        "returncode": 2
+      },
+      {
+        "path": "20261027T011634-684026141-aarch64/secondary/cpu-off-return/result.json",
+        "passed": true,
+        "returncode": 4
+      },
+      {
+        "path": "20261027T011634-684026141-aarch64/secondary/stale-generation/result.json",
+        "passed": true,
+        "returncode": 3
+      },
+      {
+        "path": "20261027T011634-684026141-aarch64/secondary/topology/result.json",
+        "passed": true,
+        "returncode": 1
+      },
+      {
+        "path": "20261027T011634-684026141-aarch64/smp/all-blocked/result.json",
+        "passed": true,
+        "returncode": -9
+      },
+      {
+        "path": "20261027T011634-684026141-aarch64/smp/no-peer-timer/result.json",
+        "passed": true,
+        "returncode": -9
+      },
+      {
+        "path": "20261027T011634-684026141-aarch64/smp/peer-overflow/result.json",
+        "passed": true,
+        "returncode": 5
+      },
+      {
+        "path": "20261027T011634-684026141-aarch64/wait-all-blocked/result.json",
+        "passed": true,
+        "returncode": -9
+      }
+    ],
+    "note": "Nonzero statuses are expected in rejection/timeout profiles and x86 debug exit; consult each passed verdict and raw evidence."
+  },
+  {
+    "archive": "docs/evidence/task-matrix-full-first/20261027T012013-278650328-x86_64.tar.gz",
+    "result_records": 17,
+    "nonzero_exit_records": [
+      {
+        "path": "20261027T012013-278650328-x86_64/boot/result.json",
+        "passed": true,
+        "returncode": 33
+      },
+      {
+        "path": "20261027T012013-278650328-x86_64/profiles/missing-nx/result.json",
+        "passed": true,
+        "returncode": 35
+      },
+      {
+        "path": "20261027T012013-278650328-x86_64/profiles/missing-smap/result.json",
+        "passed": true,
+        "returncode": 35
+      },
+      {
+        "path": "20261027T012013-278650328-x86_64/profiles/missing-smep/result.json",
+        "passed": true,
+        "returncode": 35
+      }
+    ],
+    "note": "Nonzero statuses are expected in rejection/timeout profiles and x86 debug exit; consult each passed verdict and raw evidence."
+  }
+]

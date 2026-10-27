@@ -640,3 +640,281 @@ arithmetic, with matching mutation fixtures. These preserve strict byte/hash
 binding rather than discarding the new fields. Requested additionally requiring
 Group/task/turn sources in the witness dependency set, since task fields now
 claim those types. Production binaries are unchanged by these host corrections.
+
+## Ordinary 25-case acceptance expansion: implementation review
+
+Reviewed the current task protocol against the implemented authority and emitter.
+The non-injection fixture/driver work can use existing public cancellation,
+inactive Group drop and real retained Pool blocks. Six setup-pressure prefixes
+match sequential catalog/root/startup/box/authority ownership; child pressure
+must likewise preserve real reservation burns and fail at actual allocation.
+The large-BSS inequalities, 64th-call no-effect checks, parked child-budget WAIT,
+source overwrite ordering and bounded mode-gate checks remain required.
+
+Approved the ordinary-only artifact inventory proposed by the harness author:
+29 entries comprising explicit bin/demo directories, 25 root files (rights split
+adds one; separate large-BSS root removes one), and worker/loop catalog files.
+A separate five-entry archive contains the large-BSS root and the same fixed
+catalog paths. Require an explicit path list; the stale negative-root/legacy
+inventory does not authorize those excluded profiles.
+
+Before final driver/protocol approval, freeze the read-only cfg-only issuer
+snapshot signature, correct the Budget exception to include wait_budget_child's
+child, and align exact record ordering with the actual emitter (CONSUME before
+SETTLE/CHARGE; PUBLISH charged field versus CLOSE without it). Add an actual
+compiler witness value for the combined bounded task capture if claiming that
+measurement; the existing compile-time size assertion remains mandatory. None
+of these grants authority for the ten failure/exhaustion injection profiles.
+
+Verified the harness author's saved explicit 29/5-entry lists, corrected Budget
+scope and exact conditional emitter order. Approve implementation of these
+ordinary fixtures/builders and strict host parser, plus the six real Pool
+pressure setup stages and driver actions using existing public APIs. Preserve
+the already verified ordinary demo artifacts. The only remaining small driver
+API freeze is the read-only issuer snapshot; the ten negative hooks remain
+excluded rather than blocking this implementable non-injection scope. Linked
+fixture behavior, every affected stack/layout and first actual trace grammar
+still need their separate evidence gates.
+
+The remaining diagnostic API is now frozen and approved under task-tests only:
+Executor::task_issuance_snapshot(&self) -> (u32, Option<u32>), with a Group
+forwarder of the same shape. The first value is actual next_task_cap (zero is
+permanent exhaustion); the second is existing last_prepared_generation, not the
+console issuer's next value. Console-disabled reservations can burn without
+changing that second snapshot. Use Executor after failed construction/outside a
+Group borrow, and Group at live/closed boundaries. Both only copy scalar state.
+
+Also approved cfg-only Group::task_launch_generation(&self) -> Result<u32, Error>:
+read actual Authority.launch, return its generation while present, and Mode when
+absent (including Ordinary, TaskClosed or revoked Closing). ROOT diagnostics read
+it after publication before first entry. No lease, MMIO, mutation, reference or
+owner escapes through these observers. Production-absence compiler probes are
+required. Actual layout witness values supply pressure sizing; no mutable size
+or issuance seam is authorized. Ordinary driver implementation approval is now
+complete within the non-injection scope above.
+
+Implemented observers match that freeze: actual cfg task-tests scalars only,
+stored grant lookup, and unchanged production visibility. Independently reviewed
+the twelve added compiler clients and compile-only wrapper bridge calling the
+original crate-private constructor. The 53-client plus library report in
+docs/evidence/task-negative-types-first passes; current source hashes and wrapper
+hash match, and all ten new negative stderr diagnostics contain their precise
+expected codes. Positive clients establish root Image/source lifetime release
+and copied completion ownership; negatives cover constructor privacy, exclusive
+Executor, static catalog, Pool lifetime, mutable reap, typed identity, sealed
+completion and all three production-absent observers. These are type/privacy
+results, not executed task behavior or a claim of unchanged linked binaries.
+
+Reviewed dedicated task_cases.rs/S/ld and build_task_cases.py for fixture-only
+compilation. Scripts use actual scalar syscall replies, bounded local storage,
+forced assembly overwrites, unaligned valid buffers, own-entry faults and explicit
+64th-call failure sentinels. Builder verifies actual ELF geometry, canonical
+29/5-entry archives, layout-derived charges and both embedded archive intervals;
+no new negative hook is present. Actual compiled sequencing remains to inspect.
+Clarified that fixed worker mode-prefix recognition reads input before yielding:
+the source-mutation claim concerns the complete opaque payload copy/output after
+the fourth yield, not absence of all earlier input reads.
+
+Approved the separate task-bootstrap wiring proposal: reuse the existing CPU0
+Pool/topology and preflight proof for unchanged Factory/Executor constructors,
+keep driver lifetimes within the wrapper, preserve existing-profile dispatch
+precedence and run the current baseline/EL1 exit afterward. Emit actual preflight
+bits (success 15), and extend the vector declaration cfg for standalone task-tests.
+No timer, exception or user-entry mechanism change is authorized by that wiring.
+
+The implemented bootstrap matches that approved proof and feature precedence.
+Candidate-2 dedicated artifact hashes and current source hashes independently
+match: ordinary archive e0998dea00de2f42424d50f4777a5e087ce7d1526942c2017693ffdac307d1c9
+and large archive de3dc49aca624bdd67c3cdcc86a09fbf6271ccbff32f84410846fac1e430cce1.
+Worker calls yields at 0x100000504 then full copy at 0x10000052c; copy_inputs
+executes overwrites at 0x100000430/43c before marker at 0x100000444. Actual worker
+has four ELF pages, making child charge 36. Large root 228 pages gives charge
+260, child 96 pages gives 128; metadata 3 yields totals 263/391/519 for zero/one/
+two children, establishing the 512-frame inequality without altering the cap.
+
+Initial safe task_checks/task_inputs source review is accepted for compilation.
+The real setup and child pressure prefixes, issuer snapshots, exact finalized
+root SVC boundaries, public mode/cancel/drop checks and borrowed owner cleanup
+match the approved ordinary scope. Both files forbid unsafe code; no failure hook
+or synthetic child admission appears. Group/TaskTurn return temporaries and
+constructor chains still need actual emitted-stack review; noinline annotations
+alone do not establish a fit. Formatting and compilation remain parent-owned.
+
+## First dedicated task matrix candidate: stack gate fails
+
+The standalone profile compiles, but its actual reachable task-SPAWN stack does
+not fit. In task-matrix-first, the controlling chain is boot 7600, run 16, checks
+1920, one 5408, drive 1264, Checks::step 2112, Group::turn 5584,
+execute_task_turn 400, dispatch_task 1136, load_boxed 17936, box_loaded 9888,
+box_process 19776, allocate_heap 48: total 73,088 plus the unchanged 640 allowance
+is 73,728/65,536. Unlike the old ordinary runtime driver, this task-dispatch path
+is genuinely reachable and cannot be excluded from the bound.
+
+Other feasible bounds including allowance also fail: setup 67,200,
+allocation_rollback 73,472, drop_waiting 72,896. Proposed safe driver reductions:
+borrow owned Result<Turn> and return compact step facts rather than copying large
+TaskTurn/TaskCompletion across helper frames; handle completion/reap inside that
+owner scope; isolate constructor and formatting phases. Setup should avoid
+returning Group through nested construct/reject_setup ownership slots. Exact
+implementation and fresh emitted measurements are required; no stack enlargement
+or allowance reduction is approved. No new task-matrix guest is authorized.
+
+Candidate ELF 686f7fce5fbcfbb0bb72758f5be144df4008bec62fc15f9c477dac8d9d4113bb;
+assembly 89b2e05240ea933327182bdfb3d92ae7ceff2193e56435d07f59db13f183329c.
+Other 23 profiles have not yet been rebuilt for this matrix integration.
+
+Second driver refactor source preserves checks through borrowed Turn reports,
+compact StepFacts, held/publication/reaped completion equality and direct failed
+construction. It is sound, but the second linked candidate still fails: maximum
+71,840 plus 640 = 72,480. The controlling path now runs through checks 2768,
+allocation_rollback 4016, child_pressure_phase 1280, failed_spawn_boundary 96 and
+Checks::step 1296, with unchanged boot/core ownership frames. Candidate ELF is
+5fc9a2c1ac65d100b831b2ed2b21c95b4d518f14d09bdbabddec808fc272f1d3;
+assembly 399e1141dcd00cb37ef94f7d5f0e5faabb5c2e8b03ce15cec2880c4bf347168f.
+No guest approval. Suggested measuring a narrow private Result<Space> ownership
+handoff to eliminate duplicated large load return slots, without changing APIs,
+allocation order or unsafe contracts.
+
+Initial dedicated parser review found four corrected issues: console-disabled
+preparation burns its issuer without changing last prepared console generation;
+own-RX EL0 write fault uses lower-EL ESR 0x9200004f; timer CHARGE end must reach
+its programmed comparator; each profile needs a kernel/artifact input hash record.
+Verified those corrections on disk, including the explicitly tighter 16-MiB
+shared trace limit versus 32-MiB serial limit. Exact fifty-case orchestration,
+injection exclusion and strict record/trace correlation are present. Requested
+a complete synthetic fifty-case positive and missing/duplicate ownership/action
+mutations before source freeze; the current single lifecycle positive does not
+exercise the entire multi-case orchestration. Trace approval remains false.
+
+Approved the exact private experiment in 0029-boxed-preparation-stack.md:
+load_boxed passes its owned Result<Space> into the existing noinline box_loaded;
+the identical load-error classification/retirement moves into the callee before
+preparation. Allocation, issuance, failure drops under Lease, box_process and
+counter boundaries remain unchanged. No new unsafe/public API/layout change.
+Source review and actual full-chain measurement must establish any reduction;
+all affected profiles require rebuild before guest approval.
+
+The exact private core handoff and noinline free-count wrapper are source-reviewed;
+the 25 original observations remain at their corresponding checks and records.
+Third candidate still fails: 67,712 plus 640 = 68,352. Snapshot isolation helps,
+but the core experiment shifts storage rather than removing it: load_boxed falls
+17,936→9,008 while box_loaded rises 9,888→18,832 (net +16). Controlling driver
+frames are boot 7600, run 16, checks 176, allocation_rollback 4016, pressure 240,
+failed boundary 96, step 784, followed by unchanged turn/dispatch/boxing chain.
+Another 2,816-byte reduction is required; no allowance change is approved.
+ELF d087adc7b710ca5ea2842d6e97c4b5203de3ff256ae4781fb682741d688121c8;
+assembly bbb82ed7c43e186abfc9e92bb0c3d1fb8cdee25273ad85f2e0bcba89d4c3c3f2.
+
+The parser now has a complete synthetic fifty-case/54-group positive with six
+setup failures, both rights variants, large geometry, pressure, mode gates and
+drop recovery, plus missing/duplicate/permuted action mutations. Reviewed its
+separate state-transition emitter and explicit synthetic-only scope. Parser source
+is accepted for diagnostics once compiled gates pass; actual trace flag remains
+false. Synthetic acceptance is not an executed hardware claim.
+
+Rejected the measured no-gain core handoff; verified process_group.rs is restored
+exactly (empty diff). Further emitted inspection shows baseline run_tests already
+has an out-of-line call. The 7600-byte boot frame includes inlined initialization
+metadata/Platform result storage at offsets 2528 and 5056..7488, retained during
+the driver. Approved task-tests-only noinline isolation of existing arch::init as
+an exact-behavior experiment; its initialization chain also needs measurement.
+A preflight-only split is safe but not established to remove the dominant slots.
+Designer additionally identified a second 1960-byte Group slot created by explicit
+drop(owned); approved lexical owner scopes returning only namespace/free-count
+scalars, preserving drop/control/check order. Parent authorizes concrete edits
+and serialized builds; no stack reduction is presumed until measured.
+
+## Fourth dedicated candidate: new-profile stack gate passes
+
+Verified lexical Group cleanup occurs before existing DROP/control records, with
+identical failure cleanup. Task-only noinline init leaves initialization behavior
+unchanged. Actual emitted boot frame falls 7600→2704 and allocation_rollback
+4016→2128; the failed core experiment remains reverted. The controlling live
+SPAWN chain is now 60,912 plus unchanged 640 = 61,552/65,536 (3,984 spare).
+It includes run 16, checks 176, rollback 2128, pressure 240, boundary 96, step 784,
+turn 5584, execution 400, dispatch 1136, load 17936, prepare 9888, box 19776,
+allocator 48 and boot 2704. Separate init subtree 12,480 plus boot/allowance is
+15,824, so isolation has not hidden an initialization overflow.
+
+Actual fourth ELF and assembly match their inventory:
+01251bcee0e50b7103da61ba959dc72120781d5e33de3494804671cb9cc65389 and
+85ac468c7301bdb44877d9826b02fa1ab0f4fb80e4399dc8b888469b3465be35.
+New-profile stack gate passes; other 23 affected profiles, current compiler layout
+and embedded artifact binding still need final rebuild/identity verification
+before new guest execution under the frozen all-profile gate.
+
+## Final 24-profile matrix gate before diagnostics
+
+Independently rehashed all actual fifth-candidate ELFs and emitted assembly against
+its inventory. Every ELF is byte-identical to its reviewed predecessor (22 task
+second profiles, runtime third, new task fourth), preserving their stack proofs.
+All 224 captured build-source hashes are current. Current layout witness validates
+against actual sources and bytes; all 30 canonical fixture ELF hashes match their
+manifest. The exact large and ordinary archives are uniquely embedded inside
+bounded read-only LOADs at offsets 413316 and 482948 respectively, with the
+previously reviewed SHA256 values.
+
+Approve bounded first 64/128-MiB ordinary matrix diagnostics after static checks
+pass. Trace-review flag stays false until independent inspection of actual raw
+records and hardware transitions. This is preguest approval, not acceptance of
+unexecuted cases or the excluded injection profiles.
+
+## First ordinary matrix hardware evidence accepted
+
+Independently reviewed guest-first for both 64/128 MiB: actual kernel SHA
+01251bcee0e50b7103da61ba959dc72120781d5e33de3494804671cb9cc65389,
+current parser-source hashes, both embedded archive intervals and every recorded
+raw-log digest match. Commands retain one CPU and userspace=off. Revalidated the
+unchanged complete serial ownership model and all raw QEMU exception/ERET/GICC
+transactions. Each profile reaches 50 exact cases/54 groups plus the 41-case
+baseline, exits zero without timeout or stderr, and ends through the sole
+privileged exit. The intentional trace flag is the only remaining validation error.
+
+64-MiB evidence contains 16,599 records and 1,931 slices (1,050 SVC, 877 IRQ,
+four faults), 14.079 seconds; 128-MiB has 16,578 records and 1,928 slices
+(1,050 SVC, 874 IRQ, four faults), 14.546 seconds. Real setup leaves
+0/1/2/34/35/38 frames and recovers baseline 3129 each time. Child pressure leaves
+0/32/33, recovers 3090 while root/metadata remain, then 3129 on teardown.
+
+Observed copy markers are parent calls 2/5/8, each before its child's fourth
+yield; exact original absent/empty/256-byte payload results and output follow.
+Budget-child cases actually park and wake once after 72–78 loop IRQs. Own-RX
+faults match lower-EL ESR 0x9200004f, own entry FAR and pinned fault PC. Shared
+64-attempt cases terminate without task copy/commit/reply on attempt 64; Closing
+retains the expected reason and reclaims children before publication. Mode gates,
+stale/foreign rights checks, held capacity and physical/logical exhaustion match
+the exact scripts and reconstructed ownership. Dropping Waiting creates no
+completion/wake, recovers all frames and is followed by a fresh supervisor.
+
+Approve enabling the ordinary matrix trace-review flag and rerunning strict
+validation. This establishes the declared non-injection matrix only. Full local
+regressions still remain required; ten dedicated injected failure/exhaustion
+profiles, remote CI and wider OS/compatibility goals are not established here.
+
+## Ordinary matrix full-suite checkpoint accepted
+
+Independently audited task-matrix-full-first: make test-all exits zero in
+272.002 seconds with no changed inputs. Both raw archive SHA256 values match
+archives.json; their inventories contain 91 ARM and 17 x86 result records with
+no false result. Required fixture reproduction, compiler layout, 53 actual process
+clients, ordinary task launcher, new matrix, old runtime and regression gates are
+present. The log reports 233 Python validator cases per architecture, no skips.
+Nonzero expected rejection/timeout/debug-exit records have passing classified
+results; they are not unreported failed tests.
+
+Replayed the final archived matrix serial and QEMU traces independently. Both
+profiles pass their exact 50 cases/54 groups and 41-case baseline. Final 64-MiB
+trace has 1,924 slices (1,050 SVC, 870 IRQ, four faults); 128-MiB has 1,954
+(1,050 SVC, 900 IRQ, four faults). Actual kernel and raw-log hashes bind to the
+reviewed candidate. Timing-dependent IRQ counts vary within the strict contract;
+no case inventory, outcome, budget or ownership requirement was relaxed.
+
+All 308 captured current source hashes match. Independently extracted all 308
+blobs with git show at implementation checkpoint
+67b86e1b1396521848eb2da37724a91fcadab31b and verified their SHA256 values against
+the tested inputs. This accepts the local ordinary task mechanism and declared
+non-injection acceptance matrix with existing regressions. Preserved earlier
+stack/compiler/reader failures remain part of the evidence history. The ten
+dedicated injected failure/exhaustion profiles, remote CI, native ARM/KVM,
+Linux compatibility, IPC/services and global phase exit goals remain unverified
+or outside this milestone; no global completion is claimed.

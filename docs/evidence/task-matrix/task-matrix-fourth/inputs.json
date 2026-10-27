@@ -1,0 +1,26 @@
+{
+  "aarch64-task-test": {
+    "command": [
+      "cargo",
+      "rustc",
+      "--locked",
+      "--offline",
+      "-p",
+      "hm-core",
+      "--release",
+      "--target",
+      "aarch64-unknown-none",
+      "--target-dir",
+      "target/group-stage-b/task-matrix-fourth/aarch64-task-test",
+      "--features",
+      "task-tests",
+      "--",
+      "--emit=link,asm"
+    ],
+    "returncode": 0,
+    "elf": "target/group-stage-b/task-matrix-fourth/aarch64-task-test/aarch64-unknown-none/release/hematite",
+    "elf_sha256": "01251bcee0e50b7103da61ba959dc72120781d5e33de3494804671cb9cc65389",
+    "asm": "target/group-stage-b/task-matrix-fourth/aarch64-task-test/aarch64-unknown-none/release/deps/hematite-de003696f1ec1415.s",
+    "asm_sha256": "85ac468c7301bdb44877d9826b02fa1ab0f4fb80e4399dc8b888469b3465be35"
+  }
+}

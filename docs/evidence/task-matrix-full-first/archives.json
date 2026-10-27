@@ -1,0 +1,12 @@
+[
+  {
+    "source": "target/evidence/20261027T011634-684026141-aarch64",
+    "archive": "docs/evidence/task-matrix-full-first/20261027T011634-684026141-aarch64.tar.gz",
+    "sha256": "0df715bf254bf4d59f35062630194f1e9969443ff6f14072394946b80d7079d4"
+  },
+  {
+    "source": "target/evidence/20261027T012013-278650328-x86_64",
+    "archive": "docs/evidence/task-matrix-full-first/20261027T012013-278650328-x86_64.tar.gz",
+    "sha256": "67ca37adfe2760ea399cbf72ce6723badb8aa6236a7fd822c7d5a56d921b88a9"
+  }
+]

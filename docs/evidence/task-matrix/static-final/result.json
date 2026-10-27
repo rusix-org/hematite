@@ -1,0 +1,4 @@
+{
+  "passed": true,
+  "scope": "ARM/x86 all-feature Clippy, formatting, structural safety hygiene; no runtime acceptance"
+}

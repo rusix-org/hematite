@@ -56,5 +56,6 @@ seconds. All 264 captured source inputs match implementation commit
 `c59c6e07`; see the [committed-blob verification](task-full-third/verified-commit.json). Raw
 archives for all three full attempts are retained alongside their command/input
 records; no failure was overwritten.
-The detailed task authority/fault/rollback matrix and its test-only hooks remain
-unaccepted. Ordinary demonstration success does not close those requirements.
+The subsequent [ordinary authority/fault/rollback matrix](task-matrix.md) now
+passes its strict guests after independent trace review and its full ARM/x86
+regression. Ten dedicated failure-injection profiles remain outstanding.
