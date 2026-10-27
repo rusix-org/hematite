@@ -7,8 +7,10 @@ an ARM64 QEMU `virt` guest into a serial monitor, with x86_64 microvm
 retained as a regression target. **There is no Linux userspace support yet.**
 
 Checkpoint status: the full ARM/x86 regression suite passes, including all ten
-task-failure profiles. A bounded audit optimization resolves the observed timing
-regression for the tested workloads; see [measurements and evidence](docs/evidence/task-budget.md).
+task-failure profiles and the fixed UART/deadline idle tests. They verify real
+input, the 300-second timer expiry, exact restoration and later native execution;
+see [scoped evidence](docs/evidence/idle.md). Userspace READ and an interactive
+shell remain future work.
 
 With Docker running and Make installed:
 
@@ -88,6 +90,9 @@ Test runs preserve serial output, input hash, expanded QEMU command and results
 under `target/evidence/`. Missing/duplicate/failed cases, unexpected exit status
 and timeouts fail the command. GitHub CI runs the same `make test-all` command;
 remote results are available in the repository’s GitHub Actions tab.
+
+The ARM suite includes a deliberate 300-second no-input deadline test. It stays
+quiet during that wait; the host watchdog bounds the run separately.
 
 ARM tests also induce protected-memory faults and verify fixed-site recovery
 on a separate exception stack. Unrecognized faults remain fatal.

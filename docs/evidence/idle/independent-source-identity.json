@@ -1,0 +1,21 @@
+{
+  "commit": "dc8c8cfd756bccb567ca18dc6a81502ea22b79ff",
+  "scope": "Read-only comparison of recorded build/full-suite inputs to committed blobs and current files; no build or guest run",
+  "inventories": {
+    "third_candidates": {
+      "input": "docs/evidence/idle/idle-candidates-third/sources.json",
+      "input_sha256": "d1d773a34515bfff078af4d1e18f957e85809c1906f58d51ded95d63df3b4141",
+      "count": 258,
+      "mismatches": [],
+      "passed": true
+    },
+    "full_suite": {
+      "input": "docs/evidence/idle-full-first/inputs.json",
+      "input_sha256": "3e03ce982b9189f5364814b469428f223f79db82911e99d45001610ff6eeb3f2",
+      "count": 359,
+      "mismatches": [],
+      "passed": true
+    }
+  },
+  "passed": true
+}

@@ -7,10 +7,10 @@ maps the interface to existing core owners. Their explicit corrections replace
 the preliminary ACK ordering, SpuriousLimit and BPR wording below.
 The [proof addendum](0031-idle-proof-addendum.md) resolves the initial source
 questions at the end of this draft; it does not supply execution evidence.
-The [final review](../reviews/0031-idle-transaction.md) approves the refined
-fixed transaction and ownership design; the concrete hardware profile remains
-pending. Approval applies to the refinements, not conflicting old wording here.
-No code, build or guest run.
+The [final review](../reviews/0031-idle-transaction.md) accepts the refined
+fixed boot-only implementation and tests. Acceptance applies to the refinements,
+not conflicting historical wording here. This initial draft itself records no
+execution evidence; the review links the actual captured runs.
 This refines [0031's input contract](0031-interactive-input-contract.md), using
 [primary evidence](0031-idle-primary-evidence.md). It does not authorize a new
 interrupt handler or relax the eventual production 300-second wall deadline.

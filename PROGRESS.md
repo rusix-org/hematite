@@ -1,6 +1,6 @@
 # Progress
 
-Current phase: **Phase 1 locally verified within its ARM scope; Phase 2 native functional experiment verified locally, including owned startup input and ordinary archive-backed program launch; matching CI remains open**.
+Current phase: **Phase 1 verified within its ARM scope; Phase 2 native functional experiment verified, including owned startup input and archive-backed launch. Fixed boot-only UART/deadline idle passes full ARM/x86 regression and matching CI; interactive READ remains next**.
 Aaron approved scratch implementation and then changed the primary objective
 from strict Linux parity to native OS design with selective compatibility.
 [ADR 0005](docs/adr/0005-native-first-design.md) records the native direction;
@@ -19,19 +19,20 @@ from strict Linux parity to native OS design with selective compatibility.
   and [safe input evidence](docs/evidence/input-safe.md).
   UART input for userspace, the interactive coordinator and user shell remain
   **unimplemented**. A boot-only fixed UART/timer idle transaction is now
-  **implemented/under verification**, with scoped source approval,
+  **verified within its fixed boot-only scope**, with scoped source approval,
   both-architecture static checks and twelve host mutation tests passing.
   Compiled stack/order and artifact gates pass after a preserved initial stack
   rejection. Corrected short64/128 diagnostics complete eight guest cases,
   native hello and the baseline; independent raw review accepts their substantive
   checks. The quiet300s diagnostic also completes with genuine expiry and later
   recovery; independent review accepts all nine cases. The strict trace gate
-  is enabled; fresh full ARM/x86 regression remains pending. A preserved first guest caught the GIC's
+  is enabled; fresh full ARM/x86 regression and matching CI pass. A preserved first guest caught the GIC's
   uniprocessor RAZ/WI target behavior. See [current evidence](docs/evidence/idle.md).
   The fixed transaction and sealed
   ownership design passed [independent review](docs/reviews/0031-idle-transaction.md);
-  the concrete hardware profile is also source-approved. Full-suite acceptance
-  remains open.
+  the concrete hardware profile is also accepted. All37 executed kernels match
+  reviewed hashes, all359 captured inputs match committed source, and the
+  independently audited archives contain125 ARM/18 x86 passing result verdicts.
 
 - Native userspace task creation is **verified locally for the ordinary demo**;
   the ordinary 25-case authority/lifecycle matrix now also passes both RAM
@@ -1175,3 +1176,21 @@ does not claim resumable execution or process-group support.
   Independent review accepts all nine cases, enabling strict trace acceptance.
   Source checkpoint `98c72e16` and harness checkpoint `f773db54` are saved;
   full fresh ARM/x86 regression remains pending. See docs/evidence/idle.md.
+
+- 2026-10-26: Full fresh ARM/x86 `make test-all` passes668.740s with all359
+  captured inputs unchanged and matching committed source `dc8c8cfd`.
+  Independent final audit verifies both archive hashes,125 ARM/18 x86 passing
+  result verdicts, all37 actual QEMU-bound kernel hashes and direct replay of
+  the fresh strict nine-case idle matrix. Its real300s wall case takes302.283s,
+  with no input/watchdog action and successful later hello/baseline. Matching
+  GitHub Actions40457340082 also passes for that source checkpoint. Earlier
+  failures remain preserved. Hardware idle milestone is accepted for the
+  pinned boot-only TCG scope; userspace READ/coordinator/shell remain next.
+  A separate coordinator draft records fairness, typed reports and terminal
+  handoff questions; it grants no implementation approval.
+
+- 2026-10-26: Aaron requested a break and push. Saving the accepted hardware
+  idle evidence, full-suite archives and current documentation before pausing.
+  No local build or VM remains running. Resume with the production coordinator
+  draft's private API and fixture/host-protocol review; userspace READ and the
+  shell remain unimplemented.

@@ -1,6 +1,6 @@
 # Fixed UART/timer idle transaction
 
-Status: **nine diagnostic cases independently accepted; full regression pending**. This exercises real
+Status: **verified for the fixed boot-only profile, including full ARM/x86 regression**. This exercises real
 PL011 input and masked-WFI timer waiting on pinned one-CPU ARM64 QEMU. It does
 not implement userspace READ, an interactive coordinator or a shell.
 
@@ -25,8 +25,8 @@ the 640-byte helper allowance. An idle-only initialization boundary reduces
 that maximum to 63,440 including allowance. The first 37 and subsequent two-profile
 candidate sets remain preserved. The actual
 [third short/wall images](idle/idle-candidates-third/inputs.json) pass renewed
-stack and ordering review with 2,096 bytes spare. Full-suite builds must still
-confirm their actual executed hashes.
+stack and ordering review with 2,096 bytes spare. Full-suite execution confirms
+all 37 actual kernel hashes; see the final audit below.
 
 Both final candidate artifact inspections pass:
 [short](idle/artifact-short-second/result.json),
@@ -63,5 +63,19 @@ controls, native hello and the complete baseline. Independent review accepts all
 nine diagnostic cases. Their original false aggregate verdicts remain unchanged:
 the review flag was deliberately disabled during capture, and short64 also
 preserves its original parser-shape rejection. The final trace gate is now
-enabled. Fresh strict three-profile execution and the full ARM/x86 suite remain
-required; a short timer or host watchdog cannot substitute for this evidence.
+enabled. A short timer or host watchdog cannot substitute for this evidence.
+
+The [fresh full ARM/x86 run](idle-full-first/result.json) passes in668.740 seconds
+with all359 captured inputs unchanged and matching committed `dc8c8cfd` blobs.
+The [independent final audit](idle/independent-final-audit.json) verifies both
+archive hashes,125 ARM/18 x86 result verdicts with no failures, all37 executed
+kernel paths/hashes, and direct replay of the fresh strict nine-case inventory.
+The fresh quiet wall case takes302.283 seconds with its exact300-second guest
+counter bound, genuine timer cause, no input and complete recovery.
+[Matching GitHub Actions](https://github.com/rusix-org/hematite/actions/runs/40457340082)
+also passes for `dc8c8cfd756bccb567ca18dc6a81502ea22b79ff`.
+
+Earlier failures and unaccepted diagnostic verdicts remain intact. Acceptance is
+for pinned TCG, one CPU, the explicit UP GICv2/PL011 profile and tested bounds;
+physical ARM/KVM, active-process input delivery, RX error races, simultaneous
+causes and quarantine are not established by this milestone.

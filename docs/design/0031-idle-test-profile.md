@@ -1,9 +1,9 @@
 # First fixed idle hardware profile
 
-Status: **Source-approved contract; boot-only implementation under verification.**
-The first corrected short64 guest completes its four cases, hello and baseline;
-the full three-boot/raw-trace acceptance gate remains open. Failed candidates
-and diagnostics are preserved separately.
+Status: **Fixed boot-only profile accepted in full ARM/x86 regression.**
+All nine cases, later hello/baseline execution and exact three-block raw grammar
+pass [independent final review](../reviews/0031-idle-transaction.md). Failed
+candidates and diagnostics are preserved separately.
 Scope is the [idle transaction](0031-idle-transaction.md), with its
 [cleanup refinement](0031-idle-cleanup-refinement.md) and
 [ownership boundary](0031-idle-ownership.md). This tests a private transaction
@@ -323,7 +323,7 @@ WFI skip/entry, stopped attempts, wrong cause/deadline, lost/unexpected byte,
 pre-EOI pending=1, wrong active state, EOI1023, extra ACK, missing restoration,
 extra EL0/IRQ during idle, and shortened production duration.
 
-## Remaining concrete freeze points
+## Required acceptance gates
 
 Before code: independently approve the frozen test-only witness, fixed short
 limits, copied observation/API and serial grammar above. Bind every GIC write
@@ -333,4 +333,5 @@ preflight → idle cases → release → lazy8IRQ preflight → hello2SVC → ba
 16IRQ plus24fault/return pairs → sole privileged successful semihost exit. Before guests: independent
 source, compiled MMIO/WFI ordering and stack review. Before acceptance: first
 raw trace review and all three profiles, including the uninterrupted production
-300 s case. None of these gates is represented as completed by this proposal.
+300 s case. The final review records completion for this fixed profile. A new
+production witness or changed protocol must pass the corresponding gates again.

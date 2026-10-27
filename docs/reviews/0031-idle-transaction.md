@@ -1,9 +1,8 @@
 # Review: masked-WFI idle transaction
 
-Status: **Fixed transaction and ownership design approved for implementation;
-concrete hardware test profile pending.** The final decision below governs;
-earlier findings remain as review history. Reviewed as design only.
-The existing RW-copy and safe READ-policy approvals confer no UART/GIC authority.
+Status: **Fixed boot-only transaction accepted after source, linked, raw and
+full ARM/x86 regression review.** Final decisions below govern; earlier findings
+remain as review history. Production interactive input is separate work.
 
 Suppressing the source, disabling its forwarding, observing pending=0 while
 active=1, then issuing the exact acknowledged IAR to EOIR and observing
@@ -411,3 +410,39 @@ configuration and parser failures remain preserved. This approval establishes
 the declared one-CPU masked-WFI transaction and recovery scope; it does not
 prove halted residency, simultaneous-cause races, physical ARM/KVM behavior,
 production interactive READ delivery or a completed full regression.
+
+## Final local full-suite acceptance
+
+Independently audited `docs/evidence/idle-full-first`: make test-all exits zero
+in 668.740 seconds without timeout or changed inputs. All 359 captured inputs
+match both current files and committed dc8c8cfd756bccb567ca18dc6a81502ea22b79ff
+blobs. The separately recorded third-candidate inventory also matched all 258
+committed/current inputs. No captured source was edited by this audit.
+
+Both raw archive SHA256 values match archives.json. Their exact-basename
+result.json inventories contain 125 ARM and 18 x86 verdicts, all passed. This
+count excludes subordinate command/symbol result files. The ARM inventory
+retains ordinary/native/task/RW-copy, all ten dedicated task-negative profiles,
+SMP/preemption/secondary, host policy/compiler and new idle gates; x86 retains
+its existing bootstrap/monitor and type regressions. Archived QEMU commands
+cover all 37 distinct built kernels. Independently hashing their actual paths
+confirms every ELF equals its reviewed candidate: 35 prior accepted binaries
+plus the two UP-corrected third idle binaries.
+
+Replayed all fresh idle raw logs directly from the verified ARM archive, using
+actual linked fixups/hello symbols and the frozen strict parser. All nine cases
+pass, including their counter, exact three-TB execution, ACK/EOI, restoration,
+input, hello and baseline checks. Fresh wall execution lasts 302.283 seconds:
+start 7,907,477, wall_end==limit 18,757,907,477, wake 18,762,804,389, final
+18,762,903,778 at 62.5 MHz; no input, poison, timeout or host kill. Across the
+three profiles there are five real WFI paths and six subsequent hello SVCs;
+each profile preserves its 32 preflight/baseline IRQs, 24 baseline faults and
+41 successful baseline cases.
+
+Accepted the complete local fixed-idle milestone in this declared scope.
+Machine-readable independent results are in
+`docs/evidence/idle/independent-final-audit.json`; source and 37-kernel comparison
+sidecars retain their separate evidence. Earlier stack/configuration/parser and
+routine static failures remain preserved. This review does not claim remote CI
+results, real hardware halted-time behavior or implemented interactive EL0 READ;
+the proposed production coordinator remains a separately reviewed next step.

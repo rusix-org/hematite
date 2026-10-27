@@ -1,6 +1,6 @@
 # Idle ownership and integration boundary
 
-Status: **independently approved design; boot-only implementation under verification**.
+Status: **boot-only implementation accepted; production coordinator remains planned**.
 See [the final review](../reviews/0031-idle-transaction.md). The concrete
 boot-test profile is source-approved. Production interactive ownership remains
 planned; the feature-only boot witness does not stand in for a live Process.

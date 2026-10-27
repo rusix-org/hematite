@@ -1,11 +1,12 @@
 # Review: fixed idle artifact and host gates
 
-Status: **Source approved for host checks and diagnostic eligibility after
-corrections; no actual guest/raw-trace acceptance. No VM/build/test was run by
-this reviewer.** Scope: `build_idle.py`, `test_idle.py`,
+Status: **Source accepted; subsequent raw/full-suite acceptance is recorded in
+[the transaction review](0031-idle-transaction.md). No VM/build/test was run by
+this source reviewer.** Scope: `build_idle.py`, `test_idle.py`,
 `test_test_idle.py`, compared with approved0031 profile and actual `idle.rs` /
-`idle_checks.rs`. This is not raw-trace or guest acceptance. The explicit
-TRACE_GRAMMAR_REVIEWED=false gate correctly prevents premature success.
+`idle_checks.rs`. This document records source review. The review flag remained
+false during initial diagnostics and was enabled only after independent review
+of all nine actual cases; earlier findings below retain their original scope.
 
 ## Findings corrected and independently re-read
 

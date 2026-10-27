@@ -1,0 +1,12 @@
+[
+  {
+    "source": "target/evidence/20261027T054813-622893550-aarch64",
+    "archive": "docs/evidence/idle-full-first/20261027T054813-622893550-aarch64.tar.gz",
+    "sha256": "f817efeeef305f8a8a5f3f1e7c420e053bb03d9af42241b041c6df44c99e14dd"
+  },
+  {
+    "source": "target/evidence/20261027T055828-375189271-x86_64",
+    "archive": "docs/evidence/idle-full-first/20261027T055828-375189271-x86_64.tar.gz",
+    "sha256": "15dc05b5b09120353f98cb02b2671110f03bb608ec1d314f36827c84f0e01ab7"
+  }
+]

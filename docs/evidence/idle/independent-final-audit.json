@@ -1,0 +1,203 @@
+{
+  "commit": "dc8c8cfd756bccb567ca18dc6a81502ea22b79ff",
+  "archives": [
+    {
+      "archive": "docs/evidence/idle-full-first/20261027T054813-622893550-aarch64.tar.gz",
+      "sha256": "f817efeeef305f8a8a5f3f1e7c420e053bb03d9af42241b041c6df44c99e14dd",
+      "result_count": 125,
+      "all_passed": true
+    },
+    {
+      "archive": "docs/evidence/idle-full-first/20261027T055828-375189271-x86_64.tar.gz",
+      "sha256": "15dc05b5b09120353f98cb02b2671110f03bb608ec1d314f36827c84f0e01ab7",
+      "result_count": 18,
+      "all_passed": true
+    }
+  ],
+  "idle": [
+    {
+      "profile": "short64",
+      "kernel_sha256": "a8a067f23812684e2ba73934eab12589f69f06f6b48c7bf3e2ed7d0aadf37db2",
+      "execution": {
+        "returncode": 0,
+        "timed_out": false,
+        "log_limit_exceeded": false,
+        "host_killed": false,
+        "launch_error": null,
+        "elapsed_seconds": 3.228440328966826
+      },
+      "trace": {
+        "wfi": 2,
+        "el0_svcs": 2,
+        "timer_irqs": 32,
+        "baseline_faults": 24
+      },
+      "counts": [
+        {
+          "frequency": 62500000,
+          "start": 7931253,
+          "wall_end": 18757931253,
+          "limit": 70488838,
+          "pre_arm": 8007935,
+          "precheck": 8042271,
+          "wake": 0,
+          "final": 8094508,
+          "samples": 42,
+          "poisoned": 0
+        },
+        {
+          "frequency": 62500000,
+          "start": 7931253,
+          "wall_end": 18757931253,
+          "limit": 8348544,
+          "pre_arm": 8351159,
+          "precheck": 8351159,
+          "wake": 0,
+          "final": 8351159,
+          "samples": 2,
+          "poisoned": 0
+        },
+        {
+          "frequency": 62500000,
+          "start": 7931253,
+          "wall_end": 18757931253,
+          "limit": 320993824,
+          "pre_arm": 8496884,
+          "precheck": 8500053,
+          "wake": 11664078,
+          "final": 11682368,
+          "samples": 9,
+          "poisoned": 0
+        },
+        {
+          "frequency": 62500000,
+          "start": 7931253,
+          "wall_end": 18757931253,
+          "limit": 74381347,
+          "pre_arm": 11883905,
+          "precheck": 11887017,
+          "wake": 74394770,
+          "final": 74415783,
+          "samples": 9,
+          "poisoned": 0
+        }
+      ],
+      "passed": true
+    },
+    {
+      "profile": "short128",
+      "kernel_sha256": "a8a067f23812684e2ba73934eab12589f69f06f6b48c7bf3e2ed7d0aadf37db2",
+      "execution": {
+        "returncode": 0,
+        "timed_out": false,
+        "log_limit_exceeded": false,
+        "host_killed": false,
+        "launch_error": null,
+        "elapsed_seconds": 3.448623758042231
+      },
+      "trace": {
+        "wfi": 2,
+        "el0_svcs": 2,
+        "timer_irqs": 32,
+        "baseline_faults": 24
+      },
+      "counts": [
+        {
+          "frequency": 62500000,
+          "start": 7910253,
+          "wall_end": 18757910253,
+          "limit": 70461119,
+          "pre_arm": 7978964,
+          "precheck": 8008280,
+          "wake": 0,
+          "final": 8059343,
+          "samples": 23,
+          "poisoned": 0
+        },
+        {
+          "frequency": 62500000,
+          "start": 7910253,
+          "wall_end": 18757910253,
+          "limit": 8296569,
+          "pre_arm": 8298686,
+          "precheck": 8298686,
+          "wake": 0,
+          "final": 8298686,
+          "samples": 2,
+          "poisoned": 0
+        },
+        {
+          "frequency": 62500000,
+          "start": 7910253,
+          "wall_end": 18757910253,
+          "limit": 320935964,
+          "pre_arm": 8438317,
+          "precheck": 8441089,
+          "wake": 11609859,
+          "final": 11627809,
+          "samples": 9,
+          "poisoned": 0
+        },
+        {
+          "frequency": 62500000,
+          "start": 7910253,
+          "wall_end": 18757910253,
+          "limit": 74285839,
+          "pre_arm": 11787087,
+          "precheck": 11789326,
+          "wake": 74359587,
+          "final": 74393561,
+          "samples": 9,
+          "poisoned": 0
+        }
+      ],
+      "passed": true
+    },
+    {
+      "profile": "wall128",
+      "kernel_sha256": "86e5e6e710b969d628ca051b039c041fbe674e4202dc554053270d55928033a5",
+      "execution": {
+        "returncode": 0,
+        "timed_out": false,
+        "log_limit_exceeded": false,
+        "host_killed": false,
+        "launch_error": null,
+        "elapsed_seconds": 302.28306670696475
+      },
+      "trace": {
+        "wfi": 1,
+        "el0_svcs": 2,
+        "timer_irqs": 32,
+        "baseline_faults": 24
+      },
+      "counts": [
+        {
+          "frequency": 62500000,
+          "start": 7907477,
+          "wall_end": 18757907477,
+          "limit": 18757907477,
+          "pre_arm": 7984831,
+          "precheck": 8023471,
+          "wake": 18762804389,
+          "final": 18762903778,
+          "samples": 9,
+          "poisoned": 0
+        }
+      ],
+      "passed": true
+    }
+  ],
+  "source_count": 359,
+  "source_mismatches": [],
+  "qemu_command_bound_kernel_count": 37,
+  "not_seen_in_archived_qemu_commands": [],
+  "all_37_current_kernel_hashes_match": true,
+  "full_result": {
+    "passed": true,
+    "returncode": 0,
+    "timed_out": false,
+    "elapsed_seconds": 668.7397343131015,
+    "changed_inputs": []
+  },
+  "passed": true
+}

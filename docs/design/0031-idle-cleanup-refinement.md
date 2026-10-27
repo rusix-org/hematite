@@ -1,8 +1,8 @@
 # Idle cleanup by observed GIC quiescence
 
-Status: **Fixed transaction design independently approved for implementation**
-by [the final review](../reviews/0031-idle-transaction.md); the concrete hardware
-test profile remains pending. No code, builds or VMs. Read with the [transaction draft](0031-idle-transaction.md)
+Status: **Fixed transaction implemented and accepted in its boot-only scope**
+by [the final review](../reviews/0031-idle-transaction.md). Production interactive
+input remains separate. Read with the [transaction draft](0031-idle-transaction.md)
 and [timer/logger addendum](0031-idle-proof-addendum.md). This proposal removes
 an assumed instantaneous timer-to-GIC propagation guarantee, not the requirement
 to clear an interrupt source before deactivation.
@@ -136,7 +136,7 @@ of stopped attempts; no stepping, debugger PC writes or inferred WFI from mere
 absence of exceptions. Preserve the production300s deadline/no-input test and
 short race cases. A host watchdog is test containment, not the deadline proof.
 
-Before implementation approval, independently check:
+Required review obligations, now discharged for the fixed boot-only scope:
 
 - The updated [proof addendum](0031-idle-proof-addendum.md) now traces pinned
   `gic_test_pending`, distributor reads and input updates: revision2 includes
@@ -145,16 +145,16 @@ Before implementation approval, independently check:
   level readbacks below. Independent review must accept that precise premise;
   no assumed timer propagation interval is introduced.
 - Independently review the complete field/setup/rollback freeze below against
-  the actual implementation; none of the new transaction has been implemented.
+  the actual implementation, including every partial-setup failure position.
 - Actual compiled ordering and no-return fatal ownership; counters must not
   allow accepting a recovered invalid sample. No arbitrary test hook may fake
   pending/active success or a timer wake.
 
-This is a proposed way to tolerate delayed deassertion by observation. It makes
+This protocol tolerates delayed deassertion by observation. It makes
 no normative latency claim, no physical-board/KVM claim, and no assertion that
-finite polling proves an instantaneous external signal transition. It remains
-unimplemented. The final independent review approves the fixed design, without
-claiming hardware execution or approving the still-proposed test profile.
+finite polling proves an instantaneous external signal transition. The final
+independent review accepts implementation and execution only for the declared
+boot-only test profile; production integration needs its own ownership proof.
 
 
 ## Complete admitted register profile and snapshot
