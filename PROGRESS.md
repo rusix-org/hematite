@@ -19,7 +19,9 @@ from strict Linux parity to native OS design with selective compatibility.
   and [safe input evidence](docs/evidence/input-safe.md).
   Actual UART input, hardware idle, the interactive coordinator and user shell
   remain **unimplemented**. Current design work resolves bounded GIC cleanup,
-  partial-setup restoration and ownership; no hardware approval is implied.
+  partial-setup restoration and ownership. The fixed transaction and sealed
+  ownership design passed [independent review](docs/reviews/0031-idle-transaction.md);
+  the concrete hardware test profile, implementation and execution remain open.
 
 - Native userspace task creation is **verified locally for the ordinary demo**;
   the ordinary 25-case authority/lifecycle matrix now also passes both RAM
@@ -1136,3 +1138,13 @@ does not claim resumable execution or process-group support.
   Source/test checkpoint `8f50dde0` exactly matches all 351 captured full-suite
   inputs, with zero mismatches. Saving evidence and publishing under Aaron's
   standing push instruction; matching CI will be checked on the pushed head.
+
+- 2026-10-26: Matching GitHub Actions40452129267 passes for pushed RW-copy
+  checkpoint `dbd117a1`. Closed idle's pinned pending-read proof with independent
+  source/hash inspection. Fixed design now specifies exact saved register masks,
+  partial-setup rollback, pre/post-EOI quiescence, sticky clock poison independent
+  of hardware cleanup, SPI33 existence admission, and the actual monitor RX
+  reservation/inactive execution boundary. Independent design review approves
+  that fixed transaction. Proposed three-boot test inventory retains the real
+  300s quiet deadline and subsequent timer/EL0 checks; concrete test-interface
+  freeze remains next. No new hardware source, build or VM execution this session.

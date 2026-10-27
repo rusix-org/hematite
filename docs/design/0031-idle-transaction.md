@@ -1,6 +1,16 @@
 # Masked-WFI UART/deadline transaction
 
-Status: **Draft, not approved for implementation.** No code, build or guest run.
+Status: **Initial draft, superseded in part.**
+The [cleanup refinement](0031-idle-cleanup-refinement.md) owns the exact
+register/setup/rollback and clock protocol; [ownership](0031-idle-ownership.md)
+maps the interface to existing core owners. Their explicit corrections replace
+the preliminary ACK ordering, SpuriousLimit and BPR wording below.
+The [proof addendum](0031-idle-proof-addendum.md) resolves the initial source
+questions at the end of this draft; it does not supply execution evidence.
+The [final review](../reviews/0031-idle-transaction.md) approves the refined
+fixed transaction and ownership design; the concrete hardware profile remains
+pending. Approval applies to the refinements, not conflicting old wording here.
+No code, build or guest run.
 This refines [0031's input contract](0031-interactive-input-contract.md), using
 [primary evidence](0031-idle-primary-evidence.md). It does not authorize a new
 interrupt handler or relax the eventual production 300-second wall deadline.
