@@ -6,9 +6,9 @@ adapter, not the definition of the native interfaces. It currently boots on
 an ARM64 QEMU `virt` guest into a serial monitor, with x86_64 microvm
 retained as a regression target. **There is no Linux userspace support yet.**
 
-Checkpoint status: the ten task-failure profiles pass strict VM tests. The latest
-full regression has an unresolved ordinary 128 MiB task-budget failure; see
-[the evidence and resume point](docs/evidence/task-negative.md).
+Checkpoint status: the full ARM/x86 regression suite passes, including all ten
+task-failure profiles. A bounded audit optimization resolves the observed timing
+regression for the tested workloads; see [measurements and evidence](docs/evidence/task-budget.md).
 
 With Docker running and Make installed:
 
@@ -58,7 +58,7 @@ afterward. The three ordinary QEMU profiles pass with independently reviewed
 traces. The [ordinary authority/lifecycle matrix](docs/evidence/task-matrix.md)
 also passed 50 cases at each RAM size at its accepted checkpoint. Dedicated
 [failure-injection coverage](docs/evidence/task-negative.md) now passes its
-strict guests; the latest full-suite failure is recorded above.
+strict guests and the full regression suite.
 
 This first task interface uses a fixed two-program catalog and at most two
 outstanding children. Only the supervisor receives launch authority. A child
