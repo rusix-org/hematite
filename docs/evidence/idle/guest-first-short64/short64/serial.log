@@ -1,0 +1,8 @@
+hematite: ARM64 Rust kernel entered at EL1
+Boot RAM bytes: 0x0000000004000000 (discovered RAM)
+Frame pool pages: 0x0000000000000c2e (4 KiB each; boot reservations excluded)
+HMIDLE PREFLIGHT checks=15 irqs=8
+HMIDLE BEGIN profile=short cases=4
+HMIDLE CASE index=0 name=pending_byte
+HMIDLE READY name=pending_byte
+HMIDLE ERROR index=0 stage=wait error=Configuration

@@ -1,0 +1,70 @@
+{
+  "passed": true,
+  "results": [
+    {
+      "name": "fmt",
+      "command": [
+        "cargo",
+        "fmt",
+        "--all",
+        "--",
+        "--check"
+      ],
+      "returncode": 0
+    },
+    {
+      "name": "safety",
+      "command": [
+        "python3",
+        "tools/check_safety.py"
+      ],
+      "returncode": 0
+    },
+    {
+      "name": "repository",
+      "command": [
+        "python3",
+        "tools/check_repository.py"
+      ],
+      "returncode": 0
+    },
+    {
+      "name": "aarch64-unknown-none",
+      "command": [
+        "cargo",
+        "clippy",
+        "--workspace",
+        "--all-features",
+        "--locked",
+        "--offline",
+        "--target",
+        "aarch64-unknown-none",
+        "--target-dir",
+        "target/idle-static/idle-static-third/aarch64-unknown-none",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "returncode": 0
+    },
+    {
+      "name": "x86_64-unknown-none",
+      "command": [
+        "cargo",
+        "clippy",
+        "--workspace",
+        "--all-features",
+        "--locked",
+        "--offline",
+        "--target",
+        "x86_64-unknown-none",
+        "--target-dir",
+        "target/idle-static/idle-static-third/x86_64-unknown-none",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "returncode": 0
+    }
+  ]
+}

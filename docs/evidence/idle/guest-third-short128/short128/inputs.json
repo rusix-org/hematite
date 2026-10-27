@@ -1,0 +1,14 @@
+[
+  {
+    "case": "pending_byte",
+    "hex": "50",
+    "trigger": "ready",
+    "time": 0.23665943194646388
+  },
+  {
+    "case": "uart_wait",
+    "hex": "55",
+    "trigger": "wfi_attempt",
+    "time": 0.2944626919925213
+  }
+]

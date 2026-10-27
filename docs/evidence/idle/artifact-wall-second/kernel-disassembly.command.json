@@ -1,0 +1,15 @@
+{
+  "argv": [
+    "aarch64-linux-gnu-objdump",
+    "-d",
+    "/workspace/target/idle-candidates/idle-candidates-third/aarch64-idle-wall/aarch64-unknown-none/release/hematite"
+  ],
+  "cwd": "/workspace",
+  "stdin_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout": "docs/evidence/idle/artifact-wall-second/kernel-disassembly.stdout.log",
+  "env": {
+    "LC_ALL": "C",
+    "TZ": "UTC"
+  },
+  "timeout_seconds": 20
+}

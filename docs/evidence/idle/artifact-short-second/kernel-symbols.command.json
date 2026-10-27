@@ -1,0 +1,5 @@
+[
+  "readelf",
+  "-sW",
+  "/workspace/target/idle-candidates/idle-candidates-third/aarch64-idle-short/aarch64-unknown-none/release/hematite"
+]

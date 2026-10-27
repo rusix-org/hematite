@@ -1,0 +1,17 @@
+[
+  "cargo",
+  "rustc",
+  "--locked",
+  "--offline",
+  "-p",
+  "hm-core",
+  "--release",
+  "--target",
+  "aarch64-unknown-none",
+  "--target-dir",
+  "target/idle-candidates/idle-candidates-first/aarch64-preemption-boundary-test",
+  "--features",
+  "preemption-boundary-test",
+  "--",
+  "--emit=link,asm"
+]

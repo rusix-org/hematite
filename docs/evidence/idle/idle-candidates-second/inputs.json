@@ -1,0 +1,56 @@
+{
+  "aarch64-idle-short": {
+    "command": [
+      "cargo",
+      "rustc",
+      "--locked",
+      "--offline",
+      "-p",
+      "hm-core",
+      "--release",
+      "--target",
+      "aarch64-unknown-none",
+      "--target-dir",
+      "target/idle-candidates/idle-candidates-second/aarch64-idle-short",
+      "--features",
+      "idle-tests",
+      "--",
+      "--emit=link,asm"
+    ],
+    "returncode": 0,
+    "profile_environment": {
+      "HM_IDLE_PROFILE": "short"
+    },
+    "elf": "target/idle-candidates/idle-candidates-second/aarch64-idle-short/aarch64-unknown-none/release/hematite",
+    "elf_sha256": "389b2e2d262345020a0fd8862b24225dbb0f53401af0cac114d8c43c2f92ba63",
+    "asm": "target/idle-candidates/idle-candidates-second/aarch64-idle-short/aarch64-unknown-none/release/deps/hematite-2a3c15384841de58.s",
+    "asm_sha256": "d109f6a89378b3ff1472168823fd6b0ef81b8c4956454b22afe0f452ec3574e1"
+  },
+  "aarch64-idle-wall": {
+    "command": [
+      "cargo",
+      "rustc",
+      "--locked",
+      "--offline",
+      "-p",
+      "hm-core",
+      "--release",
+      "--target",
+      "aarch64-unknown-none",
+      "--target-dir",
+      "target/idle-candidates/idle-candidates-second/aarch64-idle-wall",
+      "--features",
+      "idle-tests",
+      "--",
+      "--emit=link,asm"
+    ],
+    "returncode": 0,
+    "profile_environment": {
+      "HM_IDLE_PROFILE": "wall"
+    },
+    "elf": "target/idle-candidates/idle-candidates-second/aarch64-idle-wall/aarch64-unknown-none/release/hematite",
+    "elf_sha256": "af7544acee51c82f8e9a8f9eb8aee5eba2950de64e065648290d231db986ee13",
+    "asm": "target/idle-candidates/idle-candidates-second/aarch64-idle-wall/aarch64-unknown-none/release/deps/hematite-2a3c15384841de58.s",
+    "asm_sha256": "5e09a5128aaf4c5000eb23cca79d197a37b646bdd388f54390f412678ec26e06"
+  }
+}

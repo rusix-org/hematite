@@ -1,0 +1,116 @@
+{
+  "passed": false,
+  "errors": [
+    "Actual idle trace grammar awaits independent review"
+  ],
+  "execution": {
+    "returncode": 0,
+    "timed_out": false,
+    "log_limit_exceeded": false,
+    "host_killed": false,
+    "launch_error": null,
+    "elapsed_seconds": 302.4214657250559
+  },
+  "serial": [
+    {
+      "name": "production_wall",
+      "counts": {
+        "frequency": 62500000,
+        "start": 7887223,
+        "wall_end": 18757887223,
+        "limit": 18757887223,
+        "pre_arm": 7945082,
+        "precheck": 7977074,
+        "wake": 18764404341,
+        "final": 18764671180,
+        "samples": 9,
+        "poisoned": 0
+      },
+      "entry": {
+        "root": 1076940800,
+        "vbar": 1075841024,
+        "sp0": 1077100544,
+        "daif": 960,
+        "cntkctl": 0,
+        "cpacr": 3145728,
+        "tpidr0": 0,
+        "tpidrro": 0,
+        "par": 0,
+        "sctlr": 811079693,
+        "tcr": 2157524249,
+        "mair": 255,
+        "ttbr1": 0,
+        "elr": 1075845344,
+        "spsr": 2688549701,
+        "esr": 0,
+        "far": 0,
+        "fpcr": 0,
+        "fpsr": 0,
+        "tpidr1": 1077006336,
+        "cval": 1581464,
+        "ctl": 2,
+        "currentel": 4,
+        "spsel": 1,
+        "dit": 0,
+        "ssbs": 0,
+        "group0": 0,
+        "group1": 0,
+        "cfg1": 0,
+        "cfg2": 0,
+        "prio7": 8388608,
+        "prio8": 0,
+        "target8": 0,
+        "pmr": 255,
+        "bpr": 0,
+        "enable0": 65535,
+        "enable1": 0,
+        "imsc": 0,
+        "dctl": 0,
+        "cctl": 0
+      },
+      "wait": {
+        "entered": 1,
+        "expired": 1,
+        "wfi": 1075844524,
+        "resume": 1075844528,
+        "acks": 1,
+        "spurious": 1
+      },
+      "acks": [
+        {
+          "iar": 30,
+          "enable": 0,
+          "source": 2,
+          "pending_before": 0,
+          "active_before": 1,
+          "pending_after": 0,
+          "active_after": 0,
+          "counter_before": 18764421129,
+          "counter_after": 18764425804,
+          "polls_before": 1,
+          "polls_after": 1
+        }
+      ]
+    }
+  ],
+  "trace": {
+    "wfi": 1,
+    "el0_svcs": 2,
+    "timer_irqs": 32,
+    "baseline_faults": 24
+  },
+  "artifacts": {
+    "serial.log": {
+      "bytes": 3753,
+      "sha256": "946ac7432b8439f6564b1938527daceb26624867113095ab20a704f60013a7f6"
+    },
+    "trace.log": {
+      "bytes": 20627,
+      "sha256": "a4b563fd713a73f3ab6d0fe0a3fb16c19264c66879f1bf620dd1d4a5c1edce45"
+    },
+    "stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  }
+}

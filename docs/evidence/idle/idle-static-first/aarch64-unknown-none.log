@@ -1,0 +1,31 @@
+    Checking hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+    Checking hm-core v0.1.0 (/workspace/crates/hm-core)
+error[E0282]: type annotations needed
+   --> crates/hm-core/src/idle.rs:137:13
+    |
+137 |         let frequency;
+    |             ^^^^^^^^^
+...
+151 |         let wall_end = frequency
+    |                        --------- type must be known at this point
+    |
+help: consider giving `frequency` an explicit type
+    |
+137 |         let frequency: /* Type */;
+    |                      ++++++++++++
+
+error[E0499]: cannot borrow `*platform` as mutable more than once at a time
+    --> crates/hm-core/src/aarch64.rs:1429:18
+     |
+1419 |     let test = unsafe { super::idle::BootTest::from_boot(&mut platform.terminal, topology) };
+     |                                                          ---------------------- first mutable borrow occurs here
+...
+1429 |     let report = platform.run_native("bin/hello");
+     |                  ^^^^^^^^ second mutable borrow occurs here
+...
+1441 | }
+     | - first borrow might be used here, when `test` is dropped and runs the destructor for type `core::result::Result<idle::BootTest<'_>, idle::Error>`
+
+Some errors have detailed explanations: E0282, E0499.
+For more information about an error, try `rustc --explain E0282`.
+error: could not compile `hm-core` (bin "hematite") due to 2 previous errors

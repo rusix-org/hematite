@@ -1,0 +1,50 @@
+   Compiling hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+   Compiling hm-core v0.1.0 (/workspace/crates/hm-core)
+warning: struct `WritablePart` is never constructed
+   --> crates/hm-core/src/user_space.rs:101:8
+    |
+101 | struct WritablePart {
+    |        ^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: struct `WritablePlan` is never constructed
+   --> crates/hm-core/src/user_space.rs:106:8
+    |
+106 | struct WritablePlan {
+    |        ^^^^^^^^^^^^
+
+warning: method `reborrow` is never used
+   --> crates/hm-core/src/user_space.rs:112:19
+    |
+111 | impl<'pool> Factory<'pool> {
+    | -------------------------- method in this implementation
+112 |     pub(super) fn reborrow(&self) -> Factory<'pool> {
+    |                   ^^^^^^^^
+
+warning: methods `validate_rw`, `copy_into_rw`, `writable_plan`, and `writable_part` are never used
+   --> crates/hm-core/src/user_space.rs:347:19
+    |
+202 | impl Space<'_> {
+    | -------------- methods in this implementation
+...
+347 |     pub(super) fn validate_rw(&self, address: u64, length: usize) -> Result<(), Error> {
+    |                   ^^^^^^^^^^^
+...
+353 |     pub(super) fn copy_into_rw(&mut self, address: u64, input: &[u8]) -> Result<(), Error> {
+    |                   ^^^^^^^^^^^^
+...
+414 |     fn writable_plan(&self, address: u64, length: usize) -> Result<WritablePlan, Error> {
+    |        ^^^^^^^^^^^^^
+...
+439 |     fn writable_part(&self, address: u64, remaining: usize) -> Result<WritablePart, Error> {
+    |        ^^^^^^^^^^^^^
+
+warning: function `writable_identity` is never used
+   --> crates/hm-core/src/user_space.rs:698:4
+    |
+698 | fn writable_identity(frame: &Frame<'_>) -> Result<(), Error> {
+    |    ^^^^^^^^^^^^^^^^^
+
+warning: `hm-core` (bin "hematite") generated 5 warnings
+    Finished `release` profile [optimized] target(s) in 8.59s

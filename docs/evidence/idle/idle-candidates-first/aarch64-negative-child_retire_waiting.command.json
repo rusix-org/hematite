@@ -1,0 +1,17 @@
+[
+  "cargo",
+  "rustc",
+  "--locked",
+  "--offline",
+  "-p",
+  "hm-core",
+  "--release",
+  "--target",
+  "aarch64-unknown-none",
+  "--target-dir",
+  "target/idle-candidates/idle-candidates-first/aarch64-negative-child_retire_waiting",
+  "--features",
+  "task-negative-tests",
+  "--",
+  "--emit=link,asm"
+]

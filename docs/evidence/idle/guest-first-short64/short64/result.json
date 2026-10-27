@@ -1,0 +1,30 @@
+{
+  "passed": false,
+  "errors": [
+    "Execution failed/incomplete"
+  ],
+  "execution": {
+    "returncode": 1,
+    "timed_out": false,
+    "log_limit_exceeded": false,
+    "host_killed": false,
+    "launch_error": null,
+    "elapsed_seconds": 0.17244705697521567
+  },
+  "serial": null,
+  "trace": null,
+  "artifacts": {
+    "serial.log": {
+      "bytes": 371,
+      "sha256": "e16e3a8716089afe5a0f1b35f8ec165dda4b84c048bdc6ad573732a6c85a7756"
+    },
+    "trace.log": {
+      "bytes": 3147,
+      "sha256": "a61fba6058ad235a47b72a95b3b2055acaba4352c4c6a597c47808d8507ca909"
+    },
+    "stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  }
+}

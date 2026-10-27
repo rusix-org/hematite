@@ -1,0 +1,30 @@
+[
+  {
+    "command": [
+      "rustc",
+      "--version"
+    ],
+    "output": "rustc 1.99.0 (b940084d7 2026-09-28)\n"
+  },
+  {
+    "command": [
+      "cargo",
+      "--version"
+    ],
+    "output": "cargo 1.99.0 (5f94df478 2026-08-27)\n"
+  },
+  {
+    "command": [
+      "qemu-system-aarch64",
+      "--version"
+    ],
+    "output": "QEMU emulator version 7.2.22 (Debian 1:7.2+dfsg-7+deb12u18+b3)\nCopyright (c) 2003-2022 Fabrice Bellard and the QEMU Project developers\n"
+  },
+  {
+    "command": [
+      "python3",
+      "--version"
+    ],
+    "output": "Python 3.11.2\n"
+  }
+]

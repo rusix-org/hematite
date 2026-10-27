@@ -1,0 +1,109 @@
+hematite: ARM64 Rust kernel entered at EL1
+Boot RAM bytes: 0x0000000008000000 (discovered RAM)
+Frame pool pages: 0x0000000000000c2e (4 KiB each; boot reservations excluded)
+HMIDLE PREFLIGHT checks=15 irqs=8
+HMIDLE BEGIN profile=short cases=4
+HMIDLE CASE index=0 name=pending_byte
+HMIDLE READY name=pending_byte
+HMIDLE COUNTS index=0 frequency=62500000 start=7754309 wall_end=18757754309 limit=70308690 pre_arm=7825404 precheck=7854606 wake=0 final=7900885 samples=87 poisoned=0
+HMIDLE SNAPSHOT index=0 phase=entry root=0x4030d000 vbar=0x40200800 sp0=0x40334000 daif=0x3c0 cntkctl=0x0 cpacr=0x300000 tpidr0=0x0 tpidrro=0x0 par=0x0 sctlr=0x3058180d tcr=0x80993519 mair=0xff ttbr1=0x0 elr=0x402018e0 spsr=0xa0400345 esr=0x0 far=0x0 fpcr=0x0 fpsr=0x0 tpidr1=0x4031d000 cval=0x163535 ctl=0x2 currentel=0x4 spsel=0x1 dit=0x0 ssbs=0x0 group0=0x0 group1=0x0 cfg1=0x0 cfg2=0x0 prio7=0x800000 prio8=0x0 target8=0x0 pmr=0xff bpr=0x0 enable0=0xffff enable1=0x0 imsc=0x0 dctl=0x0 cctl=0x0
+HMIDLE SETUP index=0 changed=0xfefc300000 cval=0x430d352 ctl=0x1 group0=0x0 group1=0x0 cfg1=0x0 cfg2=0x0 prio7=0x800000 prio8=0x8000 target8=0x0 pmr=0xff bpr=0x0 enable0=0x4000ffff enable1=0x2 imsc=0x7d0 dctl=0x1 cctl=0x1
+HMIDLE CAUSE index=0 phase=precheck sampled=1 fr=0x80 ris=0x30 mis=0x10 rsr=0x0 ctl=0x1 count=7854606
+HMIDLE CAUSE index=0 phase=post sampled=0 fr=0x0 ris=0x0 mis=0x0 rsr=0x0 ctl=0x0 count=0
+HMIDLE WAIT index=0 entered=0 expired=0 wfi=0x402015ac resume=0x402015b0 acks=1 spurious=1
+HMIDLE ACK index=0 ordinal=0 iar=0x21 enable=0 source=0x0 pending_before=0 active_before=1 pending_after=0 active_after=0 counter_before=7862070 counter_after=7864912 polls_before=1 polls_after=1
+HMIDLE CLEANUP index=0 id=30 enable=0 pending=0 active=0 counter=7876148 polls=1
+HMIDLE CLEANUP index=0 id=33 enable=0 pending=0 active=0 counter=7878204 polls=1
+HMIDLE SNAPSHOT index=0 phase=restored root=0x4030d000 vbar=0x40200800 sp0=0x40334000 daif=0x3c0 cntkctl=0x0 cpacr=0x300000 tpidr0=0x0 tpidrro=0x0 par=0x0 sctlr=0x3058180d tcr=0x80993519 mair=0xff ttbr1=0x0 elr=0x402018e0 spsr=0xa0400345 esr=0x0 far=0x0 fpcr=0x0 fpsr=0x0 tpidr1=0x4031d000 cval=0x163535 ctl=0x2 currentel=0x4 spsel=0x1 dit=0x0 ssbs=0x0 group0=0x0 group1=0x0 cfg1=0x0 cfg2=0x0 prio7=0x800000 prio8=0x0 target8=0x0 pmr=0xff bpr=0x0 enable0=0xffff enable1=0x0 imsc=0x0 dctl=0x0 cctl=0x0
+HMIDLE RESTORED index=0 controls=1
+HMIDLE PUMP index=0 count=1 dr=0x50 hex=50 empty=1
+HMIDLE PASS index=0
+HMIDLE CASE index=1 name=expired_limit
+HMIDLE COUNTS index=1 frequency=62500000 start=7754309 wall_end=18757754309 limit=8129355 pre_arm=8131384 precheck=8131384 wake=0 final=8131384 samples=2 poisoned=0
+HMIDLE SNAPSHOT index=1 phase=entry root=0x4030d000 vbar=0x40200800 sp0=0x40334000 daif=0x3c0 cntkctl=0x0 cpacr=0x300000 tpidr0=0x0 tpidrro=0x0 par=0x0 sctlr=0x3058180d tcr=0x80993519 mair=0xff ttbr1=0x0 elr=0x402018e0 spsr=0xa0400345 esr=0x0 far=0x0 fpcr=0x0 fpsr=0x0 tpidr1=0x4031d000 cval=0x163535 ctl=0x2 currentel=0x4 spsel=0x1 dit=0x0 ssbs=0x0 group0=0x0 group1=0x0 cfg1=0x0 cfg2=0x0 prio7=0x800000 prio8=0x0 target8=0x0 pmr=0xff bpr=0x0 enable0=0xffff enable1=0x0 imsc=0x0 dctl=0x0 cctl=0x0
+HMIDLE SETUP index=1 changed=0x0 cval=0x163535 ctl=0x2 group0=0x0 group1=0x0 cfg1=0x0 cfg2=0x0 prio7=0x800000 prio8=0x0 target8=0x0 pmr=0xff bpr=0x0 enable0=0xffff enable1=0x0 imsc=0x0 dctl=0x0 cctl=0x0
+HMIDLE CAUSE index=1 phase=precheck sampled=0 fr=0x0 ris=0x0 mis=0x0 rsr=0x0 ctl=0x0 count=0
+HMIDLE CAUSE index=1 phase=post sampled=0 fr=0x0 ris=0x0 mis=0x0 rsr=0x0 ctl=0x0 count=0
+HMIDLE WAIT index=1 entered=0 expired=1 wfi=0x402015ac resume=0x402015b0 acks=0 spurious=0
+HMIDLE CLEANUP index=1 id=30 enable=0 pending=0 active=0 counter=0 polls=0
+HMIDLE CLEANUP index=1 id=33 enable=0 pending=0 active=0 counter=0 polls=0
+HMIDLE SNAPSHOT index=1 phase=restored root=0x4030d000 vbar=0x40200800 sp0=0x40334000 daif=0x3c0 cntkctl=0x0 cpacr=0x300000 tpidr0=0x0 tpidrro=0x0 par=0x0 sctlr=0x3058180d tcr=0x80993519 mair=0xff ttbr1=0x0 elr=0x402018e0 spsr=0xa0400345 esr=0x0 far=0x0 fpcr=0x0 fpsr=0x0 tpidr1=0x4031d000 cval=0x163535 ctl=0x2 currentel=0x4 spsel=0x1 dit=0x0 ssbs=0x0 group0=0x0 group1=0x0 cfg1=0x0 cfg2=0x0 prio7=0x800000 prio8=0x0 target8=0x0 pmr=0xff bpr=0x0 enable0=0xffff enable1=0x0 imsc=0x0 dctl=0x0 cctl=0x0
+HMIDLE RESTORED index=1 controls=1
+HMIDLE PUMP index=1 count=0 dr=0x0 hex=none empty=1
+HMIDLE PASS index=1
+HMIDLE CASE index=2 name=uart_wait
+HMIDLE READY name=uart_wait
+HMIDLE COUNTS index=2 frequency=62500000 start=7754309 wall_end=18757754309 limit=320760220 pre_arm=8262220 precheck=8264821 wake=11429080 final=11449295 samples=9 poisoned=0
+HMIDLE SNAPSHOT index=2 phase=entry root=0x4030d000 vbar=0x40200800 sp0=0x40334000 daif=0x3c0 cntkctl=0x0 cpacr=0x300000 tpidr0=0x0 tpidrro=0x0 par=0x0 sctlr=0x3058180d tcr=0x80993519 mair=0xff ttbr1=0x0 elr=0x402018e0 spsr=0xa0400345 esr=0x0 far=0x0 fpcr=0x0 fpsr=0x0 tpidr1=0x4031d000 cval=0x163535 ctl=0x2 currentel=0x4 spsel=0x1 dit=0x0 ssbs=0x0 group0=0x0 group1=0x0 cfg1=0x0 cfg2=0x0 prio7=0x800000 prio8=0x0 target8=0x0 pmr=0xff bpr=0x0 enable0=0xffff enable1=0x0 imsc=0x0 dctl=0x0 cctl=0x0
+HMIDLE SETUP index=2 changed=0xfefc300000 cval=0x131e699c ctl=0x1 group0=0x0 group1=0x0 cfg1=0x0 cfg2=0x0 prio7=0x800000 prio8=0x8000 target8=0x0 pmr=0xff bpr=0x0 enable0=0x4000ffff enable1=0x2 imsc=0x7d0 dctl=0x1 cctl=0x1
+HMIDLE CAUSE index=2 phase=precheck sampled=1 fr=0x90 ris=0x20 mis=0x0 rsr=0x0 ctl=0x1 count=8264821
+HMIDLE CAUSE index=2 phase=post sampled=1 fr=0x80 ris=0x30 mis=0x10 rsr=0x0 ctl=0x1 count=11429080
+HMIDLE WAIT index=2 entered=1 expired=0 wfi=0x402015ac resume=0x402015b0 acks=1 spurious=1
+HMIDLE ACK index=2 ordinal=0 iar=0x21 enable=0 source=0x0 pending_before=0 active_before=1 pending_after=0 active_after=0 counter_before=11440857 counter_after=11441809 polls_before=1 polls_after=1
+HMIDLE CLEANUP index=2 id=30 enable=0 pending=0 active=0 counter=11445065 polls=1
+HMIDLE CLEANUP index=2 id=33 enable=0 pending=0 active=0 counter=11445327 polls=1
+HMIDLE SNAPSHOT index=2 phase=restored root=0x4030d000 vbar=0x40200800 sp0=0x40334000 daif=0x3c0 cntkctl=0x0 cpacr=0x300000 tpidr0=0x0 tpidrro=0x0 par=0x0 sctlr=0x3058180d tcr=0x80993519 mair=0xff ttbr1=0x0 elr=0x402018e0 spsr=0xa0400345 esr=0x0 far=0x0 fpcr=0x0 fpsr=0x0 tpidr1=0x4031d000 cval=0x163535 ctl=0x2 currentel=0x4 spsel=0x1 dit=0x0 ssbs=0x0 group0=0x0 group1=0x0 cfg1=0x0 cfg2=0x0 prio7=0x800000 prio8=0x0 target8=0x0 pmr=0xff bpr=0x0 enable0=0xffff enable1=0x0 imsc=0x0 dctl=0x0 cctl=0x0
+HMIDLE RESTORED index=2 controls=1
+HMIDLE PUMP index=2 count=1 dr=0x55 hex=55 empty=1
+HMIDLE PASS index=2
+HMIDLE CASE index=3 name=timer_wait
+HMIDLE COUNTS index=3 frequency=62500000 start=7754309 wall_end=18757754309 limit=74118072 pre_arm=11619242 precheck=11621503 wake=74179269 final=74206131 samples=9 poisoned=0
+HMIDLE SNAPSHOT index=3 phase=entry root=0x4030d000 vbar=0x40200800 sp0=0x40334000 daif=0x3c0 cntkctl=0x0 cpacr=0x300000 tpidr0=0x0 tpidrro=0x0 par=0x0 sctlr=0x3058180d tcr=0x80993519 mair=0xff ttbr1=0x0 elr=0x402018e0 spsr=0xa0400345 esr=0x0 far=0x0 fpcr=0x0 fpsr=0x0 tpidr1=0x4031d000 cval=0x163535 ctl=0x2 currentel=0x4 spsel=0x1 dit=0x0 ssbs=0x0 group0=0x0 group1=0x0 cfg1=0x0 cfg2=0x0 prio7=0x800000 prio8=0x0 target8=0x0 pmr=0xff bpr=0x0 enable0=0xffff enable1=0x0 imsc=0x0 dctl=0x0 cctl=0x0
+HMIDLE SETUP index=3 changed=0xfefc300000 cval=0x46af3b8 ctl=0x1 group0=0x0 group1=0x0 cfg1=0x0 cfg2=0x0 prio7=0x800000 prio8=0x8000 target8=0x0 pmr=0xff bpr=0x0 enable0=0x4000ffff enable1=0x2 imsc=0x7d0 dctl=0x1 cctl=0x1
+HMIDLE CAUSE index=3 phase=precheck sampled=1 fr=0x90 ris=0x20 mis=0x0 rsr=0x0 ctl=0x1 count=11621503
+HMIDLE CAUSE index=3 phase=post sampled=1 fr=0x90 ris=0x20 mis=0x0 rsr=0x0 ctl=0x5 count=74179269
+HMIDLE WAIT index=3 entered=1 expired=1 wfi=0x402015ac resume=0x402015b0 acks=1 spurious=1
+HMIDLE ACK index=3 ordinal=0 iar=0x1e enable=0 source=0x2 pending_before=0 active_before=1 pending_after=0 active_after=0 counter_before=74193281 counter_after=74197366 polls_before=1 polls_after=1
+HMIDLE CLEANUP index=3 id=30 enable=0 pending=0 active=0 counter=74202198 polls=1
+HMIDLE CLEANUP index=3 id=33 enable=0 pending=0 active=0 counter=74202434 polls=1
+HMIDLE SNAPSHOT index=3 phase=restored root=0x4030d000 vbar=0x40200800 sp0=0x40334000 daif=0x3c0 cntkctl=0x0 cpacr=0x300000 tpidr0=0x0 tpidrro=0x0 par=0x0 sctlr=0x3058180d tcr=0x80993519 mair=0xff ttbr1=0x0 elr=0x402018e0 spsr=0xa0400345 esr=0x0 far=0x0 fpcr=0x0 fpsr=0x0 tpidr1=0x4031d000 cval=0x163535 ctl=0x2 currentel=0x4 spsel=0x1 dit=0x0 ssbs=0x0 group0=0x0 group1=0x0 cfg1=0x0 cfg2=0x0 prio7=0x800000 prio8=0x0 target8=0x0 pmr=0xff bpr=0x0 enable0=0xffff enable1=0x0 imsc=0x0 dctl=0x0 cctl=0x0
+HMIDLE RESTORED index=3 controls=1
+HMIDLE PUMP index=3 count=0 dr=0x0 hex=none empty=1
+HMIDLE PASS index=3
+HMIDLE END cases=4
+HMIDLE HELLO BEGIN
+hello from EL0
+HMIDLE HELLO END status=0 generation=1 restored=1
+HMTEST BEGIN 41
+HMTEST PASS write_protect
+HMTEST PASS nx
+HMTEST PASS user_execute_protect
+HMTEST PASS user_access_protect
+HMTEST PASS wx
+HMTEST PASS stack_guard
+HMTEST PASS null_guard
+HMTEST PASS checked_range
+HMTEST PASS monitor_bounds
+HMTEST PASS cap_authority
+HMTEST PASS cap_limits
+HMTEST PASS cap_lifetime
+HMTEST PASS cap_generation
+HMTEST PASS boot_memory_valid
+HMTEST PASS boot_memory_malformed
+HMTEST PASS cpu_topology_valid
+HMTEST PASS cpu_topology_malformed
+HMTEST PASS cpu_topology_live
+HMTEST PASS elf_valid
+HMTEST PASS elf_malformed
+HMTEST PASS frame_ranges
+HMTEST PASS frame_boundaries
+HMTEST PASS frame_contract
+HMTEST PASS heap_blocks
+HMTEST PASS heap_values
+HMTEST PASS event_contract
+HMTEST PASS mutex_contract
+HMTEST PASS mutex_lifetime
+HMTEST PASS mutex_workers
+HMTEST PASS thread_contract
+HMTEST PASS thread_limits
+HMTEST PASS thread_core
+HMTEST PASS timer_contract
+HMTEST PASS fault_contract
+HMTEST PASS mapping_contract
+HMTEST PASS mapping_limits
+HMTEST PASS mapping_hardware
+HMTEST PASS cpu_local_state
+HMTEST PASS gic_ownership
+HMTEST PASS secondary_memory
+HMTEST PASS cap_orderings
+HMTEST END 41

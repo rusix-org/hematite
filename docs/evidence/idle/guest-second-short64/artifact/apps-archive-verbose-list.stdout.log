@@ -1,0 +1,9 @@
+drwxr-xr-x   2 0        0               0 Jan  1  1970 bin
+-rwxr-xr-x   1 0        0           13984 Jan  1  1970 bin/hello
+-rwxr-xr-x   1 0        0          686776 Jan  1  1970 bin/info
+-rwxr-xr-x   1 0        0           13984 Jan  1  1970 bin/echo
+drwxr-xr-x   2 0        0               0 Jan  1  1970 demo
+-rwxr-xr-x   1 0        0           13984 Jan  1  1970 demo/fault
+-rwxr-xr-x   1 0        0           13984 Jan  1  1970 demo/loop
+-rwxr-xr-x   1 0        0           22432 Jan  1  1970 bin/supervisor
+-rwxr-xr-x   1 0        0           14768 Jan  1  1970 bin/worker

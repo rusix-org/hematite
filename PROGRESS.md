@@ -17,11 +17,21 @@ from strict Linux parity to native OS design with selective compatibility.
   [matching CI run](https://github.com/rusix-org/hematite/actions/runs/40452129267)
   passed. See [RW-copy evidence](docs/evidence/rw-copy.md)
   and [safe input evidence](docs/evidence/input-safe.md).
-  Actual UART input, hardware idle, the interactive coordinator and user shell
-  remain **unimplemented**. Current design work resolves bounded GIC cleanup,
-  partial-setup restoration and ownership. The fixed transaction and sealed
+  UART input for userspace, the interactive coordinator and user shell remain
+  **unimplemented**. A boot-only fixed UART/timer idle transaction is now
+  **implemented/under verification**, with scoped source approval,
+  both-architecture static checks and twelve host mutation tests passing.
+  Compiled stack/order and artifact gates pass after a preserved initial stack
+  rejection. Corrected short64/128 diagnostics complete eight guest cases,
+  native hello and the baseline; independent raw review accepts their substantive
+  checks. The quiet300s diagnostic also completes with genuine expiry and later
+  recovery; independent review accepts all nine cases. The strict trace gate
+  is enabled; fresh full ARM/x86 regression remains pending. A preserved first guest caught the GIC's
+  uniprocessor RAZ/WI target behavior. See [current evidence](docs/evidence/idle.md).
+  The fixed transaction and sealed
   ownership design passed [independent review](docs/reviews/0031-idle-transaction.md);
-  the concrete hardware test profile, implementation and execution remain open.
+  the concrete hardware profile is also source-approved. Full-suite acceptance
+  remains open.
 
 - Native userspace task creation is **verified locally for the ordinary demo**;
   the ordinary 25-case authority/lifecycle matrix now also passes both RAM
@@ -1148,3 +1158,20 @@ does not claim resumable execution or process-group support.
   that fixed transaction. Proposed three-boot test inventory retains the real
   300s quiet deadline and subsequent timer/EL0 checks; concrete test-interface
   freeze remains next. No new hardware source, build or VM execution this session.
+
+- 2026-10-26: Implemented and independently reviewed fixed boot-only UART/deadline
+  idle, real terminal reservation and masked-WFI leaf. Static checks pass on
+  ARM/x86; twelve final harness mutation tests pass. First candidates preserve
+  all35 old ELF hashes but reveal an oversized hello stack before boot; the
+  reviewed init split reduces the final maximum to63,440 including allowance.
+  First diagnostic safely rejects an unsupported UP target-register write;
+  pinned-source review establishes RAZ/WI targets with implicit CPU0 routing.
+  Corrected source explicitly admits that profile and retains exact other checks.
+  Actual ISB translation splits the resume path into two TBs; the preserved
+  parser failure leads to an independently reviewed exact three-TB grammar.
+  Both RAM-size diagnostics complete four cases plus native hello/baseline;
+  the quiet wall diagnostic completes its real300s bound in302.421s with no
+  input/watchdog action, then restores controls and runs hello/baseline.
+  Independent review accepts all nine cases, enabling strict trace acceptance.
+  Source checkpoint `98c72e16` and harness checkpoint `f773db54` are saved;
+  full fresh ARM/x86 regression remains pending. See docs/evidence/idle.md.
