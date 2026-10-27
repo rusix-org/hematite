@@ -1,0 +1,36 @@
+{
+  "version": 1,
+  "archive": "initramfs.cpio",
+  "sha256": "8ce5bbb75f17fd5b952ae7bef964f9188dac2b203c54e2055ff10c40f676ab24",
+  "bytes": 20480,
+  "entries": [
+    {
+      "path": "bin",
+      "kind": "directory",
+      "mode": 16877,
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "bin/hello",
+      "kind": "file",
+      "mode": 33261,
+      "size": 19816,
+      "sha256": "4b2900ee8b67674f5cf71d286401662a6d98c70637b9f55b5b87a84dfea09c42"
+    },
+    {
+      "path": "etc",
+      "kind": "directory",
+      "mode": 16877,
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "etc/banner",
+      "kind": "file",
+      "mode": 33188,
+      "size": 26,
+      "sha256": "338219821d8e952247b53446c5ccb09e7b55164984d63126a875b1a77077e11b"
+    }
+  ]
+}

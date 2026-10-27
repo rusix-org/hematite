@@ -1,0 +1,5 @@
+[
+  "readelf",
+  "-sW",
+  "/workspace/docs/evidence/task-budget/process-fixtures-updated/svcimm.elf"
+]

@@ -1,0 +1,17 @@
+[
+  "cargo",
+  "rustc",
+  "--locked",
+  "--offline",
+  "-p",
+  "hm-core",
+  "--release",
+  "--target",
+  "aarch64-unknown-none",
+  "--target-dir",
+  "target/group-stage-b/optimized-candidates-first/aarch64-fault-test",
+  "--features",
+  "unhandled-fault-test",
+  "--",
+  "--emit=link,asm"
+]

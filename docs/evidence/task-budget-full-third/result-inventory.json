@@ -1,0 +1,12 @@
+[
+  {
+    "archive": "docs/evidence/task-budget-full-third/20261027T033533-547046527-aarch64.tar.gz",
+    "result_records": 113,
+    "false_records": []
+  },
+  {
+    "archive": "docs/evidence/task-budget-full-third/20261027T033817-965975357-x86_64.tar.gz",
+    "result_records": 17,
+    "false_records": []
+  }
+]

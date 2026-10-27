@@ -1,0 +1,18 @@
+{
+  "argv": [
+    "cpio",
+    "--extract",
+    "--to-stdout",
+    "--quiet",
+    "--file=crates/hm-core/fixtures/task-cases-initramfs.cpio",
+    "bin/rights_console_policy"
+  ],
+  "cwd": "/workspace",
+  "stdin_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout": "docs/evidence/task-budget/optimized-first/archive-extract-bin-rights_console_policy.stdout.log",
+  "env": {
+    "LC_ALL": "C",
+    "TZ": "UTC"
+  },
+  "timeout_seconds": 20
+}

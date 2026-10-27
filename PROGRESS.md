@@ -11,10 +11,10 @@ from strict Linux parity to native OS design with selective compatibility.
 - Native userspace task creation is **verified locally for the ordinary demo**;
   the ordinary 25-case authority/lifecycle matrix now also passes both RAM
   profiles after independent raw-trace review (two passes, 50 cases per guest).
-  Its preceding full ARM/x86 regression passes. All ten new injection profiles
-  now pass strict fresh guests after independent raw review, but the latest full
-  suite failed in the ordinary 128 MiB copy-input case on genuine budget
-  exhaustion. See [checkpoint evidence](docs/evidence/task-negative.md).
+  All ten injection profiles and the complete ARM/x86 regression now pass after
+  independent raw review and a bounded audit optimization. The earlier budget
+  failure and subsequent artifact-binding failures remain preserved. See
+  [current evidence](docs/evidence/task-budget.md).
   Its wire codec and owned
   Session admission policy are also **implemented and verified locally**.
   The preceding Session stage passed 16 independent policy cases, 13 compiler clients per
@@ -1015,3 +1015,64 @@ does not claim resumable execution or process-group support.
   Saved implementation checkpoint `ccdd6bc5`; all333 captured inputs from the
   preserved failed full run match its committed blobs exactly. This verifies
   source identity, not full-suite success. Work is paused at Aaron's request.
+
+- 2026-10-26: Aaron resumed work and explicitly authorized periodic GitHub
+  pushes. Pushed the saved checkpoint through `e73f798e` to existing origin/main
+  (rusix-org/hematite); remote head verified. Three predeclared unchanged-binary
+  128MiB trials yield one Budget failure in allocation_rollback and two complete
+  passes; original copy_inputs completes in all three. This demonstrates broader
+  timing fragility, not a fix or a repeat of the identical failing case. Exact
+  kernel, commands, raw traces, CPU usage and cgroup snapshots are retained under
+  docs/evidence/task-budget/unchanged-first. Review0032 identifies the repeated
+  4096-by512 RX-owner scan as a concrete optimization target. No budget, test
+  expectation or QEMU time model has changed.
+
+- 2026-10-26: Reviewed design0032 replaces only RX-owner lookup with64 scalar
+  window masks, preserving all4096 leaf comparisons and earlier audit checks.
+  Implemented safe noalloc helper and core loop; independent source equivalence
+  review approves compiled evaluation. Actual pinned host gate now requires
+  exactly13 tests (original10 native policy plus3 alias equivalence tests) and
+  passes; its7 mutation tests pass. Stack/order review, measured optimized VM
+  trials and full regression acceptance remain pending. No optimized guest run.
+
+- 2026-10-26: All34 optimized kernels compile; independent emitted review
+  accepts unchanged maximum stack bounds and final counter ordering. Actual
+  helper uses zero stack and audit176 bytes (previous48), with no new worst
+  chain. Fresh matching-library layout/artifact binding passes. Three optimized
+  128MiB trials pass all50 cases and41 baseline checks. Independent raw review
+  recomputes nine matched first-pass copy_inputs SPAWN intervals per binary:
+  median21.771984ms→1.883696ms. This is scoped TCG charged-turn improvement,
+  with budgets/scripts/QEMU time model unchanged. Full ARM/x86 regression is
+  running; original full and unchanged-trial failures remain preserved. See
+  docs/evidence/task-budget.md for commands, traces and limits.
+
+- 2026-10-26: First optimized full run stops before process guests at strict
+  fixture/kernel binding: BSS moved0x40393000→0x40394000. Preserved all logs and
+  unchanged source hashes. Regenerated33 same-size ELF fixtures and36-entry
+  archive; independent delta review verifies only target literal/symbol bytes
+  change and rebuilt BSS is stable. New kernel instruction streams, stack and
+  counter ordering are unchanged. All three strict process profiles then pass.
+  Full ARM/x86 second run is active; no binding assertion was relaxed.
+
+- 2026-10-26: Second full run catches another dependent artifact: small parser
+  initramfs also embeds process/hello. Regenerated it; independent review verifies
+  same headers/four entries/size and only two expected hello payload bytes change.
+  Dependency search confirms it is host-integration-only. All33 fixtures and both
+  archives now reproduce, and actual Rust archive-admission tests pass. Third
+  full ARM/x86 run active. The two failed attempts remain preserved.
+
+- 2026-10-26: Third full `make test-all` passes218.9s, all captured inputs
+  unchanged. All34 executed kernel hashes exactly match reviewed candidates
+  (using the rebound process image); archives contain113 ARM and17 x86 result
+  records with no false verdicts. Ordinary64/128MiB matrices and all ten strict
+  injections pass. This closes the local timing-fix/full-suite gate for these
+  workloads; earlier failures remain intact. GitHub Actions independently passed
+  prior checkpoint e73f798e (run40442564602), while matching CI for the new
+  optimization awaits its push. Interactive input remains design-only.
+
+- 2026-10-26: Saved optimization source and fixture checkpoints. All334 inputs
+  from the passing full-third run match committed blobs at `7b54804b`, zero
+  mismatches. Independent final audit accepts34 kernel hashes,113ARM/17x86 raw
+  result records,244 Python cases per target,13 native host cases, both full
+  task matrices and all ten negative raw traces. Matching new remote CI follows
+  this checkpoint's push; real-ARM performance and interactive input remain open.

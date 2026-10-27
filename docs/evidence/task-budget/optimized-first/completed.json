@@ -1,0 +1,5 @@
+{
+  "completed_trials": 3,
+  "passed_trials": 3,
+  "scope": "three optimized-kernel trials; original failures preserved; not full regression acceptance"
+}

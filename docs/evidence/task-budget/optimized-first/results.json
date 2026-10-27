@@ -1,0 +1,56 @@
+[
+  {
+    "trial": 1,
+    "passed": true,
+    "errors": [],
+    "wall_seconds": 11.085169213009067,
+    "qemu_user_seconds": 3.549697,
+    "qemu_system_seconds": 7.240861000000001,
+    "before": {
+      "/sys/fs/cgroup/cpu.stat": "usage_usec 638725\nuser_usec 352400\nsystem_usec 286325\nnice_usec 0\ncore_sched.force_idle_usec 0\nnr_periods 8\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+      "/proc/pressure/cpu": "some avg10=0.45 avg60=1.17 avg300=1.15 total=7980424657\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=0\n",
+      "/proc/pressure/memory": "some avg10=0.01 avg60=0.25 avg300=0.28 total=640907259\nfull avg10=0.01 avg60=0.25 avg300=0.28 total=606542988\n"
+    },
+    "after": {
+      "/sys/fs/cgroup/cpu.stat": "usage_usec 11817311\nuser_usec 4267111\nsystem_usec 7550199\nnice_usec 0\ncore_sched.force_idle_usec 0\nnr_periods 119\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+      "/proc/pressure/cpu": "some avg10=0.29 avg60=1.01 avg300=1.12 total=7980509959\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=0\n",
+      "/proc/pressure/memory": "some avg10=0.00 avg60=0.20 avg300=0.27 total=640920380\nfull avg10=0.00 avg60=0.20 avg300=0.27 total=606556082\n"
+    }
+  },
+  {
+    "trial": 2,
+    "passed": true,
+    "errors": [],
+    "wall_seconds": 11.024333147914149,
+    "qemu_user_seconds": 3.4946030000000006,
+    "qemu_system_seconds": 7.314821,
+    "before": {
+      "/sys/fs/cgroup/cpu.stat": "usage_usec 11817311\nuser_usec 4267111\nsystem_usec 7550199\nnice_usec 0\ncore_sched.force_idle_usec 0\nnr_periods 119\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+      "/proc/pressure/cpu": "some avg10=0.29 avg60=1.01 avg300=1.12 total=7980509959\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=0\n",
+      "/proc/pressure/memory": "some avg10=0.00 avg60=0.20 avg300=0.27 total=640920380\nfull avg10=0.00 avg60=0.20 avg300=0.27 total=606556082\n"
+    },
+    "after": {
+      "/sys/fs/cgroup/cpu.stat": "usage_usec 23008726\nuser_usec 8108753\nsystem_usec 14899972\nnice_usec 0\ncore_sched.force_idle_usec 0\nnr_periods 229\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+      "/proc/pressure/cpu": "some avg10=0.40 avg60=0.94 avg300=1.10 total=7980604321\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=0\n",
+      "/proc/pressure/memory": "some avg10=0.00 avg60=0.17 avg300=0.26 total=640923816\nfull avg10=0.00 avg60=0.17 avg300=0.26 total=606559461\n"
+    }
+  },
+  {
+    "trial": 3,
+    "passed": true,
+    "errors": [],
+    "wall_seconds": 10.95744229608681,
+    "qemu_user_seconds": 3.5078449999999997,
+    "qemu_system_seconds": 7.273973999999999,
+    "before": {
+      "/sys/fs/cgroup/cpu.stat": "usage_usec 23009724\nuser_usec 8108753\nsystem_usec 14900971\nnice_usec 0\ncore_sched.force_idle_usec 0\nnr_periods 229\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+      "/proc/pressure/cpu": "some avg10=0.40 avg60=0.94 avg300=1.10 total=7980604321\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=0\n",
+      "/proc/pressure/memory": "some avg10=0.00 avg60=0.17 avg300=0.26 total=640923816\nfull avg10=0.00 avg60=0.17 avg300=0.26 total=606559461\n"
+    },
+    "after": {
+      "/sys/fs/cgroup/cpu.stat": "usage_usec 34154938\nuser_usec 11959991\nsystem_usec 22194946\nnice_usec 0\ncore_sched.force_idle_usec 0\nnr_periods 338\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+      "/proc/pressure/cpu": "some avg10=0.36 avg60=0.86 avg300=1.08 total=7980690091\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=0\n",
+      "/proc/pressure/memory": "some avg10=0.00 avg60=0.14 avg300=0.25 total=640937087\nfull avg10=0.00 avg60=0.14 avg300=0.25 total=606572555\n"
+    }
+  }
+]

@@ -1,0 +1,9 @@
+{
+  "sources": {
+    "crates/hm-core/fixtures/process/hello.elf": "4b2900ee8b67674f5cf71d286401662a6d98c70637b9f55b5b87a84dfea09c42",
+    "tools/build_initramfs.py": "3ef54b0f1caa7a35eb554532abffe3cc9b87fc687119600621c77903ec3cb116",
+    "docs/design/0024-initramfs.md": "4fe0f7f99dc93dd6c090d58e44b2d778428c036f790da35b7209c59af69afa0f"
+  },
+  "update": true,
+  "process": false
+}

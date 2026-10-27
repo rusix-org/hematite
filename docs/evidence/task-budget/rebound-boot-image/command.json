@@ -1,0 +1,16 @@
+[
+  "cargo",
+  "test",
+  "-p",
+  "hm-kernel",
+  "--test",
+  "boot_image",
+  "--locked",
+  "--offline",
+  "--target",
+  "x86_64-unknown-linux-gnu",
+  "--target-dir",
+  "target/host-boot-image",
+  "--",
+  "--test-threads=1"
+]

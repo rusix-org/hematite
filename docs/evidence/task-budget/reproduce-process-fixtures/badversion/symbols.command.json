@@ -1,0 +1,5 @@
+[
+  "readelf",
+  "-sW",
+  "/workspace/docs/evidence/task-budget/reproduce-process-fixtures/badversion.elf"
+]

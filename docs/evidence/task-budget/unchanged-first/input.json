@@ -1,0 +1,37 @@
+{
+  "kernel_sha256": "bae8c5d551059d150dd69b0e9dbedff380670ffc618acfc234824e0326ac877e",
+  "original_input": {
+    "kernel": "/workspace/target/aarch64/task-test/aarch64-unknown-none/release/hematite",
+    "kernel_sha256": "bae8c5d551059d150dd69b0e9dbedff380670ffc618acfc234824e0326ac877e",
+    "ram_mb": 128,
+    "cpus": 1,
+    "timeout_seconds": 60,
+    "max_serial_bytes": 33554432,
+    "max_trace_bytes": 16777216,
+    "fixtures_sha256": "a777af7e42bacb9c6757b6392bfcc3c73f7927c32bc12ae3377659b91ca3c570",
+    "layout_sha256": "7f448f41d5f7cf410cd0a7b4a21a72dab765d85a307209c765760ed7d9794642",
+    "archives": {
+      "task-cases-initramfs.cpio": {
+        "sha256": "e0998dea00de2f42424d50f4777a5e087ce7d1526942c2017693ffdac307d1c9",
+        "bytes": 632320,
+        "entries": 29,
+        "kernel_file_offset": 482948
+      },
+      "task-cases-large-initramfs.cpio": {
+        "sha256": "de3dc49aca624bdd67c3cdcc86a09fbf6271ccbff32f84410846fac1e430cce1",
+        "bytes": 69632,
+        "entries": 5,
+        "kernel_file_offset": 413316
+      }
+    }
+  },
+  "trials": 3,
+  "memory_mb": 128,
+  "qemu_changes": [],
+  "budget_changes": [],
+  "sources": {
+    "/workspace/docs/evidence/task-budget/reproduce.py": "a565cc882fec7cd68e1f97a092a6220790c942389c5c47330b4f7313a4727388",
+    "tools/test_task_cases.py": "18d9178dc6680613e4132660e7c05a9ba33183c48b636595794654a8227fd196",
+    "tools/test_runtime.py": "8297737f05c26e7d8c384828b5eb7eff28187320a6989958694040ad8e24f079"
+  }
+}

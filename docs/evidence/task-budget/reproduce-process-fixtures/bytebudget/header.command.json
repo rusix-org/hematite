@@ -1,0 +1,5 @@
+[
+  "readelf",
+  "-hW",
+  "/workspace/docs/evidence/task-budget/reproduce-process-fixtures/bytebudget.elf"
+]

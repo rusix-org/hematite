@@ -57,8 +57,9 @@ is outside accounting; the available evidence cannot separate emulation cost
 from host scheduling. No budget or assertion was relaxed and no blind rerun was
 performed. The suite stopped before its integrated negative guests and x86 leg.
 
-Resume by investigating this reproducibility problem against the saved binary
-and timing evidence, then rerun the complete suite after an evidence-based
-resolution. Full ARM/x86 regression acceptance remains pending. This milestone does not
+The subsequent [bounded audit optimization](task-budget.md) preserves this
+failure, reduces repeated validation work and passes the full ARM/x86 suite,
+including these ten profiles. This closes the local regression gate for the
+tested checkpoint. This milestone does not
 establish interactive input, a shell, storage, networking, Linux compatibility,
 remote CI or completion of the useful-system objective.

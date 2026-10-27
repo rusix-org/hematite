@@ -1,0 +1,5 @@
+[
+  "readelf",
+  "-sW",
+  "/workspace/target/group-stage-b/process-rebound-candidate/aarch64-process-test/aarch64-unknown-none/release/hematite"
+]

@@ -1,0 +1,5 @@
+[
+  "readelf",
+  "-hW",
+  "/workspace/docs/evidence/task-budget/process-fixtures-updated/badptr_null.elf"
+]

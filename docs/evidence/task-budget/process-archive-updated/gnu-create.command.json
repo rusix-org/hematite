@@ -1,0 +1,19 @@
+{
+  "argv": [
+    "cpio",
+    "--create",
+    "--format=newc",
+    "--reproducible",
+    "--owner=0:0",
+    "--null",
+    "--quiet"
+  ],
+  "cwd": "/workspace/docs/evidence/task-budget/process-archive-updated/gnu-input",
+  "stdin_sha256": "548b1276312c3d85b27c1babcd17419deeffa9030646cecd222cd36dec951b81",
+  "stdout": "/workspace/docs/evidence/task-budget/process-archive-updated/gnu-reference.cpio",
+  "env": {
+    "LC_ALL": "C",
+    "TZ": "UTC"
+  },
+  "timeout_seconds": 20
+}

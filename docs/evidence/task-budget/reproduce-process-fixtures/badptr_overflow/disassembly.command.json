@@ -1,0 +1,5 @@
+[
+  "aarch64-linux-gnu-objdump",
+  "-d",
+  "/workspace/docs/evidence/task-budget/reproduce-process-fixtures/badptr_overflow.elf"
+]
