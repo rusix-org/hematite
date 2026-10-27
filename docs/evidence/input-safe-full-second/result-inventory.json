@@ -1,0 +1,12 @@
+[
+  {
+    "archive": "docs/evidence/input-safe-full-second/20261027T040802-700037693-aarch64.tar.gz",
+    "result_records": 116,
+    "false_records": []
+  },
+  {
+    "archive": "docs/evidence/input-safe-full-second/20261027T041036-281651515-x86_64.tar.gz",
+    "result_records": 18,
+    "false_records": []
+  }
+]

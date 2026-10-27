@@ -1,0 +1,20 @@
+{
+  "library": "/workspace/target/input-safe/x86_64/x86_64-unknown-none/release/libhm_kernel.rlib",
+  "library_sha256": "b187526b0bfd9c274a7d4353e484621f992935e358b0784839b2b71a0f6f6ce0",
+  "target": "x86_64-unknown-none",
+  "source_sha256": "3fa241cb7f163bd8c3ec2d4daf19e093ca183238937c871667c4dd8db152b3e5",
+  "expected_probes": [
+    "valid_issue_startup",
+    "valid_dispatch_host",
+    "valid_move_session",
+    "forge_issuer",
+    "forge_session",
+    "issuer_clone",
+    "session_clone",
+    "change_generation",
+    "change_grant",
+    "change_calls",
+    "change_budget",
+    "revive_session"
+  ]
+}

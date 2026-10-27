@@ -1,0 +1,15 @@
+[
+  "cargo",
+  "test",
+  "-p",
+  "hm-kernel",
+  "--lib",
+  "--locked",
+  "--offline",
+  "--target",
+  "x86_64-unknown-linux-gnu",
+  "--target-dir",
+  "target/host-native",
+  "--",
+  "--test-threads=1"
+]

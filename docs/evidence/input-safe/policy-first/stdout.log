@@ -1,0 +1,23 @@
+
+running 18 tests
+test guard_drop_is_session_local ... ok
+test host_borrow_ends_at_admission ... ok
+test interactive_cross_entrypoints_never_grant_task_authority ... ok
+test interactive_last_write_and_exit_rules ... ok
+test interactive_output_budget_survives_read_cycles ... ok
+test interactive_startup_limits_and_terminal_flags ... ok
+test invalid_finish_returns_original_parked_owner ... ok
+test invalid_park_returns_guard ... ok
+test legacy_input_entry_matches_dispatch ... ok
+test malformed_final_read_preserves_reply_then_stop ... ok
+test park_finish_preserves_shared_allowances ... ok
+test parked_drop_is_session_local ... ok
+test read_admission_preserves_counters_without_host_effects ... ok
+test read_finish_requires_original_capacity ... ok
+test recognized_final_read_has_no_effect_or_guard ... ok
+test rejection_returns_original_session ... ok
+test shared_issuer_generations_are_monotonic ... ok
+test stopped_session_is_sticky ... ok
+
+test result: ok. 18 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+

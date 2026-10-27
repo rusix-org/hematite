@@ -1,0 +1,34 @@
+{
+  "cwd": "/workspace",
+  "expected_cases": [
+    "all_task_operations",
+    "byte_budget_survives_owned_transitions",
+    "dropped_guard_is_session_local",
+    "guard_at_attempt_63",
+    "host_borrow_ends_at_admission",
+    "legacy_dispatch_parity",
+    "legacy_limit_parity",
+    "malformed_limit_preserves_legacy_reply",
+    "malformed_task_arguments_are_deferred",
+    "non_wait_park_returns_guard",
+    "parked_drop_is_session_local",
+    "reply_preserves_session",
+    "shared_attempt_counter",
+    "stopped_session_is_sticky",
+    "valid_task_limit_has_no_host_effect",
+    "wait_park_wake_preserves_session"
+  ],
+  "sources": {
+    "rust-toolchain.toml": "da55df283f88667ec7a31b7392d493f574a36c88467b955d467c3a3cbe2e9fb1",
+    "Cargo.lock": "383e08e95bee956a6cc81d5ee51e1b4dca8355d92c80473228e2c1413b7b177b",
+    "Cargo.toml": "b5ce112343302244db423f588b44e1c4da81b030bf2a3b2d66c7552a94bec1d8",
+    "crates/hm-kernel/Cargo.toml": "5b738f47733eb9c7ff18b1a4a635da1f747595796e3f68ba812379f03c694b9c",
+    "crates/hm-kernel/src/lib.rs": "c0bc93913010f3f5783fa8170af17c48596ec5cb6601ce0df044d5f5fe4764f7",
+    "crates/hm-kernel/src/task_wire.rs": "8b3b76438f013d06df43b6af89c20b72b1514a65194483739f028825d04dc711",
+    "crates/hm-kernel/src/startup_input.rs": "78f6593de5ff4dcdaab66b58bc807e04dcf78008955b6295e98479cb8bbce059",
+    "crates/hm-kernel/src/native.rs": "3fa241cb7f163bd8c3ec2d4daf19e093ca183238937c871667c4dd8db152b3e5",
+    "crates/hm-kernel/tests/task_admission.rs": "139bd2f774205c50265d462dbcb35a7ad69af5839c0f40eb0c40526d47834831",
+    "tools/check_task_admission.py": "6f58a70ca115fba310a9e9a119a7de74a98d272e25fff98f057ab9ea6f2f94fc",
+    "docs/design/0029-session-admission.md": "e8c40f01bf3c9fdc07d21ac1943922ea5904954427e056d5630fea1af049e6f8"
+  }
+}

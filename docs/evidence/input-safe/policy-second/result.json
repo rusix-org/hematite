@@ -1,0 +1,77 @@
+{
+  "passed": true,
+  "checks": {
+    "exit_success": true,
+    "within_deadline": true,
+    "launched": true,
+    "complete_report": true,
+    "bounded_logs": true
+  },
+  "execution": {
+    "started_utc": "2026-10-27T03:56:30.909421+00:00",
+    "timeout_seconds": 60,
+    "returncode": 0,
+    "timed_out": false,
+    "launch_error": null,
+    "elapsed_seconds": 0.41526029095984995
+  },
+  "artifacts": {
+    "stdout": {
+      "bytes": 1041,
+      "within_limit": true,
+      "sha256": "2a3fd9ad2379bead9296b4051a439eabcfd6c667c5e4163a19c98398c5905a9f"
+    },
+    "stderr": {
+      "bytes": 261,
+      "within_limit": true,
+      "sha256": "14c5e89be74da75975d70795beb1110f23154d6793915c27f6e3bd6b70717121"
+    }
+  },
+  "report": {
+    "passed": true,
+    "errors": [],
+    "expected_cases": [
+      "guard_drop_is_session_local",
+      "host_borrow_ends_at_admission",
+      "interactive_cross_entrypoints_never_grant_task_authority",
+      "interactive_last_write_and_exit_rules",
+      "interactive_output_budget_survives_read_cycles",
+      "interactive_startup_limits_and_terminal_flags",
+      "invalid_finish_returns_original_parked_owner",
+      "invalid_park_returns_guard",
+      "legacy_input_entry_matches_dispatch",
+      "malformed_final_read_preserves_reply_then_stop",
+      "park_finish_preserves_shared_allowances",
+      "parked_drop_is_session_local",
+      "read_admission_preserves_counters_without_host_effects",
+      "read_finish_requires_original_capacity",
+      "recognized_final_read_has_no_effect_or_guard",
+      "rejection_returns_original_session",
+      "shared_issuer_generations_are_monotonic",
+      "stopped_session_is_sticky"
+    ],
+    "observed_lines": [
+      "running 18 tests",
+      "test guard_drop_is_session_local ... ok",
+      "test host_borrow_ends_at_admission ... ok",
+      "test interactive_cross_entrypoints_never_grant_task_authority ... ok",
+      "test interactive_last_write_and_exit_rules ... ok",
+      "test interactive_output_budget_survives_read_cycles ... ok",
+      "test interactive_startup_limits_and_terminal_flags ... ok",
+      "test invalid_finish_returns_original_parked_owner ... ok",
+      "test invalid_park_returns_guard ... ok",
+      "test legacy_input_entry_matches_dispatch ... ok",
+      "test malformed_final_read_preserves_reply_then_stop ... ok",
+      "test park_finish_preserves_shared_allowances ... ok",
+      "test parked_drop_is_session_local ... ok",
+      "test read_admission_preserves_counters_without_host_effects ... ok",
+      "test read_finish_requires_original_capacity ... ok",
+      "test recognized_final_read_has_no_effect_or_guard ... ok",
+      "test rejection_returns_original_session ... ok",
+      "test shared_issuer_generations_are_monotonic ... ok",
+      "test stopped_session_is_sticky ... ok",
+      "test result: ok. 18 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s"
+    ]
+  },
+  "scope": "actual interactive Session and owned READ policy; no RX lease, writable user copy or hardware wake"
+}

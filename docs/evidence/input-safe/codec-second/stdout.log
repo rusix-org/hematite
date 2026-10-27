@@ -1,0 +1,18 @@
+
+running 13 tests
+test arbitrary_inputs ... ok
+test canonical_full_overwrite ... ok
+test decode_precedence ... ok
+test decode_size_boundaries ... ok
+test encode_transactional_size ... ok
+test field_rejections ... ok
+test generation_roundtrips ... ok
+test grant_literal ... ok
+test layout_confusion_rejected ... ok
+test nested_startup_input ... ok
+test owned_metadata ... ok
+test token_shape_boundaries ... ok
+test wire_constants ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

@@ -1,0 +1,31 @@
+{
+  "cwd": "/workspace",
+  "expected_cases": [
+    "arbitrary_inputs",
+    "canonical_full_overwrite",
+    "decode_precedence",
+    "decode_size_boundaries",
+    "encode_transactional_size",
+    "field_rejections",
+    "generation_roundtrips",
+    "grant_literal",
+    "layout_confusion_rejected",
+    "nested_startup_input",
+    "owned_metadata",
+    "token_shape_boundaries",
+    "wire_constants"
+  ],
+  "sources": {
+    "rust-toolchain.toml": "da55df283f88667ec7a31b7392d493f574a36c88467b955d467c3a3cbe2e9fb1",
+    "Cargo.lock": "383e08e95bee956a6cc81d5ee51e1b4dca8355d92c80473228e2c1413b7b177b",
+    "Cargo.toml": "b5ce112343302244db423f588b44e1c4da81b030bf2a3b2d66c7552a94bec1d8",
+    "crates/hm-kernel/Cargo.toml": "5b738f47733eb9c7ff18b1a4a635da1f747595796e3f68ba812379f03c694b9c",
+    "crates/hm-kernel/src/lib.rs": "c0bc93913010f3f5783fa8170af17c48596ec5cb6601ce0df044d5f5fe4764f7",
+    "crates/hm-kernel/src/interactive_wire.rs": "8f6cc9b114d311431a64734a924f6693284635de43da40727ee859d5a60a39c3",
+    "crates/hm-kernel/src/startup_input.rs": "78f6593de5ff4dcdaab66b58bc807e04dcf78008955b6295e98479cb8bbce059",
+    "crates/hm-kernel/src/native.rs": "3fa241cb7f163bd8c3ec2d4daf19e093ca183238937c871667c4dd8db152b3e5",
+    "crates/hm-kernel/tests/interactive_wire.rs": "d752d3c4121ed82f61202c582b00492be7e15f65b1564237664699c97fe083fd",
+    "tools/check_interactive_wire.py": "544677e0b844a5936139a9ac7c55842cc93a9d367e673cc9e091ae7fcbdebde5",
+    "docs/design/0031-input-safe-api.md": "03bbcbc0d9480c5b24f9748660c0f5a7f638214ecbd8fb7348a48344882d79a5"
+  }
+}

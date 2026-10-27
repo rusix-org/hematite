@@ -1,0 +1,21 @@
+   Compiling hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+error[E0599]: no associated function or constant named `parse` found for struct `View<'a>` in the current scope
+   --> crates/hm-kernel/tests/interactive_wire.rs:181:23
+    |
+181 |     let outer = View::parse(&tail).unwrap();
+    |                       ^^^^^ associated function or constant not found in `View<'_>`
+
+error[E0599]: no associated function or constant named `parse` found for struct `View<'a>` in the current scope
+   --> crates/hm-kernel/tests/interactive_wire.rs:196:29
+    |
+196 |         Grant::decode(View::parse(&tail).unwrap().bytes().unwrap()),
+    |                             ^^^^^ associated function or constant not found in `View<'_>`
+
+error[E0599]: no associated function or constant named `parse` found for struct `View<'a>` in the current scope
+   --> crates/hm-kernel/tests/interactive_wire.rs:210:19
+    |
+210 |     assert!(View::parse(&CANONICAL).is_err());
+    |                   ^^^^^ associated function or constant not found in `View<'_>`
+
+For more information about this error, try `rustc --explain E0599`.
+error: could not compile `hm-kernel` (test "interactive_wire") due to 3 previous errors

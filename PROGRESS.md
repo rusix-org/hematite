@@ -1076,3 +1076,30 @@ does not claim resumable execution or process-group support.
   result records,244 Python cases per target,13 native host cases, both full
   task matrices and all ten negative raw traces. Matching new remote CI follows
   this checkpoint's push; real-ARM performance and interactive input remain open.
+
+- 2026-10-26: GitHub Actions run40445643958 passes for pushed checkpoint
+  e1a7a66e. Began interactive input's independently approved safe metadata stage:
+  canonical64-byte grant codec, fixed interactive Session profile, separate
+  InputAdmission and original-session READ park/finish owners. No RX, writable
+  user-copy, hardware idle or core interactive coordinator is implemented.
+  Strict codec13 and policy18 host tests pass, including4095successfulREAD
+  then4096termination; existing native13/task16 tests remain passing. New
+  harness10 mutation tests, integration Clippy and both-architecture static gates
+  pass. Actual22 compiler probes pass pertarget (ARM/x86); ARM Process9832 bytes
+  and taskmetadata sizes unchanged. Initialcodec test compilefailure from stale
+  View::parse usage is preserved and corrected to the existing decode API.
+  All34 kernels are compiling before new linked/layout acceptance or guest runs.
+
+- 2026-10-26: All 34 safe-input profiles pass compiled review (task maximum
+  61,568 bytes, +16; other maxima unchanged). The first full run stops before
+  guests at a stale Session initializer in the privacy probe. Record update
+  restores its required E0451; all 12 legacy clients pass on both architectures.
+  The second full run passes in 198.9 seconds with all captured inputs unchanged.
+  All 34 executed ELFs match reviewed candidates; 116 ARM/18 x86 raw result
+  records have no false verdict. Independent review replays both ordinary task
+  matrices and all ten negative profiles. The safe codec and owned READ policy
+  are verified; hardware RX, coordinator and user copying remain unimplemented.
+  Earlier failures are preserved. Preparing the local checkpoint and push.
+  Source and verification checkpoints end at `0d7b3224`; all 342 captured inputs
+  from the passing full-second run match its committed blobs exactly. Evidence
+  and reviews are being saved before the standing-authorized GitHub push.

@@ -1,0 +1,18 @@
+[
+  "rustc",
+  "--edition=2024",
+  "--crate-type=lib",
+  "--emit=metadata",
+  "--error-format=json",
+  "--target",
+  "x86_64-unknown-none",
+  "-C",
+  "panic=abort",
+  "--extern",
+  "hm_kernel=/workspace/target/input-safe/x86_64/x86_64-unknown-none/release/libhm_kernel.rlib",
+  "-L",
+  "dependency=/workspace/target/input-safe/x86_64/x86_64-unknown-none/release/deps",
+  "-o",
+  "/workspace/docs/evidence/input-safe/types-x86_64/copy_guard.rmeta",
+  "/workspace/docs/evidence/input-safe/types-x86_64/copy_guard.rs"
+]

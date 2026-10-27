@@ -1,0 +1,55 @@
+{
+  "passed": false,
+  "checks": {
+    "exit_success": false,
+    "within_deadline": true,
+    "launched": true,
+    "complete_report": false,
+    "bounded_logs": true
+  },
+  "execution": {
+    "started_utc": "2026-10-27T03:53:17.201137+00:00",
+    "timeout_seconds": 60,
+    "returncode": 101,
+    "timed_out": false,
+    "launch_error": null,
+    "elapsed_seconds": 1.5681404010392725
+  },
+  "artifacts": {
+    "stdout": {
+      "bytes": 0,
+      "within_limit": true,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stderr": {
+      "bytes": 1195,
+      "within_limit": true,
+      "sha256": "9a426fb816636171c967f02ff6f8a7d1e55e2073b2211d483261e151bdb45892"
+    }
+  },
+  "report": {
+    "passed": false,
+    "errors": [
+      "Incomplete or oversized test output",
+      "Test inventory/order/results differ from the exact thirteen cases",
+      "Missing or unsuccessful complete summary"
+    ],
+    "expected_cases": [
+      "arbitrary_inputs",
+      "canonical_full_overwrite",
+      "decode_precedence",
+      "decode_size_boundaries",
+      "encode_transactional_size",
+      "field_rejections",
+      "generation_roundtrips",
+      "grant_literal",
+      "layout_confusion_rejected",
+      "nested_startup_input",
+      "owned_metadata",
+      "token_shape_boundaries",
+      "wire_constants"
+    ],
+    "observed_lines": []
+  },
+  "scope": "actual interactive grant codec; no authority issuance, RX access or execution"
+}

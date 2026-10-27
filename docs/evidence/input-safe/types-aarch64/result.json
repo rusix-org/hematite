@@ -1,0 +1,117 @@
+{
+  "passed": true,
+  "probes": {
+    "grant_owned_copy": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "guard_outlives_host_and_request": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "park_and_finish_owned": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "invalid_finish_retains_owner": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "reject_returns_session": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "forge_grant": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0451"
+    },
+    "forge_session": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0451"
+    },
+    "forge_guard": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0451"
+    },
+    "forge_parked": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0451"
+    },
+    "clone_guard": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0599"
+    },
+    "clone_parked": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0599"
+    },
+    "copy_guard": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "copy_parked": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "reuse_after_reject": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0382"
+    },
+    "reuse_after_park": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0382"
+    },
+    "finish_twice": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0382"
+    },
+    "reuse_session_after_admission": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0382"
+    },
+    "extract_guard_session": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0616"
+    },
+    "extract_parked_session": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0616"
+    },
+    "mutate_profile": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0616"
+    },
+    "escape_guard_reference": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0515"
+    },
+    "move_borrowed_parked": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0505"
+    }
+  },
+  "target": "aarch64-unknown-none",
+  "scope": "actual Grant and owned READ policy boundary; no RX lease, writable user copy or wake authority"
+}

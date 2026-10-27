@@ -1,0 +1,14 @@
+   Compiling hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+   Compiling hm-core v0.1.0 (/workspace/crates/hm-core)
+warning: method `reborrow` is never used
+  --> crates/hm-core/src/user_space.rs:99:19
+   |
+98 | impl<'pool> Factory<'pool> {
+   | -------------------------- method in this implementation
+99 |     pub(super) fn reborrow(&self) -> Factory<'pool> {
+   |                   ^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `hm-core` (bin "hematite") generated 1 warning
+    Finished `release` profile [optimized] target(s) in 7.42s

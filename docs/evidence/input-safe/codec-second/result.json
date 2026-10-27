@@ -1,0 +1,67 @@
+{
+  "passed": true,
+  "checks": {
+    "exit_success": true,
+    "within_deadline": true,
+    "launched": true,
+    "complete_report": true,
+    "bounded_logs": true
+  },
+  "execution": {
+    "started_utc": "2026-10-27T03:54:19.452680+00:00",
+    "timeout_seconds": 60,
+    "returncode": 0,
+    "timed_out": false,
+    "launch_error": null,
+    "elapsed_seconds": 0.4152150780428201
+  },
+  "artifacts": {
+    "stdout": {
+      "bytes": 533,
+      "within_limit": true,
+      "sha256": "b0db1cc555f4c80d48ed9892eca1d685db70ecf8c251c3ec61fcb3e542b03475"
+    },
+    "stderr": {
+      "bytes": 273,
+      "within_limit": true,
+      "sha256": "178bdb9504c9fbccae55e78aaa3fa230990dc1f06ddc5e5e8f867b52ec8be68c"
+    }
+  },
+  "report": {
+    "passed": true,
+    "errors": [],
+    "expected_cases": [
+      "arbitrary_inputs",
+      "canonical_full_overwrite",
+      "decode_precedence",
+      "decode_size_boundaries",
+      "encode_transactional_size",
+      "field_rejections",
+      "generation_roundtrips",
+      "grant_literal",
+      "layout_confusion_rejected",
+      "nested_startup_input",
+      "owned_metadata",
+      "token_shape_boundaries",
+      "wire_constants"
+    ],
+    "observed_lines": [
+      "running 13 tests",
+      "test arbitrary_inputs ... ok",
+      "test canonical_full_overwrite ... ok",
+      "test decode_precedence ... ok",
+      "test decode_size_boundaries ... ok",
+      "test encode_transactional_size ... ok",
+      "test field_rejections ... ok",
+      "test generation_roundtrips ... ok",
+      "test grant_literal ... ok",
+      "test layout_confusion_rejected ... ok",
+      "test nested_startup_input ... ok",
+      "test owned_metadata ... ok",
+      "test token_shape_boundaries ... ok",
+      "test wire_constants ... ok",
+      "test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s"
+    ]
+  },
+  "scope": "actual interactive grant codec; no authority issuance, RX access or execution"
+}

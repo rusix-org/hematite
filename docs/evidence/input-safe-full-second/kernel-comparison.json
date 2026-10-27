@@ -1,0 +1,243 @@
+{
+  "passed": true,
+  "profiles": [
+    {
+      "profile": "aarch64-monitor",
+      "path": "target/aarch64/monitor/aarch64-unknown-none/release/hematite",
+      "sha256": "99151256f79d8f122a0be2d8d8edee3584cc3a168735ccc83606ce58ff0c9008",
+      "expected_sha256": "99151256f79d8f122a0be2d8d8edee3584cc3a168735ccc83606ce58ff0c9008",
+      "passed": true
+    },
+    {
+      "profile": "aarch64-boot-test",
+      "path": "target/aarch64/boot-test/aarch64-unknown-none/release/hematite",
+      "sha256": "c61f0e8a4b1cac77c723ea2ae0e332ae6cba9bd7401a3f798f73ca2c8e85feeb",
+      "expected_sha256": "c61f0e8a4b1cac77c723ea2ae0e332ae6cba9bd7401a3f798f73ca2c8e85feeb",
+      "passed": true
+    },
+    {
+      "profile": "aarch64-fault-test",
+      "path": "target/aarch64/fault-test/aarch64-unknown-none/release/hematite",
+      "sha256": "cc8c516523c4474ff9a5c41fa8a21171a148deed5c03b1f6bb5a39669c893082",
+      "expected_sha256": "cc8c516523c4474ff9a5c41fa8a21171a148deed5c03b1f6bb5a39669c893082",
+      "passed": true
+    },
+    {
+      "profile": "aarch64-nested-test",
+      "path": "target/aarch64/nested-test/aarch64-unknown-none/release/hematite",
+      "sha256": "37b22932f656942e1184737e8e66091afa0b95d0116d24f748f4b34a8c7f0814",
+      "expected_sha256": "37b22932f656942e1184737e8e66091afa0b95d0116d24f748f4b34a8c7f0814",
+      "passed": true
+    },
+    {
+      "profile": "aarch64-thread-overflow-test",
+      "path": "target/aarch64/thread-overflow-test/aarch64-unknown-none/release/hematite",
+      "sha256": "39ac3952b0810bf3504ae6a1d2fb9a648a57fea8f54cba773de139fb618d746e",
+      "expected_sha256": "39ac3952b0810bf3504ae6a1d2fb9a648a57fea8f54cba773de139fb618d746e",
+      "passed": true
+    },
+    {
+      "profile": "aarch64-preemption-test",
+      "path": "target/aarch64/preemption-test/aarch64-unknown-none/release/hematite",
+      "sha256": "eb7471905e053f7142f6ba66b726b9a9c812d599343f08f711da2de28b9e3002",
+      "expected_sha256": "eb7471905e053f7142f6ba66b726b9a9c812d599343f08f711da2de28b9e3002",
+      "passed": true
+    },
+    {
+      "profile": "aarch64-preemption-boundary-test",
+      "path": "target/aarch64/preemption-boundary-test/aarch64-unknown-none/release/hematite",
+      "sha256": "344f9e1ef7ece3e6ad58cc20461bed9a1876863acc6f5754b423b1c6575fae90",
+      "expected_sha256": "344f9e1ef7ece3e6ad58cc20461bed9a1876863acc6f5754b423b1c6575fae90",
+      "passed": true
+    },
+    {
+      "profile": "aarch64-preemption-no-timer-test",
+      "path": "target/aarch64/preemption-no-timer-test/aarch64-unknown-none/release/hematite",
+      "sha256": "b1a3fa07ac89d253884fe8e628c7c706e4b306029159ac3c8402b46c487edd7d",
+      "expected_sha256": "b1a3fa07ac89d253884fe8e628c7c706e4b306029159ac3c8402b46c487edd7d",
+      "passed": true
+    },
+    {
+      "profile": "aarch64-preemption-overflow-test",
+      "path": "target/aarch64/preemption-overflow-test/aarch64-unknown-none/release/hematite",
+      "sha256": "c0353a5d1d960e2fc7972e6c353508c65ed6c6fd13659852b29612737016da72",
+      "expected_sha256": "c0353a5d1d960e2fc7972e6c353508c65ed6c6fd13659852b29612737016da72",
+      "passed": true
+    },
+    {
+      "profile": "aarch64-wait-all-blocked-test",
+      "path": "target/aarch64/wait-all-blocked-test/aarch64-unknown-none/release/hematite",
+      "sha256": "fc5a84aeb3c5005d5156976fbb039ae7343518c872e7f698d62bc67b18946286",
+      "expected_sha256": "fc5a84aeb3c5005d5156976fbb039ae7343518c872e7f698d62bc67b18946286",
+      "passed": true
+    },
+    {
+      "profile": "aarch64-space-test",
+      "path": "target/aarch64/space-test/aarch64-unknown-none/release/hematite",
+      "sha256": "8ccc9eff36463f23ffd594740d58666277b1b72f0baf21ecffe316715a7e5cb2",
+      "expected_sha256": "8ccc9eff36463f23ffd594740d58666277b1b72f0baf21ecffe316715a7e5cb2",
+      "passed": true
+    },
+    {
+      "profile": "aarch64-process-test",
+      "path": "target/aarch64/process-test/aarch64-unknown-none/release/hematite",
+      "sha256": "95d855c10e457b31bdd3ce10601657581395aa38b94ddfeb96dbdbfba947b9f5",
+      "expected_sha256": "95d855c10e457b31bdd3ce10601657581395aa38b94ddfeb96dbdbfba947b9f5",
+      "passed": true
+    },
+    {
+      "profile": "aarch64-startup-input-test",
+      "path": "target/aarch64/startup-input-test/aarch64-unknown-none/release/hematite",
+      "sha256": "3fbfd09f1a6c61ac2b4d477513d8b2db20c78570f0f58b5e82f524f6d5f33484",
+      "expected_sha256": "3fbfd09f1a6c61ac2b4d477513d8b2db20c78570f0f58b5e82f524f6d5f33484",
+      "passed": true
+    },
+    {
+      "profile": "aarch64-secondary-test",
+      "path": "target/aarch64/secondary-test/aarch64-unknown-none/release/hematite",
+      "sha256": "28072f4f872b8bdfe07ac6789b760eb91bd50cc6e61a43235fc2eb9750f4843b",
+      "expected_sha256": "28072f4f872b8bdfe07ac6789b760eb91bd50cc6e61a43235fc2eb9750f4843b",
+      "passed": true
+    },
+    {
+      "profile": "aarch64-secondary-stale-test",
+      "path": "target/aarch64/secondary-stale-test/aarch64-unknown-none/release/hematite",
+      "sha256": "42b69fe164aff599362b6c40e5c04cb23b3e23363be726cd7f3e05dd23c98b42",
+      "expected_sha256": "42b69fe164aff599362b6c40e5c04cb23b3e23363be726cd7f3e05dd23c98b42",
+      "passed": true
+    },
+    {
+      "profile": "aarch64-secondary-off-return-test",
+      "path": "target/aarch64/secondary-off-return-test/aarch64-unknown-none/release/hematite",
+      "sha256": "9ae873bd82635bfdac8e0877bd63386bb28901c1f13c4c5a1fc56ab66c3d415e",
+      "expected_sha256": "9ae873bd82635bfdac8e0877bd63386bb28901c1f13c4c5a1fc56ab66c3d415e",
+      "passed": true
+    },
+    {
+      "profile": "aarch64-smp-test",
+      "path": "target/aarch64/smp-test/aarch64-unknown-none/release/hematite",
+      "sha256": "e26725b5a9aa6eba7766093d0be47d765ceedddc15e8c0cb5fda96077642bd2f",
+      "expected_sha256": "e26725b5a9aa6eba7766093d0be47d765ceedddc15e8c0cb5fda96077642bd2f",
+      "passed": true
+    },
+    {
+      "profile": "aarch64-smp-no-peer-timer-test",
+      "path": "target/aarch64/smp-no-peer-timer-test/aarch64-unknown-none/release/hematite",
+      "sha256": "b98c0f56e32531d1a29847ae0de7a9e62748e8c208444d6c58aad29c7f8566b4",
+      "expected_sha256": "b98c0f56e32531d1a29847ae0de7a9e62748e8c208444d6c58aad29c7f8566b4",
+      "passed": true
+    },
+    {
+      "profile": "aarch64-smp-peer-overflow-test",
+      "path": "target/aarch64/smp-peer-overflow-test/aarch64-unknown-none/release/hematite",
+      "sha256": "4e9ebcb885312fbbdb5b5b8e740a2e0b64cfb95e2625581e3a5e96908d180ee4",
+      "expected_sha256": "4e9ebcb885312fbbdb5b5b8e740a2e0b64cfb95e2625581e3a5e96908d180ee4",
+      "passed": true
+    },
+    {
+      "profile": "aarch64-smp-all-blocked-test",
+      "path": "target/aarch64/smp-all-blocked-test/aarch64-unknown-none/release/hematite",
+      "sha256": "bf5f72f80c356e09c70777082642b61fd0d7dcb3f095e055ea385317480c04e2",
+      "expected_sha256": "bf5f72f80c356e09c70777082642b61fd0d7dcb3f095e055ea385317480c04e2",
+      "passed": true
+    },
+    {
+      "profile": "x86_64-monitor",
+      "path": "target/x86_64/monitor/x86_64-unknown-none/release/hematite",
+      "sha256": "a8d1b03da701771c5da0e64be10bda5f59cdc09fc53a50474f89de2b1d0cfd05",
+      "expected_sha256": "a8d1b03da701771c5da0e64be10bda5f59cdc09fc53a50474f89de2b1d0cfd05",
+      "passed": true
+    },
+    {
+      "profile": "x86_64-boot-test",
+      "path": "target/x86_64/boot-test/x86_64-unknown-none/release/hematite",
+      "sha256": "86fbce2e552f23e8cffba47ac4bac1cf9a4aced0e5d1a494fac8eb6cfd3bd83f",
+      "expected_sha256": "86fbce2e552f23e8cffba47ac4bac1cf9a4aced0e5d1a494fac8eb6cfd3bd83f",
+      "passed": true
+    },
+    {
+      "profile": "aarch64-runtime-test",
+      "path": "target/aarch64/runtime-test/aarch64-unknown-none/release/hematite",
+      "sha256": "e8bc875826e89885f198d5ce944c6f84d4ed4ceffc4efd563c838bbdd8a5521a",
+      "expected_sha256": "e8bc875826e89885f198d5ce944c6f84d4ed4ceffc4efd563c838bbdd8a5521a",
+      "passed": true
+    },
+    {
+      "profile": "aarch64-task-test",
+      "path": "target/aarch64/task-test/aarch64-unknown-none/release/hematite",
+      "sha256": "eb80984964ac42354b64518b2315cd03c5154ace561c391f62ebf12a03d3f883",
+      "expected_sha256": "eb80984964ac42354b64518b2315cd03c5154ace561c391f62ebf12a03d3f883",
+      "passed": true
+    },
+    {
+      "profile": "aarch64-negative-final_budget_spawn",
+      "path": "target/aarch64/task-negative-final_budget_spawn/aarch64-unknown-none/release/hematite",
+      "sha256": "3aee5710a239aa37cdef34c014c54765d80fbbf0288da6068fd42d03251f4611",
+      "expected_sha256": "3aee5710a239aa37cdef34c014c54765d80fbbf0288da6068fd42d03251f4611",
+      "passed": true
+    },
+    {
+      "profile": "aarch64-negative-final_budget_park",
+      "path": "target/aarch64/task-negative-final_budget_park/aarch64-unknown-none/release/hematite",
+      "sha256": "a97e15b679783723d5c8d4ffa742aee39921c600608ad6db472a8ea80ffef22b",
+      "expected_sha256": "a97e15b679783723d5c8d4ffa742aee39921c600608ad6db472a8ea80ffef22b",
+      "passed": true
+    },
+    {
+      "profile": "aarch64-negative-platform_reply",
+      "path": "target/aarch64/task-negative-platform_reply/aarch64-unknown-none/release/hematite",
+      "sha256": "87104a05632aabc6a9e35ab7d8d384b19bdb6abf5fce2a18ccbd5f5d7531d759",
+      "expected_sha256": "87104a05632aabc6a9e35ab7d8d384b19bdb6abf5fce2a18ccbd5f5d7531d759",
+      "passed": true
+    },
+    {
+      "profile": "aarch64-negative-platform_park",
+      "path": "target/aarch64/task-negative-platform_park/aarch64-unknown-none/release/hematite",
+      "sha256": "678aeb2908f81e27480bfa81db21e6f150da40e3ae1d502ee84792e94ee1d217",
+      "expected_sha256": "678aeb2908f81e27480bfa81db21e6f150da40e3ae1d502ee84792e94ee1d217",
+      "passed": true
+    },
+    {
+      "profile": "aarch64-negative-abandon_dispatch",
+      "path": "target/aarch64/task-negative-abandon_dispatch/aarch64-unknown-none/release/hematite",
+      "sha256": "ce7d3342b272ae174259b69ff2c47376d60de6052da47febf2ce105c61129838",
+      "expected_sha256": "ce7d3342b272ae174259b69ff2c47376d60de6052da47febf2ce105c61129838",
+      "passed": true
+    },
+    {
+      "profile": "aarch64-negative-wake_install_failure",
+      "path": "target/aarch64/task-negative-wake_install_failure/aarch64-unknown-none/release/hematite",
+      "sha256": "e4fef593278ff9a316fcc6be11e67196456424765739bfb904ee440cc281dc65",
+      "expected_sha256": "e4fef593278ff9a316fcc6be11e67196456424765739bfb904ee440cc281dc65",
+      "passed": true
+    },
+    {
+      "profile": "aarch64-negative-capability_exhaustion",
+      "path": "target/aarch64/task-negative-capability_exhaustion/aarch64-unknown-none/release/hematite",
+      "sha256": "6f8ab4e90e6c6cae884e8f49281b205239ab4ff479851343a498debc1d5473d6",
+      "expected_sha256": "6f8ab4e90e6c6cae884e8f49281b205239ab4ff479851343a498debc1d5473d6",
+      "passed": true
+    },
+    {
+      "profile": "aarch64-negative-slot_exhaustion",
+      "path": "target/aarch64/task-negative-slot_exhaustion/aarch64-unknown-none/release/hematite",
+      "sha256": "993d3cd312325ceeb572f722a38f640384a3eb9da43717a086de248c579fedb8",
+      "expected_sha256": "993d3cd312325ceeb572f722a38f640384a3eb9da43717a086de248c579fedb8",
+      "passed": true
+    },
+    {
+      "profile": "aarch64-negative-child_retire_ready",
+      "path": "target/aarch64/task-negative-child_retire_ready/aarch64-unknown-none/release/hematite",
+      "sha256": "78bcea9d14e3ad96e31629f3f5458de2ff0e2dae437a9cab7dfea83605dc8e1a",
+      "expected_sha256": "78bcea9d14e3ad96e31629f3f5458de2ff0e2dae437a9cab7dfea83605dc8e1a",
+      "passed": true
+    },
+    {
+      "profile": "aarch64-negative-child_retire_waiting",
+      "path": "target/aarch64/task-negative-child_retire_waiting/aarch64-unknown-none/release/hematite",
+      "sha256": "63e006564678fb0cbd6b04d1be87169c90aa51c5934f5791bda482399d80c845",
+      "expected_sha256": "63e006564678fb0cbd6b04d1be87169c90aa51c5934f5791bda482399d80c845",
+      "passed": true
+    }
+  ]
+}

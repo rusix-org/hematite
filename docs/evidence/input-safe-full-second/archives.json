@@ -1,0 +1,12 @@
+[
+  {
+    "source": "target/evidence/20261027T040802-700037693-aarch64",
+    "archive": "docs/evidence/input-safe-full-second/20261027T040802-700037693-aarch64.tar.gz",
+    "sha256": "1e49dbbb22a389b4c43ec763e5ece2d6d93187d368bf135cbcaddb28eaf682f0"
+  },
+  {
+    "source": "target/evidence/20261027T041036-281651515-x86_64",
+    "archive": "docs/evidence/input-safe-full-second/20261027T041036-281651515-x86_64.tar.gz",
+    "sha256": "f351ae9c3992d770de474457d843d70fea5d1b2a8bef4a331f33045c36863fb2"
+  }
+]

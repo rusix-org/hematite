@@ -1,0 +1,16 @@
+[
+  "cargo",
+  "test",
+  "-p",
+  "hm-kernel",
+  "--test",
+  "input_policy",
+  "--locked",
+  "--offline",
+  "--target",
+  "x86_64-unknown-linux-gnu",
+  "--target-dir",
+  "target/host-input-policy",
+  "--",
+  "--test-threads=1"
+]

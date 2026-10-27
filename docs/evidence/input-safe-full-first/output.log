@@ -1,0 +1,586 @@
+make test ARCH=aarch64
+make[1]: Entering directory '/home/aaron/code/hematite'
+docker build --tag hematite-build:phase0 .
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 833B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/rust:1.99.0-slim-bookworm@sha256:2c3a22f0a5533ea2dd5a16627bc841228151faa2d4de2644ac9987e4a2f1f2fa
+#2 DONE 0.6s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 54B done
+#3 DONE 0.0s
+
+#4 [1/4] FROM docker.io/library/rust:1.99.0-slim-bookworm@sha256:2c3a22f0a5533ea2dd5a16627bc841228151faa2d4de2644ac9987e4a2f1f2fa
+#4 resolve docker.io/library/rust:1.99.0-slim-bookworm@sha256:2c3a22f0a5533ea2dd5a16627bc841228151faa2d4de2644ac9987e4a2f1f2fa 0.0s done
+#4 DONE 0.0s
+
+#5 [2/4] RUN rm -f /etc/apt/sources.list.d/debian.sources     && printf 'deb [check-valid-until=no] https://snapshot.debian.org/archive/debian/20261025T000000Z/ bookworm main\n' > /etc/apt/sources.list     && apt-get update     && apt-get install -y --no-install-recommends qemu-system-x86 qemu-system-arm python3 make binutils binutils-aarch64-linux-gnu cpio     && rm -rf /var/lib/apt/lists/*
+#5 CACHED
+
+#6 [3/4] RUN rustup component add rustfmt clippy --toolchain 1.99.0     && rustup target add x86_64-unknown-none aarch64-unknown-none --toolchain 1.99.0
+#6 CACHED
+
+#7 [4/4] WORKDIR /workspace
+#7 CACHED
+
+#8 exporting to image
+#8 exporting layers done
+#8 exporting manifest sha256:4d3575044fd3488f4e7352417008b9b711bb851b12ddc901dfe7b0f32fe4b453 done
+#8 exporting config sha256:49b24b5ba2fde99deb2bd98e819eeece478af191fb00018ce5c52db57820d4e5 done
+#8 exporting attestation manifest sha256:c088ce74ddedf6eb8a6f75dab0bb9bc5a5a4c881c0d224b5d8f31f6bc330dfb7 0.0s done
+#8 exporting manifest list sha256:3a012f74c11e4471ddfaedd327820ba89fb03417a27a89cb3746d5e1672c59a9 done
+#8 naming to docker.io/library/hematite-build:phase0 done
+#8 unpacking to docker.io/library/hematite-build:phase0 0.0s done
+#8 DONE 0.1s
+bash tools/dev.sh bash -eu -c '\
+	unset HM_TASK_NEGATIVE; \
+	evidence_dir="target/evidence/$(date -u +%Y%m%dT%H%M%S-%N)-aarch64"; \
+	mkdir -p "$evidence_dir"; \
+	task_negative_cases="$(python3 tools/build_task_negative_cases.py --list-profiles)"; \
+	test -n "$task_negative_cases"; \
+	printf "%s\n" "$task_negative_cases" > "$evidence_dir/task-negative-profiles.txt"; \
+	{ rustc --version; cargo --version; qemu-system-aarch64 --version; \
+		if [ "aarch64" = x86_64 ]; then sha256sum /usr/share/qemu/bios-microvm.bin; \
+		else printf "Boot: direct ELF; no external firmware.\n"; fi; \
+	} > "$evidence_dir/environment.log"; \
+	cargo fmt --all -- --check; \
+	cargo clippy --workspace --all-features --locked --offline --target aarch64-unknown-none --target-dir target/aarch64/clippy -- -D warnings; \
+	python3 tools/test_test_kernel.py; \
+	python3 tools/test_timer_trace.py; \
+	python3 tools/test_test_preemption.py; \
+	python3 tools/test_test_preemption_negative.py; \
+	python3 tools/test_preemption_boundaries.py; \
+	python3 tools/test_test_wait_blocked.py; \
+	python3 tools/test_test_secondary.py; \
+	python3 tools/test_test_smp.py; \
+	python3 tools/test_test_elf.py; \
+	python3 tools/test_test_space.py; \
+	python3 tools/test_test_native.py; \
+	python3 tools/test_test_interactive_wire.py; \
+	python3 tools/test_test_input_policy.py; \
+	python3 tools/test_test_startup_input.py; \
+	python3 tools/test_test_task_wire.py; \
+	python3 tools/test_test_task_admission.py; \
+	python3 tools/test_test_process_budget.py; \
+	python3 tools/test_test_process.py; \
+	python3 tools/test_test_initramfs.py; \
+	python3 tools/test_test_boot_image.py; \
+	python3 tools/test_test_launcher.py; \
+	python3 tools/test_test_launch_input.py; \
+	python3 tools/test_test_startup_delivery.py; \
+	python3 tools/test_test_group_launcher.py; \
+	python3 tools/test_test_task_launcher.py; \
+	python3 tools/test_test_task_cases.py; \
+	python3 tools/test_test_task_negative.py; \
+	python3 tools/test_test_runtime.py; \
+	python3 tools/check_repository.py; \
+	python3 tools/check_safety.py; \
+	cargo build --locked --offline -p hm-core --release --features boot-tests --target aarch64-unknown-none --target-dir target/aarch64/boot-test; \
+	cargo build --locked --offline -p hm-core --release --target aarch64-unknown-none --target-dir target/aarch64/monitor; \
+	if [ "aarch64" = aarch64 ]; then \
+		cargo build --locked --offline -p hm-core --release --features unhandled-fault-test --target aarch64-unknown-none --target-dir target/aarch64/fault-test; \
+		cargo build --locked --offline -p hm-core --release --features nested-fault-test --target aarch64-unknown-none --target-dir target/aarch64/nested-test; \
+		cargo build --locked --offline -p hm-core --release --features thread-overflow-test --target aarch64-unknown-none --target-dir target/aarch64/thread-overflow-test; \
+		cargo build --locked --offline -p hm-core --release --features preemption-tests --target aarch64-unknown-none --target-dir target/aarch64/preemption-test; \
+		cargo build --locked --offline -p hm-core --release --features preemption-boundary-test --target aarch64-unknown-none --target-dir target/aarch64/preemption-boundary-test; \
+		cargo build --locked --offline -p hm-core --release --features preemption-no-timer-test --target aarch64-unknown-none --target-dir target/aarch64/preemption-no-timer-test; \
+		cargo build --locked --offline -p hm-core --release --features preemption-overflow-test --target aarch64-unknown-none --target-dir target/aarch64/preemption-overflow-test; \
+		cargo build --locked --offline -p hm-core --release --features wait-all-blocked-test --target aarch64-unknown-none --target-dir target/aarch64/wait-all-blocked-test; \
+		cargo build --locked --offline -p hm-core --release --features space-tests --target aarch64-unknown-none --target-dir target/aarch64/space-test; \
+		cargo build --locked --offline -p hm-core --release --features process-tests --target aarch64-unknown-none --target-dir target/aarch64/process-test; \
+		cargo build --locked --offline -p hm-core --release --features startup-input-tests --target aarch64-unknown-none --target-dir target/aarch64/startup-input-test; \
+		cargo build --locked --offline -p hm-core --release --features runtime-tests --target aarch64-unknown-none --target-dir target/aarch64/runtime-test; \
+		cargo build --locked --offline -p hm-core --release --features task-tests --target aarch64-unknown-none --target-dir target/aarch64/task-test; \
+		for task_case in $task_negative_cases; do \
+			HM_TASK_NEGATIVE="$task_case" cargo build --locked --offline -p hm-core --release --features task-negative-tests --target aarch64-unknown-none --target-dir "target/aarch64/task-negative-$task_case"; \
+		done; \
+		cargo build --locked --offline -p hm-core --release --features secondary-tests --target aarch64-unknown-none --target-dir target/aarch64/secondary-test; \
+		cargo build --locked --offline -p hm-core --release --features secondary-stale-generation-test --target aarch64-unknown-none --target-dir target/aarch64/secondary-stale-test; \
+		cargo build --locked --offline -p hm-core --release --features secondary-cpu-off-return-test --target aarch64-unknown-none --target-dir target/aarch64/secondary-off-return-test; \
+		cargo build --locked --offline -p hm-core --release --features smp-tests --target aarch64-unknown-none --target-dir target/aarch64/smp-test; \
+		cargo build --locked --offline -p hm-core --release --features smp-no-peer-timer-test --target aarch64-unknown-none --target-dir target/aarch64/smp-no-peer-timer-test; \
+		cargo build --locked --offline -p hm-core --release --features smp-peer-overflow-test --target aarch64-unknown-none --target-dir target/aarch64/smp-peer-overflow-test; \
+		cargo build --locked --offline -p hm-core --release --features smp-all-blocked-test --target aarch64-unknown-none --target-dir target/aarch64/smp-all-blocked-test; \
+	fi; \
+	cargo build --locked --offline -p hm-kernel --release --target aarch64-unknown-none --target-dir target/aarch64/boot-test; \
+	python3 tools/check_capability_types.py \
+		--library target/aarch64/boot-test/aarch64-unknown-none/release/libhm_kernel.rlib \
+		--target aarch64-unknown-none --output "$evidence_dir/type-boundary"; \
+	python3 tools/check_native_types.py \
+		--library target/aarch64/boot-test/aarch64-unknown-none/release/libhm_kernel.rlib \
+		--target aarch64-unknown-none --output "$evidence_dir/native-types"; \
+	python3 tools/check_startup_input_types.py \
+		--library target/aarch64/boot-test/aarch64-unknown-none/release/libhm_kernel.rlib \
+		--target aarch64-unknown-none --output "$evidence_dir/startup-input-types"; \
+	python3 tools/check_input_types.py \
+		--library target/aarch64/boot-test/aarch64-unknown-none/release/libhm_kernel.rlib \
+		--target aarch64-unknown-none --output "$evidence_dir/input-types"; \
+	python3 tools/check_task_wire_types.py \
+		--library target/aarch64/boot-test/aarch64-unknown-none/release/libhm_kernel.rlib \
+		--target aarch64-unknown-none --output "$evidence_dir/task-wire-types"; \
+	python3 tools/check_task_admission_types.py \
+		--library target/aarch64/boot-test/aarch64-unknown-none/release/libhm_kernel.rlib \
+		--target aarch64-unknown-none --output "$evidence_dir/task-admission-types"; \
+	python3 tools/check_process_budget_types.py \
+		--library target/aarch64/boot-test/aarch64-unknown-none/release/libhm_kernel.rlib \
+		--target aarch64-unknown-none --output "$evidence_dir/process-budget-types"; \
+	python3 tools/check_boot_image_types.py \
+		--library target/aarch64/boot-test/aarch64-unknown-none/release/libhm_kernel.rlib \
+		--target aarch64-unknown-none --output "$evidence_dir/boot-image-types"; \
+	python3 tools/check_initramfs_types.py \
+		--library target/aarch64/boot-test/aarch64-unknown-none/release/libhm_kernel.rlib \
+		--target aarch64-unknown-none --output "$evidence_dir/initramfs-types"; \
+	python3 tools/check_elf_types.py \
+		--library target/aarch64/boot-test/aarch64-unknown-none/release/libhm_kernel.rlib \
+		--target aarch64-unknown-none --output "$evidence_dir/elf-types"; \
+	python3 tools/check_frame_types.py \
+		--library target/aarch64/boot-test/aarch64-unknown-none/release/libhm_kernel.rlib \
+		--target aarch64-unknown-none --output "$evidence_dir/frame-types"; \
+	mutex_host_args=(); \
+	if [ "aarch64" = aarch64 ]; then \
+		cargo build --locked --offline -p hm-kernel --release --target x86_64-unknown-linux-gnu --target-dir target/host-mutex; \
+		python3 tools/check_native.py --output "$evidence_dir/native-host"; \
+		cargo clippy -p hm-kernel --test startup_input --locked --offline --target x86_64-unknown-linux-gnu --target-dir target/host-startup-input -- -D warnings; \
+		python3 tools/check_startup_input.py --output "$evidence_dir/startup-input-host"; \
+		cargo clippy -p hm-kernel --test interactive_wire --locked --offline --target x86_64-unknown-linux-gnu --target-dir target/host-interactive-wire -- -D warnings; \
+		python3 tools/check_interactive_wire.py --output "$evidence_dir/interactive-wire-host"; \
+		cargo clippy -p hm-kernel --test input_policy --locked --offline --target x86_64-unknown-linux-gnu --target-dir target/host-input-policy -- -D warnings; \
+		python3 tools/check_input_policy.py --output "$evidence_dir/input-policy-host"; \
+		cargo clippy -p hm-kernel --test task_wire --locked --offline --target x86_64-unknown-linux-gnu --target-dir target/host-task-wire -- -D warnings; \
+		python3 tools/check_task_wire.py --output "$evidence_dir/task-wire-host"; \
+		cargo clippy -p hm-kernel --test task_admission --locked --offline --target x86_64-unknown-linux-gnu --target-dir target/host-task-admission -- -D warnings; \
+		python3 tools/check_task_admission.py --output "$evidence_dir/task-admission-host"; \
+		cargo clippy -p hm-kernel --test process_budget --locked --offline --target x86_64-unknown-linux-gnu --target-dir target/host-process-budget -- -D warnings; \
+		python3 tools/check_process_budget.py --output "$evidence_dir/process-budget-host"; \
+		python3 tools/build_apps.py --output "$evidence_dir/apps-fixtures"; \
+		python3 tools/build_startup_probes.py --output "$evidence_dir/startup-input-fixtures"; \
+		python3 tools/build_runtime.py --output "$evidence_dir/runtime-fixtures"; \
+		cargo clippy -p hm-kernel --test launch_input --locked --offline --target x86_64-unknown-linux-gnu --target-dir target/host-launch-input -- -D warnings; \
+		python3 tools/check_launch_input.py --output "$evidence_dir/launch-input-host"; \
+		python3 tools/build_initramfs.py --output "$evidence_dir/initramfs-fixture"; \
+		python3 tools/build_initramfs.py --process --output "$evidence_dir/process-archive"; \
+		cargo clippy -p hm-kernel --test boot_image --locked --offline --target x86_64-unknown-linux-gnu --target-dir target/host-boot-image -- -D warnings; \
+		python3 tools/check_boot_image.py --output "$evidence_dir/boot-image-host"; \
+		cargo clippy -p hm-kernel --test initramfs --locked --offline --target x86_64-unknown-linux-gnu --target-dir target/host-initramfs -- -D warnings; \
+		python3 tools/check_initramfs.py --reference "$evidence_dir/initramfs-fixture/gnu-reference.cpio" --output "$evidence_dir/initramfs-host"; \
+		python3 tools/build_process_fixtures.py --output "$evidence_dir/process-fixtures"; \
+		python3 tools/check_elf.py --library target/host-mutex/x86_64-unknown-linux-gnu/release/libhm_kernel.rlib --output "$evidence_dir/elf-host"; \
+		python3 tools/check_cpu_topology.py --library target/host-mutex/x86_64-unknown-linux-gnu/release/libhm_kernel.rlib --output "$evidence_dir/cpu-topology"; \
+		mutex_host_args=(--host-library target/host-mutex/x86_64-unknown-linux-gnu/release/libhm_kernel.rlib); \
+	fi; \
+	python3 tools/check_mutex_types.py \
+		--library target/aarch64/boot-test/aarch64-unknown-none/release/libhm_kernel.rlib \
+		--target aarch64-unknown-none --output "$evidence_dir/mutex-types" "${mutex_host_args[@]}"; \
+	if [ "aarch64" = aarch64 ]; then \
+		python3 tools/check_process_types.py \
+			--library target/aarch64/boot-test/aarch64-unknown-none/release/libhm_kernel.rlib \
+			--target aarch64-unknown-none --output "$evidence_dir/process-types"; \
+		python3 tools/check_runtime_layout.py --library target/aarch64/boot-test/aarch64-unknown-none/release/libhm_kernel.rlib --output "$evidence_dir/runtime-layout"; \
+		python3 tools/build_task_cases.py --layout "$evidence_dir/runtime-layout/result.json" --output "$evidence_dir/task-case-fixtures"; \
+		python3 tools/check_runtime_layout.py --task-negative --library target/aarch64/boot-test/aarch64-unknown-none/release/libhm_kernel.rlib --output "$evidence_dir/task-negative-layout"; \
+		python3 tools/build_task_negative_cases.py --layout "$evidence_dir/task-negative-layout/result.json" --output "$evidence_dir/task-negative-fixtures"; \
+		python3 tools/check_space_types.py \
+			--library target/aarch64/boot-test/aarch64-unknown-none/release/libhm_kernel.rlib \
+			--target aarch64-unknown-none --output "$evidence_dir/space-types"; \
+		python3 tools/check_mapping_types.py \
+			--library target/aarch64/boot-test/aarch64-unknown-none/release/libhm_kernel.rlib \
+			--target aarch64-unknown-none --output "$evidence_dir/mapping-types"; \
+		python3 tools/check_thread_types.py \
+			--library target/aarch64/boot-test/aarch64-unknown-none/release/libhm_kernel.rlib \
+			--target aarch64-unknown-none --output "$evidence_dir/thread-types"; \
+	fi; \
+	python3 tools/test_kernel.py \
+		--kernel target/aarch64/boot-test/aarch64-unknown-none/release/hematite \
+		--output "$evidence_dir/boot" --accel tcg --arch aarch64; \
+	python3 tools/test_boot_profiles.py \
+		--test-kernel target/aarch64/boot-test/aarch64-unknown-none/release/hematite \
+		--monitor-kernel target/aarch64/monitor/aarch64-unknown-none/release/hematite \
+		--fault-kernel target/aarch64/fault-test/aarch64-unknown-none/release/hematite \
+		--nested-kernel target/aarch64/nested-test/aarch64-unknown-none/release/hematite \
+		--thread-overflow-kernel target/aarch64/thread-overflow-test/aarch64-unknown-none/release/hematite \
+		--output "$evidence_dir/profiles" --arch aarch64; \
+	if [ "aarch64" = aarch64 ]; then \
+		python3 tools/test_preemption.py --kernel target/aarch64/preemption-test/aarch64-unknown-none/release/hematite --output "$evidence_dir/preemption-128m"; \
+		python3 tools/test_preemption.py --kernel target/aarch64/preemption-test/aarch64-unknown-none/release/hematite --memory 64 --output "$evidence_dir/preemption-64m"; \
+		python3 tools/test_preemption.py --kernel target/aarch64/preemption-boundary-test/aarch64-unknown-none/release/hematite --boundaries --output "$evidence_dir/preemption-boundaries"; \
+		python3 tools/test_preemption_negative.py --no-timer-kernel target/aarch64/preemption-no-timer-test/aarch64-unknown-none/release/hematite --overflow-kernel target/aarch64/preemption-overflow-test/aarch64-unknown-none/release/hematite --output "$evidence_dir/preemption-negative"; \
+		python3 tools/test_wait_blocked.py --kernel target/aarch64/wait-all-blocked-test/aarch64-unknown-none/release/hematite --output "$evidence_dir/wait-all-blocked"; \
+		python3 tools/test_process.py --kernel target/aarch64/process-test/aarch64-unknown-none/release/hematite --fixtures crates/hm-core/fixtures/process/manifest.json --archive crates/hm-core/fixtures/process-initramfs.cpio --output "$evidence_dir/process"; \
+		python3 tools/test_startup_delivery.py --kernel target/aarch64/startup-input-test/aarch64-unknown-none/release/hematite --fixtures crates/hm-core/fixtures/startup-input/manifest.json --archive crates/hm-core/fixtures/startup-input-initramfs.cpio --output "$evidence_dir/startup-delivery"; \
+		python3 tools/test_launcher.py --kernel target/aarch64/monitor/aarch64-unknown-none/release/hematite --apps crates/hm-core/fixtures/apps/manifest.json --archive crates/hm-core/fixtures/apps-initramfs.cpio --output "$evidence_dir/launcher"; \
+		python3 tools/test_group_launcher.py --kernel target/aarch64/monitor/aarch64-unknown-none/release/hematite --apps crates/hm-core/fixtures/apps/manifest.json --archive crates/hm-core/fixtures/apps-initramfs.cpio --output "$evidence_dir/group-launcher"; \
+		python3 tools/test_task_launcher.py --kernel target/aarch64/monitor/aarch64-unknown-none/release/hematite --apps crates/hm-core/fixtures/apps/manifest.json --archive crates/hm-core/fixtures/apps-initramfs.cpio --output "$evidence_dir/task-launcher"; \
+		python3 tools/test_runtime.py --kernel target/aarch64/runtime-test/aarch64-unknown-none/release/hematite --fixtures crates/hm-core/fixtures/runtime/manifest.json --archive crates/hm-core/fixtures/runtime-initramfs.cpio --layout "$evidence_dir/runtime-layout/result.json" --output "$evidence_dir/runtime"; \
+		python3 tools/test_task_cases.py --kernel target/aarch64/task-test/aarch64-unknown-none/release/hematite --fixtures crates/hm-core/fixtures/task-cases/manifest.json --archive crates/hm-core/fixtures/task-cases-initramfs.cpio --large-archive crates/hm-core/fixtures/task-cases-large-initramfs.cpio --layout "$evidence_dir/runtime-layout/result.json" --output "$evidence_dir/task-cases"; \
+		for task_case in $task_negative_cases; do \
+			python3 tools/test_task_negative.py --case "$task_case" --kernel "target/aarch64/task-negative-$task_case/aarch64-unknown-none/release/hematite" --fixtures crates/hm-core/fixtures/task-negative-cases/manifest.json --archive crates/hm-core/fixtures/task-negative-initramfs.cpio --layout "$evidence_dir/task-negative-layout/result.json" --output "$evidence_dir/task-negative-$task_case"; \
+		done; \
+		python3 tools/test_space.py --kernel target/aarch64/space-test/aarch64-unknown-none/release/hematite --output "$evidence_dir/space"; \
+		python3 tools/test_secondary.py --kernel target/aarch64/secondary-test/aarch64-unknown-none/release/hematite --stale-generation-kernel target/aarch64/secondary-stale-test/aarch64-unknown-none/release/hematite --cpu-off-return-kernel target/aarch64/secondary-off-return-test/aarch64-unknown-none/release/hematite --output "$evidence_dir/secondary"; \
+		python3 tools/test_smp.py --kernel target/aarch64/smp-test/aarch64-unknown-none/release/hematite --no-peer-timer-kernel target/aarch64/smp-no-peer-timer-test/aarch64-unknown-none/release/hematite --peer-overflow-kernel target/aarch64/smp-peer-overflow-test/aarch64-unknown-none/release/hematite --all-blocked-kernel target/aarch64/smp-all-blocked-test/aarch64-unknown-none/release/hematite --output "$evidence_dir/smp"; \
+		python3 tools/check_timer_trace.py --trace "$evidence_dir/boot/exceptions.log" \
+			--expected 16 --output "$evidence_dir/boot/timer-trace.json"; \
+		python3 tools/check_timer_trace.py --trace "$evidence_dir/profiles/monitor/exceptions.log" \
+			--expected 32 --output "$evidence_dir/profiles/monitor/timer-trace.json"; \
+		python3 tools/check_timer_trace.py --trace "$evidence_dir/profiles/memory-64m/exceptions.log" \
+			--expected 32 --output "$evidence_dir/profiles/memory-64m/timer-trace.json"; \
+	fi'
+    Checking hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+    Checking hm-core v0.1.0 (/workspace/crates/hm-core)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 1.62s
+..............
+----------------------------------------------------------------------
+Ran 14 tests in 0.011s
+
+OK
+.........
+----------------------------------------------------------------------
+Ran 9 tests in 0.001s
+
+OK
+........
+----------------------------------------------------------------------
+Ran 8 tests in 0.002s
+
+OK
+........
+----------------------------------------------------------------------
+Ran 8 tests in 0.001s
+
+OK
+.
+----------------------------------------------------------------------
+Ran 1 test in 0.000s
+
+OK
+.
+----------------------------------------------------------------------
+Ran 1 test in 0.000s
+
+OK
+............
+----------------------------------------------------------------------
+Ran 12 tests in 0.005s
+
+OK
+......................
+----------------------------------------------------------------------
+Ran 22 tests in 0.025s
+
+OK
+......
+----------------------------------------------------------------------
+Ran 6 tests in 0.002s
+
+OK
+.........
+----------------------------------------------------------------------
+Ran 9 tests in 0.307s
+
+OK
+.......
+----------------------------------------------------------------------
+Ran 7 tests in 0.011s
+
+OK
+.....
+----------------------------------------------------------------------
+Ran 5 tests in 0.012s
+
+OK
+.....
+----------------------------------------------------------------------
+Ran 5 tests in 0.012s
+
+OK
+.....
+----------------------------------------------------------------------
+Ran 5 tests in 0.012s
+
+OK
+.....
+----------------------------------------------------------------------
+Ran 5 tests in 0.012s
+
+OK
+.....
+----------------------------------------------------------------------
+Ran 5 tests in 0.011s
+
+OK
+.....
+----------------------------------------------------------------------
+Ran 5 tests in 0.011s
+
+OK
+.....................
+----------------------------------------------------------------------
+Ran 21 tests in 2.522s
+
+OK
+........
+----------------------------------------------------------------------
+Ran 8 tests in 0.017s
+
+OK
+.....
+----------------------------------------------------------------------
+Ran 5 tests in 0.019s
+
+OK
+............
+----------------------------------------------------------------------
+Ran 12 tests in 0.083s
+
+OK
+.....
+----------------------------------------------------------------------
+Ran 5 tests in 0.013s
+
+OK
+...........
+----------------------------------------------------------------------
+Ran 11 tests in 0.976s
+
+OK
+.........
+----------------------------------------------------------------------
+Ran 9 tests in 0.025s
+
+OK
+........
+----------------------------------------------------------------------
+Ran 8 tests in 0.047s
+
+OK
+................
+----------------------------------------------------------------------
+Ran 16 tests in 0.941s
+
+OK
+..........
+----------------------------------------------------------------------
+Ran 10 tests in 0.092s
+
+OK
+......................
+----------------------------------------------------------------------
+Ran 22 tests in 24.376s
+
+OK
+PASS: Phase 0 records present; approval and runtime gates not assessed
+PASS: safe crate roots, dependency-free lockfile, core SAFETY-comment hygiene
+Scope: structural hygiene only; compile all targets and review core soundness separately
+   Compiling hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+   Compiling hm-core v0.1.0 (/workspace/crates/hm-core)
+    Finished `release` profile [optimized] target(s) in 4.16s
+   Compiling hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+   Compiling hm-core v0.1.0 (/workspace/crates/hm-core)
+    Finished `release` profile [optimized] target(s) in 5.51s
+   Compiling hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+   Compiling hm-core v0.1.0 (/workspace/crates/hm-core)
+    Finished `release` profile [optimized] target(s) in 2.17s
+   Compiling hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+   Compiling hm-core v0.1.0 (/workspace/crates/hm-core)
+    Finished `release` profile [optimized] target(s) in 2.12s
+   Compiling hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+   Compiling hm-core v0.1.0 (/workspace/crates/hm-core)
+    Finished `release` profile [optimized] target(s) in 2.25s
+   Compiling hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+   Compiling hm-core v0.1.0 (/workspace/crates/hm-core)
+    Finished `release` profile [optimized] target(s) in 4.48s
+   Compiling hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+   Compiling hm-core v0.1.0 (/workspace/crates/hm-core)
+    Finished `release` profile [optimized] target(s) in 4.49s
+   Compiling hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+   Compiling hm-core v0.1.0 (/workspace/crates/hm-core)
+    Finished `release` profile [optimized] target(s) in 4.63s
+   Compiling hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+   Compiling hm-core v0.1.0 (/workspace/crates/hm-core)
+    Finished `release` profile [optimized] target(s) in 2.14s
+   Compiling hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+   Compiling hm-core v0.1.0 (/workspace/crates/hm-core)
+    Finished `release` profile [optimized] target(s) in 2.16s
+   Compiling hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+   Compiling hm-core v0.1.0 (/workspace/crates/hm-core)
+warning: method `reborrow` is never used
+  --> crates/hm-core/src/user_space.rs:99:19
+   |
+98 | impl<'pool> Factory<'pool> {
+   | -------------------------- method in this implementation
+99 |     pub(super) fn reborrow(&self) -> Factory<'pool> {
+   |                   ^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `hm-core` (bin "hematite") generated 1 warning
+    Finished `release` profile [optimized] target(s) in 4.84s
+   Compiling hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+   Compiling hm-core v0.1.0 (/workspace/crates/hm-core)
+    Finished `release` profile [optimized] target(s) in 4.93s
+   Compiling hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+   Compiling hm-core v0.1.0 (/workspace/crates/hm-core)
+    Finished `release` profile [optimized] target(s) in 5.25s
+   Compiling hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+   Compiling hm-core v0.1.0 (/workspace/crates/hm-core)
+    Finished `release` profile [optimized] target(s) in 5.68s
+   Compiling hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+   Compiling hm-core v0.1.0 (/workspace/crates/hm-core)
+    Finished `release` profile [optimized] target(s) in 5.59s
+   Compiling hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+   Compiling hm-core v0.1.0 (/workspace/crates/hm-core)
+    Finished `release` profile [optimized] target(s) in 5.33s
+   Compiling hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+   Compiling hm-core v0.1.0 (/workspace/crates/hm-core)
+    Finished `release` profile [optimized] target(s) in 5.47s
+   Compiling hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+   Compiling hm-core v0.1.0 (/workspace/crates/hm-core)
+    Finished `release` profile [optimized] target(s) in 5.25s
+   Compiling hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+   Compiling hm-core v0.1.0 (/workspace/crates/hm-core)
+    Finished `release` profile [optimized] target(s) in 5.53s
+   Compiling hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+   Compiling hm-core v0.1.0 (/workspace/crates/hm-core)
+    Finished `release` profile [optimized] target(s) in 5.30s
+   Compiling hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+   Compiling hm-core v0.1.0 (/workspace/crates/hm-core)
+    Finished `release` profile [optimized] target(s) in 5.60s
+   Compiling hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+   Compiling hm-core v0.1.0 (/workspace/crates/hm-core)
+    Finished `release` profile [optimized] target(s) in 5.27s
+   Compiling hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+   Compiling hm-core v0.1.0 (/workspace/crates/hm-core)
+    Finished `release` profile [optimized] target(s) in 5.45s
+   Compiling hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+   Compiling hm-core v0.1.0 (/workspace/crates/hm-core)
+    Finished `release` profile [optimized] target(s) in 5.37s
+   Compiling hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+   Compiling hm-core v0.1.0 (/workspace/crates/hm-core)
+    Finished `release` profile [optimized] target(s) in 5.43s
+   Compiling hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+   Compiling hm-core v0.1.0 (/workspace/crates/hm-core)
+    Finished `release` profile [optimized] target(s) in 4.43s
+   Compiling hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+   Compiling hm-core v0.1.0 (/workspace/crates/hm-core)
+    Finished `release` profile [optimized] target(s) in 4.56s
+   Compiling hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+   Compiling hm-core v0.1.0 (/workspace/crates/hm-core)
+    Finished `release` profile [optimized] target(s) in 4.43s
+   Compiling hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+   Compiling hm-core v0.1.0 (/workspace/crates/hm-core)
+    Finished `release` profile [optimized] target(s) in 5.06s
+   Compiling hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+   Compiling hm-core v0.1.0 (/workspace/crates/hm-core)
+    Finished `release` profile [optimized] target(s) in 2.57s
+   Compiling hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+   Compiling hm-core v0.1.0 (/workspace/crates/hm-core)
+    Finished `release` profile [optimized] target(s) in 2.53s
+   Compiling hm-kernel v0.1.0 (/workspace/crates/hm-kernel)
+   Compiling hm-core v0.1.0 (/workspace/crates/hm-core)
+    Finished `release` profile [optimized] target(s) in 2.46s
+    Finished `release` profile [optimized] target(s) in 0.00s
+{
+  "passed": true,
+  "scope": "safe-client type boundary; not runtime isolation",
+  "probes": {
+    "valid_client": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "cross_instance": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "lifetime"
+    },
+    "escaping_handle": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "lifetime"
+    },
+    "private_generation": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0616"
+    },
+    "uncloneable_instance": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    }
+  }
+}
+{
+  "passed": false,
+  "probes": {
+    "valid_issue_startup": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "valid_dispatch_host": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "valid_move_session": {
+      "passed": true,
+      "returncode": 0,
+      "expected_rejection": null
+    },
+    "forge_issuer": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0451"
+    },
+    "forge_session": {
+      "passed": false,
+      "returncode": 1,
+      "expected_rejection": "E0451"
+    },
+    "issuer_clone": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "session_clone": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0277"
+    },
+    "change_generation": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0616"
+    },
+    "change_grant": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0616"
+    },
+    "change_calls": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0616"
+    },
+    "change_budget": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0616"
+    },
+    "revive_session": {
+      "passed": true,
+      "returncode": 1,
+      "expected_rejection": "E0616"
+    }
+  },
+  "target": "aarch64-unknown-none",
+  "scope": "actual safe native-policy type encapsulation; no hardware authority or EL0 execution"
+}
+make[1]: *** [Makefile:20: test] Error 1
+make[1]: Leaving directory '/home/aaron/code/hematite'
+make: *** [Makefile:215: test-all] Error 2

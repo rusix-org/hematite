@@ -1,0 +1,16 @@
+[
+  "cargo",
+  "test",
+  "-p",
+  "hm-kernel",
+  "--test",
+  "task_admission",
+  "--locked",
+  "--offline",
+  "--target",
+  "x86_64-unknown-linux-gnu",
+  "--target-dir",
+  "target/host-task-admission",
+  "--",
+  "--test-threads=1"
+]
